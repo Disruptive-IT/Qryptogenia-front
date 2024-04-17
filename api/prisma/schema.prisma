@@ -1,0 +1,150 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+//? Distincion entre los usuarios
+model User {
+  id              String   @id @default(uuid())
+  profile_picture String
+  username        String
+  email           String   @unique @db.VarChar(255)
+  password        String
+  createdAt       DateTime @default(now())
+  update_date     DateTime @updatedAt
+  state           Boolean  @default(true)
+
+  rol         Rol         @relation(fields: [rolId], references: [id])
+  rolId       String
+  loginLogs   LoginLogs   @relation(fields: [loginLogsId], references: [id])
+  loginLogsId String      @unique
+  Qr          Qr[]
+  Membership  Membership?
+}
+
+enum roles {
+  ADMIN
+  USER //? Como identificar al "usuario común"
+}
+
+//? Acerca de la cantidad de roles 
+model Rol {
+  id            String          @id @default(uuid())
+  name          roles
+  state         Boolean         @default(true)
+  createdAt     DateTime        @default(now())
+  update_date   DateTime        @updatedAt
+  RolPermission RolPermission[]
+  User          User[]
+}
+
+model Membership {
+  id                 String               @id @default(uuid())
+  name               String
+  description        String
+  duration_time      DateTime
+  state              Boolean              @default(true)
+  createdAt          DateTime             @default(now())
+  update_date        DateTime             @updatedAt
+  user               User                 @relation(fields: [userId], references: [id])
+  userId             String               @unique
+  MembershipBenefits MembershipBenefits[]
+}
+
+model LoginLogs {
+  id           String   @id @default(uuid())
+  failed_login Int
+  //? Implementar campo para verificar el tiempo por intentos fallidos
+  created_ip   String
+  update_ip    String
+  createdAt    DateTime @default(now()) //? Puedo ser la misma fecha del usuario?
+  update_date  DateTime @updatedAt
+  User         User?
+}
+
+model PreRegister {
+  id                      String   @id @default(uuid())
+  username                String
+  email                   String   @unique @db.VarChar(255)
+  password                String
+  createdAt               DateTime @default(now())
+  //* Campos nuevos para seguimiento en la generacion del token. Se hizo eliminacion de estado!
+  last_token_generated_at DateTime @updatedAt
+  token                   String
+}
+
+//? Mejor forma de implementar el preregistro, cuando se realice la confirmacion o verificacion de su registro es que se redirige a un sitio donde ingresara la contraseña y username
+
+model RolPermission {
+  id    String   @id @default(uuid())
+  useAt DateTime @default(now())
+
+  //? Se permitira la eliminacion de roles? establecer eliminacion en cascada?
+  rolId        String
+  rol          Rol        @relation(fields: [rolId], references: [id])
+  permissionId String
+  permission   Permission @relation(fields: [permissionId], references: [id])
+
+  @@unique([rolId, permissionId], map: "id_rol_permission")
+}
+
+model Permission {
+  id            String          @id @default(uuid())
+  description   String
+  state         Boolean         @default(true)
+  createdAt     DateTime        @default(now())
+  update_date   DateTime        @updatedAt
+  RolPermission RolPermission[]
+}
+
+model MembershipBenefits {
+  id          String   @id @default(uuid())
+  createdAt   DateTime @default(now())
+  update_date DateTime @updatedAt
+
+  membershipId String
+  membership   Membership @relation(fields: [membershipId], references: [id])
+  benefitsId   String
+  benefits     Benefits   @relation(fields: [benefitsId], references: [id])
+
+  @@unique([membershipId, benefitsId], map: "id_membership_benefits")
+}
+
+model Benefits {
+  id                 String               @id @default(uuid())
+  name               String
+  description        String
+  createdAt          DateTime             @default(now())
+  update_date        DateTime             @updatedAt
+  MembershipBenefits MembershipBenefits[]
+}
+
+//? PERSONALIZACIÓN
+
+model Qr {
+  id          String   @id @default(uuid())
+  description String
+  qr          String
+  state       Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  update_date DateTime @updatedAt
+
+  user   User    @relation(fields: [userId], references: [id])
+  userId String
+  QrType QrType?
+}
+
+model QrType {
+  id          String   @id @default(uuid())
+  description String
+  state       Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  update_date DateTime @updatedAt
+
+  qr   Qr     @relation(fields: [qrId], references: [id])
+  qrId String @unique
+}
