@@ -52,7 +52,7 @@ export const useAuth = (navigate) => {
 
     async function loginUser(values) {
         try {
-            const res = await axios.post('/login/', values);
+            const res = await axios.post('/auth/login/', values);
             toast.success(res.data)
             // * Llamar al fecth para que a demas de verificar el token obtenga la info del usuario
             fetchUserData()
