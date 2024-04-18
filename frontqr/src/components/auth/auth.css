@@ -1,0 +1,258 @@
+.authFormsContainer{
+    display: flex;
+    flex-wrap: wrap;
+    width: 100%;
+    min-height: 100vh;
+    scrollbar-width: none;
+}
+
+.fullWidth{
+    width: 100%;
+}
+
+.authTittle{
+    font-size: 30px;
+    font-weight: bold;
+}
+
+.authInputs {
+    height: 30px;
+    width: 250px;
+    border-radius: 4px;
+    border: none; 
+    box-shadow: 2px 2px 2px gray;
+    padding-left: 30px;
+    outline:  2px solid rgb(98, 158, 219);
+    background-color: #e7d5d5;  
+    transition: all 0.5s;
+}
+
+.inputGroup{
+    width: 50px;
+    margin-bottom: 20px ;
+    width: 100%;
+}
+
+.inputGroup .errorMessaje{
+    color: red;
+    font-size: 14px;
+    font-weight:bold;
+}
+
+.inputsGroupsStart{
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    text-align: center;
+    width: 50%;
+    height: fit-content;
+    margin: auto 0;
+    justify-content: center;
+    padding: 20px 10px;
+    transition: all 0.5s;
+}
+
+.otherSide{
+    width: 50%;
+}
+
+.inputsGroupsEnd{
+    display:flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    text-align: center;
+    width: 50%;
+    height: 100%;
+    justify-content: center;
+    transition: all 0.5s;
+    padding: 20px 10px;
+}
+
+.boxContainer{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    transition: opacity 0.5s ease-in-out;
+}
+
+.changeForm{
+    height: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+
+
+.authFormContainer{
+    background-color: #e7d5d568;
+    overflow: hidden; 
+    position: relative; 
+    box-shadow: 2px 2px 4px 2px rgb(168, 167, 167);
+    border-radius: 10px 50px 10px 50px;
+    width: 50%;
+    height: 70vh;
+    transition: all 0.5s;
+}
+
+.candado{
+    background-image: url('../../assets/imgs/candado.png');
+}
+
+.emailIcon{
+    background-image: url('../../assets/imgs/correo-electronico-vacio.png');
+}
+
+.candado, .emailIcon {
+    background-repeat: no-repeat;
+    background-position: 4px center; 
+    background-size: 16px 16px; 
+}
+
+
+.authBtn:hover{
+    background-color: rgb(17, 56, 119);
+}
+
+.elLogoRigth{
+    width: 30%;
+    position: absolute;
+    right: 10%;
+    top: 25%;
+    filter:drop-shadow(5px 5px 2px gray);
+    transition: all 0.5s;
+}
+
+.elLogoLeft{
+    width: 30%;    
+    position: absolute;
+    left: 80px;
+    top: 130px;
+    filter:drop-shadow(5px 5px 2px gray);
+    transition: all 0.5s;
+}
+
+.iconitos{
+    z-index: -1;
+    
+}
+
+.rigth{
+    animation: levitarR 120s infinite alternate; 
+}
+
+.left{
+    animation: levitarL 200s infinite alternate;
+
+}
+.formContainer{
+    display: flex;
+    width: 100%;
+    height: 100%;
+}
+
+@media (max-width:1200px){
+    .elLogoRigth{
+        right: 5%
+    }
+
+    .elLogoLeft{
+        left: 5%;
+    }
+}
+
+@media (max-width:1050px){
+    .inputsGroupsEnd{
+        width: 60%;
+    }
+
+    .otherSide{
+        width: 40%;
+    }
+}
+
+@media (max-width:900px){ 
+    .inputsGroupsStart{
+        width: 60%;
+    }
+
+    .authFormContainer{
+        width: 70%;
+    }
+}
+@media (max-width:800px){
+
+    
+
+    .otherSide{
+        width: 35%;
+    }
+}
+@media (max-width:600px){
+    .elLogoRigth{
+        width: 20%;
+    }
+
+    .inputsGroupsEnd{
+        width: 100%;
+    }
+
+    .otherSide{
+        width: 0%;
+    }
+
+    .elLogoLeft{
+        display: none;
+    }
+    .errorMessajeL{
+        width: 100%;
+        text-align: center;
+    }
+    .errorMessajeR{
+        width: 100%;
+        text-align: center;
+    
+    }
+}
+
+@media (max-width:500px){
+    .authInputs{
+        width: 95%;
+        height: 45px;
+    }
+
+    .authFormContainer{
+        width: 90%;
+    }
+
+    .inputsGroupsStart{
+        width: 100%;
+    }
+
+    .elLogoRigth{
+        display: none;
+    }
+
+   
+}
+
+
+@keyframes levitarL {
+    0% {
+      transform: translateY(0) rotate(0deg); /* La imagen comienza en su posición original */
+    }
+    100% {
+      transform: translateY(-10px)  rotate(360deg); /* La imagen levita 20px hacia arriba */
+    }
+  }
+
+@keyframes levitarR {
+    0% {
+        transform: translateY(0) rotate(0deg); /* La imagen comienza en su posición original */
+    }
+    100% {
+        transform: translateY(0)  rotate(-360deg); /* La imagen levita 20px hacia arriba */
+    }
+}
