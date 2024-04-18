@@ -175,6 +175,7 @@ export default function MiniDrawer() {
                                     to={item.path}
                                     sx={{
                                         minHeight: 50,
+                                        justifyContent: 'center',
                                         justifyContent: open ? 'initial' : 'center',
                                         px: 2.5,
                                         margin: 1,

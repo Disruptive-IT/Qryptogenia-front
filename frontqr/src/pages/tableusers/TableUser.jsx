@@ -4,6 +4,7 @@ import { useContext } from 'react';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import axios from "axios";
 import { AuthContext } from '../../context/AuthContext';
+import HeaderModule from './HeaderModule';
 import IconButton from '@mui/material/IconButton';
 import UserModal from './ModalUser';
 import { ScanEye } from 'lucide-react';
@@ -79,29 +80,27 @@ const App2 = () => {
     const columns = [
         {
             name: "user_id",
-            label: "id",
+            label: "ID",
             options: {
                 display: false,
             },
         },
         {
             name: "username",
-            label: "Username",
+            label: "USERNAME",
             options: {
                 customBodyRender: (value) => <div style={{ paddingLeft: '15px' }}>{value}</div>,
-                width: 100,
+                
             },
         },
         {
             name: "email",
-            label: "E-mail",
-            options: {
-                width: 100,
-            },
+            label: "E-MAIL",
+            
         },
         {
             name: "is_active",
-            label: "Status",
+            label: "STATUS",
             options: {
                 customBodyRender: (value) => (
                     <div style={{ paddingLeft: '' }}>
@@ -110,17 +109,17 @@ const App2 = () => {
                         </p>
                     </div>
                 ),
-                width: 100,
+                
             },
         },
         {
             name: "user_id",
-            label: "Actions",
+            label: "ACTIONS",
             options: {
                 customBodyRender: (value, tableMeta) => {
                     const userId = tableMeta.rowData[0];
                     return (
-                        <div style={{ paddingLeft: '9px' }}>
+                        <div style={{ paddingLeft: '10px' }}>
                             <IconButton onClick={() => handleViewDetails(userId)} >
                                 <ScanEye style={{ color: '#602eb8' }} />
                             </IconButton>
@@ -145,11 +144,13 @@ const App2 = () => {
     return (
         <div className="py-15 min-h-screen grid place-items-center">
             <div className="w-11/12 max-w-4x2 relative">
-
+                <div className='mb-4'>
+                    <HeaderModule />
+                </div>
                 <ThemeProvider theme={createTheme({
-                    typography: {
-                        fontFamily: "Verdana, sans-serif"
-                    },
+                    // typography: {
+                    //     fontFamily: "Verdana, sans-serif"
+                    // },
                     palette: {
                         ...currentTheme.background,
                         mode: currentTheme.mode,
@@ -158,11 +159,11 @@ const App2 = () => {
                         MuiTableCell: {
                             styleOverrides: {
                                 head: {
-                                    padding: "10px 4px",
+                                    padding: "11px 11px",
                                     textAlign: 'center',
                                 },
                                 body: {
-                                    padding: "9px 5px",
+                                    padding: "7px 5px",
                                     color: currentTheme.textColor,
                                 }
                             }
@@ -170,29 +171,19 @@ const App2 = () => {
                         MuiTableHead: {
                             styleOverrides: {
                                 root: {
-                                    textAlign: 'center' // centrar las celdas de encabezado
-                                }
-                            }
-                        },
-
-                        MuiTableHeadCell: {
-                            styleOverrides: {
-                                root: {
-                                    textAlign: 'center', // Ajusta la alineaciÃ³n de las columnas centradas
+                                    '& th:nth-of-type(1)': {
+                                        paddingLeft: '25px',
+                                    },
                                 },
                             },
                         },
-                    }
+                    },
                 })}>
-
                     <MUIDataTable
-
-                        title={"Users List"}
                         data={users}
                         columns={columns}
                         options={options}
                     />
-
                 </ThemeProvider>
                 <div>
                     <button onClick={toggleTheme} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded ">
@@ -200,7 +191,7 @@ const App2 = () => {
                     </button>
                 </div>
             </div>
-
+    
             <UserModal
                 openDialog={openDialog}
                 setOpenDialog={setOpenDialog}

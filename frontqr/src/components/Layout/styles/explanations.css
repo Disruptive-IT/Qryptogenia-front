@@ -1,0 +1,8 @@
+.explanation-box{
+    box-shadow: 5px 2px 2px 2px rgb(165, 165, 165);
+    border: 3px solid #284B63;
+}
+
+.explanation-box img{
+    border-radius: 6px 6px 0px 0px;
+}

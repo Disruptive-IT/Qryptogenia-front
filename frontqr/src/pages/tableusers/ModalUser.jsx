@@ -50,7 +50,7 @@ const UserModal = ({ openDialog, setOpenDialog, selectedUser }) => {
                         </div>
                     )}
                     <div style={{ position: 'absolute', bottom: '10px', right: '10px' }}>
-                        <Button variant="outlined" color="error" onClick={() => setOpenDialog(false)}>Close</Button>
+                        <Button variant="contained" color="error" onClick={() => setOpenDialog(false)}>CLOSE</Button>
                     </div>
                 </Box>
             </Modal>
