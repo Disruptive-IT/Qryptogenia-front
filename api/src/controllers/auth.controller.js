@@ -10,16 +10,23 @@ export const register = async (req, res) => {
         console.log(error)
         res.status(500).json(useSend('Error in server', error))
     }
-    
 };
 
 export const login = async (req, res) => {
-  const { email, password } = req.body;
-
+//   const { email, password } = req.body;
+    console.log("HOLA")
+    try {
+        console.log("LLEGA AL BACK")
+        res.status(201).json(useSend('Todo bien'))
+    } catch (error) {
+        console.log(error)
+        res.status(500).json(useSend('Error in server', error))
+}
     // Validar si el ususario existe
     // Validar si la contraseña es correcta
     // Generar token y dar acceso
 };
+
 
 export const logout = (req, res) => {
     // Limpiar el token y chao
