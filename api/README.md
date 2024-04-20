@@ -14,6 +14,10 @@ PORT=yourPort
 CLIENT_URL=empty
 DATABASE_URL="mysql://user:password@localhost:port/qryptogenia"
 ```
+### Generate JWT_SECRET 
+```bash
+node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"
+```
 
 ## Create firts migrate in main prisma folder
 ```bash
@@ -33,3 +37,4 @@ npx prisma generate
 ```bash
 npx prisma studio 
 ```
+
