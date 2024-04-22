@@ -19,7 +19,7 @@ let csrftoken = getCookie('csrftoken');
 const storedToken = localStorage.getItem('jwt_token');
 
 const instance = axios.create({
-    baseURL: "http://localhost:8000/api",
+    baseURL: "http://localhost:3000/auth",
     withCredentials: true,
     headers: {
         'Content-Type': 'application/json',

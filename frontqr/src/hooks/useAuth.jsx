@@ -94,32 +94,25 @@ export const useAuth = (navigate) => {
     };
 
 
-    const recoverPassword = async (password, token) => {
+    const recoverPassword = async (id, token, newPasswordData) => {
         try {
-            const response = await axios.post('/password_reset/confirm/', {
-                password,
-                token,
-            });
-            if (response.status === 200) {
-                return { success: true };
-            }
+          const response = await axios.post(`/password_reset/${id}/${token}`, newPasswordData);
+          return response.data; // Retorna la respuesta del servidor
         } catch (error) {
-            console.error('Error changing password:', error);
-            return { success: false };
+          console.error('Error restableciendo contraseña:', error);
+          throw error; // Maneja el error adecuadamente en tu frontend
         }
-    };
+      };
 
-    const forgotPassword = async (email) => {
+      const forgotPassword = async (email) => {
         try {
-            const response = await axios.post('/password_reset/', { email });
-            if (response.status === 200) {
-                return { success: true };
-            }
+          const response = await axios.post('/password_reset', { email });
+          return response.data; // Retorna la respuesta del servidor
         } catch (error) {
-            console.error('Error sending recovery mail:', error);
-            return { success: false, error };
+          console.error('Error enviando correo electrónico para restablecimiento de contraseña:', error);
+          throw error; // Maneja el error adecuadamente en tu frontend
         }
-    };
+      };
 
     const getUsersData = async () => {
         try {

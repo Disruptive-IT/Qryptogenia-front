@@ -20,11 +20,11 @@ export const ForgotPassForm = () => {
         position: "bottom-right",
       });
   
-      const { success, error } = await forgotPassword(data.email);
+      const response = await forgotPassword(data.email);
   
       toast.dismiss(loadingToast); // Cerrar el loadingToast una vez que se obtenga la respuesta
   
-      if (success) {
+      if (response && response.status === "success") {
         toast.success("Recovery email sent successfully", {
           position: "bottom-right",
           style: {
@@ -46,6 +46,13 @@ export const ForgotPassForm = () => {
       }
     } catch (error) {
       console.error('Error en la solicitud:', error);
+      toast.error('Error sending recovery email', {
+        position: "bottom-right",
+        style: {
+          fontSize: '15px',
+          padding: '25px',
+        },
+      });
     }
   };
 
