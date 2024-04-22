@@ -21,6 +21,7 @@ export default app
 
 // TODO: 
 // Probar acceso de usuarios / clientes
+// Implementacion middleware verifyToken
 //* Proteccion de rutas back y front
 //* Registro
 //? Probar verificacion token

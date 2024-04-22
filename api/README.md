@@ -12,7 +12,14 @@ npm install
 ```bash
 PORT=yourPort
 CLIENT_URL=empty
-DATABASE_URL="mysql://user:password@localhost:port/qryptogenia"
+DATABASE_URL="mysql://root:GpUzjYbMakwnNjNLnNMmZvgwIXnoFPDl@viaduct.proxy.rlwy.net:32432/railway"
+JWT_SECRET=47a8ec4d8752b9be493521b340f0aa2b847b8bd51d0a051c925ff1fe768dfc79
+NODE_ENV=development
+
+EMAIL_HOST=smtp.gmail.com
+EMAIL_PASSWORD=contraseñaDeApp
+EMAIL_USER=Correo del que envia
+JWT_EXPIRATION=1h
 ```
 ### Generate JWT_SECRET 
 ```bash

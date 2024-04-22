@@ -2,15 +2,55 @@ import prisma from "../lib/prisma.js";
 import { useSend } from "../utils/useSend.js";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
+import { sendVerificationEmail } from "../services/mail.service.js";
 
 export const register = async (req, res) => {
-  // const { names, last_names, email, password } = req.body;
-  // Hashear la contraseña y crear el usuario
+  const { email } = req.body;
+
+  const existingUser = await prisma.user.findUnique({
+    where: { email: email },
+  });
+  //? Verificar tambien el estado del usuario por eliminacion
+  if (existingUser) {
+    return res.status(400).json(useSend("Ya existe"));
+  }
+
+  //! Verficar si el usuario ya tiene un preregistro
+
+  //* Enviar el mail de verificación al cliente
+  const tokenVerificacion = jwt.sign({ email: email }, process.env.JWT_SECRET, {
+    expiresIn: process.env.JWT_EXPIRATION,
+  });
+
+  const mail = await sendVerificationEmail(email, tokenVerificacion);
+  if (mail.accepted === 0) {
+    return res(500).send({
+      status: "error",
+      message: "Error enviando mail de verificación",
+    });
+  }
+
+  // ! Crear el registro del usuario en preregistro
+
+  return res.status(200).json(useSend("Se ha enviado el correo electronico"));
+};
+
+export const verifyAccount = async (req, res) => {
   try {
-    res.status(201).json(useSend("Todo bien"));
-  } catch (error) {
-    console.log(error);
-    res.status(500).json(useSend("Error in server", error));
+    if (!req.params.token) {
+      return res.status(500).json(useSend("El token no coincide"));
+    }
+
+    //! Decodicicar el token
+    //- Verificar expiracion
+    //- tomar el correo
+    //- verificar el preregistro para saber si el token coincide con el recibido
+    //? Dar el acceso
+    //! Pasar a establecer el registro en user
+
+    res.status(200).json(useSend("Melo en verifyAccount"));
+  } catch (err) {
+    res.status(500).json(useSend("Error in server", err));
   }
 };
 
@@ -29,7 +69,7 @@ export const login = async (req, res) => {
         .json(useSend("No account with this email has been registered."));
     }
 
-    //! Ya encriptada
+    //! Implemtar la encriptacion para descomentarear
     // const isMatch = await bcrypt.compare(password, user.password);
     // if (!isMatch) {
     //   return res.status(400).json(useSend("Invalid credentials."));
@@ -38,6 +78,8 @@ export const login = async (req, res) => {
     if (password !== user.password) {
       return res.status(400).json(useSend("Invalid credentials."));
     }
+
+    //? aca implementar la logica de para accesos errones .> login log
 
     const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET, {
       expiresIn: req.body.remember ? "365d" : "24h",
@@ -65,6 +107,7 @@ export const login = async (req, res) => {
       })
       .json(
         useSend("Successfully login admin", {
+          //? Puede ser una opcion obtener la info por el middleware
           user: {
             rol: user.rol.name,
             // isLoggedIn: user.isLoggedIn,
