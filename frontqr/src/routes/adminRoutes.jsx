@@ -7,7 +7,7 @@ import App2 from '../pages/tableusers/TableUser';
 import LayoutAdmin from "../pages/templates/Admin/Layout";
 
 export const adminRoutes = () => (
- <ProtectedRoute roles={['admin']}>
+ <ProtectedRoute roles={['ADMIN']}>
     <LayoutAdmin>
       <Routes>
         <Route path="/" element={<Navigate to="dashboard" replace />} />

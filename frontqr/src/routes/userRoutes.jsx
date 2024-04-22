@@ -5,7 +5,7 @@ import UserHome from '../pages/user/UserHome';
 import LayoutUser from "../pages/templates/User/Layout";
 
 export const userRoutes = () => (
- <ProtectedRoute roles={['user']}>
+ <ProtectedRoute roles={['CLIENT']}>
     <LayoutUser>
       <Routes>
         <Route path="home" element={<UserHome />} />

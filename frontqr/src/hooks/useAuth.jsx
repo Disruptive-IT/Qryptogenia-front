@@ -10,21 +10,22 @@ export const useAuth = (navigate) => {
     useEffect(() => {
         startLoading();
         if (user) {
-            if (user.is_staff) {
+            if (user.rol === "ADMIN") {
                 navigate("/admin/");
             } else {
                 navigate("/user/");
             }
         }
         stopLoading();
-    }, [user]);
+    }, [user]); 
+    
 
-    async function fetchUserData() {
+    async function verifyAuth() {
         try {
             startLoading();
-            const response = await axios.get('/verify-auth/');
-            if (response.data.IsAuthenticated) {
-                setUser(response.data.user);
+            const res = await axios.get('user/');
+            if (res.data.info) {
+                setUser(res.data.info);
             } else {
                 setUser(null);
                 logoutUser()
@@ -38,35 +39,28 @@ export const useAuth = (navigate) => {
     };
 
     useEffect(() => {
-        fetchUserData();
+        verifyAuth();
     }, []);
 
     async function logoutUser() {
         try {
-            const response = await axios.get('/logout/');
+            const res = await axios.get('/auth/logout/');
+            toast.success(res.data.msg)
+            setUser(null)
             navigate("/login")
-        } catch (error) {
-            console.error('Error al cerrar sesión:', error);
+        } catch (err) {
+            toast.error(err.response.data.msg)
         }
     }
 
     async function loginUser(values) {
         try {
-            const res = await axios.post('/login/', values);
-            toast.success(res.data)
-            // * Llamar al fecth para que a demas de verificar el token obtenga la info del usuario
-            fetchUserData()
+            const res = await axios.post('/auth/login', values);
+            toast.success(res.data.msg)
+            setUser(res.data.info.user);
             return { success: true };
-        } catch (error) {
-            // * Error está en error.response.data.credentials
-            if (error.response && error.response.status === 400) {
-                let errorData = error.response.data.credentials;
-                // * errorData es un array con el mensaje de error
-                toast.error(errorData[0]);
-                return { success: false };
-            } else {
-                return { success: false };
-            }
+        } catch (err) {
+            toast.error(err.response.data.msg)
         }
     }
 

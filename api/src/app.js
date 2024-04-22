@@ -9,6 +9,7 @@ const app = express();
 //! config
 app.use(cors(CorsConfig));
 app.use(express.json());
+app.use(cookieParser());
 app.use(morgan('dev'))
 // ! middlewares
 
@@ -16,3 +17,12 @@ app.use(morgan('dev'))
 app.use("/api", routes);
 
 export default app
+
+
+// TODO: 
+// Probar acceso de usuarios / clientes
+// Implementacion middleware verifyToken
+//* Proteccion de rutas back y front
+//* Registro
+//? Probar verificacion token
+

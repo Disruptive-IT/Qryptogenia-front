@@ -1,4 +1,5 @@
 import prisma from "../lib/prisma.js";
+import { useSend } from "../utils/useSend.js";
 
 
 export const getUsers = async (req, res) => {
@@ -11,16 +12,27 @@ export const getUsers = async (req, res) => {
   }
 };
 
+//* getUser se ejecuta entre las renderizaciones del sitio, asegurando que se acceda a los datos del usuario después de una verificación exitosa del token por parte del middleware. Esto es para la persistencia del estado autenticado del usuario, tambien hace mas facil el acceso a los datos del usuario en diferentes partes de la aplicación sin necesidad de realizar verificaciones adicionales
 export const getUser = async (req, res) => {
-  const id = req.params.id;
   try {
-    const user = await prisma.user.findUnique({
-      where: { id },
+    const _user = await prisma.user.findUnique({
+      where: { id: req.userId, state: true },
+      select: {
+        profile_picture: true,
+        username: true,
+        email: true,
+        rol: true,
+      },
     });
-    res.status(200).json(user);
+
+    const user = {
+      ..._user,
+      rol: _user.rol.name,
+    };
+
+    res.status(200).json(useSend("", user));
   } catch (err) {
-    console.log(err);
-    res.status(500).json({ message: "Failed to get user!" });
+    res.status(500).json(useSend("Failed to get user!"));
   }
 };
 

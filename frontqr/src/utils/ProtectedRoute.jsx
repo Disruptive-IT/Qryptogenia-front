@@ -7,13 +7,10 @@ export const ProtectedRoute = ({ children, roles }) => {
 
   if (!user) {
     return;
-  }
-
-  // Determinar usuario basado en is_staff
-  const userRole = user.is_staff ? 'admin' : 'user';
+ }
 
   // Validacion de rol
-  if (!roles.some(role => role === userRole)) {
+  if (!roles.some(role => role === user.rol)) {
     return <Navigate to="/login" replace />; 
   }
 

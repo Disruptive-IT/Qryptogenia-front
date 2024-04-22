@@ -2,7 +2,8 @@ import * as Yup from "yup";
 
 export const SchemaLoginValidate = Yup.object().shape({
     email: Yup.string().email('Invalid email').required('Email is required'),
-    password: Yup.string().required('Password is required')
+    password: Yup.string().required('Password is required'),
+    terms: Yup.string().required('Password is required'),
 });
 
 
