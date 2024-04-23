@@ -20,11 +20,11 @@ export const ForgotPassForm = () => {
         position: "bottom-right",
       });
   
-      const response = await forgotPassword(data.email);
+      const { success, error } = await forgotPassword(data.email);
   
       toast.dismiss(loadingToast); // Cerrar el loadingToast una vez que se obtenga la respuesta
   
-      if (response && response.status === "success") {
+      if (success) {
         toast.success("Recovery email sent successfully", {
           position: "bottom-right",
           style: {
@@ -46,13 +46,6 @@ export const ForgotPassForm = () => {
       }
     } catch (error) {
       console.error('Error en la solicitud:', error);
-      toast.error('Error sending recovery email', {
-        position: "bottom-right",
-        style: {
-          fontSize: '15px',
-          padding: '25px',
-        },
-      });
     }
   };
 
@@ -84,10 +77,10 @@ export const ForgotPassForm = () => {
                   <IconsLeft />
                   <div className="inputsGroupsEnd fullWidth">
                     <h1 className="authTittle">
-                      <span className='text-[#284B63]'>QR</span>yptogenia
+                      <span className="negrita">QR</span>yptogenia
                     </h1>
-                    <span className="fullWidth">Ingrese tu Email para enviarte un{" "}</span>
-                    <span className="fullWidth">correo de recuperacion de contraseña{" "}</span>
+                    <span className="fullWidth" style={{ color: "black" }}>Ingrese tu Email para enviarte un{" "}</span>
+                    <span className="fullWidth" style={{ color: "black" }}>correo de recuperacion de contraseña{" "}</span>
                     <div className="inputGroup">
                       <Field
                         className="authInputs emailIcon"

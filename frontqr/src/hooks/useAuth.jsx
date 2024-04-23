@@ -42,16 +42,16 @@ export const useAuth = (navigate) => {
         verifyAuth();
     }, []);
 
-    async function logoutUser() {
-        try {
-            const res = await axios.get('/auth/logout/');
-            toast.success(res.data.msg)
-            setUser(null)
-            navigate("/login")
-        } catch (err) {
-            toast.error(err.response.data.msg)
-        }
-    }
+    // async function logoutUser() {
+    //     try {
+    //         const res = await axios.get('/auth/logout/');
+    //         toast.success(res.data.msg)
+    //         setUser(null)
+    //         navigate("/login")
+    //     } catch (err) {
+    //         toast.error(err.response.data.msg)
+    //     }
+    // }
 
     async function loginUser(values) {
         try {
@@ -88,23 +88,50 @@ export const useAuth = (navigate) => {
     };
 
 
-    const recoverPassword = async (id, token, newPasswordData) => {
+    const recoverPassword = async (confirmPassword, token, id) => {
         try {
-          const response = await axios.post(`/password_reset/${id}/${token}`, newPasswordData);
-          return response.data; // Retorna la respuesta del servidor
+          console.log('Token enviado en la solicitud:', token);
+      
+          const response = await axios.post(`/auth/password_reset/confirm/${id}/${token}`, { confirmPassword });
+      
+          switch (response.status) {
+            case 200:
+              return { success: true };
+            // Manejo de otros códigos de estado aquí
+            default:
+              return { success: false, message: 'Unknown error' };
+          }
         } catch (error) {
-          console.error('Error restableciendo contraseña:', error);
-          throw error; // Maneja el error adecuadamente en tu frontend
+          if (error.response) {
+            // Error de respuesta HTTP
+            console.error('Error response:', error.response.data);
+            return { success: false, message: error.response.data };
+          } else if (error.request) {
+            // Error de solicitud HTTP
+            console.error('Error request:', error.request);
+            return { success: false, message: 'Network error' };
+          } else {
+            // Otro tipo de error
+            console.error('Error:', error.message);
+            return { success: false, message: 'Unknown error' };
+          }
         }
       };
+      
 
       const forgotPassword = async (email) => {
         try {
-          const response = await axios.post('/password_reset', { email });
-          return response.data; // Retorna la respuesta del servidor
+          const response = await axios.post('/auth/password_reset', { email });
+          if (response.data.status === 'User not exists!') {
+            // Si el usuario no existe en el servidor, mostrar un error
+            return { success: false, error: 'E-mail not registered in our system' };
+          } else {
+            // Si el correo se envía correctamente, devolver éxito
+            return { success: true };
+          }
         } catch (error) {
-          console.error('Error enviando correo electrónico para restablecimiento de contraseña:', error);
-          throw error; // Maneja el error adecuadamente en tu frontend
+          console.error('Error sending recovery email:', error);
+          return { success: false, error: 'Error sending recovery email' }; // Manejar errores de red u otros errores
         }
       };
 
@@ -216,7 +243,7 @@ export const useAuth = (navigate) => {
         user,
         loginUser,
         registerUser,
-        logoutUser,
+        // logoutUser,
         recoverPassword,
         forgotPassword,
         getUsersData,

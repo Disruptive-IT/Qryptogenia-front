@@ -7,14 +7,14 @@ import { IconsRight } from "../../components/auth/pure/iconsRight";
 import logo from "../../assets/imgs/logoForms.png"
 import { AuthContext } from "../../context/AuthContext";
 import { Formik, Form, Field, ErrorMessage } from "formik";
+import { useParams } from 'react-router-dom';
 // import toast from 'react-hot-toast';
 import { Toaster, toast } from 'sonner'
 
 export const RecoverPassForm = () => {
-  const { register, handleSubmit, watch, setError } = useForm();
-  const location = useLocation();
+  const { register, handleSubmit, setError } = useForm();
+  const { token, id } = useParams();
   const { recoverPassword } = useContext(AuthContext);
-  const token = new URLSearchParams(location.search).get('token');
   const [redirectToLogin, setRedirectToLogin] = useState(false);
   const [showPassword, setShowPassword] = useState({
     newPassword: false,
@@ -24,13 +24,19 @@ export const RecoverPassForm = () => {
 
   const onSubmit = async (data) => {
     try {
+      console.log('Formulario de recuperación de contraseña enviado:', data);
+  
+      const { success } = await recoverPassword(data.confirmPassword, token, id);
       if (!token) {
         setError('token', { type: 'manual', message: 'Token no válido. Por favor, asegúrate de tener el enlace correcto.' });
         return;
       }
-
-      const { success } = await recoverPassword(data.confirmPassword, token);
-
+  
+      console.log('Token enviado al servidor:', token);
+  
+      
+      console.log('Respuesta del servidor:', success);
+  
       if (success) {
         toast.success("¡Tu contraseña ha sido cambiada con éxito!", {
           position: "bottom-right",

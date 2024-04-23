@@ -1,8 +1,14 @@
 import prisma from "../lib/prisma.js";
 import { useSend } from "../utils/useSend.js";
 import bcrypt from "bcryptjs";
-import jwt from "jsonwebtoken";
+import nodemailer from "nodemailer"
+// import jwt from "jsonwebtoken";
+import jwt from 'jsonwebtoken';
+
 import { sendVerificationEmail } from "../services/mail.service.js";
+
+// const jwt = require('jsonwebtoken');
+const JWT_SECRET = process.env.JWT_SECRET;
 
 export const register = async (req, res) => {
   const { email } = req.body;
@@ -134,3 +140,158 @@ export const logout = (req, res) => {
     res.status(500).json(useSend("Error in server", err));
   }
 };
+
+
+export const forgot_password = async (req, res) => {
+  const {email} = req.body;
+  prisma.user.findUnique({ where: { email } })
+    .then(user =>{
+      if(!user){
+        return res.send({Status: "User not existed"})
+      }
+      const token = jwt.sign({id: user.id}, "jwt_secret", {expiresIn:"1d"})
+      var transporter = nodemailer.createTransport({
+        service: 'gmail',
+        auth: {
+          user: process.env.EMAIL_HOST_USER,
+          pass: process.env.EMAIL_HOST_PASSWORD,
+        }
+      });
+      
+      var mailOptions = {
+        from: process.env.EMAIL_HOST_USER,
+        to: email,
+        subject: 'Reset your password',
+        text: `http://localhost:5173/recoverPassword/${user.id}/${token}`
+      };
+      
+      transporter.sendMail(mailOptions, function(error, info){
+        if (error) {
+          console.log(error);
+        } else {
+          return res.send({Status: "Success"})
+        }
+      });
+    })
+    
+}
+
+export const recoverPassword = async (req, res) =>{
+  const {id, token} = req.params
+  const {password} = req.body
+
+  jwt.verify(token, "jwt_secret", (err, decoded) =>{
+    if(err){
+      return res.json({Status: "error with token"})
+    }else{
+      bcrypt.hash(password, 10)
+      .then(hash =>{
+        prisma.user.update({
+          where: { id: id },
+          data: { password: hash }
+          .then(u => res.send({Status: "Success"}))
+          .catch(err => res.send({Status: err}))
+        });
+      }).catch(err => res.send({Status: err}))
+    }
+  })
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// export const forgot_password = async (req, res) => {
+//   const { email } = req.body;
+//   try {
+//     const oldUser = await prisma.user.findUnique({ where: { email } });
+//     if (!oldUser) {
+//       return res.json({ status: "User not exists!" });
+//     }
+//     const secret = process.env.JWT_SECRET + oldUser.password;
+//     console.log("Valor de JWT_SECRET en forgot_password:", process.env.JWT_SECRET);
+
+//     const token = jwt.sign({ email: oldUser.email, id: oldUser.id }, secret, {
+//       expiresIn: "1h", // Cambiar a una hora de expiración
+//     });
+//     const resetLink = `http://localhost:5173/recoverPassword/${token}`;
+
+//     // Configurar el transporte de correo
+//     const transporter = nodemailer.createTransport({
+//       service: 'gmail',
+//       auth: {
+//         user: process.env.EMAIL_HOST_USER,
+//         pass: process.env.EMAIL_HOST_PASSWORD,
+//       }
+//     });
+    
+//     // Configurar el contenido del correo electrónico
+//     const mailOptions = {
+//       from: process.env.EMAIL_HOST_USER,
+//       to: email,
+//       subject: 'Recuperación de contraseña',
+//       html: `<p>Hola ${oldUser.username},</p>
+//              <p>Has solicitado restablecer tu contraseña. Haz clic en el siguiente enlace para continuar:</p>
+//              <a href="${resetLink}">${resetLink}</a>
+//              <p>Si no solicitaste este cambio, puedes ignorar este correo electrónico.</p>`
+//     };
+
+//     // Intentar enviar el correo electrónico
+//     transporter.sendMail(mailOptions, function(error, info){
+//       if (error) {
+//         console.error("Error sending email:", error);
+//         return res.json({ status: "Error sending email" });
+//       } else {
+//         console.log('Email sent: ' + info.response);
+//         return res.json({ status: "Email sent successfully" });
+//       }
+//     });
+//   } catch (error) {
+//     console.error(error);
+//     return res.status(500).json({ status: "Internal server error" });
+//   }
+// };
+
+
+
+// export const reset_password2 = async (req, res) => {
+//   const { token } = req.params;
+//   const { password } = req.body;
+
+//   try {
+//     const decodedToken = jwt.verify(token, process.env.JWT_SECRET);
+//     const userId = decodedToken.id;
+
+//     const oldUser = await prisma.user.findUnique({ where: { id: userId } });
+//     if (!oldUser) {
+//       return res.status(404).json({ status: "User not found" });
+//     }
+
+//     const encryptedPassword = await bcrypt.hash(password, 10);
+
+//     // Actualizar la contraseña del usuario en la base de datos
+//     await prisma.user.update({
+//       where: { id: userId },
+//       data: { password: encryptedPassword },
+//     });
+
+//     res.json({ status: "Password updated" });
+//   } catch (error) {
+//     console.error("Error verifying token:", error);
+//     res.status(500).json({ status: "Internal server error" });
+//   }
+// };
+
+
+

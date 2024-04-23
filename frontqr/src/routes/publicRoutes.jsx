@@ -16,7 +16,7 @@ export const publicRoutes = () => (
         <Route path="register" element={<RegisterForm />} />
         <Route path="verification" element={<ActivateEmailPage />} />
         <Route path="not" element={<NotFoundPage />} />
-        <Route path="recoverPassword/confirm" element={<RecoverPassForm />} />
+        <Route path="recoverPassword/:id/:token" element={<RecoverPassForm />} />
         <Route path="forgotPassword" element={<ForgotPassForm />} />   
     </Route>
 );
