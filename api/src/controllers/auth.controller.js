@@ -7,50 +7,158 @@ import { sendVerificationEmail } from "../services/mail.service.js";
 export const register = async (req, res) => {
   const { email } = req.body;
 
+  //* Si el usuario ya existe
   const existingUser = await prisma.user.findUnique({
     where: { email: email },
   });
-  //? Verificar tambien el estado del usuario por eliminacion
   if (existingUser) {
-    return res.status(400).json(useSend("Ya existe"));
+    return res.status(400).json(useSend("Este registro ya existe"));
   }
 
-  //! Verficar si el usuario ya tiene un preregistro
-
-  //* Enviar el mail de verificación al cliente
-  const tokenVerificacion = jwt.sign({ email: email }, process.env.JWT_SECRET, {
-    expiresIn: process.env.JWT_EXPIRATION,
+  //* Si el usuario ya tiene un pre-registro
+  const existingPreRegister = await prisma.preRegister.findUnique({
+    where: { email: email },
   });
 
-  const mail = await sendVerificationEmail(email, tokenVerificacion);
-  if (mail.accepted === 0) {
-    return res(500).send({
-      status: "error",
-      message: "Error enviando mail de verificación",
-    });
+  if (existingPreRegister) {
+    // Verificar si ha pasado el tiempo mínimo para enviar otro correo
+    const timeSinceLastEmail =
+      new Date() - existingPreRegister.last_token_generated_at;
+    const minTimeBetweenEmails = 10 * 60 * 1000; // 10 minutos en milisegundos
+
+    if (timeSinceLastEmail < minTimeBetweenEmails) {
+      //* Calcular el tiempo restante en minutos
+      const remainingTime = Math.ceil(
+        (minTimeBetweenEmails - timeSinceLastEmail) / (60 * 1000)
+      );
+
+      const message = `Ya se ha enviado un correo de verificación recientemente. Por favor, espera ${remainingTime} minuto(s) antes de solicitar otro.`;
+
+      return res.status(200).json(useSend(message));
+    }
   }
 
-  // ! Crear el registro del usuario en preregistro
+  return enviarCorreo(req, res, existingPreRegister);
+};
 
-  return res.status(200).json(useSend("Se ha enviado el correo electronico"));
+export const completeRegister = async (req, res) => {
+  const { username, password, email } = req.body;
+
+  try {
+    // Buscar el registro de pre-registro
+    const preRegister = await prisma.preRegister.findUnique({
+      where: { email: email },
+    });
+    //!! ALGUN ERROR DE POR ACÁ
+    if (!preRegister) {
+      return res.status(404).json({ message: "Pre-registro no encontrado" });
+    }
+
+    // Eliminar el registro de pre-registro
+    await prisma.preRegister.delete({
+      where: { id: preRegister.id },
+    });
+
+    // Encriptar la contraseña
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    // Crear el nuevo usuario
+    const newUser = await prisma.user.create({
+      data: {
+        username: username,
+        email: email,
+        password: hashedPassword,
+        rol: { connect: { name: "CLIENT" } },
+      },
+    });
+
+    // Crear el registro de LoginLogs
+    await prisma.loginLogs.create({
+      data: {
+        user: { connect: { id: newUser.id } },
+        created_ip: req.ip,
+      },
+    });
+
+    // Responder con éxito
+    return res.status(200).json({ message: "Registro completado con éxito" });
+  } catch (error) {
+    console.error("Error completing registration:", error);
+    return res.status(500).json({ message: "Error completing registration" });
+  }
+};
+
+const enviarCorreo = async (req, res, existingPreRegister) => {
+  const { email } = req.body;
+
+  // const tokenVerificacion = jwt.sign({ email: email }, process.env.JWT_SECRET, {
+  //   expiresIn: process.env.JWT_EXPIRATION,
+  // });
+
+  const pin = Math.floor(1000 + Math.random() * 9000);
+
+  try {
+    await sendVerificationEmail(email, pin);
+
+    //* Si el usuario ya tiene un pre-registro, actualizarlo
+    if (existingPreRegister) {
+      await prisma.preRegister.update({
+        where: { email: email },
+        data: {
+          pin: pin,
+          last_token_generated_at: new Date(),
+        },
+      });
+      return res
+        .status(200)
+        .json(
+          useSend(
+            "Se ha enviado un nuevo correo de verificación. Por favor, verifica tu bandeja de entrada."
+          )
+        );
+    }
+
+    //* Si el usuario no tiene un pre-registro, crear uno nuevo
+    await prisma.preRegister.create({
+      data: {
+        email: email,
+        pin: pin,
+        last_token_generated_at: new Date(),
+      },
+    });
+
+    return res
+      .status(200)
+      .json(
+        useSend(
+          "Se ha enviado correo de verificación.  Por favor, verifica tu bandeja de entrada."
+        )
+      );
+  } catch (error) {
+    return res
+      .status(500)
+      .json(useSend("Error enviando correo de verificación"));
+  }
 };
 
 export const verifyAccount = async (req, res) => {
   try {
-    if (!req.params.token) {
-      return res.status(500).json(useSend("El token no coincide"));
-    }
+    const { email, pin } = req.body;
 
-    //! Decodicicar el token
-    //- Verificar expiracion
-    //- tomar el correo
-    //- verificar el preregistro para saber si el token coincide con el recibido
-    //? Dar el acceso
-    //! Pasar a establecer el registro en user
+    // Verificar el pre-registro para saber si el pin coincide con el recibido
+    const preRegister = await prisma.preRegister.findUnique({
+      where: { email: email },
+    });
 
-    res.status(200).json(useSend("Melo en verifyAccount"));
+    if (!preRegister)
+      return res.status(400).json(useSend("Intente generar el pin nuevamente"));
+
+    if (preRegister.pin !== parseInt(pin))
+      return res.status(400).json(useSend("No es el token mas reciente"));
+
+    return res.status(200).json(useSend("TDO BIEN"));
   } catch (err) {
-    res.status(500).json(useSend("Error in server", err));
+    return res.status(500).json(useSend("Error in server", err));
   }
 };
 
@@ -115,6 +223,7 @@ export const login = async (req, res) => {
         })
       );
   } catch (err) {
+    console.log("ERROR ", err.response);
     res.status(500).json(useSend("Error in server", err));
   }
 };

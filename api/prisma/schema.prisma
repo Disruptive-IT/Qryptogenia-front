@@ -71,7 +71,7 @@ model PreRegister {
   email                   String   @unique @db.VarChar(255)
   createdAt               DateTime @default(now())
   last_token_generated_at DateTime @updatedAt
-  token                   String
+  pin                   Int
 }
 
 model RolPermission {

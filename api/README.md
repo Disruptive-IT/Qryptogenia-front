@@ -10,15 +10,15 @@ npm install
 ### Create .env file:
 
 ```bash
-PORT=yourPort
+PORT=PUERTO-BACK
 CLIENT_URL=empty
 DATABASE_URL="mysql://root:GpUzjYbMakwnNjNLnNMmZvgwIXnoFPDl@viaduct.proxy.rlwy.net:32432/railway"
 JWT_SECRET=47a8ec4d8752b9be493521b340f0aa2b847b8bd51d0a051c925ff1fe768dfc79
 NODE_ENV=development
 
 EMAIL_HOST=smtp.gmail.com
-EMAIL_PASSWORD=contraseñaDeApp
-EMAIL_USER=Correo del que envia
+EMAIL_PASSWORD=CONTRASEÑA-APLICACION
+EMAIL_USER=CORREO
 JWT_EXPIRATION=1h
 ```
 ### Generate JWT_SECRET 
