@@ -24,7 +24,8 @@ export const register = async (req, res) => {
     // Verificar si ha pasado el tiempo mínimo para enviar otro correo
     const timeSinceLastEmail =
       new Date() - existingPreRegister.last_token_generated_at;
-    const minTimeBetweenEmails = 10 * 60 * 1000; // 10 minutos en milisegundos
+    // const minTimeBetweenEmails = 10 * 60 * 1000; // 10 minutos en milisegundos
+    const minTimeBetweenEmails = 1;
 
     if (timeSinceLastEmail < minTimeBetweenEmails) {
       //* Calcular el tiempo restante en minutos
@@ -34,11 +35,11 @@ export const register = async (req, res) => {
 
       const message = `Ya se ha enviado un correo de verificación recientemente. Por favor, espera ${remainingTime} minuto(s) antes de solicitar otro.`;
 
-      return res.status(200).json(useSend(message));
+      return res.status(400).json(useSend(message));
     }
   }
 
-  return enviarCorreo(req, res, existingPreRegister);
+  return sendVerifyEmail(req, res, existingPreRegister);
 };
 
 export const completeRegister = async (req, res) => {
@@ -49,7 +50,7 @@ export const completeRegister = async (req, res) => {
     const preRegister = await prisma.preRegister.findUnique({
       where: { email: email },
     });
-    //!! ALGUN ERROR DE POR ACÁ
+
     if (!preRegister) {
       return res.status(404).json({ message: "Pre-registro no encontrado" });
     }
@@ -68,7 +69,7 @@ export const completeRegister = async (req, res) => {
         username: username,
         email: email,
         password: hashedPassword,
-        rol: { connect: { name: "CLIENT" } },
+        rol: { connect: { id: 2 } },
       },
     });
 
@@ -88,12 +89,8 @@ export const completeRegister = async (req, res) => {
   }
 };
 
-const enviarCorreo = async (req, res, existingPreRegister) => {
+const sendVerifyEmail = async (req, res, existingPreRegister) => {
   const { email } = req.body;
-
-  // const tokenVerificacion = jwt.sign({ email: email }, process.env.JWT_SECRET, {
-  //   expiresIn: process.env.JWT_EXPIRATION,
-  // });
 
   const pin = Math.floor(1000 + Math.random() * 9000);
 
@@ -113,7 +110,7 @@ const enviarCorreo = async (req, res, existingPreRegister) => {
         .status(200)
         .json(
           useSend(
-            "Se ha enviado un nuevo correo de verificación. Por favor, verifica tu bandeja de entrada."
+            "Se ha enviado un nuevo correo de verificación"
           )
         );
     }
@@ -131,7 +128,7 @@ const enviarCorreo = async (req, res, existingPreRegister) => {
       .status(200)
       .json(
         useSend(
-          "Se ha enviado correo de verificación.  Por favor, verifica tu bandeja de entrada."
+          "Se ha enviado el correo de verificación"
         )
       );
   } catch (error) {
@@ -177,15 +174,14 @@ export const login = async (req, res) => {
         .json(useSend("No account with this email has been registered."));
     }
 
-    //! Implemtar la encriptacion para descomentarear
-    // const isMatch = await bcrypt.compare(password, user.password);
-    // if (!isMatch) {
-    //   return res.status(400).json(useSend("Invalid credentials."));
-    // }
-    // Suponiendo que 'password' es la contraseña ingresada por el usuario y 'user.password' es la contraseña almacenada en la base de datos.
-    if (password !== user.password) {
+    const isMatch = await bcrypt.compare(password, user.password);
+    if (!isMatch) {
       return res.status(400).json(useSend("Invalid credentials."));
     }
+    // Suponiendo que 'password' es la contraseña ingresada por el usuario y 'user.password' es la contraseña almacenada en la base de datos.
+    // if (password !== user.password) {
+    //   return res.status(400).json(useSend("Invalid credentials."));
+    // }
 
     //? aca implementar la logica de para accesos errones .> login log
 
@@ -214,7 +210,7 @@ export const login = async (req, res) => {
         path: "/",
       })
       .json(
-        useSend("Successfully login admin", {
+        useSend("Successfully login", {
           //? Puede ser una opcion obtener la info por el middleware
           user: {
             rol: user.rol.name,

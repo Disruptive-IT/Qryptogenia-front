@@ -5,22 +5,22 @@ import { useAuthContext } from "../../context/AuthContext";
 import { useLoader } from '../../context/LoaderContext';
 import { SchemaCompleteRegisterValidate } from '../../helpers/validate/auth.validate';
 
-const CompleteRegisterForm = ({ onSuccess, email }) => {
-    const { completeRegister } = useAuthContext();
+const CompleteRegisterForm = ({ email }) => {
+    const { completeRegister, loginUser } = useAuthContext();
     const { startLoading, stopLoading } = useLoader();
 
     const handleSubmit = async (values, { resetForm }) => {
         startLoading();
         try {
-            const result = await completeRegister({ ...values, email });
-            stopLoading();
-            if (result.success) {
-                onSuccess();
-            } else {
-                console.log('Complete register erorr');
+            const completeResult = await completeRegister({ ...values, email });
+            if (completeResult.success) {
+                const loginResult = await loginUser({ email, password: values.password });
+                if (loginResult.success) {
+                    resetForm();
+                }
             }
         } catch (error) {
-            console.error('Compelte registere error', error);
+            console.error('Error inesperado:', error);
         } finally {
             stopLoading();
         }
@@ -28,28 +28,47 @@ const CompleteRegisterForm = ({ onSuccess, email }) => {
 
     return (
         <Formik
-            initialValues={{ username: '', password: '', confirmPassword: '', }}
+            initialValues={{ username: '', password: '', confirmPassword: '', terms: false }}
             validationSchema={SchemaCompleteRegisterValidate}
             onSubmit={handleSubmit}
         >
-            <Form>
-                <div className="inputGroup relative">
-                    <span className="fullWidth">Ingresa los datos faltantes para Completar tu registro</span>
+            {({ values, touched }) => (
+
+                <Form>
                     <div className="inputGroup relative">
-                        <Field className="authInputs emailIcon" type="text" title="Username" name="username" placeholder="Username" maxLength="64" /><br />
-                        <ErrorMessage name="username" className="errorMessaje absolute left-7" component='span' />
+                        <div className='mb-5'>
+                            <h1 className="authTittle mb-4"><span className='text-[#284B63]'>QR</span>yptogenia</h1>
+                            <p>Ingresa los datos faltantes para completar tu registro.</p>
+                            <strong>{email}</strong>
+                        </div>
+                        <span className="fullWidth"></span>
+                        <div className="inputGroup relative">
+                            <Field className="authInputs emailIcon" type="text" title="Username" name="username" placeholder="Username" maxLength="64" /><br />
+                            <ErrorMessage name="username" className="errorMessaje absolute left-7" component='span' />
+                        </div>
+                        <div className="inputGroup relative">
+                            <Field className="authInputs candado" type="password" title="Password" name="password" placeholder="Password" maxLength="64" />
+                            <ErrorMessage name="password" className="errorMessaje absolute left-8 top-7 " component='span' />
+                        </div>
+                        <div className="inputGroup relative">
+                            <Field className="authInputs candado" type="password" title="Confirm Password" name="confirmPassword" placeholder="Confirm Password" maxLength="64" /><br />
+                            <ErrorMessage name="confirmPassword" className="errorMessaje absolute left-7" component='span' />
+                        </div>
                     </div>
-                    <div className="inputGroup relative">
-                        <Field className="authInputs candado" type="password" title="Password" name="password" placeholder="Password" maxLength="64" />
-                        <ErrorMessage name="password" className="errorMessaje absolute left-7 top-8 " component='span' />
+                    <div className='flex flex-col items-start my-4'>
+                        <div className='mt-2'>
+                            <Field type="checkbox" name="remember" className="mr-2" />
+                            <label htmlFor="remember">Remember me</label>
+                        </div>
+                        <div>
+                            <Field type="checkbox" name="terms" className="mr-2" />
+                            <label htmlFor="terms" className={`${touched.terms && !values.terms ? 'text-red-500' : ''}`}>I accept the Terms and Conditions</label>
+                        </div>
                     </div>
-                    <div className="inputGroup relative">
-                        <Field className="authInputs candado" type="password" title="Confirm Password" name="confirmPassword" placeholder="Confirm Password" maxLength="64" /><br />
-                        <ErrorMessage name="confirmPassword" className="errorMessaje absolute left-7" component='span' />
-                    </div>
-                </div>
-                <SubmitButton text="Completar registro" />
-            </Form>
+                    <SubmitButton text="Completar registro" />
+                </Form>
+            )}
+
         </Formik>
     );
 };

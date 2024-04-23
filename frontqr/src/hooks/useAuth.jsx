@@ -78,18 +78,15 @@ export const useAuth = (navigate) => {
             return { success: true };
         } catch (err) {
             toast.error(err.response.data.msg);
-            return { success: false };
         }
     };
 
     const completeRegister = async (values) => {
         try {
             const res = await axios.post('/auth/complete-register', values);
-            toast.success(res.data.msg);
             return { success: true };
         } catch (err) {
             toast.error(err.response.data.msg);
-            return { success: false };
         }
     };
 

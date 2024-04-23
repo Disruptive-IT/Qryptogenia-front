@@ -1,19 +1,22 @@
 import * as Yup from "yup";
 
+
 export const SchemaLoginValidate = Yup.object().shape({
   email: Yup.string().email('Invalid email').required('Email is required'),
   password: Yup.string().required('Password is required'),
-  terms: Yup.string().required('Password is required'),
+  terms: Yup.boolean().oneOf([true], 'You must accept the terms and conditions'),
 });
-
 
 
 export const SchemaRegisterValidate = Yup.object().shape({
   email: Yup.string().email('Invalid email').required('Email is required'),
 });
 
-export const SchemaPinValidate = Yup.object().shape({
-  // email: Yup.string().email('Invalid email').required('Email is required'),
+export const SchemaPinValidate = Yup.object({
+  pin: Yup.string()
+    .required('El PIN es requerido')
+    .length(4, 'El PIN debe tener exactamente 4 dígitos')
+    .matches(/^\d+$/, 'El PIN solo puede contener números')
 });
 
 export const SchemaCompleteRegisterValidate = Yup.object().shape({
@@ -28,6 +31,8 @@ export const SchemaCompleteRegisterValidate = Yup.object().shape({
   confirmPassword: Yup.string()
     .oneOf([Yup.ref('password'), null], 'Passwords must match')
     .required('Confirm Password is required'),
+  terms: Yup.boolean().oneOf([true], 'You must accept the terms and conditions'),
+
 });
 
 
