@@ -60,10 +60,8 @@ export const completeRegister = async (req, res) => {
       where: { id: preRegister.id },
     });
 
-    // Encriptar la contraseña
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    // Crear el nuevo usuario
     const newUser = await prisma.user.create({
       data: {
         username: username,
@@ -81,11 +79,9 @@ export const completeRegister = async (req, res) => {
       },
     });
 
-    // Responder con éxito
-    return res.status(200).json({ message: "Registro completado con éxito" });
+    return res.status(200).json(useSend("Registro completado con éxito"));
   } catch (error) {
-    console.error("Error completing registration:", error);
-    return res.status(500).json({ message: "Error completing registration" });
+    return res.status(500).json(useSend("Error completing registration"));
   }
 };
 
@@ -108,11 +104,7 @@ const sendVerifyEmail = async (req, res, existingPreRegister) => {
       });
       return res
         .status(200)
-        .json(
-          useSend(
-            "Se ha enviado un nuevo correo de verificación"
-          )
-        );
+        .json(useSend("Se ha enviado un nuevo correo de verificación"));
     }
 
     //* Si el usuario no tiene un pre-registro, crear uno nuevo
@@ -126,11 +118,7 @@ const sendVerifyEmail = async (req, res, existingPreRegister) => {
 
     return res
       .status(200)
-      .json(
-        useSend(
-          "Se ha enviado el correo de verificación"
-        )
-      );
+      .json(useSend("Se ha enviado el correo de verificación"));
   } catch (error) {
     return res
       .status(500)
