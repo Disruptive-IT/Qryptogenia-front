@@ -37,7 +37,7 @@ model Rol {
   createdAt     DateTime
   update_date   DateTime?
   RolPermission RolPermission[]
-  user          user[]
+  User          User[]
 }
 
 model Membership {
@@ -125,7 +125,7 @@ model Qr {
   createdAt   DateTime
   update_date DateTime?
 
-  user   user    @relation(fields: [userId], references: [id])
+  user   User    @relation(fields: [userId], references: [id])
   userId String
   QrType QrType?
 }
