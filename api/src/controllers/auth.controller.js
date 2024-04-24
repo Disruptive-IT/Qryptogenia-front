@@ -2,13 +2,9 @@ import prisma from "../lib/prisma.js";
 import { useSend } from "../utils/useSend.js";
 import bcrypt from "bcryptjs";
 import nodemailer from "nodemailer"
-// import jwt from "jsonwebtoken";
 import jwt from 'jsonwebtoken';
-
 import { sendVerificationEmail } from "../services/mail.service.js";
-
-// const jwt = require('jsonwebtoken');
-const JWT_SECRET = process.env.JWT_SECRET;
+import { sendRecoverEmail } from "../services/mail.recover.js";
 
 export const register = async (req, res) => {
   const { email } = req.body;
@@ -75,15 +71,14 @@ export const login = async (req, res) => {
         .json(useSend("No account with this email has been registered."));
     }
 
-    //! Implemtar la encriptacion para descomentarear
-    // const isMatch = await bcrypt.compare(password, user.password);
-    // if (!isMatch) {
-    //   return res.status(400).json(useSend("Invalid credentials."));
-    // }
-    // Suponiendo que 'password' es la contraseña ingresada por el usuario y 'user.password' es la contraseña almacenada en la base de datos.
-    if (password !== user.password) {
+    const isMatch = await bcrypt.compare(password, user.password);
+    if (!isMatch) {
       return res.status(400).json(useSend("Invalid credentials."));
     }
+    // Suponiendo que 'password' es la contraseña ingresada por el usuario y 'user.password' es la contraseña almacenada en la base de datos.
+    // if (password !== user.password) {
+    //   return res.status(400).json(useSend("Invalid credentials."));
+    // }
 
     //? aca implementar la logica de para accesos errones .> login log
 
@@ -112,7 +107,7 @@ export const login = async (req, res) => {
         path: "/",
       })
       .json(
-        useSend("Successfully login admin", {
+        useSend("Successfully login", {
           //? Puede ser una opcion obtener la info por el middleware
           user: {
             rol: user.rol.name,
@@ -121,6 +116,7 @@ export const login = async (req, res) => {
         })
       );
   } catch (err) {
+    console.log("ERROR ", err.response);
     res.status(500).json(useSend("Error in server", err));
   }
 };
@@ -143,59 +139,64 @@ export const logout = (req, res) => {
 
 
 export const forgot_password = async (req, res) => {
-  const {email} = req.body;
-  prisma.user.findUnique({ where: { email } })
-    .then(user =>{
-      if(!user){
-        return res.send({Status: "User not existed"})
-      }
-      const token = jwt.sign({id: user.id}, "jwt_secret", {expiresIn:"1d"})
-      var transporter = nodemailer.createTransport({
-        service: 'gmail',
-        auth: {
-          user: process.env.EMAIL_HOST_USER,
-          pass: process.env.EMAIL_HOST_PASSWORD,
-        }
-      });
-      
-      var mailOptions = {
-        from: process.env.EMAIL_HOST_USER,
-        to: email,
-        subject: 'Reset your password',
-        text: `http://localhost:5173/recoverPassword/${user.id}/${token}`
-      };
-      
-      transporter.sendMail(mailOptions, function(error, info){
-        if (error) {
-          console.log(error);
-        } else {
-          return res.send({Status: "Success"})
-        }
-      });
-    })
-    
-}
-
-export const recoverPassword = async (req, res) =>{
-  const {id, token} = req.params
-  const {password} = req.body
-
-  jwt.verify(token, "jwt_secret", (err, decoded) =>{
-    if(err){
-      return res.json({Status: "error with token"})
-    }else{
-      bcrypt.hash(password, 10)
-      .then(hash =>{
-        prisma.user.update({
-          where: { id: id },
-          data: { password: hash }
-          .then(u => res.send({Status: "Success"}))
-          .catch(err => res.send({Status: err}))
-        });
-      }).catch(err => res.send({Status: err}))
+  const { email } = req.body;
+  try {
+    const user = await prisma.user.findUnique({ where: { email } });
+    if (!user) {
+      return res.status(404).send({ error: "User not existed" });
     }
-  })
-}
+    const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET, { expiresIn: "1d" });
+    
+    // Llamada a la función sendRecoverEmail en lugar de configurar el transporte y enviar el correo directamente
+    const mail = await sendRecoverEmail(email, token, user.id);
+    
+    // Manejo de la respuesta del envío del correo
+    if (!mail.accepted || mail.accepted.length === 0) {
+      return res.status(500).send({
+        status: "error",
+        message: "Error sending recovery email",
+      });
+    }
+    
+    // Si el correo se envió correctamente, responder con éxito
+    return res.status(200).json({ success: true, message: "Recovery email sent successfully" });
+  } catch (error) {
+    console.error('Error:', error);
+    return res.status(500).send({ error: "Internal server error" });
+  }
+};
+
+
+
+export const recoverPassword = async (req, res) => {
+  const { id, token } = req.params;
+  const { confirmPassword } = req.body;
+
+  try {
+    console.log('Password:', confirmPassword); // Verifica el valor de la contraseña
+  
+    // Verificar el token
+    jwt.verify(token, process.env.JWT_SECRET, async (err, decoded) => {
+      if (err) {
+        return res.json({ Status: "error with token" });
+      } else {
+        // Generar hash de la nueva contraseña
+        const saltRounds = 10; // Número de rondas de hashing
+        const hashedPassword = await bcrypt.hash(confirmPassword, saltRounds); // Usar confirmPassword en lugar de password
+
+        // Actualizar la contraseña en la base de datos
+        await prisma.user.update({
+          where: { id: id },
+          data: { password: hashedPassword }
+        });
+
+        res.send({ Status: "Success" });
+      }
+    });
+  } catch (error) {
+    res.send({ Status: "Error", message: error.message });
+  }
+};
 
 
 

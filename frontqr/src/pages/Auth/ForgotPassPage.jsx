@@ -20,11 +20,11 @@ export const ForgotPassForm = () => {
         position: "bottom-right",
       });
   
-      const { success, error } = await forgotPassword(data.email);
+      const result = await forgotPassword(data.email);
+      
+      toast.dismiss(loadingToast);
   
-      toast.dismiss(loadingToast); // Cerrar el loadingToast una vez que se obtenga la respuesta
-  
-      if (success) {
+      if (result.success) {
         toast.success("Recovery email sent successfully", {
           position: "bottom-right",
           style: {
@@ -46,6 +46,14 @@ export const ForgotPassForm = () => {
       }
     } catch (error) {
       console.error('Error en la solicitud:', error);
+      // Manejar el error aquí, puedes mostrar un toast de error genérico
+      toast.error('An error occurred, please try again later', {
+        position: "bottom-right",
+        style: {
+          fontSize: '15px',
+          padding: '25px',
+        },
+      });
     }
   };
 
