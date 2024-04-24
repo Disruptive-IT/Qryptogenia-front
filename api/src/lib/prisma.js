@@ -33,6 +33,5 @@ let prisma = new PrismaClient();
 //   .finally(async () => {
 //     await prisma.$disconnect();
 //   });
-let prisma = new PrismaClient()
 
 export default prisma;
