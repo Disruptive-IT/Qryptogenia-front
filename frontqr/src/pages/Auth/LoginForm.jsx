@@ -47,16 +47,15 @@ const LoginForm = () => {
                   <Field className="authInputs candado" type="password" title="Password" name="password" placeholder="Password" maxLength="64" /><br />
                   <ErrorMessage name="password" className="errorMessaje absolute left-7" component='span' />
                 </div>
-                <div>
-                  <div className='mt-2 flex justify-start items-center'>
+                <div className='mt-2 flex flex-col items-start'>
+                  <div>
                     <Field type="checkbox" name="remember" className="mr-2" />
                     <label htmlFor="remember">Remember me</label>
                   </div>
-                  <div className='mt-2 flex justify-start items-center'>
+                  <div>
                     <Field type="checkbox" name="terms" className="mr-2" />
                     <label htmlFor="terms" className={`${touched.terms && !values.terms ? 'text-red-500' : ''}`}>I accept the Terms and Conditions</label>
                   </div>
-                  {touched.terms && errors.terms && <div className="errorMessaje absolute left-7" style={{ color: 'red' }}>{errors.terms}</div>}
                 </div>
                 <Link className='text-[#103b79]' to="/forgotPassword">Forgot your password?</Link>
                 <SubmitButton text="Log in" />
@@ -65,7 +64,6 @@ const LoginForm = () => {
               <img src={logo} className="elLogoRigth" alt="" />
               <IconsRight />
             </div>
-
           </Form>
         </section>
       )}

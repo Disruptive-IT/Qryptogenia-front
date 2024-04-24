@@ -4,6 +4,7 @@ import { login, logout, register, verifyAccount, forgot_password, recoverPasswor
 const router = express.Router();
 
 router.post("/register", register);
+router.post("/complete-register", completeRegister);
 router.post("/login", login);
 router.get("/logout", logout);
 router.get("/verificar/:token", verifyAccount);

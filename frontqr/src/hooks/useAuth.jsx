@@ -17,41 +17,38 @@ export const useAuth = (navigate) => {
             }
         }
         stopLoading();
-    }, [user]); 
-    
-
-    async function verifyAuth() {
-        try {
-            startLoading();
-            const res = await axios.get('user/');
-            if (res.data.info) {
-                setUser(res.data.info);
-            } else {
-                setUser(null);
-                logoutUser()
-            }
-        } catch (error) {
-            console.error('Error verifying token:', error);
-            logoutUser()
-        } finally {
-            stopLoading();
-        }
-    };
+    }, [user]);
 
     useEffect(() => {
-        verifyAuth();
-    }, []);
+        async function verifyAuth() {
+            try {
+                startLoading();
+                const res = await axios.get('user/');
+                if (res.data.info) {
+                    setUser(res.data.info);
+                } else {
+                    setUser(null);
+                    logoutUser()
+                }
+            } catch (error) {
+                console.error('Error verifying token:', error);
+                logoutUser()
+            } finally {
+                stopLoading();
+            }
+        };
+    }, [user]);
 
-    // async function logoutUser() {
-    //     try {
-    //         const res = await axios.get('/auth/logout/');
-    //         toast.success(res.data.msg)
-    //         setUser(null)
-    //         navigate("/login")
-    //     } catch (err) {
-    //         toast.error(err.response.data.msg)
-    //     }
-    // }
+    async function logoutUser() {
+        try {
+            const res = await axios.get('/auth/logout/');
+            toast.success(res.data.msg)
+            setUser(null)
+            navigate("/login")
+        } catch (err) {
+            toast.error(err.response.data.msg)
+        }
+    }
 
     async function loginUser(values) {
         try {
@@ -64,29 +61,34 @@ export const useAuth = (navigate) => {
         }
     }
 
-    const registerUser = async (values) => {
+    const registerUser = async (email) => {
         try {
-            const response = await axios.post('/register/', values);
-            toast.success("Verification email successfully sent");
+            const res = await axios.post('/auth/register', { email: email });
+            toast.info(res.data.msg);
             return { success: true };
-        } catch (error) {
-            // * Error está en error.response.data.tipoError
-            // * El error puede ser de tipo credenciasles o tipo verificacion
-            if (error.response && error.response.status === 400) {
-                let errorData = error.response.data;
-                if (errorData.credentials) {
-                    const credentialsErrorMessage = errorData.credentials;
-                    toast.error(credentialsErrorMessage);
-                    return { success: false, errorType: 'credentials' };
-                }
-                if (errorData.verif && !errorData.credentials) {
-                    const verifErrorMessage = errorData.verif;
-                    return { success: false, errorType: 'verif', verifErrorMessage };
-                }
-            }
+        } catch (err) {
+            toast.error(err.response.data.msg);
         }
     };
 
+    const verifyPin = async ({ pin, email }) => {
+        try {
+            const res = await axios.post('/auth/confirm', { pin, email });
+            toast.success(res.data.msg);
+            return { success: true };
+        } catch (err) {
+            toast.error(err.response.data.msg);
+        }
+    };
+
+    const completeRegister = async (values) => {
+        try {
+            const res = await axios.post('/auth/complete-register', values);
+            return { success: true };
+        } catch (err) {
+            toast.error(err.response.data.msg);
+        }
+    };
 
     const recoverPassword = async (confirmPassword, token, id) => {
         try {
@@ -243,7 +245,9 @@ export const useAuth = (navigate) => {
         user,
         loginUser,
         registerUser,
-        // logoutUser,
+        completeRegister,
+        verifyPin,
+        logoutUser,
         recoverPassword,
         forgotPassword,
         getUsersData,
@@ -252,4 +256,4 @@ export const useAuth = (navigate) => {
         changeProfilePicture,
         getProfileImageUrl
     };
-};
+}
