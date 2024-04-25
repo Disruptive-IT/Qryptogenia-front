@@ -7,18 +7,6 @@ export const useAuth = (navigate) => {
     const [user, setUser] = useState(null);
     const { startLoading, stopLoading } = useLoader();
 
-    useEffect(() => { //! Temporal
-        startLoading();
-        if (user) {
-            if (user.rol === "ADMIN") {
-                navigate("/admin/dashboard");
-            } else {
-                navigate("/user/home");
-            }
-        }
-        stopLoading();
-    }, [user]);
-
     useEffect(() => {
         async function verifyAuth() {
             try {
@@ -47,9 +35,9 @@ export const useAuth = (navigate) => {
     async function redirectUser(user) {
         if (user) {
             if (user.rol === "ADMIN") {
-                navigate("/admin/");
+                navigate("/admin/dashboard");
             } else {
-                navigate("/user/");
+                navigate("/user/home");
             }
         }
     }
