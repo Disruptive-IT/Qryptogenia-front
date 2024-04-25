@@ -288,6 +288,7 @@ export const logout = (req, res) => {
 
 export const forgot_password = async (req, res) => {
   const { email } = req.body;
+  
   try {
     const user = await prisma.user.findUnique({ where: { email } });
     if (!user) {
@@ -296,6 +297,15 @@ export const forgot_password = async (req, res) => {
     
     // Generar el token JWT con el ID del usuario
     const token = jwt.sign({ userId: user.id }, process.env.JWT_SECRET, { expiresIn: "1d" });
+
+    await prisma.resetToken.create({
+      data: {
+        token: token,
+        userId: user.id, 
+        createdAt: new Date(),
+        used: false, // Establecer como no utilizado al crear el token
+      },
+    });
     
     // Llamada a la función sendRecoverEmail con el ID del usuario
     const mail = await sendRecoverEmail(email, token, user.id);
@@ -317,31 +327,44 @@ export const forgot_password = async (req, res) => {
 };
 
 
-
-// 
-
-
-
 export const recoverPassword = async (req, res) => {
-  // const { token } = req.query;
   const { confirmPassword, token } = req.body;
 
   try {
-    // Verificar el token
+    // Verificar el token JWT
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
     if (!decoded || !decoded.userId) {
       return res.json({ Status: "error with token" });
     }
 
+    // Buscar el token en la base de datos
+    const resetToken = await prisma.resetToken.findFirst({
+      where: {
+        userId: decoded.userId,
+        token: token,
+        used: false
+      }
+    });
+
+    if (!resetToken) {
+      return res.status(400).json({ status: "error", message: "Invalid or expired token" });
+    }
+
     // Generar hash de la nueva contraseña
-    const saltRounds = 10; // Número de rondas de hashing
+    const saltRounds = 10;
     const hashedPassword = await bcrypt.hash(confirmPassword, saltRounds);
 
-    // Actualizar la contraseña en la base de datos con el ID del usuario decodificado
+    // Actualizar la contraseña en la base de datos
     await prisma.user.update({
       where: { id: decoded.userId },
       data: { password: hashedPassword }
+    });
+
+    // Marcar el token como utilizado
+    await prisma.resetToken.update({
+      where: { id: resetToken.id },
+      data: { used: true }
     });
 
     res.send({ Status: "Success" });

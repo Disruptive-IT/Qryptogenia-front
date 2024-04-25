@@ -25,17 +25,12 @@ export const RecoverPassForm = () => {
 
   const onSubmit = async (data) => {
     try {
-      console.log('Formulario de recuperación de contraseña enviado:', data);
-      console.log('Valor de token:', token);
-      const { success } = await recoverPassword(data.confirmPassword, token); // Acceder al token desde data.token
-      if (!data.token) { // Verificar si el token está presente en los datos del formulario
+      const { success, message } = await recoverPassword(data.confirmPassword, token);
+  
+      if (!data.token) { 
         setError('token', { type: 'manual', message: 'Token no válido. Por favor, asegúrate de tener el enlace correcto.' });
         return;
       }
-  
-      console.log('Token enviado al servidor:', data.token); // Mostrar el token enviado al servidor
-  
-      console.log('Respuesta del servidor:', success);
   
       if (success) {
         toast.success("¡Tu contraseña ha sido cambiada con éxito!", {
@@ -49,19 +44,28 @@ export const RecoverPassForm = () => {
           setRedirectToLogin(true);
         }, 3000);
       } else {
-        toast.error('Error al cambiar la contraseña.', {
-          position: "bottom-right",
-          style: {
-            fontSize: '15px',
-            padding: '25px',
-          },
-        });
+        if (console.log('Error changing password.')) {
+          toast.error('Error changing password.', {
+            position: "bottom-right",
+            style: {
+              fontSize: '15px',
+              padding: '25px',
+            },
+          });
+        } else {
+          toast.error('Invalid or expired token', {
+            position: "bottom-right",
+            style: {
+              fontSize: '15px',
+              padding: '25px',
+            },
+          });
+        }
       }
     } catch (error) {
       console.error('Error en la solicitud:', error);
     }
   };
-
   const handleTogglePassword = (field) => {
     setShowPassword((prev) => ({ ...prev, [field]: !prev[field] }));
   };
