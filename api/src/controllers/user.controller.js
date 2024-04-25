@@ -1,6 +1,7 @@
 import prisma from "../lib/prisma.js";
 import { useSend } from "../utils/useSend.js";
 
+
 export const getUsers = async (req, res) => {
   try {
     const users = await prisma.user.findMany();

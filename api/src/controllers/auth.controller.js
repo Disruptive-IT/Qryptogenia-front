@@ -1,7 +1,8 @@
 import prisma from "../lib/prisma.js";
 import { useSend } from "../utils/useSend.js";
 import bcrypt from "bcryptjs";
-import jwt from "jsonwebtoken";
+import nodemailer from "nodemailer"
+import jwt from 'jsonwebtoken';
 import { sendVerificationEmail } from "../services/mail.service.js";
 
 
@@ -11,6 +12,7 @@ function getDate() {
   return dateCurrent;
 }
 
+import { sendRecoverEmail } from "../services/mail.recover.js";
 
 export const register = async (req, res) => {
   const { email } = req.body;
@@ -281,5 +283,71 @@ export const logout = (req, res) => {
     res.status(200).json(useSend("Successfully logged out"));
   } catch (err) {
     res.status(500).json(useSend("Error in server", err));
+  }
+};
+
+
+
+export const forgot_password = async (req, res) => {
+  const { email } = req.body;
+  try {
+    const user = await prisma.user.findUnique({ where: { email } });
+    if (!user) {
+      return res.status(404).send({ error: "User not existed" });
+    }
+    
+    // Generar el token JWT con el ID del usuario
+    const token = jwt.sign({ userId: user.id }, process.env.JWT_SECRET, { expiresIn: "1d" });
+    
+    // Llamada a la función sendRecoverEmail con el ID del usuario
+    const mail = await sendRecoverEmail(email, token, user.id);
+    
+    // Manejo de la respuesta del envío del correo
+    if (!mail.accepted || mail.accepted.length === 0) {
+      return res.status(500).send({
+        status: "error",
+        message: "Error sending recovery email",
+      });
+    }
+    
+    // Si el correo se envió correctamente, responder con éxito
+    return res.status(200).json({ success: true, message: "Recovery email sent successfully" });
+  } catch (error) {
+    console.error('Error:', error);
+    return res.status(500).send({ error: "Internal server error" });
+  }
+};
+
+
+
+// 
+
+
+
+export const recoverPassword = async (req, res) => {
+  // const { token } = req.query;
+  const { confirmPassword, token } = req.body;
+
+  try {
+    // Verificar el token
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+
+    if (!decoded || !decoded.userId) {
+      return res.json({ Status: "error with token" });
+    }
+
+    // Generar hash de la nueva contraseña
+    const saltRounds = 10; // Número de rondas de hashing
+    const hashedPassword = await bcrypt.hash(confirmPassword, saltRounds);
+
+    // Actualizar la contraseña en la base de datos con el ID del usuario decodificado
+    await prisma.user.update({
+      where: { id: decoded.userId },
+      data: { password: hashedPassword }
+    });
+
+    res.send({ Status: "Success" });
+  } catch (error) {
+    res.send({ Status: "Error", message: error.message });
   }
 };
