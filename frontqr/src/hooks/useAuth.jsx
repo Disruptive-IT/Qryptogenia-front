@@ -90,12 +90,13 @@ export const useAuth = (navigate) => {
         }
     };
 
-    const recoverPassword = async (confirmPassword, token, id) => {
+    const recoverPassword = async (confirmPassword, token) => {
         try {
           console.log('Token enviado en la solicitud:', token);
-      
-          const response = await axios.post(`/auth/password_reset/confirm/${id}/${token}`, { confirmPassword });
-      
+        
+          // Realizar la solicitud POST con el token como parte del cuerpo de la solicitud
+          const response = await axios.post(`/auth/password_reset/confirm`, { token, confirmPassword });
+        
           switch (response.status) {
             case 200:
               return { success: true };
@@ -119,6 +120,7 @@ export const useAuth = (navigate) => {
           }
         }
       };
+      
       
 
       const forgotPassword = async (email) => {

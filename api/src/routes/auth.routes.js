@@ -17,7 +17,7 @@ router.post("/login", login);
 router.get("/logout", logout);
 router.post("/confirm", verifyAccount);
 router.post("/password_reset", forgot_password);
-router.post("/password_reset/confirm/:id/:token", recoverPassword);
+router.post("/password_reset/confirm", recoverPassword);
 
 
 export default router;

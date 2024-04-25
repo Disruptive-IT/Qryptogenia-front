@@ -10,16 +10,16 @@ const transporter = nodemailer.createTransport({
     }
 });
 
-export async function sendRecoverEmail(email, token, userId) {
+export async function sendRecoverEmail(email, token, id) {
     return await transporter.sendMail({
         from: "Qryptogenia",
         to: email,
         subject: "Verificación de nueva cuenta - Qryptogenia",
-        html: RecoverPassEmail(token, userId)
+        html: RecoverPassEmail(token, id)
     });
 }
 
-function RecoverPassEmail(token, userId) {
+function RecoverPassEmail(token, id) {
     return `
     <!DOCTYPE html>
     <html lang="es">
@@ -41,7 +41,7 @@ function RecoverPassEmail(token, userId) {
         <h1>Recuperación de contraseña</h1>
         <p>Hemos enviado un correo electrónico de recuperación de contraseña para tu cuenta en Qryptogenia.</p>
         <p>Por favor, sigue las instrucciones en el correo electrónico para restablecer tu contraseña.</p>
-        <p>Cambia la contraseña de la cuenta: <a href="http://localhost:5173/recoverPassword/${userId}/${token}" target="_blank" rel="noopener noreferrer">haciendo click aquí</a>.
+        <p>Cambia la contraseña de la cuenta: <a href="http://localhost:5173/recoverPassword?token=${token}" target="_blank" rel="noopener noreferrer">haciendo click aquí</a>.
     </body>
     </html>
     `;

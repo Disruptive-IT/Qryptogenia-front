@@ -294,9 +294,11 @@ export const forgot_password = async (req, res) => {
     if (!user) {
       return res.status(404).send({ error: "User not existed" });
     }
-    const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET, { expiresIn: "1d" });
     
-    // Llamada a la función sendRecoverEmail en lugar de configurar el transporte y enviar el correo directamente
+    // Generar el token JWT con el ID del usuario
+    const token = jwt.sign({ userId: user.id }, process.env.JWT_SECRET, { expiresIn: "1d" });
+    
+    // Llamada a la función sendRecoverEmail con el ID del usuario
     const mail = await sendRecoverEmail(email, token, user.id);
     
     // Manejo de la respuesta del envío del correo
@@ -317,31 +319,33 @@ export const forgot_password = async (req, res) => {
 
 
 
+// 
+
+
+
 export const recoverPassword = async (req, res) => {
-  const { id, token } = req.params;
-  const { confirmPassword } = req.body;
+  // const { token } = req.query;
+  const { confirmPassword, token } = req.body;
 
   try {
-    console.log('Password:', confirmPassword); // Verifica el valor de la contraseña
-  
     // Verificar el token
-    jwt.verify(token, process.env.JWT_SECRET, async (err, decoded) => {
-      if (err) {
-        return res.json({ Status: "error with token" });
-      } else {
-        // Generar hash de la nueva contraseña
-        const saltRounds = 10; // Número de rondas de hashing
-        const hashedPassword = await bcrypt.hash(confirmPassword, saltRounds); // Usar confirmPassword en lugar de password
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
-        // Actualizar la contraseña en la base de datos
-        await prisma.user.update({
-          where: { id: id },
-          data: { password: hashedPassword }
-        });
+    if (!decoded || !decoded.userId) {
+      return res.json({ Status: "error with token" });
+    }
 
-        res.send({ Status: "Success" });
-      }
+    // Generar hash de la nueva contraseña
+    const saltRounds = 10; // Número de rondas de hashing
+    const hashedPassword = await bcrypt.hash(confirmPassword, saltRounds);
+
+    // Actualizar la contraseña en la base de datos con el ID del usuario decodificado
+    await prisma.user.update({
+      where: { id: decoded.userId },
+      data: { password: hashedPassword }
     });
+
+    res.send({ Status: "Success" });
   } catch (error) {
     res.send({ Status: "Error", message: error.message });
   }
