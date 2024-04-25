@@ -7,13 +7,13 @@ export const useAuth = (navigate) => {
     const [user, setUser] = useState(null);
     const { startLoading, stopLoading } = useLoader();
 
-    useEffect(() => {
+    useEffect(() => { //! Temporal
         startLoading();
         if (user) {
             if (user.rol === "ADMIN") {
-                navigate("/admin/");
+                navigate("/admin/dashboard");
             } else {
-                navigate("/user/");
+                navigate("/user/home");
             }
         }
         stopLoading();
@@ -55,6 +55,7 @@ export const useAuth = (navigate) => {
             const res = await axios.post('/auth/login', values);
             toast.success(res.data.msg)
             setUser(res.data.info.user);
+            localStorage.setItem('token', res.data.info.user.token);
             return { success: true };
         } catch (err) {
             toast.error(err.response.data.msg)

@@ -231,7 +231,7 @@ export const login = async (req, res) => {
     });
 
     // Generar y enviar el token JWT
-    const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET, {
+    const token = jwt.sign({ id: user.id, rol: user.rol.name }, process.env.JWT_SECRET, {
       expiresIn: req.body.remember ? "365d" : "24h",
     });
 
@@ -259,6 +259,7 @@ export const login = async (req, res) => {
         useSend("Successfully login", {
           user: {
             rol: user.rol.name,
+            token: token
           },
         })
       );
