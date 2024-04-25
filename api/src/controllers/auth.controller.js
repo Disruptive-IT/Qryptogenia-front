@@ -4,15 +4,13 @@ import bcrypt from "bcryptjs";
 import nodemailer from "nodemailer"
 import jwt from 'jsonwebtoken';
 import { sendVerificationEmail } from "../services/mail.service.js";
-
+import { sendRecoverEmail } from "../services/mail.service.js";
 
 function getDate() {
   let dateCurrent = new Date();
   dateCurrent.setHours(dateCurrent.getHours() - 5);
   return dateCurrent;
 }
-
-import { sendRecoverEmail } from "../services/mail.recover.js";
 
 export const register = async (req, res) => {
   const { email } = req.body;
