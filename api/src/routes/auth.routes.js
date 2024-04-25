@@ -5,11 +5,10 @@ import {
   logout,
   register,
   completeRegister,
-  verifyAccount,
   forgot_password,
   recoverPassword
 } from "../controllers/auth.controller.js";
-
+import {verifyAccount} from '../services/auth.service.js'
 const plaintextPassword = 'dav39484'; // Tu contraseña en texto plano
 
 // Genera el hash de la contraseña

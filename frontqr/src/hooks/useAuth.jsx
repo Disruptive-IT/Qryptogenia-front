@@ -80,10 +80,13 @@ export const useAuth = (navigate) => {
 
     const registerUser = async (email) => {
         try {
+            console.log("ANTES REGISTER")
             const res = await axios.post('/auth/register', { email: email });
+            console.log("DESPUES REGISTER")
             toast.info(res.data.msg);
             return { success: true };
         } catch (err) {
+            console.log("ERROR REGISTER ", err)
             toast.error(err.response.data.msg);
         }
     };
@@ -91,6 +94,7 @@ export const useAuth = (navigate) => {
     const verifyPin = async ({ pin, email }) => {
         try {
             const res = await axios.post('/auth/confirm', { pin, email });
+            console.log("llefa")
             toast.success(res.data.msg);
             return { success: true };
         } catch (err) {

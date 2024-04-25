@@ -1,16 +1,15 @@
 import prisma from "../lib/prisma.js";
 import { useSend } from "../utils/useSend.js";
 import bcrypt from "bcryptjs";
-import nodemailer from "nodemailer"
-import jwt from 'jsonwebtoken';
-import { sendVerificationEmail } from "../services/mail.service.js";
+import jwt from "jsonwebtoken";
 import { sendRecoverEmail } from "../services/mail.service.js";
+import {
+  handleFailedLoginAttempts,
+  generateAndSendToken,
+  sendVerifyEmail,
+} from "../services/auth.service.js";
+import { getDate } from "../utils/dateUtils.js";
 
-function getDate() {
-  let dateCurrent = new Date();
-  dateCurrent.setHours(dateCurrent.getHours() - 5);
-  return dateCurrent;
-}
 
 export const register = async (req, res) => {
   const { email } = req.body;
@@ -96,70 +95,6 @@ export const completeRegister = async (req, res) => {
   }
 };
 
-const sendVerifyEmail = async (req, res, existingPreRegister) => {
-  const { email } = req.body;
-  let dateCurrent = getDate();
-
-  const pin = Math.floor(1000 + Math.random() * 9000);
-
-  try {
-    await sendVerificationEmail(email, pin);
-
-    //* Si el usuario ya tiene un pre-registro, actualizarlo
-    if (existingPreRegister) {
-      await prisma.preRegister.update({
-        where: { email: email },
-        data: {
-          pin: pin,
-          last_pin_generated_at: dateCurrent,
-        },
-      });
-      return res
-        .status(200)
-        .json(useSend("Se ha enviado un nuevo correo de verificación"));
-    }
-
-    //* Si el usuario no tiene un pre-registro, crear uno nuevo
-    await prisma.preRegister.create({
-      data: {
-        email: email,
-        pin: pin,
-        createdAt: dateCurrent,
-        last_pin_generated_at: dateCurrent,
-      },
-    });
-
-    return res
-      .status(200)
-      .json(useSend("Se ha enviado el correo de verificación"));
-  } catch (error) {
-    return res
-      .status(500)
-      .json(useSend("Error enviando correo de verificación"));
-  }
-};
-
-export const verifyAccount = async (req, res) => {
-  try {
-    const { email, pin } = req.body;
-
-    // Verificar el pre-registro para saber si el pin coincide con el recibido
-    const preRegister = await prisma.preRegister.findUnique({
-      where: { email: email },
-    });
-
-    if (!preRegister)
-      return res.status(400).json(useSend("Intente generar el pin nuevamente"));
-
-    if (preRegister.pin !== parseInt(pin))
-      return res.status(400).json(useSend("No es el token mas reciente"));
-
-    return res.status(200).json(useSend("TDO BIEN"));
-  } catch (err) {
-    return res.status(500).json(useSend("Error in server", err));
-  }
-};
-
 export const login = async (req, res) => {
   try {
     const { email, password } = req.body;
@@ -177,35 +112,12 @@ export const login = async (req, res) => {
         .json(useSend("No account with this email has been registered."));
     }
 
-    // Verificar si el usuario tiene registros de intentos fallidos
-    const loginLog = await prisma.loginLogs.findUnique({
-      where: { userId: user.id },
-    });
-
-    // Si el usuario tiene registros de intentos fallidos, verificar el limite
-    if (loginLog && loginLog.failed_login >= 5) {
-      const timeDifference = dateCurrent - new Date(loginLog.failed_login_time);
-      // Si han pasado menos de 10 minutos desde el último intento fallido, retornar error
-      if (timeDifference < 10 * 60 * 1000) {
-        return res
-          .status(400)
-          .json(
-            useSend(
-              "You have exceeded the maximum number of failed login attempts. Please try again later."
-            )
-          );
-      }
-      // Si han pasado más de 10 minutos, resetear el contador de intentos fallidos
-      await prisma.loginLogs.update({
-        where: { userId: user.id },
-        data: {
-          failed_login: 0,
-          failed_login_time: null,
-        },
-      });
+    try {
+      await handleFailedLoginAttempts(user.id, dateCurrent);
+    } catch (error) {
+      return res.status(400).json(useSend(error.message));
     }
 
-    // Verificar las credenciales del usuario
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) {
       // Si las credenciales son incorrectas, incrementar el contador de intentos fallidos
@@ -231,11 +143,8 @@ export const login = async (req, res) => {
     });
 
     // Generar y enviar el token JWT
-    const token = jwt.sign({ id: user.id, rol: user.rol.name }, process.env.JWT_SECRET, {
-      expiresIn: req.body.remember ? "365d" : "24h",
-    });
+    const token = generateAndSendToken(user, req.body.remember, res);
 
-    // Actualizar el registro de inicio de sesión
     await prisma.loginLogs.update({
       where: { userId: user.id },
       data: {
@@ -244,25 +153,14 @@ export const login = async (req, res) => {
       },
     });
 
-    // Enviar la respuesta con el token
-    res
-      .status(200)
-      .cookie("token", token, {
-        maxAge: req.body.remember ? 365 * 24 * 60 * 60 * 1000 : null,
-        sameSite: "Lax",
-        httpOnly: true,
-        secure: process.env.NODE_ENV === "production" ? true : false,
-        domain: req.hostname,
-        path: "/",
+    res.status(200).json(
+      useSend("Successfully login", {
+        user: {
+          rol: user.rol.name,
+          token: token,
+        },
       })
-      .json(
-        useSend("Successfully login", {
-          user: {
-            rol: user.rol.name,
-            token: token
-          },
-        })
-      );
+    );
   } catch (err) {
     res.status(500).json(useSend("Error in server", err));
   }
@@ -284,8 +182,6 @@ export const logout = (req, res) => {
   }
 };
 
-
-
 export const forgot_password = async (req, res) => {
   const { email } = req.body;
   try {
@@ -293,13 +189,15 @@ export const forgot_password = async (req, res) => {
     if (!user) {
       return res.status(404).send({ error: "User not existed" });
     }
-    
+
     // Generar el token JWT con el ID del usuario
-    const token = jwt.sign({ userId: user.id }, process.env.JWT_SECRET, { expiresIn: "1d" });
-    
+    const token = jwt.sign({ userId: user.id }, process.env.JWT_SECRET, {
+      expiresIn: "1d",
+    });
+
     // Llamada a la función sendRecoverEmail con el ID del usuario
     const mail = await sendRecoverEmail(email, token, user.id);
-    
+
     // Manejo de la respuesta del envío del correo
     if (!mail.accepted || mail.accepted.length === 0) {
       return res.status(500).send({
@@ -307,20 +205,18 @@ export const forgot_password = async (req, res) => {
         message: "Error sending recovery email",
       });
     }
-    
+
     // Si el correo se envió correctamente, responder con éxito
-    return res.status(200).json({ success: true, message: "Recovery email sent successfully" });
+    return res
+      .status(200)
+      .json({ success: true, message: "Recovery email sent successfully" });
   } catch (error) {
-    console.error('Error:', error);
+    console.error("Error:", error);
     return res.status(500).send({ error: "Internal server error" });
   }
 };
 
-
-
-// 
-
-
+//
 
 export const recoverPassword = async (req, res) => {
   // const { token } = req.query;
@@ -341,7 +237,7 @@ export const recoverPassword = async (req, res) => {
     // Actualizar la contraseña en la base de datos con el ID del usuario decodificado
     await prisma.user.update({
       where: { id: decoded.userId },
-      data: { password: hashedPassword }
+      data: { password: hashedPassword },
     });
 
     res.send({ Status: "Success" });

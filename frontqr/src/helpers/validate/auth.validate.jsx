@@ -14,10 +14,9 @@ export const SchemaRegisterValidate = Yup.object().shape({
 
 export const SchemaPinValidate = Yup.object({
   pin: Yup.string()
-    .required('El PIN es requerido')
-    .length(4, 'El PIN debe tener exactamente 4 dígitos')
-    .matches(/^\d+$/, 'El PIN solo puede contener números')
-});
+     .required('Code is required')
+     .matches(/^\d+$/, 'Please enter digits only.')
+ });
 
 export const SchemaCompleteRegisterValidate = Yup.object().shape({
   username: Yup.string().required('Username is required'),

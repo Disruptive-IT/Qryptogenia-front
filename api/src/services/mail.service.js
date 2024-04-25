@@ -63,15 +63,14 @@ export async function sendVerificationEmail(direccion, pin) {
 }
 
 
-function createVerificationEmail(pin) {
-  const verificationUrl = `${process.env.VERIFICATION_URL}`;
+function createVerificationEmail(code) {
   return `
     <!DOCTYPE html>
     <html lang="es">
     <body style="max-width: 600px; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: auto; background-color: rgb(229, 255, 246); padding: 40px; border-radius: 4px; margin-top: 10px;">
-        <h1>Verificación de correo electrónico</h1>
-        <p>Ya estas a un paso de completar tu registro.</p>
-        <p>Introduce el siguiente PIN en la página para completar el registro: <strong>${pin}</strong>.</p>
+        <h1>E-mail verification</h1>
+        <p>You are one step away from completing your registration.</p>
+        <p>Enter the following code on the page to complete the registration: <strong>${code}</strong>.</p>
     </body>
     </html>
     `;

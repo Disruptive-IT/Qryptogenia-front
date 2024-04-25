@@ -15,8 +15,6 @@ app.use(express.json());
 app.use(cookieParser());
 app.use(morgan('dev'))
 app.use(upload.single('profile_picture'));
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
 // ! middlewares
 
 // ? routes

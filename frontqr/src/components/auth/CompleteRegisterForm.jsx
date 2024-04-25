@@ -11,19 +11,14 @@ const CompleteRegisterForm = ({ email }) => {
 
     const handleSubmit = async (values, { resetForm }) => {
         startLoading();
-        try {
-            const completeResult = await completeRegister({ ...values, email });
-            if (completeResult.success) {
-                const loginResult = await loginUser({ email, password: values.password });
-                if (loginResult.success) {
-                    resetForm();
-                }
+        const completeResult = await completeRegister({ ...values, email });
+        if (completeResult.success) {
+            const loginResult = await loginUser({ email, password: values.password });
+            if (loginResult.success) {
+                resetForm();
             }
-        } catch (error) {
-            console.error('Error inesperado:', error);
-        } finally {
-            stopLoading();
         }
+        stopLoading();
     };
 
     return (
