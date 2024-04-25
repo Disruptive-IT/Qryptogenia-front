@@ -5,6 +5,7 @@ import {jwtDecode} from "jwt-decode";
 const ProtectedRouteUser = (props) => {
   const token = localStorage.getItem("token"); //! Tomar de cookie
   const navigate = useNavigate();
+  
   function presentPage() {
     navigate(-1);
   }

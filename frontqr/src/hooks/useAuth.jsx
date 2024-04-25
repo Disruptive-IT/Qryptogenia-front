@@ -60,6 +60,7 @@ export const useAuth = (navigate) => {
             const res = await axios.get('/auth/logout/');
             toast.success(res.data.msg)
             setUser(null)
+            localStorage.removeItem("token") //! Temporal
             navigate("/login")
         } catch (err) {
             toast.error(err.response.data.msg)
