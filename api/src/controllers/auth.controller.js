@@ -6,7 +6,6 @@ import { sendVerificationEmail } from "../services/mail.service.js";
 
 export const register = async (req, res) => {
   const { email } = req.body;
-
   //* Si el usuario ya existe
   const existingUser = await prisma.user.findUnique({
     where: { email: email },
