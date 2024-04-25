@@ -2,6 +2,7 @@ import { PrismaClient } from '@prisma/client'
 
 let prisma = new PrismaClient();
 
+// async function main() {
 // /*async function main() {
 //   const rol = await prisma.rol.create({
 //     data: {
@@ -32,6 +33,6 @@ let prisma = new PrismaClient();
 //   })
 //   .finally(async () => {
 //     await prisma.$disconnect();
-//   });*/
+//   });
 
 export default prisma;
