@@ -7,6 +7,18 @@ export const useAuth = (navigate) => {
     const [user, setUser] = useState(null);
     const { startLoading, stopLoading } = useLoader();
 
+    useEffect(() => { //! Temporal
+        startLoading();
+        if (user) {
+            if (user.rol === "ADMIN") {
+                navigate("/admin/dashboard");
+            } else {
+                navigate("/user/home");
+            }
+        }
+        stopLoading();
+    }, [user]);
+
     useEffect(() => {
         async function verifyAuth() {
             try {
@@ -72,6 +84,7 @@ export const useAuth = (navigate) => {
             const res = await axios.post('/auth/login', values);
             toast.success(res.data.msg)
             setUser(res.data.info.user);
+            localStorage.setItem('token', res.data.info.user.token);
             return { success: true };
         } catch (err) {
             toast.error(err.response.data.msg)
@@ -107,32 +120,54 @@ export const useAuth = (navigate) => {
         }
     };
 
-    const recoverPassword = async (password, token) => {
+    const recoverPassword = async (confirmPassword, token) => {
         try {
-            const response = await axios.post('/password_reset/confirm/', {
-                password,
-                token,
-            });
-            if (response.status === 200) {
-                return { success: true };
-            }
+          console.log('Token enviado en la solicitud:', token);
+        
+          // Realizar la solicitud POST con el token como parte del cuerpo de la solicitud
+          const response = await axios.post(`/auth/password_reset/confirm`, { token, confirmPassword });
+        
+          switch (response.status) {
+            case 200:
+              return { success: true };
+            // Manejo de otros códigos de estado aquí
+            default:
+              return { success: false, message: 'Unknown error' };
+          }
         } catch (error) {
-            console.error('Error changing password:', error);
-            return { success: false };
+          if (error.response) {
+            // Error de respuesta HTTP
+            console.error('Error response:', error.response.data);
+            return { success: false, message: error.response.data };
+          } else if (error.request) {
+            // Error de solicitud HTTP
+            console.error('Error request:', error.request);
+            return { success: false, message: 'Network error' };
+          } else {
+            // Otro tipo de error
+            console.error('Error:', error.message);
+            return { success: false, message: 'Unknown error' };
+          }
         }
-    };
+      };
+      
+      
 
-    const forgotPassword = async (email) => {
+      const forgotPassword = async (email) => {
         try {
-            const response = await axios.post('/password_reset/', { email });
-            if (response.status === 200) {
-                return { success: true };
-            }
+          const response = await axios.post('/auth/password_reset', { email });
+          if (response.data.status === 'User not exists!') {
+            // Si el usuario no existe en el servidor, mostrar un error
+            return { success: false, error: 'E-mail not registered in our system' };
+          } else {
+            // Si el correo se envía correctamente, devolver éxito
+            return { success: true };
+          }
         } catch (error) {
-            console.error('Error sending recovery mail:', error);
-            return { success: false, error };
+          console.error('Error sending recovery email:', error);
+          return { success: false, error: 'Error sending recovery email' }; // Manejar errores de red u otros errores
         }
-    };
+      };
 
     const getUsersData = async () => {
         try {
