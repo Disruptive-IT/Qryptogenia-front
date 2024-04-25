@@ -25,8 +25,7 @@ export const useAuth = (navigate) => {
                 stopLoading();
             }
         };
-        verifyAuth(); // Llamada a la función directamente dentro de useEffect
-    }, []);
+    }, [user]);
 
     useEffect(() => {
         redirectUser(user); // Redirige al usuario después de que se establezca la información
