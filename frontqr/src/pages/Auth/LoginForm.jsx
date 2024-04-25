@@ -8,6 +8,7 @@ import logo from "../../assets/imgs/logoForms.png"
 import { useAuthContext } from "../../context/AuthContext";
 import { useLoader } from '../../context/LoaderContext';
 import { SchemaLoginValidate } from '../../helpers/validate/auth.validate';
+import AuthSwitcher from '../../components/auth/pure/AuthSwitcher';
 
 const LoginForm = () => {
   const { loginUser } = useAuthContext();
@@ -34,7 +35,8 @@ const LoginForm = () => {
     >
       {({ values, errors, touched }) => (
         <section>
-          <Form className="authFormContainer my-20 m-auto">
+          <AuthSwitcher text="Ir al Registro" to="/register" />
+          <Form className="authFormContainer m-auto">
             <div className="formContainer">
               <div className="inputsGroupsStart fullWidth">
                 <h1 className="authTittle"><span className='text-[#284B63]'>QR</span>yptogenia</h1>

@@ -3,7 +3,8 @@ import { Navigate, Outlet, useNavigate } from "react-router-dom";
 import {jwtDecode} from "jwt-decode";
 
 const ProtectedRouteAdmin = (props) => {
-    const token = localStorage.getItem("token"); //! Tomar de cookie
+    //? Se tomó la cookie en el servidor pero al momento de implementar la misma logica da error o no funciona de la misma forma
+    const token = localStorage.getItem("token"); 
     const navigate = useNavigate();
     
     function presentPage() {

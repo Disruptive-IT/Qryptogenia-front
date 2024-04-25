@@ -9,12 +9,18 @@ export default {
   theme: {
     extend: {
       gridTemplateColumns: {
-        'sidebar': '300px auto',
-        'sidebar-collapsed': '64px auto',
+        sidebar: "300px auto",
+        "sidebar-collapsed": "64px auto",
+      },
+      colors: {
+        "dark-blue": "#284B63",
+        "light-blue": "#3C6E71",
+        "my-gray": "#D9D9D9",
+        "my-red": "#CC2905",
+        "my-black": "#353535",
       },
     },
   },
   variants: {},
   plugins: [],
-}
-
+};

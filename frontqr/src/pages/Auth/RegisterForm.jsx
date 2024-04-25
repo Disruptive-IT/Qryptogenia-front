@@ -9,6 +9,7 @@ import PinVerificationForm from '../../components/auth/PinVerificationForm';
 import logo from "../../assets/imgs/logoForms.png";
 import { IconsLeft } from '../../components/auth/pure/iconsLeft';
 import CompleteRegisterForm from '../../components/auth/CompleteRegisterForm';
+import AuthSwitcher from '../../components/auth/pure/AuthSwitcher';
 
 const RegisterForm = () => {
   const { registerUser } = useAuthContext();
@@ -43,7 +44,8 @@ const RegisterForm = () => {
 
   return (
     <>
-      <div className="authFormContainer my-20 m-auto">
+      <AuthSwitcher text="Ir al Login" to="/login" />
+      <div className="authFormContainer m-auto">
         <div className="formContainer">
           <div className="otherSide"></div>
           <div className="inputsGroupsEnd fullWidth">
