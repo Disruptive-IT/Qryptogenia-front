@@ -8,17 +8,17 @@ datasource db {
 }
 
 model User {
-  id              String   @id @default(uuid())
+  id              String    @id @default(uuid())
   profile_picture String?
   username        String
-  email           String   @unique @db.VarChar(255)
+  email           String    @unique @db.VarChar(255)
   password        String
-  createdAt       DateTime @default(now())
-  update_date     DateTime? @updatedAt
-  state           Boolean  @default(true)
+  createdAt       DateTime
+  update_date     DateTime?
+  state           Boolean   @default(true)
 
   rol        Rol         @relation(fields: [rolId], references: [id])
-  rolId      String
+  rolId      Int
   Qr         Qr[]
   Membership Membership?
   LoginLogs  LoginLogs?
@@ -31,11 +31,11 @@ enum roles {
 
 //! Para el alcance
 model Rol {
-  id            String          @id @default(uuid())
+  id            Int             @id @default(autoincrement())
   name          roles
   state         Boolean         @default(true)
-  createdAt     DateTime        @default(now())
-  update_date   DateTime        @updatedAt
+  createdAt     DateTime
+  update_date   DateTime?
   RolPermission RolPermission[]
   User          User[]
 }
@@ -46,8 +46,8 @@ model Membership {
   description        String
   duration_time      DateTime
   state              Boolean              @default(true)
-  createdAt          DateTime             @default(now())
-  update_date        DateTime             @updatedAt
+  createdAt          DateTime
+  update_date        DateTime?
   user               User                 @relation(fields: [userId], references: [id])
   userId             String               @unique
   MembershipBenefits MembershipBenefits[]
@@ -61,44 +61,44 @@ model LoginLogs {
   failed_login_time DateTime?
   created_ip        String
   update_ip         String?
-  login_date        DateTime  @updatedAt
-  user              User      @relation(fields: [userId], references: [id])
+  login_date        DateTime?
+  user              User      @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId            String    @unique
 }
 
 model PreRegister {
-  id                      String   @id @default(uuid())
-  email                   String   @unique @db.VarChar(255)
-  createdAt               DateTime @default(now())
-  last_token_generated_at DateTime @updatedAt
-  token                   String
+  id                    String   @id @default(uuid())
+  email                 String   @unique @db.VarChar(255)
+  createdAt             DateTime
+  last_pin_generated_at DateTime?
+  pin                   Int
 }
 
 model RolPermission {
-  id    String   @id @default(uuid())
-  useAt DateTime @default(now())
+  id    Int      @id @default(autoincrement())
+  useAt DateTime
 
-  rolId        String
+  rolId        Int
   rol          Rol        @relation(fields: [rolId], references: [id])
-  permissionId String
+  permissionId Int
   permission   Permission @relation(fields: [permissionId], references: [id])
 
   @@unique([rolId, permissionId], map: "id_rol_permission")
 }
 
 model Permission {
-  id            String          @id @default(uuid())
+  id            Int             @id @default(autoincrement())
   description   String
   state         Boolean         @default(true)
-  createdAt     DateTime        @default(now())
-  update_date   DateTime        @updatedAt
+  createdAt     DateTime
+  update_date   DateTime?
   RolPermission RolPermission[]
 }
 
 model MembershipBenefits {
   id          String   @id @default(uuid())
-  createdAt   DateTime @default(now())
-  update_date DateTime @updatedAt
+  createdAt   DateTime
+  update_date DateTime?
 
   membershipId String
   membership   Membership @relation(fields: [membershipId], references: [id])
@@ -112,8 +112,8 @@ model Benefits {
   id                 String               @id @default(uuid())
   name               String
   description        String
-  createdAt          DateTime             @default(now())
-  update_date        DateTime             @updatedAt
+  createdAt          DateTime
+  update_date        DateTime?
   MembershipBenefits MembershipBenefits[]
 }
 
@@ -122,8 +122,8 @@ model Qr {
   description String
   qr          String
   state       Boolean  @default(true)
-  createdAt   DateTime @default(now())
-  update_date DateTime @updatedAt
+  createdAt   DateTime
+  update_date DateTime?
 
   user   User    @relation(fields: [userId], references: [id])
   userId String
@@ -134,8 +134,8 @@ model QrType {
   id          String   @id @default(uuid())
   description String
   state       Boolean  @default(true)
-  createdAt   DateTime @default(now())
-  update_date DateTime @updatedAt
+  createdAt   DateTime
+  update_date DateTime?
 
   qr   Qr     @relation(fields: [qrId], references: [id])
   qrId String @unique

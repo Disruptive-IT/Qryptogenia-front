@@ -1,4 +1,4 @@
-import React, { useContext, useState, useRef } from "react";
+import React, { useContext, useState, useRef, useEffect } from "react";
 import { AuthContext } from "../../../context/AuthContext";
 import EditIcon from "@mui/icons-material/Edit";
 import Button from "@mui/material/Button";
@@ -8,6 +8,8 @@ import ChangeInfo from "./changeUserName";
 const UserInfo = () => {
   const [modalisOpen, setmodalisOpen] = useState(false);
   const formRef = useRef(null);
+  const { fetchUserData } = useContext(AuthContext);
+  const [user, setUser] = useState(null);
 
   const handleModal = () => {
     setmodalisOpen(!modalisOpen);
@@ -17,7 +19,20 @@ const UserInfo = () => {
     setmodalisOpen(false);
   };
 
-  let { user } = useContext(AuthContext);
+  
+
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        const userData = await fetchUserData();
+        setUser(userData);
+      } catch (error) {
+        console.error("Error fetching user data:", error);
+      }
+    }
+
+    fetchData();
+  }, [fetchUserData]);
 
   // Verificar si el usuario está autenticado
   if (!user) {
@@ -48,7 +63,7 @@ const UserInfo = () => {
     <div>
       <div className="flex items-center space-x-2">
       <p className="">
-          Username: {user.username}
+          Username: {user.info.username}
       </p>
       <Button onClick={handleModal}>
       <EditIcon />
@@ -65,7 +80,7 @@ const UserInfo = () => {
 
       <div className="flex items-center space-x-2">
       <p className="">
-        Email: {user.email}
+        Email: {user.info.email}
       </p>
       <Button onClick={handleModal}>
       <EditIcon />

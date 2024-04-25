@@ -5,7 +5,6 @@ import routes from "./routes/index.js";
 import { CorsConfig } from "./lib/cors.config.js";
 import morgan from "morgan";
 import multer from 'multer';
-import bodyParser from "body-parser";
 
 const upload = multer({ dest: 'uploads/' });
 

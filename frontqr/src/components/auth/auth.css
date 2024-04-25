@@ -45,8 +45,9 @@
     gap: 10px;
     text-align: center;
     width: 50%;
+    min-height: 100%;
     height: fit-content;
-    margin: auto 0;
+    margin: auto 20px;
     justify-content: center;
     padding: 20px 10px;
     transition: all 0.5s;
@@ -62,7 +63,8 @@
     gap: 10px;
     text-align: center;
     width: 50%;
-    height: 100%;
+    height: fit-content;
+    margin: auto 20px;
     justify-content: center;
     transition: all 0.5s;
     padding: 20px 10px;

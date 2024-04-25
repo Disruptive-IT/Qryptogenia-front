@@ -1,7 +1,9 @@
 import prisma from "../lib/prisma.js";
 import { useSend } from "../utils/useSend.js";
 import cloudinary from 'cloudinary';
-const bcrypt = import('bcryptjs');
+import bcrypt from "bcryptjs";
+
+
 
 const checkPassword = async (user, password) => {
   try {
@@ -22,6 +24,7 @@ cloudinary.config({
   api_key: '668756849283491',
   api_secret: 'Mb2UbGHFALvahWlVuud0tBKmDYQ'
 });
+
 
 
 export const getUsers = async (req, res) => {
@@ -78,7 +81,6 @@ export const getImage = async (req, res) => {
   }
 };
 
-
 export const changeProfilePicture = async (req, res) => {
   try {
     const userId = req.userId;
@@ -111,6 +113,7 @@ export const changeProfilePicture = async (req, res) => {
   }
 };
 
+
 export const changeUsername = async (req, res) => {
   try {
     // Extract user ID from request (assuming it's available)
@@ -135,7 +138,8 @@ export const changeUsername = async (req, res) => {
     }
 
     // Verify the password
-    if (!password || !checkPassword(user, password)) {
+    const match = await bcrypt.compare(password, user.password)
+    if (!match) {
       return res.status(400).json({ error: 'Incorrect password' });
     }
 
@@ -150,6 +154,46 @@ export const changeUsername = async (req, res) => {
   } catch (error) {
     console.error('Error changing username:', error);
     return res.status(500).json({ error: 'Failed to change username' });
+  }
+};
+
+export const changePassword = async (req, res) => {
+  try {
+    const userId = req.userId;
+    // Verifica si la solicitud contiene los datos necesarios
+    const { old_password, new_password } = req.body;
+    if (!old_password || !new_password) {
+      return res.status(400).json({ error: 'Se requieren la contraseña anterior y la nueva contraseña.' });
+    }
+
+    // Busca al usuario en la base de datos
+    const user = await prisma.user.findUnique({
+      where: { id: userId },
+    });
+
+    // Verifica si el usuario existe
+    if (!user) {
+      return res.status(404).json({ error: 'Usuario no encontrado.' });
+    }
+
+    // Verifica si la contraseña anterior coincide
+    const match = await bcrypt.compare(old_password, user.password)
+    if (!match) {
+      return res.status(400).json({ error: 'La contraseña anterior es incorrecta.' });
+    }
+
+    // Cambia la contraseña del usuario
+    const encriptpass = await bcrypt.hash(new_password, 10)
+    await prisma.user.update({
+      where: { id: userId },
+      data: { password: encriptpass },
+    });
+
+    // Retorna una respuesta de éxito
+    return res.status(200).json({ message: 'Contraseña cambiada con éxito.' });
+  } catch (error) {
+    console.error('Error al cambiar la contraseña:', error);
+    return res.status(500).json({ error: 'Error al cambiar la contraseña.' });
   }
 };
 

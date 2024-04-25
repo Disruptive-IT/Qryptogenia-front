@@ -1,109 +1,85 @@
-import { useContext, useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
-import { SubmitButton } from '../../components/auth/pure/submitButton'
+import { SubmitButton } from '../../components/auth/pure/submitButton';
 import { GoogleButton } from '../../components/auth/pure/googleButton';
-import { IconsLeft } from '../../components/auth/pure/iconsLeft';
-import logo from "../../assets/imgs/logoForms.png";
 import { useAuthContext } from "../../context/AuthContext";
-import CustomDialog from '../../components/UI/modals/Modal';
-import { activateEmail } from '../../utils/api'
-import { useLoader } from '../../context/LoaderContext'
+import { useLoader } from '../../context/LoaderContext';
 import { SchemaRegisterValidate } from '../../helpers/validate/auth.validate';
+import PinVerificationForm from '../../components/auth/PinVerificationForm';
+import logo from "../../assets/imgs/logoForms.png";
+import { IconsLeft } from '../../components/auth/pure/iconsLeft';
+import CompleteRegisterForm from '../../components/auth/CompleteRegisterForm';
 
 const RegisterForm = () => {
   const { registerUser } = useAuthContext();
   const { startLoading, stopLoading } = useLoader();
-
-  // Estados para controlar la visibilidad del modal
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [modalTitle, setModalTitle] = useState('');
-  const [modalContent, setModalContent] = useState('');
-  const [modalPrimaryButtonAction, setModalPrimaryButtonAction] = useState(() => { });
+  const [showPinVerification, setShowPinVerification] = useState(false);
+  const [showCompleteRegister, setShowCompleteRegister] = useState(false);
+  const [email, setEmail] = useState('');
 
   const handleSubmit = async (values, { resetForm }) => {
     startLoading();
     try {
-      const result = await registerUser(values);
+      const result = await registerUser(values.email);
       stopLoading();
-      if (!result.success) {
-        if (result.verifErrorMessage) {
-          setModalTitle('Generate new token');
-          setModalContent(result.verifErrorMessage);
-          setModalPrimaryButtonAction(() => () => {
-            resendActivationEmail(resetForm, values);
-            setIsModalOpen(false);
-          });
-          setIsModalOpen(true);
-        }
-      } else {
+      if (result.success) {
         resetForm();
+        setEmail(values.email);
+        setShowPinVerification(true);
       }
-    } catch (error) {
-      stopLoading();
-      resetForm();
-    }
-  };
-
-  const resendActivationEmail = async (resetForm, values) => {
-    startLoading();
-    try {
-      const result = await activateEmail(values, startLoading, stopLoading);
-      toastSuccess("A new verification link has been sent.");
-      resetForm();
-    } catch (error) {
-      toastError("It has not been at least 10 minutes since the last time a token was generated.");
     } finally {
       stopLoading();
     }
   };
+
+  const handlePinVerificationSuccess = () => {
+    setShowCompleteRegister(true);
+  };
+
+  const handleSendVerification = () => {
+    setShowPinVerification(false);
+  };
+
+
   return (
-    <Formik
-      initialValues={{ username: '', email: '', password: '', confirmPassword: '', }}
-      validationSchema={SchemaRegisterValidate}
-      onSubmit={handleSubmit}
-    >
-      <section>
-        <Form className="authFormContainer my-20 m-auto">
-          <div className="formContainer">
-            <div className="otherSide"></div>
-            <div className="inputsGroupsEnd fullWidth">
-              <h1 className="authTittle"><span className='text-[#284B63]'>QR</span>yptogenia</h1>
-              <span className="fullWidth">Enter your details to register</span>
-              <div className="inputGroup relative">
-                <Field className="authInputs emailIcon" type="text" title="Username" name="username" placeholder="Username" maxLength="64" /><br />
-                <ErrorMessage name="username" className="errorMessaje absolute left-7" component='span' />
-              </div>
-              <div className="inputGroup relative">
-                <Field className="authInputs emailIcon" type="email" title="Email" name="email" placeholder="Email" maxLength="255" /><br />
-                <ErrorMessage name="email" className="errorMessaje absolute left-7" component='span' />
-              </div>
-              <div className="inputGroup relative">
-                <Field className="authInputs candado" type="password" title="Password" name="password" placeholder="Password" maxLength="64" />
-                <ErrorMessage name="password" className="errorMessaje absolute left-7 top-8 " component='span' />
-              </div>
-              <div className="inputGroup relative">
-                <Field className="authInputs candado" type="password" title="Confirm Password" name="confirmPassword" placeholder="Confirm Password" maxLength="64" /><br />
-                <ErrorMessage name="confirmPassword" className="errorMessaje absolute left-7" component='span' />
-              </div>
-              <SubmitButton text="Register" />
-              <GoogleButton text="Register with Google" />
-            </div>
-            <img src={logo} className="elLogoLeft" alt="" />
-            <IconsLeft />
+    <>
+      <div className="authFormContainer my-20 m-auto">
+        <div className="formContainer">
+          <div className="otherSide"></div>
+          <div className="inputsGroupsEnd fullWidth">
+            {!showPinVerification && !showCompleteRegister ? (
+              <Formik
+                initialValues={{ email: '' }}
+                validationSchema={SchemaRegisterValidate}
+                onSubmit={handleSubmit}
+              >
+                <Form>
+                  <div className='mb-5'>
+                    <h1 className="authTittle mb-4"><span className='text-[#284B63]'>QR</span>yptogenia</h1>
+                    <p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Rem nihil necessitatibus quo, est alias perspiciatis.</p>
+                  </div>
+                  <div className="inputGroup relative">
+                    <Field className="authInputs" type="email" name="email" placeholder="Correo electrónico" />
+                    <ErrorMessage name="email" className="errorMessaje absolute left-4 top-8" component='span' />
+                  </div>
+                  <div className='flex flex-col gap-4 pt-4'>
+                    <SubmitButton text="Registrarse" />
+                    <GoogleButton text="Log in with Google" />
+                  </div>
+                </Form>
+              </Formik>
+            ) : showPinVerification && !showCompleteRegister ? (
+              <PinVerificationForm onSuccess={handlePinVerificationSuccess} onSendVerification={handleSendVerification} email={email} />
+            ) : (
+              <CompleteRegisterForm email={email} />
+            )}
           </div>
-        </Form>
-        <CustomDialog
-          open={isModalOpen}
-          setOpen={setIsModalOpen}
-          title={modalTitle}
-          content={modalContent}
-          primaryButtonText="Generate new token"
-          primaryButtonAction={modalPrimaryButtonAction}
-          secondaryButtonText="Cancel"
-          secondaryButtonAction={() => setIsModalOpen(false)}
-        />
-      </section>
-    </Formik>
+          <img src={logo} className="elLogoLeft" alt="Logo" />
+          <IconsLeft />
+        </div>
+      </div>
+    </>
   );
 };
+
 export default RegisterForm;
