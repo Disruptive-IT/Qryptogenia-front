@@ -62,7 +62,8 @@ span.input-group-addon {
     margin-top: 5%;
 }
 
-.hover-line::after {
+/* Linea hover del menu principal */
+.hover-line::after { 
   content: "";
   display: block;
   width: 0;
