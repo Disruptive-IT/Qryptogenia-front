@@ -70,8 +70,13 @@ span.input-group-addon {
   height: 2px;
   background: #3c6e71;
   transition: width 0.3s;
-}
-
-.hover-line:hover::after {
+ }
+ 
+.hover-line:not(.active-line):hover::after {
   width: 100%;
-}
+ }
+ 
+ .hover-line.active-line::after {
+  width: 100%;
+ }
+ 

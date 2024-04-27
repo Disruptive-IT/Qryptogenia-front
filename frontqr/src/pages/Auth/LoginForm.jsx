@@ -9,19 +9,26 @@ import { useAuthContext } from "../../context/AuthContext";
 import { useLoader } from '../../context/LoaderContext';
 import { SchemaLoginValidate } from '../../helpers/validate/auth.validate';
 import AuthSwitcher from '../../components/auth/pure/AuthSwitcher';
+import ReCAPTCHA from "react-google-recaptcha";
 
 const LoginForm = () => {
   const { loginUser } = useAuthContext();
   const { startLoading, stopLoading } = useLoader();
+  const [recaptchaValue, setRecaptchaValue] = useState(null);
+  const [failedAttempts, setFailedAttempts] = useState(0);
 
   const handleSubmit = async (values, { resetForm }) => {
     startLoading()
     try {
-      const result = await loginUser(values);
-      stopLoading();
-      if (result.success) {
-        resetForm();
+      if (failedAttempts < 5 || recaptchaValue) {
+        const result = await loginUser(values);
+        if (result.success) {
+          resetForm();
+          setFailedAttempts(0);
+        }
       }
+    } catch (error) {
+      setFailedAttempts(prevAttempts => prevAttempts + 1);
     } finally {
       stopLoading();
     }
@@ -59,6 +66,12 @@ const LoginForm = () => {
                     <label htmlFor="terms" className={`${touched.terms && !values.terms ? 'text-red-500' : ''}`}>I accept the Terms and Conditions</label>
                   </div>
                 </div>
+                {failedAttempts >= 5 && (
+                  <ReCAPTCHA
+                    sitekey="6Le7X8gpAAAAADgQuIP6xfechyro8XdS6vpDH93T"
+                    onChange={value => setRecaptchaValue(value)}
+                  />
+                )}
                 <Link className='text-[#103b79]' to="/forgotPassword">Forgot your password?</Link>
                 <SubmitButton text="Log in" />
                 <GoogleButton text="Log in with Google" />

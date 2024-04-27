@@ -5,7 +5,6 @@ import { useSend } from "../utils/useSend.js";
 const VerifyTokenJWT = async (req, res, next) => {
   try {
     const token = req.cookies.token;
-    // res.status(201).json(useSend("Token ", verified));
 
     if (!token)
       return res.status(401).json({
@@ -37,6 +36,7 @@ const VerifyTokenJWT = async (req, res, next) => {
         jwtExpired: true,
       });
     else {
+      // res.status(201).json(useSend("Token ", verified));
       req.userId = user.id;
       next();
     }

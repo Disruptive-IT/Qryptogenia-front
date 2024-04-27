@@ -6,26 +6,26 @@ import { useLoader } from '../context/LoaderContext';
 export const useAuth = (navigate) => {
     const [user, setUser] = useState(null);
     const { startLoading, stopLoading } = useLoader();
-
-    useEffect(() => {
-        async function verifyAuth() {
-            try {
-                startLoading();
-                const res = await axios.get('user/');
-                if (res.data.info) {
-                    setUser(res.data.info);
-                } else {
-                    setUser(null);
-                    logoutUser();
-                }
-            } catch (error) {
-                console.error('Error verifying token:', error);
-                logoutUser();
-            } finally {
-                stopLoading();
-            }
-        };
-    }, [user]);
+    
+    // useEffect(() => {
+    //     async function verifyAuth() {
+    //         try {
+    //             startLoading();
+    //             const res = await axios.get('user/');
+    //             if (res.data.info) {
+    //                 setUser(res.data.info);
+    //             } else {
+    //                 setUser(null);
+    //                 logoutUser();
+    //             }
+    //         } catch (error) {
+    //             console.error('Error verifying token:', error);
+    //             logoutUser();
+    //         } finally {
+    //             stopLoading();
+    //         }
+    //     };
+    // }, [user]);
 
     useEffect(() => {
         redirectUser(user); // Redirige al usuario después de que se establezca la información
