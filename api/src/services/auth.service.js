@@ -26,7 +26,9 @@ export const handleFailedLoginAttempts = async (userId, dateCurrent) => {
   }
 };
 
-export const generateAndSendToken = (user, remember, res) => {
+
+
+export const generateToken = (user, remember, res) => {
   const token = jwt.sign(
     { id: user.id, rol: user.rol.name },
     process.env.JWT_SECRET,

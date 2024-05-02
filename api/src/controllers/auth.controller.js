@@ -5,11 +5,10 @@ import jwt from "jsonwebtoken";
 import { sendRecoverEmail } from "../services/mail.service.js";
 import {
   handleFailedLoginAttempts,
-  generateAndSendToken,
+  generateToken,
   sendVerifyEmail,
 } from "../services/auth.service.js";
 import { getDate } from "../utils/dateUtils.js";
-
 
 export const register = async (req, res) => {
   const { email } = req.body;
@@ -32,8 +31,8 @@ export const register = async (req, res) => {
     // Verificar si ha pasado el tiempo mínimo para enviar otro correo
     const timeSinceLastEmail =
       dateCurrent - existingPreRegister.last_pin_generated_at;
-    // const minTimeBetweenEmails = 10 * 60 * 1000; // 10 minutos en milisegundos
-    const minTimeBetweenEmails = 1;
+    const minTimeBetweenEmails = 10 * 60 * 1000; // 10 minutos en milisegundos
+    // const minTimeBetweenEmails = 1;
 
     if (timeSinceLastEmail < minTimeBetweenEmails) {
       //* Calcular el tiempo restante en minutos
@@ -115,7 +114,7 @@ export const login = async (req, res) => {
     try {
       await handleFailedLoginAttempts(user.id, dateCurrent);
     } catch (error) {
-      return res.status(400).json(useSend(error.message));
+      return res.status(400).json(useSend(error.message, true));
     }
 
     const isMatch = await bcrypt.compare(password, user.password);
@@ -132,7 +131,6 @@ export const login = async (req, res) => {
       });
       return res.status(400).json(useSend("Invalid credentials."));
     }
-
     // Si las credenciales son correctas, resetear el contador de intentos fallidos
     await prisma.loginLogs.update({
       where: { userId: user.id },
@@ -143,7 +141,7 @@ export const login = async (req, res) => {
     });
 
     // Generar y enviar el token JWT
-    const token = generateAndSendToken(user, req.body.remember, res);
+    const token = generateToken(user, req.body.remember, res);
 
     await prisma.loginLogs.update({
       where: { userId: user.id },
