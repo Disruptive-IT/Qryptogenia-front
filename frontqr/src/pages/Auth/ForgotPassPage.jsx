@@ -8,6 +8,7 @@ import logo from "../../assets/imgs/logoForms.png"
 import { Toaster, toast } from 'sonner'
 import { Navigate } from 'react-router-dom';
 import { AuthContext } from "../../context/AuthContext";
+import { IoIosMail } from "react-icons/io";
 
 
 export const ForgotPassForm = () => {
@@ -69,7 +70,7 @@ export const ForgotPassForm = () => {
             validate={(values) => {
               const errors = {};
               if (!values.email) {
-                errors.email = "El correo es requerido";
+                errors.email = "Email is required";
               } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(values.email)) {
                 errors.email = "Please enter a valid e-mail";
               }
@@ -85,31 +86,35 @@ export const ForgotPassForm = () => {
                   <IconsLeft />
                   <div className="inputsGroupsEnd fullWidth">
                     <h1 className="authTittle">
-                      <span className="negrita">QR</span>yptogenia
+                      <span className="font-bold">QR</span>yptogenia
                     </h1>
-                    <span className="fullWidth" style={{ color: "black" }}>Ingrese tu Email para enviarte un{" "}</span>
-                    <span className="fullWidth" style={{ color: "black" }}>correo de recuperacion de contraseña{" "}</span>
-                    <div className="inputGroup">
-                      <Field
-                        className="authInputs emailIcon"
-                        type="email"
-                        title="Correo electrónico"
-                        name="email"
-                        placeholder="Correo Electrónico"
-                        autoComplete="off"
-                        onFocus={() => {
-                          // Limpiar el mensaje de error del backend cuando se enfoca en el campo de correo electrónico
-                          if (backendError) {
-                            setBackendError(null);
-                          }
-                        }}
-                      />
+                    <span className="w-full ">Enter your email adress to send you a password recovery email</span>
+
+                    <div className='flex w-full flex-col h-14 mb-3'>
+                      <div className="flex  ">
+                        <span className="inline-flex items-center px-2 text-lg text-gray-900 bg-gray-200 border rounded-e-0 border-gray-300 border-e-0 rounded-s-md dark:bg-my-gray dark:text-black dark:border-gray-600">
+                          <IoIosMail/>
+                        </span>
+                        <Field className="rounded-none rounded-e-lg bg-gray-50 border text-gray-900 focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-full text-sm border-gray-300 p-2.5  dark:bg-my-gray dark:border-gray-600 dark:placeholder-gray-400 dark:text-black dark:focus:dark-blue dark:focus:border-blue-500" 
+                          type="email" 
+                          title="Email" 
+                          name="email" 
+                          placeholder="Email"
+                          autoComplete="off"
+                          onFocus={() => {
+                            // Limpiar el mensaje de error del backend cuando se enfoca en el campo de correo electrónico
+                            if (backendError) {
+                              setBackendError(null);
+                            }
+                          }} 
+                          maxLength="255" />
+                      </div>
                       <div className="errorMessageContainer">
-                        {errors.email && <span className="errorMessaje" style={{ color: 'red' }}>{errors.email}</span>}
-                        {backendError && <span className="errorMessaje" style={{ color: 'red' }}>{backendError}</span>}
+                        {errors.email && <span className="text-red-600 font-semibold" >{errors.email}</span>}
+                        {backendError && <span className="text-red-600 font-semibold" >{backendError}</span>}
                       </div>
                     </div>
-                    <SubmitButton text="Recuperar contraseña" disabled={isSubmitting} />
+                    <SubmitButton text="Send Email" disabled={isSubmitting} />
                   </div>
                 </div>
               </Form>

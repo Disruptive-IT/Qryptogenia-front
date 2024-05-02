@@ -10,6 +10,9 @@ import { useLoader } from '../../context/LoaderContext';
 import { SchemaLoginValidate } from '../../helpers/validate/auth.validate';
 import AuthSwitcher from '../../components/auth/pure/AuthSwitcher';
 import ReCAPTCHA from "react-google-recaptcha";
+import { IoIosMail } from "react-icons/io";
+import { FaLock } from "react-icons/fa";
+
 
 const LoginForm = () => {
   const { loginUser } = useAuthContext();
@@ -48,14 +51,27 @@ const LoginForm = () => {
               <div className="inputsGroupsStart fullWidth">
                 <h1 className="authTittle"><span className='text-[#284B63]'>QR</span>yptogenia</h1>
                 <span className="fullWidth">Enter your details to access</span>
-                <div className="inputGroup relative">
-                  <Field className="authInputs emailIcon" type="email" title="Email" name="email" placeholder="Email" maxLength="255" /><br />
-                  <ErrorMessage name="email" className="errorMessaje absolute left-7" component='span' />
+                
+                <div className='flex flex-col h-14'>
+                  <div className="flex md:w-64 ">
+                    <span className="inline-flex items-center px-2 text-lg text-gray-900 bg-gray-200 border rounded-e-0 border-gray-300 border-e-0 rounded-s-md dark:bg-my-gray dark:text-black dark:border-gray-600">
+                      <IoIosMail/>
+                    </span>
+                    <Field className="rounded-none rounded-e-lg bg-gray-50 border text-gray-900 focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-full text-sm border-gray-300 p-2.5  dark:bg-my-gray dark:border-gray-600 dark:placeholder-gray-400 dark:text-black dark:focus:dark-blue dark:focus:border-blue-500" type="email" title="Email" name="email" placeholder="Email" maxLength="255" /><br />
+                  </div>
+                  <ErrorMessage name="email" className="text-red-600 font-semibold" component='span' />
                 </div>
-                <div className="inputGroup relative" style={{ marginBottom: 0 }}>
-                  <Field className="authInputs candado" type="password" title="Password" name="password" placeholder="Password" maxLength="64" /><br />
-                  <ErrorMessage name="password" className="errorMessaje absolute left-7" component='span' />
+
+                <div className="flex flex-col h-14">
+                  <div className="flex md:w-64 ">
+                    <span className="inline-flex items-center px-2 text-lg text-gray-900 bg-gray-200 border rounded-e-0 border-gray-300 border-e-0 rounded-s-md dark:bg-my-gray dark:text-black dark:border-gray-600">
+                      <FaLock />
+                    </span>
+                    <Field className="rounded-none rounded-e-lg bg-gray-50 border text-gray-900 focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-full text-sm border-gray-300 p-2.5  dark:bg-my-gray dark:border-gray-600 dark:placeholder-gray-400 dark:text-black dark:focus:ring-blue-500 dark:focus:border-blue-500" type="password" title="Password" name="password" placeholder="Password" maxLength="64" /><br />
+                  </div>
+                  <ErrorMessage name="password" className="text-red-600 font-semibold" component='span' />
                 </div>
+                
                 <div className='mt-2 flex flex-col items-start'>
                   <div>
                     <Field type="checkbox" name="remember" className="mr-2" />
@@ -74,7 +90,7 @@ const LoginForm = () => {
                 )}
                 <Link className='text-[#103b79]' to="/forgotPassword">Forgot your password?</Link>
                 <SubmitButton text="Log in" />
-                <GoogleButton text="Log in with Google" />
+                <GoogleButton text="Sing in with Google" />
               </div>
               <img src={logo} className="elLogoRigth" alt="" />
               <IconsRight />
