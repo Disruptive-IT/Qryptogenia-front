@@ -10,6 +10,8 @@ import logo from "../../assets/imgs/logoForms.png";
 import { IconsLeft } from '../../components/auth/pure/iconsLeft';
 import CompleteRegisterForm from '../../components/auth/CompleteRegisterForm';
 import AuthSwitcher from '../../components/auth/pure/AuthSwitcher';
+import { IoIosMail } from "react-icons/io";
+
 
 const RegisterForm = () => {
   const { registerUser } = useAuthContext();
@@ -58,15 +60,23 @@ const RegisterForm = () => {
                 <Form>
                   <div className='mb-5'>
                     <h1 className="authTittle mb-4"><span className='text-[#284B63]'>QR</span>yptogenia</h1>
-                    <p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Rem nihil necessitatibus quo, est alias perspiciatis.</p>
+                    <p>Enter your email address and you will receive a verification code to complete your registration.</p>
                   </div>
-                  <div className="inputGroup relative">
-                    <Field className="authInputs" type="email" name="email" placeholder="Correo electrónico" />
-                    <ErrorMessage name="email" className="errorMessaje absolute left-4 top-8" component='span' />
+
+                  <div className='flex flex-col h-14'>
+                    <div className="flex  ">
+                      <span className="inline-flex items-center px-2 text-lg text-gray-900 bg-gray-200 border rounded-e-0 border-gray-300 border-e-0 rounded-s-md dark:bg-my-gray dark:text-black dark:border-gray-600">
+                        <IoIosMail/>
+                      </span>
+                      <Field className="rounded-none rounded-e-lg bg-gray-50 border text-gray-900 focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-full text-sm border-gray-300 p-2.5  dark:bg-my-gray dark:border-gray-600 dark:placeholder-gray-400 dark:text-black dark:focus:dark-blue dark:focus:border-blue-500" type="email" title="Email" name="email" placeholder="Email" maxLength="255" /><br />
+                    </div>
+                    <ErrorMessage name="email" className="text-red-600 font-semibold" component='span' />
                   </div>
+
+                 
                   <div className='flex flex-col gap-4 pt-4'>
-                    <SubmitButton text="Registrarse" />
-                    <GoogleButton text="Log in with Google" />
+                    <SubmitButton text="Sing up" />
+                    <GoogleButton text="Sing up with Google" />
                   </div>
                 </Form>
               </Formik>
