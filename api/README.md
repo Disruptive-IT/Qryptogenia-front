@@ -19,6 +19,8 @@ NODE_ENV=development
 EMAIL_HOST=smtp.gmail.com
 EMAIL_PASSWORD=CONTRASEÑA-APLICACION
 EMAIL_USER=CORREO
+
+RECAPTCHA_KEY=
 ```
 ### Generate JWT_SECRET 
 ```bash
