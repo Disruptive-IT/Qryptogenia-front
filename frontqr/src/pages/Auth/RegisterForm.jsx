@@ -48,13 +48,21 @@ const RegisterForm = () => {
     window.location.href = url
   }
 
-  async function auth(){
-    const response = await fetch('http://localhost:3000/api/auth',
-    {method:'post'});
-    const data = await response.json();
-    navigate(data.url)
-    console.log("data",data)
-
+  async function auth() {
+    try {
+      const response = await fetch('http://localhost:3000/api/auth', {
+        method: 'POST'
+      });
+      const data = await response.json();
+      if (response.ok) {
+        navigate(data.url);
+      } else {
+        console.error('Error:', data.error);
+      }
+    } catch (error) {
+      console.error('Error:', error);
+    }
+  }
 
 
   return (
@@ -89,7 +97,7 @@ const RegisterForm = () => {
                  
                   <div className='flex flex-col gap-4 pt-4'>
                     <SubmitButton text="Sing up" />
-                    <GoogleButton text="Sing up with Google" />
+                    <GoogleButton text="Sing up with Google" onClick={auth} />
                   </div>
                 </Form>
               </Formik>
@@ -106,6 +114,5 @@ const RegisterForm = () => {
     </>
   );
 };
-}
 
 export default RegisterForm;

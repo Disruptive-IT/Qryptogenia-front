@@ -143,9 +143,8 @@ export const useAuth = (navigate) => {
 
     const getUsersData = async () => {
         try {
-            const response = await axios.get('/users/');
-            const data = response.data.users;
-            return { success: true, data: data };
+            const response = await axios.get('/user/users');
+            return { success: true, data: response.data };
         } catch (error) {
             console.error('Error fetching data:', error);
             return { success: false, error: error };

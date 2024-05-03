@@ -5,7 +5,8 @@ import {
   changeProfilePicture,
   changeUsername,
   changePassword,
-  homepage
+  homepage,
+  getUsers
 } from "../controllers/user.controller.js";
 
 const router = express.Router();
@@ -17,6 +18,7 @@ router.post("/change_picture", changeProfilePicture);
 router.post("/change_username", changeUsername);
 router.post("/change_password", changePassword);
 router.get("/google", homepage);
+router.get("/users", getUsers);
 
 
 export default router;

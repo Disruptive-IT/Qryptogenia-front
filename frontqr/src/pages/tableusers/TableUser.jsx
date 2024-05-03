@@ -40,20 +40,24 @@ const App2 = () => {
 
     useEffect(() => {
         const fetchData = async () => {
-            const { success, data } = await getUsersData();
-            if (success) {
-                setUsers(data);
-                applyRowStyles(theme);
-            } else {
-                console.log('error al cargar los datos')
+            try {
+                const { success, data } = await getUsersData();
+                if (success) {
+                    setUsers(data);
+                    applyRowStyles(theme); // Mover aquí para aplicar estilos después de que se establezcan los usuarios
+                } else {
+                    console.log('Error al cargar los datos');
+                }
+            } catch (error) {
+                console.error('Error fetching data:', error);
             }
         };
-
+    
         fetchData();
     }, []);
 
     const handleViewDetails = (userId) => {
-        const user = users.find(user => user.user_id === userId);
+        const user = users.find(user => user.id === userId);
         setSelectedUser(user);
         setOpenDialog(true);
     };
@@ -79,7 +83,7 @@ const App2 = () => {
 
     const columns = [
         {
-            name: "user_id",
+            name: "id",
             label: "ID",
             options: {
                 display: false,
@@ -99,7 +103,7 @@ const App2 = () => {
             
         },
         {
-            name: "is_active",
+            name: "state",
             label: "STATUS",
             options: {
                 customBodyRender: (value) => (
@@ -113,7 +117,7 @@ const App2 = () => {
             },
         },
         {
-            name: "user_id",
+            name: "id",
             label: "ACTIONS",
             options: {
                 customBodyRender: (value, tableMeta) => {
@@ -142,9 +146,9 @@ const App2 = () => {
     };
 
     return (
-        <div className="py-15 min-h-screen grid place-items-center">
+        <div className="py-15 min-h-screen grid place-items-center" style={{ marginTop: '-30px' }}>
             <div className="w-11/12 max-w-4x2 relative">
-                <div className='mb-4'>
+                <div className='mb-1'>
                     <HeaderModule />
                 </div>
                 <ThemeProvider theme={createTheme({
@@ -163,7 +167,7 @@ const App2 = () => {
                                     textAlign: 'center',
                                 },
                                 body: {
-                                    padding: "7px 5px",
+                                    padding: "9px 5px",
                                     color: currentTheme.textColor,
                                 }
                             }
