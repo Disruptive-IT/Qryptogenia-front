@@ -10,6 +10,8 @@ import { Formik, Form, Field, ErrorMessage } from "formik";
 import { useParams } from 'react-router-dom';
 // import toast from 'react-hot-toast';
 import { Toaster, toast } from 'sonner'
+import { FaLock } from "react-icons/fa";
+
 
 export const RecoverPassForm = () => {
   const { register, handleSubmit, setError } = useForm();
@@ -85,13 +87,13 @@ export const RecoverPassForm = () => {
           const errors = {};
           
           if (!values.password) {
-            errors.password = "La contraseña es requerida";
+            errors.password = "Password is required";
           }
 
           if (!values.confirmPassword) {
-            errors.confirmPassword = "Confirmar la contraseña es requerido";
+            errors.confirmPassword = "Confirm password is required";
           } else if (values.password !== values.confirmPassword) {
-            errors.confirmPassword = "Las contraseñas no coinciden";
+            errors.confirmPassword = "Passwords don't match";
           }
           return errors;
         }}
@@ -104,31 +106,34 @@ export const RecoverPassForm = () => {
                 <span className="text-[#284B63]">QR</span>yptogenia
               </h1>
               <span className="fullWidth">
-                Ingresa tu nueva contraseña
+                Set your new password
               </span>
-              <div className="inputGroup">
-                <Field
-                  className="authInputs emailIcon"
-                  type="password"
-                  title="Nueva Contraseña"
-                  name="password"
-                  placeholder="Nueva Contraseña"
-                />
+
+              <div className="flex flex-col h-14">
+                <div className="flex md:w-64 ">
+                  <span className="inline-flex items-center px-2 text-lg text-gray-900 bg-gray-200 border rounded-e-0 border-gray-300 border-e-0 rounded-s-md dark:bg-my-gray dark:text-black dark:border-gray-600">
+                    <FaLock />
+                  </span>
+                  <Field className="rounded-none rounded-e-lg bg-gray-50 border text-gray-900 focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-full text-sm border-gray-300 p-2.5  dark:bg-my-gray dark:border-gray-600 dark:placeholder-gray-400 dark:text-black dark:focus:ring-blue-500 dark:focus:border-blue-500" type="password" title="Password" name="password" placeholder="Password" maxLength="64" /><br />
+                </div>
+                <ErrorMessage name="password" className="text-red-600 font-semibold" component='span' />
               </div>
-              <ErrorMessage name="password" component='span' className="errorMessaje" style={{ marginBottom: '10px', color: 'red' }} />
-              <div className="inputGroup">
-                <Field
-                  className="authInputs candado"
-                  type="password"
-                  title="Confirmar Contraseña"
-                  name="confirmPassword"
-                  placeholder="Confirmar Contraseña"
-                />
+
+              <div className="flex flex-col h-14">
+                <div className="flex md:w-64 ">
+                  <span className="inline-flex items-center px-2 text-lg text-gray-900 bg-gray-200 border rounded-e-0 border-gray-300 border-e-0 rounded-s-md dark:bg-my-gray dark:text-black dark:border-gray-600">
+                    <FaLock />
+                  </span>
+                  <Field className="rounded-none rounded-e-lg bg-gray-50 border text-gray-900 focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-full text-sm border-gray-300 p-2.5  dark:bg-my-gray dark:border-gray-600 dark:placeholder-gray-400 dark:text-black dark:focus:ring-blue-500 dark:focus:border-blue-500" type="password" title="confirmPassword" name="confirmPassword" placeholder="confirm Password" maxLength="64" /><br />
+                </div>
+                <ErrorMessage name="confirmPassword" className="text-red-600 font-semibold" component='span' />
               </div>
-              <ErrorMessage name="confirmPassword" component='span' className="errorMessaje" style={{ marginBottom: '10px', color: 'red' }} />
+
+
+              
               {/* Campo oculto para enviar el token */}
               <Field type="hidden" name="token" value={token} />
-              <SubmitButton text="Recuperar Contraseña" />
+              <SubmitButton text="Recover Password" />
             </div>
             <img src={logo} className="elLogoRigth" alt="" />
             <IconsRight />

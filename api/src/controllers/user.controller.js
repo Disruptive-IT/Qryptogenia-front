@@ -38,6 +38,7 @@ export const getUsers = async (req, res) => {
 };
 
 
+
 export const getUser = async (req, res) => {
   try {
     const _user = await prisma.user.findUnique({
@@ -61,6 +62,21 @@ export const getUser = async (req, res) => {
   }
 };
 
+export const getImage = async (req, res) => {
+  try {
+    const user = await prisma.user.findUnique({
+      where: { id: req.userId, state: true },
+      select: {
+        profile_picture: true,
+      },
+    });
+
+    // Si el usuario existe y tiene una imagen de perfil, devolvemos la URL de la imagen
+    if (user && user.profile_picture) {
+      res.status(200).json({ image_url: user.profile_picture });
+    } else {
+      res.status(404).json({ error: "User or profile picture not found" });
+    }
 export const getImage = async (req, res) => {
   try {
     const user = await prisma.user.findUnique({
@@ -147,7 +163,83 @@ export const changeUsername = async (req, res) => {
     await prisma.user.update({
       where: { id: userId },
       data: { username: new_username },
+    res.status(500).json({ error: "Failed to get user!" });
+  }
+};
+
+export const changeProfilePicture = async (req, res) => {
+  try {
+    const userId = req.userId;
+    const user = await prisma.user.findUnique({
+      where: { id: userId },
     });
+
+    const file = req.file;
+    if (!file) {
+      return res.status(400).json({ error: 'No file provided' });
+    }
+
+    // Subir el archivo a Cloudinary
+    const cloudinaryResponse = await cloudinary.uploader.upload(file.path);
+
+    // Obtener la URL de la imagen subida desde Cloudinary
+    const imageUrl = cloudinaryResponse.secure_url;
+
+    // Actualizar la URL de la imagen de perfil en la base de datos
+    await prisma.user.update({
+      where: { id: userId },
+      data: { profile_picture: imageUrl },
+    });
+
+    // Devolver la URL de la imagen actualizada como respuesta
+    return res.status(200).json({ image_url: imageUrl });
+  } catch (error) {
+    console.error('Error changing profile picture:', error);
+    return res.status(500).json({ error: 'Failed to change profile picture' });
+  }
+};
+
+
+export const changeUsername = async (req, res) => {
+  try {
+    // Extract user ID from request (assuming it's available)
+    const userId = req.userId;
+
+    // Fetch the user from the database
+    const user = await prisma.user.findUnique({
+      where: { id: userId },
+    });
+
+    // Check if user exists
+    if (!user) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+
+    // Get the new username and password from the request body
+    const { new_username, password } = req.body;
+
+    // Validate the new username (optional, add validation logic here)
+    if (!new_username || new_username.trim() === '') {
+      return res.status(400).json({ error: 'Invalid username' });
+    }
+
+    // Verify the password
+    const match = await bcrypt.compare(password, user.password)
+    if (!match) {
+      return res.status(400).json({ error: 'Incorrect password' });
+    }
+
+    // Update the username in the database
+    await prisma.user.update({
+      where: { id: userId },
+      data: { username: new_username },
+    });
+
+    // Return success message
+    return res.status(200).json({ success: 'Username changed successfully' });
+  } catch (error) {
+    console.error('Error changing username:', error);
+    return res.status(500).json({ error: 'Failed to change username' });
 
     // Return success message
     return res.status(200).json({ success: 'Username changed successfully' });
@@ -157,6 +249,36 @@ export const changeUsername = async (req, res) => {
   }
 };
 
+export const changePassword = async (req, res) => {
+  try {
+    const userId = req.userId;
+    // Verifica si la solicitud contiene los datos necesarios
+    const { old_password, new_password } = req.body;
+    if (!old_password || !new_password) {
+      return res.status(400).json({ error: 'Se requieren la contraseña anterior y la nueva contraseña.' });
+    }
+
+    // Busca al usuario en la base de datos
+    const user = await prisma.user.findUnique({
+      where: { id: userId },
+    });
+
+    // Verifica si el usuario existe
+    if (!user) {
+      return res.status(404).json({ error: 'Usuario no encontrado.' });
+    }
+
+    // Verifica si la contraseña anterior coincide
+    const match = await bcrypt.compare(old_password, user.password)
+    if (!match) {
+      return res.status(400).json({ error: 'La contraseña anterior es incorrecta.' });
+    }
+
+    // Cambia la contraseña del usuario
+    const encriptpass = await bcrypt.hash(new_password, 10)
+    await prisma.user.update({
+      where: { id: userId },
+      data: { password: encriptpass },
 export const changePassword = async (req, res) => {
   try {
     const userId = req.userId;

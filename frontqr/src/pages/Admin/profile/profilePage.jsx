@@ -7,6 +7,8 @@ import ChangePasswordForm from "./changePasswordForm";
 import { AuthContext } from "../../../context/AuthContext";
 import { Toaster, toast } from 'sonner';
 
+
+
 const Profile = () => {
     const [modalIsOpen, setModalIsOpen] = useState(false);
     const formRef = useRef(null);

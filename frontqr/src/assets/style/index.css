@@ -61,3 +61,22 @@ span.input-group-addon {
     align-items: center;
     margin-top: 5%;
 }
+
+/* Linea hover del menu principal */
+.hover-line::after { 
+  content: "";
+  display: block;
+  width: 0;
+  height: 2px;
+  background: #3c6e71;
+  transition: width 0.3s;
+ }
+ 
+.hover-line:not(.active-line):hover::after {
+  width: 100%;
+ }
+ 
+ .hover-line.active-line::after {
+  width: 100%;
+ }
+ 

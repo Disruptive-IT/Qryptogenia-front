@@ -6,9 +6,9 @@ import HomePage from "../pages/HomePage";
 import UserHome from "../pages/user/UserHome";
 import ProtectedRouteAdmin from "./ProtectedRouteAdmin";
 import ProtectedRouteClient from "./ProtectedRouteClient";
+import ProtectedRoutePublic from "./ProtectedRoutePublic";
 import LayoutHome from "../pages/templates/Home/Layout";
 import RegisterForm from "../pages/Auth/RegisterForm";
-import ActivateEmailPage from "../pages/Auth/ActivateEmailPage";
 import NotFoundPage from "../pages/NotFoundPage";
 import { RecoverPassForm } from "../pages/Auth/RecoverPassPage";
 import { ForgotPassForm } from "../pages/Auth/ForgotPassPage";
@@ -25,15 +25,16 @@ export const PageRouter = () => {
         <>
             <Routes>
                 {/* Home Routes */}
-                <Route path="/" element={<LayoutHome />}>
-                    <Route index element={<Navigate to="/home" replace />} />
-                    <Route path="home" element={<HomePage />} />
-                    <Route path="login" element={<LoginForm />} />
-                    <Route path="register" element={<RegisterForm />} />
-                    <Route path="verification" element={<ActivateEmailPage />} />
-                    <Route path="not" element={<NotFoundPage />} />
-                    <Route path="recoverPassword" element={<RecoverPassForm />} />
-                    <Route path="forgotPassword" element={<ForgotPassForm />} />
+
+                <Route path="/" element={<ProtectedRoutePublic />}>
+                    <Route element={<LayoutHome />}>
+                        <Route index element={<Navigate to="/home" replace />} />
+                        <Route path="home" element={<HomePage />} />
+                        <Route path="login" element={<LoginForm />} />
+                        <Route path="register" element={<RegisterForm />} />
+                        <Route path="recoverPassword" element={<RecoverPassForm />} />
+                        <Route path="forgotPassword" element={<ForgotPassForm />} />
+                    </Route>
                 </Route>
 
                 {/* Admin Routes */}

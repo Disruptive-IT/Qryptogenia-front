@@ -30,8 +30,6 @@ export const OptionBar = () => {
 
   return (
     <div className="w-full">
-      <h1 className="text-center font-bold text-2xl mb-20">Select your <strong className="text-sky-700">QR</strong>yptogenia</h1>
-
       <div className="container-layout">
         <BoxLink data={rigthItems} />
         <div className="gridItem cellPhone">

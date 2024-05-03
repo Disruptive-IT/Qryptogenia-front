@@ -1,26 +1,8 @@
-import { useContext, useEffect, useState } from 'react';
-import { Users, Kanban, QrCode } from 'lucide-react';
 
 const Dashboard = () => {
      return (
           <div className="flex h-screen bg-gray-100">
                <div className="flex-grow">
-                    <header className="p-4 shadow-md flex justify-center items-center">
-                         <h1 className="text-xl font-semibold text-gray-800">Dashboard</h1>
-                         <div className="flex justify-center w-full">
-                              <nav className="flex space-x-4">
-                                   <a href="#" className="flex items-center text-gray-500 hover:text-gray-800">
-                                        <Users className="mr-3" />
-                                   </a>
-                                   <a href="#" className="flex items-center text-gray-500 hover:text-gray-800">
-                                        <Kanban className="mr-3" />
-                                   </a>
-                                   <a href="#" className="flex items-center text-gray-500 hover:text-gray-800">
-                                        <QrCode className="mr-3" />
-                                   </a>
-                              </nav>
-                         </div>
-                    </header>
                     <main className="p-6">
                          <div className="grid grid-cols-1 gap-6">
                               <div className="bg-white shadow-md rounded-md p-4">

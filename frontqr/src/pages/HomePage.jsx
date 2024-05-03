@@ -5,10 +5,9 @@ import { OptionBar } from '../components/Layout/optionBar';
 
 const HomePage = () => {
     return (
-        <div className='flex justify-center '>
-            <div className='mt-10'>
-                <OptionBar/>
-            </div>
+        <div>
+            <h1 className="text-center font-bold text-2xl mb-20">Select your <strong className="text-sky-700">QR</strong>yptogenia</h1>
+            <OptionBar />
         </div>
     );
 };

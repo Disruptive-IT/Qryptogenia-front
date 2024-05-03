@@ -10,6 +10,7 @@ import {
 
 const router = express.Router();
 
+
 router.get("/", getUser);
 router.get("/get_image", getImage);
 router.post("/change_picture", changeProfilePicture);

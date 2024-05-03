@@ -12,20 +12,7 @@
 }
 
 
-.googleBtn{
-    width: 210px;
-    height:  45px;
-    box-shadow: 2px 2px 2px gray;
-    display:  flex;
-    align-items:  center;
-    cursor:  pointer;
-    background-color:  white;
-    border: none;
-    border-radius:  10px;
-    font-weight:  bold;
-    margin-bottom: 20px;
-    transition: all 0.5s;
-}
+
 
 
 @media (max-width:400px){
@@ -33,7 +20,5 @@
         width: 90%;
     }
 
-    .googleBtn{
-        width: 90%;
-    }
+   
 }

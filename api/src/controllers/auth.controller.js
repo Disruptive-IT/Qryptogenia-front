@@ -34,6 +34,8 @@ export const register = async (req, res) => {
       dateCurrent - existingPreRegister.last_pin_generated_at;
     const minTimeBetweenEmails = 10 * 60 * 1000; // 10 minutos en milisegundos
     // const minTimeBetweenEmails = 1;
+    const minTimeBetweenEmails = 10 * 60 * 1000; // 10 minutos en milisegundos
+    // const minTimeBetweenEmails = 1;
 
     if (timeSinceLastEmail < minTimeBetweenEmails) {
       //* Calcular el tiempo restante en minutos
@@ -116,6 +118,10 @@ export const login = async (req, res) => {
       await handleFailedLoginAttempts(user.id, dateCurrent);
     } catch (error) {
       return res.status(400).json(useSend(error.message, true));
+    try {
+      await handleFailedLoginAttempts(user.id, dateCurrent);
+    } catch (error) {
+      return res.status(400).json(useSend(error.message, true));
     }
 
     const isMatch = await bcrypt.compare(password, user.password);
@@ -143,6 +149,7 @@ export const login = async (req, res) => {
 
     // Generar y enviar el token JWT
     const token = generateToken(user, req.body.remember, res);
+    const token = generateToken(user, req.body.remember, res);
 
     await prisma.loginLogs.update({
       where: { userId: user.id },
@@ -152,6 +159,14 @@ export const login = async (req, res) => {
       },
     });
 
+    res.status(200).json(
+      useSend("Successfully login", {
+        user: {
+          rol: user.rol.name,
+          token: token,
+        },
+      })
+    );
     res.status(200).json(
       useSend("Successfully login", {
         user: {
@@ -181,8 +196,6 @@ export const logout = (req, res) => {
   }
 };
 
-
-
 export const forgot_password = async (req, res) => {
   const { email } = req.body;
   
@@ -191,7 +204,7 @@ export const forgot_password = async (req, res) => {
     if (!user) {
       return res.status(404).send({ error: "User not existed" });
     }
-    
+
     // Generar el token JWT con el ID del usuario
     const token = jwt.sign({ userId: user.id }, process.env.JWT_SECRET, { expiresIn: "1d" });
 
@@ -206,7 +219,7 @@ export const forgot_password = async (req, res) => {
     
     // Llamada a la función sendRecoverEmail con el ID del usuario
     const mail = await sendRecoverEmail(email, token, user.id);
-    
+
     // Manejo de la respuesta del envío del correo
     if (!mail.accepted || mail.accepted.length === 0) {
       return res.status(500).send({
@@ -218,7 +231,7 @@ export const forgot_password = async (req, res) => {
     
     return res.status(200).json({ success: true, message: "Recovery email sent successfully" });
   } catch (error) {
-    console.error('Error:', error);
+    console.error("Error:", error);
     return res.status(500).send({ error: "Internal server error" });
   }
 };
