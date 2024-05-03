@@ -1,6 +1,5 @@
 import express from "express";
 import bcrypt from "bcryptjs";
-import bcrypt from "bcryptjs";
 import {
   login,
   logout,
@@ -8,16 +7,16 @@ import {
   completeRegister,
   forgot_password,
   recoverPassword,
-  googleauth
+  googleauth,
   recoverPassword,
 } from "../controllers/auth.controller.js";
 import { verifyAccount } from "../services/auth.service.js";
-const plaintextPassword = "dav39484"; // Tu contraseña en texto plano
+// const plaintextPassword = "dav39484"; // Tu contraseña en texto plano
 import jwt from "jsonwebtoken";
 import { verifyRecaptcha } from "../services/verifyRecaptcha.service.js";
 
 // Genera el hash de la contraseña
-const hashedPassword = bcrypt.hashSync(plaintextPassword, 10);
+// const hashedPassword = bcrypt.hashSync(plaintextPassword, 10);
 
 // Guarda el hash en tu base de datos
 // Aquí debes implementar la lógica para guardar el hash en tu base de datos

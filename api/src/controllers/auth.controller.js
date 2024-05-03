@@ -34,8 +34,6 @@ export const register = async (req, res) => {
       dateCurrent - existingPreRegister.last_pin_generated_at;
     const minTimeBetweenEmails = 10 * 60 * 1000; // 10 minutos en milisegundos
     // const minTimeBetweenEmails = 1;
-    const minTimeBetweenEmails = 10 * 60 * 1000; // 10 minutos en milisegundos
-    // const minTimeBetweenEmails = 1;
 
     if (timeSinceLastEmail < minTimeBetweenEmails) {
       //* Calcular el tiempo restante en minutos
@@ -118,10 +116,6 @@ export const login = async (req, res) => {
       await handleFailedLoginAttempts(user.id, dateCurrent);
     } catch (error) {
       return res.status(400).json(useSend(error.message, true));
-    try {
-      await handleFailedLoginAttempts(user.id, dateCurrent);
-    } catch (error) {
-      return res.status(400).json(useSend(error.message, true));
     }
 
     const isMatch = await bcrypt.compare(password, user.password);
@@ -149,7 +143,6 @@ export const login = async (req, res) => {
 
     // Generar y enviar el token JWT
     const token = generateToken(user, req.body.remember, res);
-    const token = generateToken(user, req.body.remember, res);
 
     await prisma.loginLogs.update({
       where: { userId: user.id },
@@ -159,14 +152,6 @@ export const login = async (req, res) => {
       },
     });
 
-    res.status(200).json(
-      useSend("Successfully login", {
-        user: {
-          rol: user.rol.name,
-          token: token,
-        },
-      })
-    );
     res.status(200).json(
       useSend("Successfully login", {
         user: {
@@ -300,4 +285,4 @@ export const googleauth = async (req, res) => {
     prompt: 'consent'
   });
   res.json({url:authorizeUrl})
-}
+};
