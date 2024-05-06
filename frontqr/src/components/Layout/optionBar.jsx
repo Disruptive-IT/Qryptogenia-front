@@ -12,47 +12,41 @@ import music from "../../assets/imgs/QR-types/music.png";
 import wifi from "../../assets/imgs/QR-types/wifi.png";
 import vcard from "../../assets/imgs/QR-types/vcard.png";
 import { Explanations } from "./explanatios";
-
+import logo from "../../../public/Logo.png";
+import menu from "../../assets/imgs/QR-types/menu.png";
 export const OptionBar = () => {
-  const rigthItems = [
-    { name: "APP", img: app },
-    { name: "Social", img: social },
-    { name: "Link", img: link },
-    { name: "PDF", img: pdf },
+  const data = [
+    { name: "APP / Store", img: app, description: "Link your app in all stores"},
+    { name: "Social media", img: social, description: "Link to all your social media channels" },
+    { name: "Website URL", img: link, description: "Link to the website of your choice" },
+    { name: "PDF", img: pdf, description: "Show or download your pdf" },
+    { name: "News", img: news, description: "hello world" },
+    { name: "Music", img: music, description: "Link your song in all music apps" },
+    { name: "Wifi", img: wifi, description: "Connect to a wireles network" },
+    { name: "V-Card", img: vcard, description: "Share your electronic business card" },
+    { name: "Food Menu", img: menu, description: "Create a digital restauran menu" },
   ];
 
-  const leftItems = [
-    { name: "News", img: news },
-    { name: "Music", img: music },
-    { name: "Wifi", img: wifi },
-    { name: "V-Card", img: vcard },
-  ];
+ 
 
   return (
-    <div className="w-full">
-      <div className="container-layout">
-        <BoxLink data={rigthItems} />
-        <div className="gridItem cellPhone">
-          <div className="flex-wrap text-center jutify-center">
-            <div>
-              <h1>
-                <strong>QR</strong> Type
-              </h1>
+    <div className="w-screen px-10">
+      <div className="flex items-center md:p-2 lg:p-10">
+        <BoxLink data={data} />
+        <div className="w-full gap-4 sm:min-h-[490px] md:h-[490px] lg:max-h-[690px] lg:max-w-60  cellPhone">
+          <div className=" flex flex-col h-full gap-4 text-center  items-center jutify-center">
+            <div className="h-1/3 w-full flex flex-col justify-end items-center">
+              <img src={logo} alt="" className="w-20"/>
+            </div>
+              <h1> <strong>QR</strong>Type</h1>
               <p className="mt-5 p-3">
                 Enjoy all the services that Qryptogenia can offer you, don't wait any longer
               </p>
-            </div>
-            <div className="w-ful flex justify-center">
               <img src={QR} alt="" className="w-20" />
-            </div>
+            
           </div>
-          <img
-            src={celular}
-            alt="prevew"
-            style={{ width: "230px", position: "absolute" }}
-          />
+         
         </div>
-        <BoxLink data={leftItems} />
       </div>
 
       <div className="w-full flex justify-center mt-20 mb-20 explanation">

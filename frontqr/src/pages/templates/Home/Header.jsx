@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import CustomLink from '../../../components/Layout/CustomLink';
+import logo from "../../../../public/Logo.png"
 
 function Navbar() {
     const [isOpen, setIsOpen] = useState(false);
@@ -23,7 +24,8 @@ function Navbar() {
                     <div className="relative h-20 flex flex-col w-full p-3 mx-auto bg-white backdrop-blur-xl backdrop-filter rounded-xl md:rounded-full md:items-center md:justify-between md:flex-row">
                         <div className="flex flex-row items-center justify-between md:justify-start">
                             <Link to="/" className="text-black hover:text-black/50 items-center inline-flex font-bold ml-2 text-2xl" title="link to main page">
-                                <span className='text-dark-blue'>Qry</span>ptogenia
+                                <img className='w-[60px]' src={logo} alt="" />
+                                <span className='text-dark-blue ml-2'>Qry</span>ptogenia
                             </Link>
                             <button onClick={toggleMenu} className="inline-flex items-center justify-center p-2 text-zinc-400 focus:outline-none focus:text-black md:hidden">
                                 Menu

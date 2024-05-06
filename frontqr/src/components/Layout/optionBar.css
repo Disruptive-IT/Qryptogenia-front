@@ -1,8 +1,15 @@
 .container-layout{
     width: 100%;
     display: grid;
-    grid-template-columns: 3fr 1fr 3fr; 
+    grid-template-columns: 2fr 1fr; 
     gap: 10px; 
+}
+
+.cellPhone{
+    background-image: url("../../assets/imgs/Celular.png");
+    background-size:contain;
+    background-repeat: no-repeat;
+    border-radius: 30px;
 }
 
 .gridItem{
@@ -66,7 +73,7 @@
     }
 }
 
-@media (max-width: 900px) {
+@media (max-width: 950px) {
     .linkBox{
         width: 100px;
         height: 100px;
@@ -78,9 +85,7 @@
     .container-layout {
         grid-template-columns: 1fr 1fr;
     }
-    .cellPhone{
-        display: none;
-    }
+    
     .gridItem:first-child {
         justify-content: flex-end !important; 
     }
@@ -97,5 +102,11 @@
 @media (max-width: 560px) {
     .explanation{
         margin-top: 150px !important;
+    }
+}
+
+@media (max-width: 1200px) {
+    .cellPhone{
+        display: none;
     }
 }
