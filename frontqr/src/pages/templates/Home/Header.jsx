@@ -30,7 +30,7 @@ function Navbar() {
                         </li>
                     </ul>
                 </nav>
-                    <UseSwitchesCustom />
+                <UseSwitchesCustom />
             </div>
         </header>
     );
