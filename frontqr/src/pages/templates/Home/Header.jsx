@@ -2,15 +2,10 @@ import React, { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import CustomLink from '../../../components/Layout/CustomLink';
 import logo from "../../../../public/Logo.png"
+import UseSwitchesCustom from '../../../components/UI/theme/SwitchesTheme';
 
 function Navbar() {
-    const [isOpen, setIsOpen] = useState(false);
     const location = useLocation(); // Obtiene la ruta actual
-
-    //? Para manejar click en el botón del menú cuando es mobile
-    const toggleMenu = () => {
-        setIsOpen(!isOpen);
-    };
 
     // Determina si un enlace está activo
     const isActive = (path) => {
@@ -18,34 +13,26 @@ function Navbar() {
     };
 
     return (
-        <div className="fixed top-4 inset-x-0 z-50">
-            <div className="max-w-11/12 mx-auto px-8">
-                <div className="w-full mx-auto">
-                    <div className="relative h-20 flex flex-col w-full p-3 mx-auto bg-white backdrop-blur-xl backdrop-filter rounded-xl md:rounded-full md:items-center md:justify-between md:flex-row">
-                        <div className="flex flex-row items-center justify-between md:justify-start">
-                            <Link to="/" className="text-black hover:text-black/50 items-center inline-flex font-bold ml-2 text-2xl" title="link to main page">
-                                <img className='w-[60px]' src={logo} alt="" />
-                                <span className='text-dark-blue ml-2'>Qry</span>ptogenia
-                            </Link>
-                            <button onClick={toggleMenu} className="inline-flex items-center justify-center p-2 text-zinc-400 focus:outline-none focus:text-black md:hidden">
-                                Menu
-                            </button>
-                        </div>
-                        <nav className={`flex-col flex-grow hidden py-12 md:py-0 md:flex md:items-end justify-center md:flex-row ${isOpen ? 'flex' : 'hidden'}`}>
-                            <ul className="space-y-4 space-x-4 list-none text-sm text-zinc-500 md:space-y-0 md:ml-auto items-center md:inline-flex justify-center text-center md:text-left gap-3">
-                                <CustomLink to="/" isActive={isActive('/home')}>Home</CustomLink>
-                                <CustomLink to="#" isActive={isActive('/about')}>About us</CustomLink>
-                                <CustomLink to="#" isActive={isActive('/plans')}>Plans</CustomLink>
-                                <CustomLink to="#" isActive={isActive('/faq')}>FAQ</CustomLink>
-                                <li className="shrink-0">
-                                    <Link to="/login" className="py-2 w-auto px-4 border-2 border-dark-blue h-8 rounded-full bg-black/5 hover:bg-transparent text-dark-blue duration-200">CUENTA</Link>
-                                </li>
-                            </ul>
-                        </nav>
-                    </div>
-                </div>
+        <header className="fixed md:top-4 top-0 inset-x-0 z-50">
+            <div className="relative h-20 flex w-full p-3 mx-auto bg-white md:rounded-full items-center justify-between md:shadow lg:w-4/5  px-8">
+                <Link to="/" className="text-black hover:text-black/70 items-center inline-flex font-bold ml-2 text-2xl" title="Inicio">
+                    <img className='w-[60px]' src={logo} alt="Qryptogenia" />
+                    <span className='text-dark-blue ml-2'>Qry</span>ptogenia
+                </Link>
+                <nav className="md:flex hidden">
+                    <ul className="space-x-4 list-none text-sm text-black items-center inline-flex justify-center text-left gap-3">
+                        <CustomLink to="/" isActive={isActive('/home')}>Home</CustomLink>
+                        <CustomLink to="#" isActive={isActive('/about')}>About us</CustomLink>
+                        <CustomLink to="#" isActive={isActive('/plans')}>Plans</CustomLink>
+                        <CustomLink to="#" isActive={isActive('/faq')}>FAQ</CustomLink>
+                        <li className="shrink-0">
+                            <Link to="/login" className="py-2 w-auto px-4 border-2 border-dark-blue h-8 rounded-full bg-black/5 hover:bg-transparent text-dark-blue duration-200">CUENTA</Link>
+                        </li>
+                    </ul>
+                </nav>
+                    <UseSwitchesCustom />
             </div>
-        </div>
+        </header>
     );
 }
 
