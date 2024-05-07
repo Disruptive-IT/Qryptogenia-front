@@ -1,20 +1,28 @@
+import React from 'react';
+import { useNavigate } from 'react-router-dom';
 
-export const BoxLink = ({data}) =>{
+export const BoxLink = ({ data }) => {
+  const navigate = useNavigate();
 
-    return(
-        <div className="gridItem">
-            {data && data.map((item, index)=>(
-                <button className="linkBox text-black hover:text-neutral-100">
-                    
-                    <div className="w-full flex justify-center items-center mt-5">
-                        <img className="imgLink" src={item.img} alt="" />
-                    </div>
-                    <div className="w-full flex justify-center " >
-                        <p className=" font-bold ">{item.name}</p>
-                    </div>
-                    
-                </button>
-            ))}
-        </div>
-    )
-}
+  const handleItemClick = (item) => {
+    navigate(`/qr/${item.name.toLowerCase().replace(/\s+/g, '-')}`);
+  };
+
+  return (
+    <div className="flex flex-wrap justify-center gap-3">
+      {data &&
+        data.map((item, index) => (
+          <button 
+            onClick={() => handleItemClick(item)}
+            className="w-[300px] h-[100px] bg-slate-300 flex items-center p-3 justify-center gap-3 rounded-lg text-black hover:bg-teal-800 hover:border-spacing-48 hover:text-neutral-100"
+          >
+            <img className="h-[60px]" src={item.img} alt="" />
+            <div className="flex flex-col text-start">
+                <p className="font-bold">{item.name}</p>
+                <span>{item.description}</span>
+            </div>
+          </button>
+        ))}
+    </div>
+  );
+};
