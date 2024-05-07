@@ -51,6 +51,7 @@ export const PageRouter = () => {
                     <Route element={<LayoutUser />}>
                         <Route index element={<Navigate to="/home" replace />} />
                         <Route path="home" element={<UserHome />} />
+                        <Route path="profile" element={<Profile />} />      
                     </Route>
                 </Route>
 

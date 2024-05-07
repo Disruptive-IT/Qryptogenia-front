@@ -2,6 +2,7 @@ import prisma from "../lib/prisma.js";
 import { useSend } from "../utils/useSend.js";
 import cloudinary from 'cloudinary';
 import bcrypt from "bcryptjs";
+import { sendVerificationChangeEmail, sendVerificationChangeNewEmail } from "../services/mail.service.js";
 
 
 
@@ -194,6 +195,82 @@ export const changePassword = async (req, res) => {
   } catch (error) {
     console.error('Error al cambiar la contraseña:', error);
     return res.status(500).json({ error: 'Error al cambiar la contraseña.' });
+  }
+};
+
+export const changeEmail = async (req, res) => {
+  const { email } = req.body;
+  // Generar y enviar el código de verificación al correo electrónico actual
+  try {
+    const pin = Math.floor(1000 + Math.random() * 9000);
+    await sendVerificationChangeEmail(email, pin);
+    // Guardar el código de verificación en la base de datos o en la sesión del usuario
+    req.session.emailVerificationPin = pin;
+    res.status(200).json(useSend("Se ha enviado un correo de verificación al correo electrónico actual"));
+  } catch (error) {
+    console.error('Error sending verification email:', error);
+    res.status(500).json(useSend("Error enviando correo de verificación"));
+  }
+};
+
+
+export const verifyAccountt = async (req, res) => {
+  const { pin } = req.body;
+
+  try {
+    // Verificar si el pin coincide con el código de verificación almacenado
+    if (req.session.emailVerificationPin !== parseInt(pin)) {
+      return res.status(400).json(useSend("Código de verificación incorrecto"));
+    }
+
+    res.status(200).json(useSend("Cambio de correo electrónico exitoso"));
+  } catch (error) {
+    console.error('Error verifying account:', error);
+    res.status(500).json(useSend("Error verificando cuenta"));
+  }
+};
+
+export const sendVerifyNewEmail = async (req, res) => {
+  const { newEmail } = req.body;
+
+  // Generar y enviar el código de verificación al correo electrónico actual
+  try {
+    const pin = Math.floor(1000 + Math.random() * 9000);
+    await sendVerificationChangeNewEmail(newEmail, pin);
+    // Guardar el código de verificación en la base de datos o en la sesión del usuario
+    req.session.NewEmailVerificationPin = pin;
+    req.session.newEmail = newEmail;
+    res.status(200).json(useSend("Se ha enviado un correo de verificación al correo electrónico actual"));
+  } catch (error) {
+    console.error('Error sending verification email:', error);
+    res.status(500).json(useSend("Error enviando correo de verificación"));
+  }
+};
+
+export const verifyNewEmail = async (req, res) => {
+  const { newPin } = req.body;
+
+
+  try {
+    if (req.session.NewEmailVerificationPin !== parseInt(newPin)) {
+      return res.status(400).json({ error: "Código de verificación incorrecto" });
+    }
+
+    // Código de verificación correcto, realizar cambio de correo electrónico en la base de datos
+    // Implementar lógica para cambiar el correo electrónico en la base de datos
+    const newEmail = req.session.newEmail;
+
+    // Actualizar el correo electrónico del usuario en la base de datos
+    await prisma.user.update({
+    where: { id: req.userId },
+    data: { email: newEmail }
+    });
+
+
+    res.status(200).json({ message: "Cambio de correo electrónico exitoso" });
+  } catch (error) {
+    console.error('Error verifying new email:', error);
+    res.status(500).json({ error: "Error verificando nuevo correo electrónico" });
   }
 };
 

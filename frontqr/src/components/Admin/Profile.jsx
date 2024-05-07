@@ -1,10 +1,10 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import { Tooltip, IconButton, Avatar, Menu, MenuItem, Typography } from '@mui/material';
 import { AuthContext } from "../../context/AuthContext";
 import { Link as RouterLink } from 'react-router-dom';
 
 export default function UserProfileMenu() {
-    let { user, logoutUser } = useContext(AuthContext)
+    let { user, logoutUser, profileImage } = useContext(AuthContext)
     const [anchorElUser, setAnchorElUser] = React.useState(null);
 
     const handleOpenUserMenu = (event) => {
@@ -19,7 +19,7 @@ export default function UserProfileMenu() {
         <>
             <Tooltip title="Abrir Perfil">
                 <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                    <Avatar alt="Jobserd" src="#" sx={{width: '30px', height: '30px'}} />
+                    <Avatar alt={profileImage} src={profileImage} sx={{width: '30px', height: '30px'}} />
                 </IconButton>
             </Tooltip>
             <Menu

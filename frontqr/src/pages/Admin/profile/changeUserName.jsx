@@ -1,10 +1,13 @@
-import React, { useState, useContext, useRef } from "react";
+import React, { useState, useContext, useRef, useEffect } from "react";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import { AuthContext } from "../../../context/AuthContext";
 import { Toaster, toast } from 'sonner'
+import { MdLockOutline } from "react-icons/md";
+import { FaRegUser } from "react-icons/fa";
 
-const ChangeInfo = ({ formRef, setModalIsOpen }) => {
-    const { user } = useContext(AuthContext);
+const ChangeInfo = ({ formRef, setModalIsOpen, handleCloseModal }) => {
+  const { fetchUserData } = useContext(AuthContext);
+  const [user, setUser] = useState(null);
   
     const { changeUsername } = useContext(AuthContext); // Renombramos a changeUserInfo para manejar cambio de usuario
   
@@ -12,6 +15,19 @@ const ChangeInfo = ({ formRef, setModalIsOpen }) => {
       new_username: "", // Campo para el nuevo nombre de usuario
       password: "", // Campo para la contraseña actual
     };
+
+    useEffect(() => {
+      async function fetchData() {
+        try {
+          const userData = await fetchUserData();
+          setUser(userData);
+        } catch (error) {
+          console.error("Error fetching user data:", error);
+        }
+      }
+
+      fetchData();
+    }, [fetchUserData]);
   
     const handleChangeInfo = async (values, actions) => {
   
@@ -23,9 +39,8 @@ const ChangeInfo = ({ formRef, setModalIsOpen }) => {
           // Muestra un toast de éxito
           toast.success("Nombre de usuario cambiado correctamente");
           // Cierra la modal
-          user.username = values.new_username
-          actions.resetForm();
-          setModalIsOpen(false);
+          user.info.username = values.new_username
+          handleCloseModal()
         } else {
           // Si hay un error, establece los errores de formulario apropiados
           if (result.error && result.error.response) {
@@ -55,20 +70,30 @@ const ChangeInfo = ({ formRef, setModalIsOpen }) => {
       >
         {(formikProps) => (
           <Form className="gap-3 flex flex-col">
+            <div className="flex md:w-64 ">
+                  <span className="inline-flex items-center px-2 text-lg text-gray-900 bg-gray-200 border rounded-e-0 border-gray-300 border-e-0 rounded-s-md dark:bg-my-gray dark:text-black dark:border-gray-600">
+                    <FaRegUser />
+                  </span>
               <Field
-                className="p-2 border-solid border-MyGray border rounded-md bg-MyGray text-black"
+                className="rounded-none rounded-e-lg bg-gray-50 border text-gray-900 focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-full text-sm border-gray-300 p-2.5  dark:bg-my-gray dark:border-gray-600 dark:placeholder-gray-400 dark:text-black dark:focus:ring-blue-500 dark:focus:border-blue-500"
                 type="text"
                 placeholder="Nuevo nombre de usuario"
                 name="new_username"
                 required
               />
+              </div>
+              <div className="flex md:w-64 ">
+                  <span className="inline-flex items-center px-2 text-lg text-gray-900 bg-gray-200 border rounded-e-0 border-gray-300 border-e-0 rounded-s-md dark:bg-my-gray dark:text-black dark:border-gray-600">
+                    <MdLockOutline />
+                  </span>
               <Field
-                className="p-2 border-solid border-MyGray border rounded-md bg-MyGray text-black"
+                className="rounded-none rounded-e-lg bg-gray-50 border text-gray-900 focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-full text-sm border-gray-300 p-2.5  dark:bg-my-gray dark:border-gray-600 dark:placeholder-gray-400 dark:text-black dark:focus:ring-blue-500 dark:focus:border-blue-500"
                 type="password"
                 placeholder="Contraseña actual"
                 name="password"
                 required
               />
+              </div>
               <ErrorMessage
                 name="password"
                 component="div"
