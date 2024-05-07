@@ -1,8 +1,8 @@
-export const QrContentSwitch = ({ contentName }) => {
+export const QrContentSwitch = ({contentName}) => {
     
     let qrContent;
     switch (contentName) {
-        case "app store":
+        case "app store":                                                       
             qrContent = (
                 <div>
                     <p>APP</p>

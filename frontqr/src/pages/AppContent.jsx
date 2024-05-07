@@ -2,7 +2,7 @@ import React from 'react';
 import { useParams } from 'react-router-dom';
 import QR from "../assets/imgs/qr.png";
 import logo from "../../public/Logo.png";
-import { QrContentSwitch } from '../components/Layout/qrContent';
+import { QrContentSwitch } from '../components/Layout/qrContent/qrContent';
 
 const AppContent = () => {
     const { contentName } = useParams();
