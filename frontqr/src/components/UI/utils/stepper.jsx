@@ -10,6 +10,7 @@ import HighlightAltIcon from '@mui/icons-material/HighlightAlt';
 import CreateIcon from '@mui/icons-material/Create';
 import AutoFixHighIcon from '@mui/icons-material/AutoFixHigh';
 import DownloadIcon from '@mui/icons-material/Download';
+import { useStepper } from '../../../context/StepperContext';
 
 const ColorlibConnector = styled(StepConnector)(({ theme }) => ({
     [`&.${stepConnectorClasses.alternativeLabel}`]: {
@@ -61,9 +62,8 @@ function ColorlibStepIcon(props) {
 
     const icons = {
         1: <HighlightAltIcon />,
-        2: <CreateIcon />,
-        3: <AutoFixHighIcon />,
-        4: <DownloadIcon />,
+        2: <AutoFixHighIcon />,
+        3: <DownloadIcon />,
     };
 
     return (
@@ -80,11 +80,10 @@ ColorlibStepIcon.propTypes = {
     icon: PropTypes.node,
 };
 
-const steps = ['Select qr type', 'Fill fields according to QR type', 'Customize QR design', 'Generate and download QR'];
+const steps = ['Select qr type', 'Customize QR design', 'Generate and download QR'];
 
 export default function StepperQr() {
-    const [activeStep, setActiveStep] = React.useState(0);
-    // const { activeStep } = useStepper();
+    const { activeStep, setActiveStep } = useStepper();
 
     const handleStepChange = (step) => {
         setActiveStep(step);

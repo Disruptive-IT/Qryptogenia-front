@@ -3,7 +3,7 @@ import React, { createContext, useContext, useState } from 'react';
 const StepperContext = createContext();
 
 export const StepperProvider = ({ children }) => {
-    const [activeStep, setActiveStep] = useState(0);
+    const [activeStep, setActiveStep] = useState(null);
 
     const value = {
         activeStep,

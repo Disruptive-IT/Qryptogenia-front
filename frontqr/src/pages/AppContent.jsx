@@ -1,11 +1,17 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import logo from "../../public/Logo.png";
 import { QrContentSwitch } from '../components/Layout/qrContent';
 import NotFoundPage from './NotFoundPage';
+import { useStepper } from '../context/StepperContext';
 
 const AppContent = () => {
     const { contentName } = useParams();
+    const { setActiveStep } = useStepper();
+
+    useEffect(() => {
+        setActiveStep(0);
+    }, []); 
 
     const contentTexts = {
         "app-store": "Descubre cómo enlazar tu aplicación en todas las tiendas.",
