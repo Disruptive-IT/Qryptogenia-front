@@ -6,9 +6,8 @@ import UseSwitchesCustom from '../../../components/UI/theme/SwitchesTheme';
 import MenuDrawer from '../../../components/UI/menu/menuDrawer';
 
 function Navbar() {
-    const location = useLocation(); // Obtiene la ruta actual
+    const location = useLocation(); 
 
-    // Determina si un enlace está activo
     const isActive = (path) => {
         return location.pathname === path;
     };
