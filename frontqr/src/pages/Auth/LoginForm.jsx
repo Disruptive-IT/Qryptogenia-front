@@ -64,7 +64,7 @@ const LoginForm = () => {
     >
       <section>
         <AuthSwitcher text="Ir al Registro" to="/register" />
-        <Form className="authFormContainer m-auto">
+        <Form className="authFormContainer m-auto dark:bg-gray-600">
           <div className="formContainer">
             <div className="inputsGroupsStart fullWidth">
               <h1 className="authTittle"><span className='text-[#284B63]'>QR</span>yptogenia</h1>

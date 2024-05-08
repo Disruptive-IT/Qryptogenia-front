@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { useState, useEffect } from 'react';
 import { styled } from '@mui/material/styles';
 import Switch from '@mui/material/Switch';
 
@@ -50,7 +51,28 @@ const MaterialUISwitch = styled(Switch)(({ theme }) => ({
 }));
 
 export default function UseSwitchesCustom() {
+  const [theme, setTheme] = useState(() =>{
+    if (window.matchMedia('(prefers-color-schema: dark)').matches){
+      return "light"
+    }
+    return "dark"
+  })
+  
+
+  useEffect(() =>{
+    if(theme === "dark"){
+      document.querySelector('html').classList.add('dark')
+    }else{
+      document.querySelector('html').classList.remove('dark')
+    }
+  }, [theme])
+
+  const handleChangeTheme = () => {
+    setTheme(prevTheme => prevTheme === "light" ? "dark": "light")
+  }
+
  return (
-    <MaterialUISwitch sx={{ m: 1 }} defaultChecked />
+    <MaterialUISwitch sx={{ m: 1 }} defaultChecked onClick={handleChangeTheme}/>
+    
  );
 }

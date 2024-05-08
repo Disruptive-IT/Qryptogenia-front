@@ -2,7 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 
 const CustomLink = ({ to, children, isActive }) => {
-    const linkClass = isActive ? 'text-dark-blue active-line' : 'text-black';
+    const linkClass = isActive ? 'text-dark-blue active-line' : 'text-black dark:text-white';
 
     return (
         <li className={`hover-line ${isActive ? 'active-line' : ''}`}>
