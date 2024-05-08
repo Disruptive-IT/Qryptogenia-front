@@ -66,7 +66,7 @@ const RegisterForm = () => {
 
 
   return (
-    <>
+    <section className='mt-20'>
       <AuthSwitcher text="Ir al Login" to="/login" />
       <div className="authFormContainer m-auto">
         <div className="formContainer">
@@ -87,14 +87,13 @@ const RegisterForm = () => {
                   <div className='flex flex-col h-14'>
                     <div className="flex  ">
                       <span className="inline-flex items-center px-2 text-lg text-gray-900 bg-gray-200 border rounded-e-0 border-gray-300 border-e-0 rounded-s-md dark:bg-my-gray dark:text-black dark:border-gray-600">
-                        <IoIosMail/>
+                        <IoIosMail />
                       </span>
                       <Field className="rounded-none rounded-e-lg bg-gray-50 border text-gray-900 focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-full text-sm border-gray-300 p-2.5  dark:bg-my-gray dark:border-gray-600 dark:placeholder-gray-400 dark:text-black dark:focus:dark-blue dark:focus:border-blue-500" type="email" title="Email" name="email" placeholder="Email" maxLength="255" /><br />
                     </div>
                     <ErrorMessage name="email" className="text-red-600 font-semibold" component='span' />
                   </div>
 
-                 
                   <div className='flex flex-col gap-4 pt-4'>
                     <SubmitButton text="Sing up" />
                     <GoogleButton text="Sing up with Google" onClick={auth} />
@@ -111,7 +110,7 @@ const RegisterForm = () => {
           <IconsLeft />
         </div>
       </div>
-    </>
+    </section>
   );
 };
 

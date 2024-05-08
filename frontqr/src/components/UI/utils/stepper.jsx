@@ -5,12 +5,12 @@ import Stack from '@mui/material/Stack';
 import Stepper from '@mui/material/Stepper';
 import Step from '@mui/material/Step';
 import StepLabel from '@mui/material/StepLabel';
-import Check from '@mui/icons-material/Check';
-import SettingsIcon from '@mui/icons-material/Settings';
-import GroupAddIcon from '@mui/icons-material/GroupAdd';
-import VideoLabelIcon from '@mui/icons-material/VideoLabel';
 import StepConnector, { stepConnectorClasses } from '@mui/material/StepConnector';
-
+import HighlightAltIcon from '@mui/icons-material/HighlightAlt';
+import CreateIcon from '@mui/icons-material/Create';
+import AutoFixHighIcon from '@mui/icons-material/AutoFixHigh';
+import DownloadIcon from '@mui/icons-material/Download';
+import { useStepper } from '../../../context/StepperContext';
 
 const ColorlibConnector = styled(StepConnector)(({ theme }) => ({
     [`&.${stepConnectorClasses.alternativeLabel}`]: {
@@ -61,9 +61,9 @@ function ColorlibStepIcon(props) {
     const { active, completed, className } = props;
 
     const icons = {
-        1: <SettingsIcon />,
-        2: <GroupAddIcon />,
-        3: <VideoLabelIcon />,
+        1: <HighlightAltIcon />,
+        2: <AutoFixHighIcon />,
+        3: <DownloadIcon />,
     };
 
     return (
@@ -80,14 +80,20 @@ ColorlibStepIcon.propTypes = {
     icon: PropTypes.node,
 };
 
-const steps = ['Seleccionar tipo de qr', 'Personalizar diseño del QR', 'Generar y descargar QR'];
+const steps = ['Select qr type', 'Customize QR design', 'Generate and download QR'];
 
 export default function StepperQr() {
+    const { activeStep, setActiveStep } = useStepper();
+
+    const handleStepChange = (step) => {
+        setActiveStep(step);
+    };
+
     return (
         <Stack sx={{ width: { xs: '100%', md: '70%' }, margin: 'auto' }} spacing={4}>
-            <Stepper alternativeLabel activeStep={1} connector={<ColorlibConnector />}>
-                {steps.map((label) => (
-                    <Step key={label}>
+            <Stepper alternativeLabel activeStep={activeStep} connector={<ColorlibConnector />}>
+                {steps.map((label, index) => (
+                    <Step key={label} completed={index < activeStep}>
                         <StepLabel StepIconComponent={ColorlibStepIcon}>{label}</StepLabel>
                     </Step>
                 ))}

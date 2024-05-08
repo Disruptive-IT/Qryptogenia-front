@@ -35,7 +35,7 @@ export const PageRouter = () => {
                         <Route path="register" element={<RegisterForm />} />
                         <Route path="recoverPassword" element={<RecoverPassForm />} />
                         <Route path="forgotPassword" element={<ForgotPassForm />} />
-
+                        
                         <Route path="/qr/:contentName" element={<AppContent />} />
                     </Route>
                 </Route>

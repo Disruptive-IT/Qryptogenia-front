@@ -1,11 +1,17 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import QR from "../assets/imgs/qr.png";
 import logo from "../../public/Logo.png";
-import { QrContentSwitch } from '../components/Layout/qrContent/qrContent';
+import { QrContentSwitch } from '../components/Layout/qrContent';
+import NotFoundPage from './NotFoundPage';
+import { useStepper } from '../context/StepperContext';
 
 const AppContent = () => {
     const { contentName } = useParams();
+    const { setActiveStep } = useStepper();
+
+    useEffect(() => {
+        setActiveStep(0);
+    }, []); 
 
     const contentTexts = {
         "app-store": "Descubre cómo enlazar tu aplicación en todas las tiendas.",
@@ -21,6 +27,10 @@ const AppContent = () => {
 
     const content = contentTexts[contentName.toLowerCase().replace(/\s+/g, '-')];
     const title = contentName.replace(/-/g, ' ')
+    
+    if (!content) {
+        return <NotFoundPage/>
+    }
     return (
         <>
             <section className=''>

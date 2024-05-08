@@ -3,6 +3,7 @@ import { Link, useLocation } from 'react-router-dom';
 import CustomLink from '../../../components/Layout/CustomLink';
 import logo from "../../../../public/Logo.png"
 import UseSwitchesCustom from '../../../components/UI/theme/SwitchesTheme';
+import MenuDrawer from '../../../components/UI/menu/menuDrawer';
 
 function Navbar() {
     const location = useLocation(); // Obtiene la ruta actual
@@ -30,7 +31,12 @@ function Navbar() {
                         </li>
                     </ul>
                 </nav>
-                <UseSwitchesCustom />
+                <div>
+                    <div className='mr-8'>
+                        <UseSwitchesCustom />
+                    </div>
+                    <MenuDrawer />
+                </div>
             </div>
         </header>
     );
