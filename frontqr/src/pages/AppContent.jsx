@@ -4,6 +4,8 @@ import logo from "../../public/Logo.png";
 import { QrContentSwitch } from '../components/Layout/qrContent';
 import NotFoundPage from './NotFoundPage';
 import { useStepper } from '../context/StepperContext';
+import CellBox from "../components/Layout/qrContent/generalCellPhone"
+import { WebLinkPhone } from '../components/Layout/qrContent/fromWebLink/cellPhone';
 
 const AppContent = () => {
     const { contentName } = useParams();
@@ -42,7 +44,11 @@ const AppContent = () => {
                     <div className='col-span-3 bg-red-50'>
                         <QrContentSwitch contentName={title} />
                     </div>
-                    <div className='col-span-1 grid '>
+                    <CellBox>
+                        <WebLinkPhone
+                        title="Hello Word"/>
+                    </CellBox>
+                    {/* <div className='col-span-1 grid '>
                         <div className=" md:h-[490px] lg:max-h-[690px] lg:max-w-60 cellPhone">
                             <div className="flex flex-col h-full text-center items-center jutify-center">
                                 <div className="w-full h-full py-9 flex flex-col gap-2 items-center">
@@ -56,7 +62,7 @@ const AppContent = () => {
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    </div> */}
                 </div>
             </section>
         </>
