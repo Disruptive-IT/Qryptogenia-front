@@ -66,10 +66,6 @@ export default function ChangeFrame(props) {
         setValue(newValue);
     };
 
-    const handleChangeIndex = (index) => {
-        setValue(index);
-    };
-
     const transitionDuration = {
         enter: theme.transitions.duration.enteringScreen,
         exit: theme.transitions.duration.leavingScreen,
@@ -97,15 +93,17 @@ export default function ChangeFrame(props) {
     ];
 
     return (
-        <section className="md:h-[490px] lg:max-h-[690px] lg:max-w-60 cellPhone pt-8 px-4 ">
+        <section className="relative w-full">
             <Box
                 sx={{
-                    bgcolor: 'background.paper',
-                    position: 'relative',
-                    height: '90%',
+                    bgcolor: 'background.red',
+                    position: 'absolute',
+                    top: -70,
+                    height: '100%',
+                    width: '100%',
                 }}
             >
-                <AppBar position="static" sx={{ background: "transparent", borderRadius: "20px 20px 0 0" }} >
+                <AppBar position="static" sx={{ background: "transparent", textAlign: "center" ,  marginBottom: "50px", borderRadius: "20px 20px 0 0", height: "65px", width: "100%" }} >
                     <Tabs
                         value={value}
                         onChange={handleChange}
@@ -113,10 +111,11 @@ export default function ChangeFrame(props) {
                         aria-label="action tabs"
                         sx={{
                             '.MuiTabs-indicator': {
-                                backgroundColor: '#3C6E71',
+                                display: 'none', 
                             },
-                            '.MuiTab-root': {
+                            '.MuiTab-root.Mui-selected': {
                                 color: '#284B63',
+                                fontWeight: 'bold', 
                             },
                         }}
                     >
@@ -134,7 +133,7 @@ export default function ChangeFrame(props) {
                     <p className='text-sm'>ACÁ VA EL COMO SE VE EL QR</p>
                 </TabPanel>
 
-                {fabs.map((fab, index) => (
+                {/* {fabs.map((fab, index) => (
                     <Zoom
                         key={fab.color}
                         in={value === index}
@@ -148,7 +147,7 @@ export default function ChangeFrame(props) {
                             {fab.icon}
                         </Fab>
                     </Zoom>
-                ))}
+                ))} */}
             </Box>
         </section >
     );

@@ -7,6 +7,8 @@ import { useStepper } from '../context/StepperContext';
 import ChangeFrame from '../components/Layout/qrContent/changeFrame';
 import { contentTexts, dataTypeQr } from '../components/Layout/qrContent/contentData';
 import { OptionBarTwo } from '../components/Layout/optionBar';
+import CellBox from "../components/Layout/qrContent/generalCellPhone"
+import { WebLinkPhone } from '../components/Layout/qrContent/fromWebLink/cellPhone';
 
 const AppContent = () => {
     const { contentName } = useParams();
@@ -49,9 +51,11 @@ const AppContent = () => {
                     <div className='col-span-3 bg-red-50'>
                         <QrContentSwitch contentName={title} />
                     </div>
-                    <div className='col-span-1 grid '>
+                    <CellBox>
+                        {/* <WebLinkPhone logo={logo}
+                        title={title}/> */}
                         <ChangeFrame logo={logo} title={title} />
-                    </div>
+                    </CellBox>
                 </div>
             </section>
         </>
