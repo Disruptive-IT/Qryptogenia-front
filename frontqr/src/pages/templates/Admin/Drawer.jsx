@@ -136,7 +136,7 @@ export default function MiniDrawer() {
     return (
         <>
             <CssBaseline />
-            <AppBar open={open} className="fixed inset-x-0 z-20 w-full dark:text-white">
+            <AppBar open={open} className="fixed inset-x-0 z-20 w-full ">
                 <div className="bg-white backdrop-blur-xl backdrop-filter md:items-center md:justify-between md:flex-row dark:bg-slate-600">
                     <div className="w-full flex flex-row items-center justify-between dark:bg-slate-600">
                         <Toolbar >

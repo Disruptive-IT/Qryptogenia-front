@@ -104,7 +104,7 @@ const App2 = () => {
     };
 
     return (
-        <div className="py-15 min-h-screen grid place-items-center dark:bg-slate-800 dark:text-white">
+        <div className="py-15 min-h-screen grid place-items-center">
             <div className="w-11/12 max-w-4x2 relative">
                 <div className='mb-1 dark:text-white'>
                     <HeaderModule />
