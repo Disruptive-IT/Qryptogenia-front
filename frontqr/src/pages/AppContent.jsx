@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
-import logo from "../../public/Logo.png";
 import { QrContentSwitch } from '../components/Layout/qrContent';
 import NotFoundPage from './NotFoundPage';
 import { useStepper } from '../context/StepperContext';
@@ -19,7 +18,7 @@ const AppContent = () => {
         setActiveStep(0);
     }, []);
 
-   
+
     const content = contentTexts[contentName.toLowerCase().replace(/\s+/g, '-')];
     const title = contentName.replace(/-/g, ' ');
 
@@ -47,15 +46,13 @@ const AppContent = () => {
                     <h1>{title}</h1>
                     <p>{content}</p>
                 </div>
-                <div className='grid grid-cols-4 gap-10 w-11/12 m-auto py-10'>
+                <div className='grid grid-cols-5 gap-10 w-11/12 m-auto py-10'>
                     <div className='col-span-3 bg-red-50'>
                         <QrContentSwitch contentName={title} />
                     </div>
-                    <CellBox>
-                        {/* <WebLinkPhone logo={logo}
-                        title={title}/> */}
-                        <ChangeFrame logo={logo} title={title} />
-                    </CellBox>
+                    <div className='col-span-2'>
+                        <ChangeFrame title={title} />
+                    </div>
                 </div>
             </section>
         </>

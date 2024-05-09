@@ -12,6 +12,7 @@ import EditIcon from '@mui/icons-material/Edit';
 import UpIcon from '@mui/icons-material/KeyboardArrowUp';
 import { green } from '@mui/material/colors';
 import Box from '@mui/material/Box';
+import CellBox from './generalCellPhone';
 
 function TabPanel(props) {
     const { children, value, index, ...other } = props;
@@ -93,17 +94,9 @@ export default function ChangeFrame(props) {
     ];
 
     return (
-        <section className="relative w-full">
-            <Box
-                sx={{
-                    bgcolor: 'background.red',
-                    position: 'absolute',
-                    top: -70,
-                    height: '100%',
-                    width: '100%',
-                }}
-            >
-                <AppBar position="static" sx={{ background: "transparent", textAlign: "center" ,  marginBottom: "50px", borderRadius: "20px 20px 0 0", height: "65px", width: "100%" }} >
+        <section className="relative w-full h-full bg-gray-100   rounded-xl ">
+            <Box className="flex justify-center flex-col items-center">
+                <AppBar position="static" sx={{ background: "transparent", textAlign: "center", borderRadius: "20px 20px 0 0", boxShadow: "0 0 10px 0 #ccc" }} >
                     <Tabs
                         value={value}
                         onChange={handleChange}
@@ -111,11 +104,11 @@ export default function ChangeFrame(props) {
                         aria-label="action tabs"
                         sx={{
                             '.MuiTabs-indicator': {
-                                display: 'none', 
+                                display: 'block',
                             },
                             '.MuiTab-root.Mui-selected': {
                                 color: '#284B63',
-                                fontWeight: 'bold', 
+                                fontWeight: 'bold',
                             },
                         }}
                     >
@@ -123,22 +116,37 @@ export default function ChangeFrame(props) {
                         <Tab label="QR" {...a11yProps(1)} />
                     </Tabs>
                 </AppBar>
-                <TabPanel value={value} index={0} dir={theme.direction}>
-                    <div className="flex flex-col h-full text-center items-center justify-center">
-                        <img src={logo} alt="" className="w-20 m-auto" />
-                        <h1>{title}</h1>
+                <TabPanel value={value} index={0} dir={theme.direction} className="w-[450px]">
+                    <h2 className="text-center text-2xl font-bold mb-8">Preview CellPhone</h2>
+                    <CellBox>
+                        <div className='flex flex-col h-[200px] p-6 items-center w-full rounded-xl shadow-xl    '>
+                            <img src="#" alt="" className="w-20 h-20 m-auto" />
+                            <h1>{title}</h1>
+                        </div>
+                        <div className='w-full h-[450px] p-5'>
+                            <p>Contenido</p>
+                        </div>
+                    </CellBox>
+                </TabPanel>
+                <TabPanel value={value} index={1} dir={theme.direction} className="xl:w-[500px] w-full ">
+                    <h2 className="text-center text-2xl font-bold mb-8">Preview QRytogenia</h2>
+                    <div className='w-full h-[680px] rounded-md bg-white'>
+                        <div className='h-[200px] p-6 items-center w-full '>
+                            <img src="#" alt="" className="w-40 h-40 m-auto" />
+                        </div>
+                        <div className='w-full h-[450px] p-5  '>
+                            <p>Contenido</p>
+                        </div>
                     </div>
                 </TabPanel>
-                <TabPanel value={value} index={1} dir={theme.direction}>
-                    <p className='text-sm'>ACÁ VA EL COMO SE VE EL QR</p>
-                </TabPanel>
-
                 {/* {fabs.map((fab, index) => (
                     <Zoom
                         key={fab.color}
                         in={value === index}
                         timeout={transitionDuration}
                         style={{
+                            position: "absolute",
+                            top:60,
                             transitionDelay: `${value === index ? transitionDuration.exit : 0}ms`,
                         }}
                         unmountOnExit
