@@ -14,6 +14,7 @@ import vcard from "../../assets/imgs/QR-types/vcard.png";
 import { Explanations } from "./explanatios";
 import logo from "../../../public/Logo.png";
 import menu from "../../assets/imgs/QR-types/menu.png";
+import Spline from '@splinetool/react-spline';
 
 export const OptionBar = () => {
   const data = [
@@ -45,9 +46,12 @@ export const OptionBar = () => {
           </div>
         </div>
       </div>
-      <div className="w-full flex justify-center mt-20 mb-20 explanation">
-        <Explanations />
+      <div className="">
+      <Spline scene="https://prod.spline.design/sX32gyMUh76zN7mX/scene.splinecode" />
+
       </div>
     </div>
   );
 };
+
+

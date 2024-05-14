@@ -6,7 +6,7 @@ export const WebLinkPhone = ({title}) => {
 
 
     return(
-        <div className='bg-red-400 flex flex-col justify-end items-center h-48 rounded-t-[50px] rounded-b-[25px] w-full p-5'>
+        <div className='bg-sky-400  flex flex-col  h-full rounded-t-[52px] rounded-b-[50px]  w-full p-5'>
             <h1>{title}</h1>
         </div>
     )

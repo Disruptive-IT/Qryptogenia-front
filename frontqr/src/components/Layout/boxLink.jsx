@@ -1,6 +1,10 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 
+
+
+
+
 export const BoxLink = ({ data }) => {
   const navigate = useNavigate();
 
@@ -26,3 +30,10 @@ export const BoxLink = ({ data }) => {
     </div>
   );
 };
+
+export const BoxLinkIcons =({data})=>{
+
+  return(
+    <></>
+  )
+}

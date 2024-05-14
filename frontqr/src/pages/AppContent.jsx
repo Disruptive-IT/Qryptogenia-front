@@ -4,7 +4,7 @@ import logo from "../../public/Logo.png";
 import { QrContentSwitch } from '../components/Layout/qrContent';
 import NotFoundPage from './NotFoundPage';
 import { useStepper } from '../context/StepperContext';
-import CellBox from "../components/Layout/qrContent/generalCellPhone"
+import CellBox from "../components/Layout/qrContent/cellBox"
 import { WebLinkPhone } from '../components/Layout/qrContent/fromWebLink/cellPhone';
 
 const AppContent = () => {
