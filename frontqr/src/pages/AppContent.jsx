@@ -6,8 +6,9 @@ import { useStepper } from '../context/StepperContext';
 import ChangeFrame from '../components/Layout/qrContent/changeFrame';
 import { contentTexts, dataTypeQr } from '../components/Layout/qrContent/contentData';
 import { OptionBarTwo } from '../components/Layout/optionBar';
-import CellBox from "../components/Layout/qrContent/generalCellPhone"
-import { WebLinkPhone } from '../components/Layout/qrContent/fromWebLink/cellPhone';
+
+import CellBox from "../components/Layout/qrContent/cellBox"
+import { WebLinkPhone } from '../components/Layout/qrContent/socialMedia/stylePhone';
 
 const AppContent = () => {
     const { contentName } = useParams();

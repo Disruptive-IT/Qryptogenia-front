@@ -26,3 +26,10 @@ export const BoxLink = () => {
     </div>
   );
 };
+
+export const BoxLinkIcons =({data})=>{
+
+  return(
+    <></>
+  )
+}
