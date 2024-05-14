@@ -13,6 +13,7 @@ import UpIcon from '@mui/icons-material/KeyboardArrowUp';
 import { green } from '@mui/material/colors';
 import Box from '@mui/material/Box';
 import CellBox from './cellBox';
+import { WebLinkPhone } from './socialMedia/stylePhone';
 
 function TabPanel(props) {
     const { children, value, index, ...other } = props;
@@ -119,13 +120,10 @@ export default function ChangeFrame(props) {
                 <TabPanel value={value} index={0} dir={theme.direction} className="w-[450px]">
                     <h2 className="text-center text-2xl font-bold mb-8">Preview CellPhone</h2>
                     <CellBox>
-                        <div className='flex flex-col h-[200px] p-6 items-center w-full rounded-xl shadow-xl    '>
-                            <img src="#" alt="" className="w-20 h-20 m-auto" />
-                            <h1>{title}</h1>
-                        </div>
-                        <div className='w-full h-[450px] p-5'>
-                            <p>Contenido</p>
-                        </div>
+                        <WebLinkPhone 
+                            title={"HOLA MUNDO"}
+                            textColor={"blue"}
+                        />
                     </CellBox>
                 </TabPanel>
                 <TabPanel value={value} index={1} dir={theme.direction} className="xl:w-[500px] w-full ">

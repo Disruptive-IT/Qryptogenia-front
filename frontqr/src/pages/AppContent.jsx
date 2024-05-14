@@ -8,7 +8,7 @@ import { contentTexts, dataTypeQr } from '../components/Layout/qrContent/content
 import { OptionBarTwo } from '../components/Layout/optionBar';
 
 import CellBox from "../components/Layout/qrContent/cellBox"
-import { WebLinkPhone } from '../components/Layout/qrContent/fromWebLink/cellPhone';
+import { WebLinkPhone } from '../components/Layout/qrContent/socialMedia/stylePhone';
 
 const AppContent = () => {
     const { contentName } = useParams();
