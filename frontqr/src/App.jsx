@@ -1,6 +1,5 @@
 import React from 'react';
 import { Toaster } from 'sonner';
-import { LoaderProvider } from './context/LoaderContext';
 import { Store } from "./context/store";
 import { PageRouter } from './router/PageRouter';
 

@@ -11,38 +11,75 @@ import { ScanEye } from 'lucide-react';
 
 const App2 = () => {
     const [users, setUsers] = useState([]);
+    const [theme, setTheme] = useState('dark');
     const { getUsersData } = useContext(AuthContext);
     const [openDialog, setOpenDialog] = useState(false);
     const [selectedUser, setSelectedUser] = useState(null);
 
+    const toggleTheme = () => {
+        const newTheme = theme === 'dark' ? 'light' : 'dark';
+        setTheme(newTheme);
+        applyRowStyles(newTheme);
+    };
+
+    const applyRowStyles = (theme) => {
+        const table = document.querySelector('.MuiTable-root');
+        if (table) {
+            const rows = table.querySelectorAll('.MuiTableRow-root');
+            rows.forEach((row, index) => {
+                if (theme === 'dark') {
+                    row.style.backgroundColor = index % 2 === 0 ? '#141516  ' : '#040505   ';
+                    row.style.color = 'white';
+                } else {
+                    row.style.backgroundColor = index % 2 === 0 ? '#FDFEFE ' : '#F7F9F9   ';
+                    row.style.color = 'black';
+                }
+            });
+        }
+    };
+
     useEffect(() => {
         const fetchData = async () => {
-            try {
-                const { success, data } = await getUsersData();
-                if (success) {
-                    setUsers(data);
-                } else {
-                    console.log('Error al cargar los datos');
-                }
-            } catch (error) {
-                console.error('Error fetching data:', error);
+            const { success, data } = await getUsersData();
+            if (success) {
+                setUsers(data);
+                applyRowStyles(theme);
+            } else {
+                console.log('error al cargar los datos')
             }
         };
-    
+
         fetchData();
     }, []);
 
     const handleViewDetails = (userId) => {
-        const user = users.find(user => user.id === userId);
+        const user = users.find(user => user.user_id === userId);
         setSelectedUser(user);
         setOpenDialog(true);
     };
 
-    
+    const themeColors = {
+        dark: {
+
+            mode: "dark",
+            textColor: "#e2e8f0",
+            primaryColor: "#34D399",
+
+        },
+        light: {
+
+            mode: "light",
+            textColor: "#000000",
+            primaryColor: "#F7F9F9 ",
+            secondaryColor: "#EF4444"
+        }
+    };
+
+    const currentTheme = themeColors[theme];
+
     const columns = [
-        
         {
-            name: "id",
+            name: "user_id",
             label: "ID",
             options: {
                 display: false,
@@ -52,36 +89,37 @@ const App2 = () => {
             name: "username",
             label: "USERNAME",
             options: {
-                customBodyRender: (value) => <div className="pl-10">{value}</div>,
+                customBodyRender: (value) => <div style={{ paddingLeft: '15px' }}>{value}</div>,
+                
             },
         },
         {
             name: "email",
             label: "E-MAIL",
-            options: {
-            },
+            
         },
         {
-            name: "state",
+            name: "is_active",
             label: "STATUS",
             options: {
                 customBodyRender: (value) => (
-                    <div>
+                    <div style={{ paddingLeft: '' }}>
                         <p className={`capitalize px-3 py-1 inline-block rounded-full ${value === true ? 'bg-green-500' : 'bg-red-500'}`}>
                             {value ? 'Activo' : 'Inactivo'}
                         </p>
                     </div>
                 ),
+                
             },
         },
         {
-            name: "id",
+            name: "user_id",
             label: "ACTIONS",
             options: {
                 customBodyRender: (value, tableMeta) => {
                     const userId = tableMeta.rowData[0];
                     return (
-                        <div className="pl-10">
+                        <div style={{ paddingLeft: '10px' }}>
                             <IconButton onClick={() => handleViewDetails(userId)} >
                                 <ScanEye style={{ color: '#602eb8' }} />
                             </IconButton>
@@ -106,28 +144,30 @@ const App2 = () => {
     return (
         <div className="py-15 min-h-screen grid place-items-center">
             <div className="w-11/12 max-w-4x2 relative">
-                <div className='mb-1 dark:text-white'>
+                <div className='mb-4'>
                     <HeaderModule />
                 </div>
-                
-
-                
-                <ThemeProvider  theme={createTheme({
+                <ThemeProvider theme={createTheme({
+                    // typography: {
+                    //     fontFamily: "Verdana, sans-serif"
+                    // },
+                    palette: {
+                        ...currentTheme.background,
+                        mode: currentTheme.mode,
+                    },
                     components: {
                         MuiTableCell: {
                             styleOverrides: {
                                 head: {
                                     padding: "11px 11px",
                                     textAlign: 'center',
-                                    
                                 },
                                 body: {
-                                    padding: "9px 5px",
-                                    className:"dark:text-white"
+                                    padding: "7px 5px",
+                                    color: currentTheme.textColor,
                                 }
                             }
                         },
-                        
                         MuiTableHead: {
                             styleOverrides: {
                                 root: {
@@ -139,14 +179,18 @@ const App2 = () => {
                         },
                     },
                 })}>
-                    <MUIDataTable className="dark:bg-slate-900"
+                    <MUIDataTable
                         data={users}
                         columns={columns}
                         options={options}
                     />
                 </ThemeProvider>
+                <div>
+                    <button onClick={toggleTheme} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded ">
+                        Change theme
+                    </button>
+                </div>
             </div>
-                
     
             <UserModal
                 openDialog={openDialog}

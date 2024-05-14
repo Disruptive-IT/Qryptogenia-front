@@ -32,7 +32,7 @@ router.post("/confirm", verifyAccount);
 
 router.post("/password_reset", forgot_password);
 router.post("/password_reset/confirm", recoverPassword);
-// router.post("/", googleauth);
+
 router.post("/verifyRecaptcha", verifyRecaptcha);
 
 router.get("/google", googleauth)

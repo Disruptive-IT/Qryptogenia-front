@@ -9,12 +9,12 @@ function LayoutHome() {
     return (
         <div className="flex flex-col min-h-screen relative">
             <Navbar />
-            {location.pathname !== '/login' && location.pathname !== '/register' && (
+            {location.pathname !== '/login' && location.pathname !== '/register'  && location.pathname !== '/forgotPassword'  && (
                 <div className='mt-32'>
                     <StepperQr />
                 </div>
             )}
-            <main className="flex-grow mt-16">
+            <main className="flex-grow mt-8">
                 <Outlet />
             </main>
         </div>

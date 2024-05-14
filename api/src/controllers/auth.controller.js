@@ -1,7 +1,7 @@
 import prisma from "../lib/prisma.js";
 import { useSend } from "../utils/useSend.js";
 import bcrypt from "bcryptjs";
-import jwt from 'jsonwebtoken';
+import jwt from "jsonwebtoken";
 import { sendRecoverEmail } from "../services/mail.service.js";
 import {
   handleFailedLoginAttempts,
@@ -184,7 +184,6 @@ export const logout = (req, res) => {
 
 export const forgot_password = async (req, res) => {
   const { email } = req.body;
-  
   try {
     const user = await prisma.user.findUnique({ where: { email } });
     if (!user) {
@@ -192,17 +191,10 @@ export const forgot_password = async (req, res) => {
     }
 
     // Generar el token JWT con el ID del usuario
-    const token = jwt.sign({ userId: user.id }, process.env.JWT_SECRET, { expiresIn: "1d" });
-
-    await prisma.resetToken.create({
-      data: {
-        token: token,
-        userId: user.id, 
-        createdAt: new Date(),
-        used: false, // Establecer como no utilizado al crear el token
-      },
+    const token = jwt.sign({ userId: user.id }, process.env.JWT_SECRET, {
+      expiresIn: "1d",
     });
-    
+
     // Llamada a la función sendRecoverEmail con el ID del usuario
     const mail = await sendRecoverEmail(email, token, user.id);
 
@@ -213,52 +205,39 @@ export const forgot_password = async (req, res) => {
         message: "Error sending recovery email",
       });
     }
-    
-    
-    return res.status(200).json({ success: true, message: "Recovery email sent successfully" });
+
+    // Si el correo se envió correctamente, responder con éxito
+    return res
+      .status(200)
+      .json({ success: true, message: "Recovery email sent successfully" });
   } catch (error) {
     console.error("Error:", error);
     return res.status(500).send({ error: "Internal server error" });
   }
 };
 
+//
 
 export const recoverPassword = async (req, res) => {
+  // const { token } = req.query;
   const { confirmPassword, token } = req.body;
 
   try {
-    // Verificar el token JWT
+    // Verificar el token
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
     if (!decoded || !decoded.userId) {
       return res.json({ Status: "error with token" });
     }
 
-    const resetToken = await prisma.resetToken.findFirst({
-      where: {
-        userId: decoded.userId,
-        token: token,
-        used: false
-      }
-    });
-
-    if (!resetToken) {
-      return res.status(400).json({ status: "error", message: "Invalid or expired token" });
-    }
-
-    const saltRounds = 10;
+    // Generar hash de la nueva contraseña
+    const saltRounds = 10; // Número de rondas de hashing
     const hashedPassword = await bcrypt.hash(confirmPassword, saltRounds);
 
-    // Actualizar la contraseña en la base de datos
+    // Actualizar la contraseña en la base de datos con el ID del usuario decodificado
     await prisma.user.update({
       where: { id: decoded.userId },
-      data: { password: hashedPassword }
-    });
-
-    // Marcar el token como utilizado
-    await prisma.resetToken.update({
-      where: { id: resetToken.id },
-      data: { used: true }
+      data: { password: hashedPassword },
     });
 
     res.send({ Status: "Success" });

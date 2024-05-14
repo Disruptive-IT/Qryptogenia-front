@@ -94,7 +94,7 @@ const RegisterForm = () => {
 
                   <div className='flex flex-col gap-4 pt-4'>
                     <SubmitButton text="Sing up" />
-                    <GoogleButton text="Sing up with Google" onClick={auth} />
+                    <GoogleButton text="Sing up with Google" />
                   </div>
                 </Form>
               </Formik>

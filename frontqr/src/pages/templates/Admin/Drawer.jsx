@@ -137,11 +137,11 @@ export default function MiniDrawer() {
         <>
             <CssBaseline />
             <AppBar open={open} className="fixed inset-x-0 z-20 w-full ">
-                <div className="bg-white backdrop-blur-xl backdrop-filter md:items-center md:justify-between md:flex-row dark:bg-slate-600">
-                    <div className="w-full flex flex-row items-center justify-between dark:bg-slate-600">
-                        <Toolbar >
+                <div className="bg-white backdrop-blur-xl backdrop-filter md:items-center md:justify-between md:flex-row">
+                    <div className="w-full flex flex-row items-center justify-between">
+                        <Toolbar>
                             <Typography variant="h5" noWrap component="div">
-                                <span className='text-dark-blue '>Qry</span>ptogenia
+                                <span className='text-dark-blue'>Qry</span>ptogenia
                             </Typography>
                         </Toolbar>
                         <Toolbar>
@@ -152,8 +152,8 @@ export default function MiniDrawer() {
                         </Toolbar>
                     </div>
                 </div>
-            </AppBar >
-            <Drawer  
+            </AppBar>
+            <Drawer
                 variant="permanent"
                 open={open}
                 onMouseEnter={handleDrawerOpen}
@@ -162,7 +162,7 @@ export default function MiniDrawer() {
                 <DrawerHeader open={open}>
                     <img src={logo} alt="Logo" />
                 </DrawerHeader>
-                <List >
+                <List>
                     {menuItems.map((item, index) => (
                         <ListItem disablePadding sx={{
                             display: 'block',
@@ -174,7 +174,7 @@ export default function MiniDrawer() {
                                 }
                             },
                         }}>
-                            <ListItemButton 
+                            <ListItemButton
                                 component={NavLink}
                                 to={item.path}
                                 sx={{
@@ -190,7 +190,7 @@ export default function MiniDrawer() {
                                     },
                                 }}
                             >
-                                <ListItemIcon 
+                                <ListItemIcon
                                     sx={{
                                         minWidth: 0,
                                         margin: 'auto',

@@ -2,7 +2,7 @@ import prisma from "../lib/prisma.js";
 import { useSend } from "../utils/useSend.js";
 import cloudinary from 'cloudinary';
 import bcrypt from "bcryptjs";
-import { OAuth2Client } from "google-auth-library";
+
 
 
 const checkPassword = async (user, password) => {
@@ -197,50 +197,4 @@ export const changePassword = async (req, res) => {
   }
 };
 
-async function getUserData(access_token){
-  try {
-    const response = await fetch(`https://www.googleapis.com/oauth2/v3/userinfo?access_token=${access_token}`);
-    const data = await response.json();
-    console.log('User data response:', data);
-    return data;
-  } catch (error) {
-    console.log('Error fetching user data:', error);
-    throw error;
-  }
-}
 
-export const homepage = async (req, res, next)=>{
-  const code = req.query.code;
-  try {
-    const redirectUrl = 'http://localhost:5173/user/home'
-    const oAuth2Client = new OAuth2Client(
-      process.env.CLIENT_ID,
-      process.env.CLIENT_SECRET,
-      redirectUrl
-    );
-    const tokenResponse = await oAuth2Client.getToken(code);
-    console.log('Token response:', tokenResponse);
-    await oAuth2Client.setCredentials(tokenResponse.tokens);
-    console.log('Tokens acquired');
-    const user = oAuth2Client.credentials;
-    console.log('Credentials:', user);
-    const userData = await getUserData(user.access_token);
-    console.log('UserData:', userData);
-
-  } catch (error) {
-    console.log('Error with sign in with Google:', error);
-  }
-}
-
-// export const getUsers = async (req, res)=>{
-//   try {
-//     // Consulta la base de datos para obtener todos los usuarios
-//     const users = await prisma.user.findMany();
-
-//     // Envía los usuarios como respuesta
-//     res.json(users);
-//   } catch (error) {
-//     console.error('Error retrieving users:', error);
-//     res.status(500).json({ error: 'Internal server error' });
-//   }
-// }
