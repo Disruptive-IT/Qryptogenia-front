@@ -23,6 +23,7 @@
     "express": "^4.19.2",
     "express-session": "^1.18.0",
     "google-auth-library": "^9.9.0",
+    "googleapis": "^137.1.0",
     "jsonwebtoken": "^9.0.2",
     "mongoose-findorcreate": "^4.0.0",
     "morgan": "^1.10.0",
@@ -32,6 +33,7 @@
     "swagger-autogen": "^2.23.7"
   },
   "devDependencies": {
+    "http-proxy-middleware": "^3.0.0",
     "prisma": "^5.13.0"
   }
 }

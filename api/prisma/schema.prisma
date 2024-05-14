@@ -12,8 +12,8 @@ model User {
   profile_picture String?
   username        String
   email           String    @unique @db.VarChar(255)
-  password        String
-  createdAt       DateTime
+  password        String?
+  createdAt        DateTime  @default(now()) @db.Timestamp(0)
   update_date     DateTime?
   state           Boolean   @default(true)
 

@@ -7,7 +7,8 @@ import {
   completeRegister,
   forgot_password,
   recoverPassword,
-  googleauth
+  googleauth,
+  googlecall
 } from "../controllers/auth.controller.js";
 import { verifyAccount } from "../services/auth.service.js";
 const plaintextPassword = "dav39484"; // Tu contraseña en texto plano
@@ -31,9 +32,11 @@ router.post("/confirm", verifyAccount);
 
 router.post("/password_reset", forgot_password);
 router.post("/password_reset/confirm", recoverPassword);
-router.post("/", googleauth);
+// router.post("/", googleauth);
 router.post("/verifyRecaptcha", verifyRecaptcha);
 
+router.get("/google", googleauth)
+router.get("/google/callback", googlecall)
 
 //!! Pendiente a pruebas
 router.get("/check-token", (req, res) => {

@@ -11,6 +11,7 @@ import { IconsLeft } from '../../components/auth/pure/iconsLeft';
 import CompleteRegisterForm from '../../components/auth/CompleteRegisterForm';
 import AuthSwitcher from '../../components/auth/pure/AuthSwitcher';
 import { IoIosMail } from "react-icons/io";
+import axios from 'axios';
 
 
 const RegisterForm = () => {
@@ -50,14 +51,11 @@ const RegisterForm = () => {
 
   async function auth() {
     try {
-      const response = await fetch('http://localhost:3000/api/auth', {
-        method: 'POST'
-      });
-      const data = await response.json();
-      if (response.ok) {
-        navigate(data.url);
+      const response = await axios.get('http://localhost:3000/api/auth/google');
+      if (response.status === 200) {
+        navigate(response.data.url);
       } else {
-        console.error('Error:', data.error);
+        console.error('Error:', response.data.error);
       }
     } catch (error) {
       console.error('Error:', error);
