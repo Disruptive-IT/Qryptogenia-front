@@ -12,7 +12,7 @@ import EditIcon from '@mui/icons-material/Edit';
 import UpIcon from '@mui/icons-material/KeyboardArrowUp';
 import { green } from '@mui/material/colors';
 import Box from '@mui/material/Box';
-import CellBox from './generalCellPhone';
+import CellBox from './cellBox';
 
 function TabPanel(props) {
     const { children, value, index, ...other } = props;
