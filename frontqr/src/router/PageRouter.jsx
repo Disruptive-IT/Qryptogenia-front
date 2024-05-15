@@ -17,6 +17,7 @@ import App2 from "../pages/tableusers/TableUser";
 import LayoutUser from "../pages/templates/User/Layout";
 import { useLoader } from '../context/LoaderContext';
 import Loader from '../components/UI/loader/Loader';
+import AppContent from "../pages/AppContent";
 
 export const PageRouter = () => {
     const { isLoading } = useLoader();
@@ -34,6 +35,7 @@ export const PageRouter = () => {
                         <Route path="register" element={<RegisterForm />} />
                         <Route path="recoverPassword" element={<RecoverPassForm />} />
                         <Route path="forgotPassword" element={<ForgotPassForm />} />
+                        <Route path="/qr/:contentName" element={<AppContent />} />
                     </Route>
                 </Route>
 

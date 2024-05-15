@@ -37,7 +37,7 @@ const ChangeInfo = ({ formRef, setModalIsOpen, handleCloseModal }) => {
         console.log(result);
         if (result.success) {
           // Muestra un toast de éxito
-          toast.success("Nombre de usuario cambiado correctamente");
+          toast.success("Username changed successfully");
           // Cierra la modal
           user.info.username = values.new_username
           handleCloseModal()
@@ -46,19 +46,19 @@ const ChangeInfo = ({ formRef, setModalIsOpen, handleCloseModal }) => {
           if (result.error && result.error.response) {
             const status = result.error.response.status;
             if (status === 400) {
-              actions.setFieldError("password", "Contraseña incorrecta");
-              toast.error("Contraseña incorrecta");
+              actions.setFieldError("password", "Incorrect password");
+              toast.error("Incorrect password");
             } else {
-              actions.setFieldError("newUsername", "Error en el cambio de nombre de usuario");
-              toast.error("Error en el cambio de nombre de usuario");
+              actions.setFieldError("newUsername", "Username change error");
+              toast.error("Username change error");
             }
           } else {
-            toast.error("Hubo un problema inesperado");
+            toast.error("There was an unexpected problem");
           }
         }
       } catch (error) {
-        console.error("Error al cambiar la información de usuario:", error);
-        toast.error("Hubo un problema al cambiar la información. Por favor, inténtelo de nuevo más tarde.");
+        console.error("Error changing user information:", error);
+        toast.error("There was a problem changing the information. Please try again later.");
       }
     };
   
@@ -77,7 +77,7 @@ const ChangeInfo = ({ formRef, setModalIsOpen, handleCloseModal }) => {
               <Field
                 className="rounded-none rounded-e-lg bg-gray-50 border text-gray-900 focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-full text-sm border-gray-300 p-2.5  dark:bg-my-gray dark:border-gray-600 dark:placeholder-gray-400 dark:text-black dark:focus:ring-blue-500 dark:focus:border-blue-500"
                 type="text"
-                placeholder="Nuevo nombre de usuario"
+                placeholder="New username"
                 name="new_username"
                 required
               />
@@ -89,7 +89,7 @@ const ChangeInfo = ({ formRef, setModalIsOpen, handleCloseModal }) => {
               <Field
                 className="rounded-none rounded-e-lg bg-gray-50 border text-gray-900 focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-full text-sm border-gray-300 p-2.5  dark:bg-my-gray dark:border-gray-600 dark:placeholder-gray-400 dark:text-black dark:focus:ring-blue-500 dark:focus:border-blue-500"
                 type="password"
-                placeholder="Contraseña actual"
+                placeholder="Current password"
                 name="password"
                 required
               />

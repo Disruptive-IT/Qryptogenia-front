@@ -39,10 +39,10 @@ const Profile = () => {
             if (result.success) {
                 // Actualiza la imagen de perfil llamando a la función updateProfileImage
                 updateProfileImage();
-                toast.success('Imagen de perfil cambiada con éxito');
+                toast.success('Profile picture successfully changed');
             } else {
-                console.error('Error al cambiar la imagen de perfil:', result.error);
-                toast.error('Error al cambiar la imagen de perfil');
+                console.error('Error when changing profile picture:', result.error);
+                toast.error('Error changing profile picture');
             }
         }
     };

@@ -64,7 +64,7 @@ const UserInfo = () => {
 
   // Verificar si el usuario está autenticado
   if (!user) {
-    return <div>No hay usuario autenticado</div>;
+    return <div>No authenticated user</div>;
   }
   console.log("Información del usuario:", user);
 

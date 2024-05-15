@@ -142,13 +142,13 @@ const ChangeEmail = ({ formRef, setModalIsOpen, handleCloseEmail }) => {
             !confirmChangeEmail && ( // Mostrar mensaje de confirmación si no se ha confirmado el cambio de correo
               <div className="flex flex-col items-center">
                 <p className="mb-3">
-                  ¿Estás seguro de cambiar tu correo electrónico?
+                Are you sure to change your email?
                 </p>
                 <button
                   type="submit"
                   className="px-4 py-2 bg-blue-500 text-white rounded-md"
                 >
-                  Confirmar cambio
+                  Confirm change
                 </button>
               </div>
             )}
@@ -175,7 +175,7 @@ const ChangeEmail = ({ formRef, setModalIsOpen, handleCloseEmail }) => {
 
             </div>
             <div className="mt-2"> {/* Contenedor para el mensaje */}
-              <p className="text-gray-500 text-sm">Se ha enviado un código de verificación al correo electrónico.</p>
+              <p className="text-gray-500 text-sm">A verification code has been sent to the email.</p>
             </div>
           </div>
 
@@ -234,7 +234,7 @@ const ChangeEmail = ({ formRef, setModalIsOpen, handleCloseEmail }) => {
               </button>
             </div>
             <div className="mt-2"> {/* Contenedor para el mensaje */}
-              <p className="text-gray-500 text-sm">Se ha enviado un código de verificación al nuevo correo electrónico.</p>
+              <p className="text-gray-500 text-sm">A verification code has been sent to the new email.</p>
             </div>
           </div>
           )}

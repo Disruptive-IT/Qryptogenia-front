@@ -17,7 +17,7 @@ const ChangePasswordForm = ({ formRef, setModalIsOpen }) => {
   const validateForm = (values) => {
     const errors = {};
     if (values.newPassword !== values.confirmPassword) {
-      errors.confirmPassword = "Las contraseñas no coinciden";
+      errors.confirmPassword = "Passwords do not match";
     }
     return errors;
   };
@@ -32,7 +32,7 @@ const ChangePasswordForm = ({ formRef, setModalIsOpen }) => {
 
       if (result.success) {
         // Muestra el toast de éxito
-        toast.success("Contraseña cambiada correctamente");
+        toast.success("Password changed successfully");
         // Cierra la modal
         actions.resetForm();
         setModalIsOpen(false);
@@ -43,20 +43,20 @@ const ChangePasswordForm = ({ formRef, setModalIsOpen }) => {
           result.error.response &&
           result.error.response.status === 400
         ) {
-          actions.setFieldError("oldPassword", "Contraseña incorrecta");
+          actions.setFieldError("oldPassword", "Incorrect password");
           toast.error("Contraseña i");
         } else {
-          actions.setFieldError("confirmPassword", "Contraseña incorrecta");
-          toast.error("Contraseña Incorrecta");
+          actions.setFieldError("confirmPassword", "Incorrect password");
+          toast.error("Incorrect password");
           actions.resetForm();
         }
       }
     } catch (error) {
-      console.error("Error al cambiar la contraseña:", error);
-      toastError("Hubo un problema al cambiar la contraseña. Por favor, inténtelo de nuevo más tarde.");
+      console.error("Error changing password:", error);
+      toast.error("There was a problem changing the password. Please try again later.");
       actions.setFieldError(
         "confirmPassword",
-        "Hubo un problema al cambiar la contraseña. Por favor, inténtelo de nuevo más tarde."
+        "There was a problem changing the password. Please try again later."
       );
     }
   };
