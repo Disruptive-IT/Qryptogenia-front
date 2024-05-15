@@ -5,12 +5,14 @@ import Box from '@mui/material/Box';
 import imgQr from '../../../../assets/imgs/qr.png';
 import './style.css';
 
-export default function ScrollableFrameQrs() {
+export default function ScrollableFrameQrs({ onTabSelect }) {
     const [value, setValue] = React.useState(0);
 
     const handleChange = (event, newValue) => {
         setValue(newValue);
+        onTabSelect(newValue);
     };
+
 
     return (
         <Box sx={{ width: 'auto', bgcolor: 'background.paper' }}>
