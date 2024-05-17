@@ -2,15 +2,17 @@ import * as React from 'react';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import Box from '@mui/material/Box';
-import imgQr from '../../../../assets/imgs/qr.png';
-import './style.css';
+import imgQr from '../../../../../assets/imgs/qr.png';
+import '../style.css';
 
-export default function ScrollableFrameQrs() {
+export default function ScrollableFrameQrs({ onTabSelect }) {
     const [value, setValue] = React.useState(0);
 
     const handleChange = (event, newValue) => {
         setValue(newValue);
+        onTabSelect(newValue);
     };
+
 
     return (
         <Box sx={{ width: 'auto', bgcolor: 'background.paper' }}>
@@ -28,6 +30,9 @@ export default function ScrollableFrameQrs() {
 
                 }}
             >
+                <Tab label={<div className='tab'>
+                    <img src={imgQr} alt="" className='w-10 m-auto' />
+                </div>} />
                 <Tab label={<div className='tab'>
                     <img src={imgQr} alt="" className='w-10 m-auto' />
                     <span className='absolute top-0 w-full tab-span'>Top Text</span>
