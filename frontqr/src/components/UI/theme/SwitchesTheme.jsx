@@ -50,10 +50,7 @@ const MaterialUISwitch = styled(Switch)(({ theme }) => ({
 }));
 
 export default function UseSwitchesCustom() {
-  
-
- return (
-    <MaterialUISwitch sx={{ m: 1 }} defaultChecked />
-    
- );
-}
+  return (
+     <MaterialUISwitch sx={{ m: 1 }} defaultChecked />
+  );
+ }
