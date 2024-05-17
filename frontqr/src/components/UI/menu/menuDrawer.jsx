@@ -42,7 +42,7 @@ const Puller = styled('div')(({ theme }) => ({
 function MenuDrawer(props) {
     const { window } = props;
     const [open, setOpen] = React.useState(false);
-    const location = useLocation(); 
+    const location = useLocation();
 
     const isActive = (path) => {
         return location.pathname === path;
@@ -70,27 +70,24 @@ function MenuDrawer(props) {
                 }}
             />
             <Box sx={{
-                position: 'fixed',
-                bottom: 55,
-                right: 45,
+                position: 'absolute',
+                top: 15,
+                right: 15,
                 zIndex: 99,
+                borderRadius: '100%',
+                width: 45,
+                height: 45,
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                backgroundColor: '#284B63',
                 '@media (min-width:768px)': {
                     display: 'none',
                 }
             }}>
                 <Button
                     onClick={toggleDrawer(!open)}
-                    sx={{
-                        backgroundColor: '#ccc',
-                        color: 'black',
-                        borderRadius: '5px',
-                        width: 'auto',
-                        padding: '8px',
-                        '&:hover': {
-                            backgroundColor: '#bbb',
-                        }
-                    }}
-                >
+                    sx={{ color: 'white' }}>
                     {open ? <CloseIcon /> : <MenuIcon />}
                 </Button>
             </Box>

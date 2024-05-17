@@ -71,16 +71,6 @@ const AppBar = styled('div', {
         width: `calc(100% - ${drawerWidth}px)`,
         transition: theme.transitions.create(['width', 'margin'], {
             easing: theme.transitions.easing.easeInOut,
-            duration: theme.transitions.duration.leavingScreen * 2,
-        }),
-        backgroundColor: '#284B63',
-        ...(open && {
-            marginLeft: drawerWidth,
-            width: `calc(100% - ${drawerWidth}px)`,
-            transition: theme.transitions.create(['width', 'margin'], {
-                easing: theme.transitions.easing.easeInOut,
-                duration: theme.transitions.duration.enteringScreen * 2,
-            }),
             duration: theme.transitions.duration.enteringScreen * 2,
         }),
     }),
@@ -108,7 +98,6 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
         ...(open ? openedMixin(theme) : closedMixin(theme)),
     }),
 );
-
 
 const menuItems = [
     {
@@ -162,7 +151,7 @@ export default function MiniDrawer() {
                             </Box>
                         </Toolbar>
                     </div>
-                    </div>
+                </div>
             </AppBar>
             <Drawer
                 variant="permanent"
@@ -198,7 +187,6 @@ export default function MiniDrawer() {
                                         '.MuiListItemText-root': {
                                             color: '#284B63', // Cambia el color del texto al hacer hover
                                         },
-                                    
                                     },
                                 }}
                             >
@@ -208,7 +196,7 @@ export default function MiniDrawer() {
                                         margin: 'auto',
                                     }}
                                 >
-                                     {item.icon}
+                                    {item.icon}
                                 </ListItemIcon>
                                 <ListItemText primary={item.title} sx={{ opacity: open ? 1 : 0, marginLeft: "10px" }} /> {/* Centra el texto */}
                             </ListItemButton>

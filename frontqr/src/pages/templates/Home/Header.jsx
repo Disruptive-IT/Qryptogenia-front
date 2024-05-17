@@ -3,19 +3,18 @@ import { Link, useLocation } from 'react-router-dom';
 import CustomLink from '../../../components/Layout/CustomLink';
 import logo from "../../../../public/Logo.png"
 import UseSwitchesCustom from '../../../components/UI/theme/SwitchesTheme';
+import MenuDrawer from '../../../components/UI/menu/menuDrawer';
 
 function Navbar() {
-    const location = useLocation(); // Obtiene la ruta actual
+    const location = useLocation(); 
 
-
-    // Determina si un enlace está activo
     const isActive = (path) => {
         return location.pathname === path;
     };
 
     return (
         <header className="fixed md:top-4 top-0 inset-x-0 z-50">
-            <div className="relative h-20 flex w-full p-3 mx-auto bg-white md:rounded-full items-center justify-between md:shadow lg:w-4/5  px-8">
+            <div className="relative h-20 flex w-full p-3 mx-auto bg-white md:rounded-full items-center justify-between md:shadow lg:w-4/5 px-8">
                 <Link to="/" className="text-black hover:text-black/70 items-center inline-flex font-bold ml-2 text-2xl" title="Inicio">
                     <img className='w-[60px]' src={logo} alt="Qryptogenia" />
                     <span className='text-dark-blue ml-2'>Qry</span>ptogenia
@@ -31,7 +30,12 @@ function Navbar() {
                         </li>
                     </ul>
                 </nav>
-                <UseSwitchesCustom />
+                <div>
+                    <div className='mr-8'>
+                        <UseSwitchesCustom />
+                    </div>
+                    <MenuDrawer />
+                </div>
             </div>
         </header>
     );

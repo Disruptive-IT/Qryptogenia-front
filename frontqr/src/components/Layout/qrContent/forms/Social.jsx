@@ -161,7 +161,7 @@ export const SocialForm = () => {
         >
             {({ setFieldValue }) => (
                 <Form className="max-w-4xl mx-auto mt-8 relative">
-                    <div className="w-full bg-gray-100 p-6 rounded-lg">
+                    <div className="p-6">
                         <h2 className="text-xl font-semibold mb-4">Social Qr</h2>
                         <div className="flex flex-col md:flex-row md:items-start md:mb-4">
                             <div className="flex flex-col w-full md:w-2/3 mr-6 mb-4 md:mb-0">

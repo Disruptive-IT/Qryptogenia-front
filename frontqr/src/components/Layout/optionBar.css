@@ -1,7 +1,7 @@
 .container-layout{
     width: 100%;
     display: grid;
-    grid-template-columns: 2fr 1fr;
+    grid-template-columns: 2fr 1fr; 
     gap: 10px; 
 }
 
@@ -11,7 +11,6 @@
     background-repeat: no-repeat;
     border-radius: 30px;
 }
-
 
 .gridItem{
     display: flex;
@@ -86,6 +85,7 @@
     .container-layout {
         grid-template-columns: 1fr 1fr;
     }
+    
     .gridItem:first-child {
         justify-content: flex-end !important; 
     }
@@ -104,3 +104,4 @@
         margin-top: 150px !important;
     }
 }
+

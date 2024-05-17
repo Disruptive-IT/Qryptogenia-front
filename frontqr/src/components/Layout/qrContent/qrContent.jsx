@@ -1,5 +1,5 @@
-import {SocialForm} from '../qrContent/forms/Social'
-import {AppForm} from '../qrContent/forms/App'
+import AppForm from "./forms/App";
+
 export const QrContentSwitch = ({contentName}) => {
 
     let qrContent;
@@ -7,7 +7,7 @@ export const QrContentSwitch = ({contentName}) => {
         case "app store":                                                       
             qrContent = (
                 <div>
-                    <AppForm/>
+                   <AppForm></AppForm>
                 </div>
             );
             break;
@@ -21,7 +21,7 @@ export const QrContentSwitch = ({contentName}) => {
         case "website url":
             qrContent = (
                 <div>
-                    <p>PARA SITIOS WEBS</p>
+                    <p>PARAAAA SITIOS WEBS</p>
                 </div>
             );
             break;

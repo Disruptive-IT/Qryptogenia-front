@@ -62,7 +62,7 @@ const LoginForm = () => {
       validationSchema={SchemaLoginValidate}
       onSubmit={handleSubmit}
     >
-      <section>
+      <section className='mt-20'>
         <AuthSwitcher text="Ir al Registro" to="/register" />
         <Form className="authFormContainer m-auto">
           <div className="formContainer">
