@@ -23,16 +23,16 @@ const WebLinkPhonePreview = ({ bodyColor }) => {
     
     return (
         <div style={{ background:backgroundcolor }} className={`bg-gradient-to-b ml-2   flex flex-col h-full items-center rounded-t-[52px] rounded-b-[50px] w-full  p-2`}>
-            {/* Encabezado del teléfono */}
+            {/* Encabezado del phone*/}
             <WebLinkPhoneHeader logo={mesadoko} title={title} textColor={textColor} headerColor={headerColor} description={description}  />
-            {/* Cuerpo del teléfono */}
+            {/* Cuerpo del phone*/}
             <div style={{ background: backgroundcolor }} className="rounded-b-[52px] p-5 flex flex-col items-center w-full h-full">
             <h1 style={{ color: `rgb(${textColor})` }} className={`font-bold mb-3 text-center relative ${title.length > 22 ? 'text-xl' : 'text-2xl'}`}>{title}</h1>
 
                 <div>
                     <p className={`text-dark font-thin relative`}>{description}</p>
                 </div>
-                {/* Agrega aquí el contenido del cuerpo del teléfono */}
+                {/* componentes de los botones */}
                 <SocialButton data={data} />
             </div>
         </div>
