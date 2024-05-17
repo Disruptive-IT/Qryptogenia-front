@@ -7,7 +7,6 @@ import logo from "../../../public/Logo.png";
 import { dataTypeQr } from "./qrContent/contentData";
 import { useNavigate } from "react-router-dom";
 import menu from "../../assets/imgs/QR-types/menu.png";
-import Spline from '@splinetool/react-spline';
 
 export const OptionBar = () => {
 
@@ -29,7 +28,6 @@ export const OptionBar = () => {
         </div>
       </div>
       <div className="">
-      <Spline scene="https://prod.spline.design/sX32gyMUh76zN7mX/scene.splinecode" />
 
       </div>
     </div>

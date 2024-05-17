@@ -15,6 +15,8 @@ import Box from '@mui/material/Box';
 import CellBox from './cellBox';
 import { WebLinkPhone } from './socialMedia/stylePhone';
 
+import CustomQr from './customQr';
+
 function TabPanel(props) {
     const { children, value, index, ...other } = props;
 
@@ -95,7 +97,7 @@ export default function ChangeFrame(props) {
     ];
 
     return (
-        <section className="relative w-full h-full bg-gray-100   rounded-xl ">
+        <section className="relative w-full h-full bg-white shadow-xl rounded-xl">
             <Box className="flex justify-center flex-col items-center">
                 <AppBar position="static" sx={{ background: "transparent", textAlign: "center", borderRadius: "20px 20px 0 0", boxShadow: "0 0 10px 0 #ccc" }} >
                     <Tabs
@@ -126,17 +128,11 @@ export default function ChangeFrame(props) {
                         />
                     </CellBox>
                 </TabPanel>
-                <TabPanel value={value} index={1} dir={theme.direction} className="xl:w-[500px] w-full ">
+                <TabPanel value={value} index={1} dir={theme.direction} className="xl:w-[500px] w-full  ">
                     <h2 className="text-center text-2xl font-bold mb-8">Preview QRytogenia</h2>
-                    <div className='w-full h-[680px] rounded-md bg-white'>
-                        <div className='h-[200px] p-6 items-center w-full '>
-                            <img src="#" alt="" className="w-40 h-40 m-auto" />
-                        </div>
-                        <div className='w-full h-[450px] p-5  '>
-                            <p>Contenido</p>
-                        </div>
-                    </div>
+                    <CustomQr />
                 </TabPanel>
+
                 {/* {fabs.map((fab, index) => (
                     <Zoom
                         key={fab.color}

@@ -48,7 +48,7 @@ const AppContent = () => {
                     <p>{content}</p>
                 </div>
                 <div className='grid grid-cols-5 gap-10 w-11/12 m-auto py-10'>
-                    <div className='col-span-3 bg-red-50'>
+                    <div className='col-span-3 bg-white shadow-xl rounded-xl'>
                         <QrContentSwitch contentName={title} />
                     </div>
                     <div className='col-span-2'>

@@ -17,6 +17,7 @@ function LayoutHome() {
             <main className="flex-grow mt-8">
                 <Outlet />
             </main>
+            <MenuDrawer />
         </div>
     );
 }

@@ -13,21 +13,23 @@ const Profile = () => {
     const [modalIsOpen, setModalIsOpen] = useState(false);
     const formRef = useRef(null);
     const fileInputRef = useRef(null);
-    const { changeProfilePicture, getProfileImageUrl } = useContext(AuthContext);
-
-    // Estado para la imagen de perfil
-    const [profileImage, setProfileImage] = useState('');
+    const { fetchUserData } = useContext(AuthContext);
+    const [user, setUser] = useState(null);
+    const { updateProfileImage, profileImage, changeProfilePicture } = useContext(AuthContext);
 
     // Cargar la imagen de perfil cuando el componente se monte
     useEffect(() => {
-        // Obtener la URL de la imagen de perfil desde el contexto global
-        const loadProfileImage = async () => {
-            const imageUrl = await getProfileImageUrl();
-            setProfileImage(imageUrl);
-        };
-
-        loadProfileImage();
-    }, [getProfileImageUrl]);
+        async function fetchData() {
+            try {
+              const userData = await fetchUserData();
+              setUser(userData);
+            } catch (error) {
+              console.error("Error fetching user data:", error);
+            }
+          }
+  
+          fetchData();
+        }, [fetchUserData]);
 
     // Manejar el cambio de imagen de perfil
     const handleImageChange = async (event) => {
@@ -35,12 +37,12 @@ const Profile = () => {
         if (file) {
             const result = await changeProfilePicture(file);
             if (result.success) {
-                // Actualiza la imagen de perfil en el estado
-                setProfileImage(result.data.image_url);
-                toast.success('Imagen de perfil cambiada con éxito');
+                // Actualiza la imagen de perfil llamando a la función updateProfileImage
+                updateProfileImage();
+                toast.success('Profile picture successfully changed');
             } else {
-                console.error('Error al cambiar la imagen de perfil:', result.error);
-                toast.error('Error al cambiar la imagen de perfil');
+                console.error('Error when changing profile picture:', result.error);
+                toast.error('Error changing profile picture');
             }
         }
     };
@@ -67,7 +69,7 @@ const Profile = () => {
         <div className="bg-white flex justify-center items-center mt-16 lg:mt-32 mx-4 lg:mx-20 rounded-3xl">
             <div className="flex flex-col lg:flex-row lg:w-11/12 mx-2 lg:mx-8 my-8 lg:my-16 rounded-3xl bg-MyBlack lg:min-h-[30vh] sm:min-h-[40vh]">
                 <div className="border-solid lg:border-MyGray lg:border-r flex flex-col lg:w-4/12 justify-center items-center">
-                    <a className="mt-0 text-xl p-2">Settings</a>
+                    <a className="mt-0 text-xl p-2">{user?.info?.rol === 'CLIENT' ? 'User Settings' : 'Admin Settings'}</a>
                     <input
                         type="file"
                         accept="image/*"
@@ -81,9 +83,6 @@ const Profile = () => {
                         alt="Profile"
                         onClick={() => fileInputRef.current.click()} // Abre el selector de archivo cuando se hace clic en la imagen
                     />
-                    <button onClick={() => fileInputRef.current.click()}>
-                        <EditIcon />
-                    </button>
                 </div>
                 <div className="flex flex-col w-full lg:w-8/12">
                     <div className="w-full p-4 lg:p-16 text-MyGray">

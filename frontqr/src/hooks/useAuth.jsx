@@ -226,6 +226,44 @@ export const useAuth = (navigate) => {
         }
     };
 
+    const handleChangeEmail = async (values) => {
+        try {
+          const response = await axios.post('/user/change-email', { email: values.email });
+          return response.data
+
+        } catch (error) {
+          console.error('Error changing email:', error);
+        }
+      };
+
+      const handleVerifyCode = async (verificationCode) => {
+        try {
+          const response = await axios.post('/user/verify-account', { pin: verificationCode });
+          return response.data
+
+        } catch (error) {
+          console.error('Error verifying code:', error);
+        }
+      };
+
+      const handleChangeNewEmail = async (values) => {
+        try {
+          const response = await axios.post('/user/send-verify-new-email', { newEmail: values.newEmail });
+          return response.data
+        } catch (error) {
+          console.error('Error changing email:', error);
+        }
+      };
+
+      const handleVerifyNewCode = async (newVerificationCode) => {
+        try {
+          const response = await axios.post('/user/verify-new-email', { newPin: newVerificationCode });
+          return response.data
+        } catch (error) {
+          console.error('Error verifying new code:', error);
+        }
+      };
+
     return {
         user,
         loginUser,
@@ -240,6 +278,10 @@ export const useAuth = (navigate) => {
         changeUsername,
         changeProfilePicture,
         getProfileImageUrl,
-        fetchUserData
+        fetchUserData,
+        handleChangeEmail,
+        handleVerifyCode,
+        handleChangeNewEmail,
+        handleVerifyNewCode
     };
 }

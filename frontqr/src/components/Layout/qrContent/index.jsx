@@ -1,3 +1,8 @@
+import AppForm from "./forms/App";
+import SpotifyPlaylist from "./forms/Music";
+import {PdfUploadComponent, LinkInput } from "./forms/Pdf";
+import SocialForm from "./forms/Social";
+
 export const QrContentSwitch = ({contentName}) => {
     
     let qrContent;
@@ -5,31 +10,28 @@ export const QrContentSwitch = ({contentName}) => {
         case "app store":                                                       
             qrContent = (
                 <div>
-                    <p>APP</p>
+                    <AppForm/>
                 </div>
             );
             break;
         case "social media":
             qrContent = (
                 <div>
-                    <p>REDES SOCIALES</p>
+                    <SocialForm/>
                 </div>
             );
             break;
         case "website url":
             qrContent = (
                 <div>
-                    <p>PARA SITIOS WEBS</p>
+                    <LinkInput/>
                 </div>
             );
             break;
         case "pdf":
             qrContent = (
                 <div>
-                    <form>
-                        <label htmlFor="pdfFile">Selecciona tu archivo PDF:</label>
-                        <input type="file" id="pdfFile" name="pdfFile" accept=".pdf" required />
-                    </form>
+                    <PdfUploadComponent/>
                 </div>
             );
             break;
@@ -43,7 +45,7 @@ export const QrContentSwitch = ({contentName}) => {
         case "music":
             qrContent = (
                 <div>
-                    <p>MUSICA</p>
+                    <SpotifyPlaylist/>
                 </div>
             );
             break;

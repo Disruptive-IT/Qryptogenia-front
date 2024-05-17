@@ -5,6 +5,7 @@ const UserHome = () => {
     return (
         <div className='container'>
             <h1 className='display-4'>USUARIO!</h1>
+            <a href='/user/profile'>User</a>
         </div>
     );
 };

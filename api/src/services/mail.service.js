@@ -62,6 +62,35 @@ export async function sendVerificationEmail(direccion, pin) {
   }
 }
 
+export async function sendVerificationChangeEmail(direccion, pin) {
+  try {
+    const mailOptions = {
+      from: "Qryptogenia",
+      to: direccion,
+      subject: "Verificación dcambio de correo - Qryptogenia",
+      html: createVerificationEmail(pin),
+    };
+
+    await transporter.sendMail(mailOptions);
+  } catch (error) {
+    throw error; 
+  }
+}
+export async function sendVerificationChangeNewEmail(direccion, pin) {
+  try {
+    const mailOptions = {
+      from: "Qryptogenia",
+      to: direccion,
+      subject: "Verificación dcambio de correo - Qryptogenia",
+      html: createVerificationEmail(pin),
+    };
+
+    await transporter.sendMail(mailOptions);
+  } catch (error) {
+    throw error; 
+  }
+}
+
 
 function createVerificationEmail(code) {
   return `
