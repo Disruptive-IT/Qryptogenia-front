@@ -1,18 +1,47 @@
-import React, { useState } from 'react';
+import React from 'react';
 import InputText from '../StyleInput';
+import InputColor from 'react-input-color';
 import ScrollableFrameQrs from './scrollableFrameQrs';
+import { useQr } from '../../../../../context/QrContext';
+import ScrollableChipText from './scrollableChipText';
+import Input from '@mui/material/Input';
 
-const Frame = ({ inputValue, onTabSelect }) => {
-    const [inputText, setInputText] = useState('');
+const Frame = () => {
+    const { setQrText, setQrFontStyle, setTextColor, setFontSize } = useQr();
 
     const handleInputChange = (event) => {
-        setInputText(event.target.value);
+        setQrText(event.target.value);
+    };
+
+    const handleTabSelect = (fontStyle) => {
+        setQrFontStyle(fontStyle);
+    };
+
+    const handleColorChange = (color) => {
+        setTextColor(color.hex);
+    };
+
+    const handleFontSizeChange = (event) => {
+        setFontSize(event.target.value);
     };
 
     return (
         <>
-            <ScrollableFrameQrs inputValue={inputValue} onTabSelect={onTabSelect} />
-            <InputText label="Escribir el texto" variant="filled" fullWidth onChange={handleInputChange} />
+            <ScrollableFrameQrs onTabSelect={handleTabSelect} />
+            <div className="flex space-x-4 items-center">
+                <InputText label="Escribir el texto" variant="filled" fullWidth onChange={handleInputChange} />
+                <div className='flex flex-col gap-2'>
+                    <Input
+                        type="number"
+                        inputProps={{ min: "10", max: "25", step: "1" }}
+                        onChange={handleFontSizeChange}
+                        style={{ width: '50px' }}
+                    />
+                    <InputColor initialValue="#000" onChange={handleColorChange} placement="right" className="w-[10px]" />
+                </div>
+            </div>
+            <span className='text-xs text-gray-500'>*El texto tiene un limite de 20 caracteres</span>
+            <ScrollableChipText />
         </>
     );
 };

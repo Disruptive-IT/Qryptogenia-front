@@ -52,7 +52,7 @@ const AppContent = () => {
                         <QrContentSwitch contentName={title} />
                     </div>
                     <div className='col-span-2'>
-                        <ChangeFrame title={title} />
+                        <ChangeFrame />
                     </div>
                 </div>
             </section>

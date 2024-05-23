@@ -2,17 +2,28 @@ import * as React from 'react';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import Box from '@mui/material/Box';
-import imgQr from '../../../../../assets/imgs/qr.png';
-import '../style.css';
 
 export default function ScrollableFrameQrs({ onTabSelect }) {
     const [value, setValue] = React.useState(0);
 
     const handleChange = (event, newValue) => {
         setValue(newValue);
-        onTabSelect(newValue);
+        onTabSelect(fontStyles[newValue]);
     };
 
+    const fontStyles = [
+        { width: "50px", background: "#f2f2f2", padding: "0.5rem", borderRadius: "5px" },
+        { fontFamily: 'Arial, sans-serif', fontWeight: 'bold', fontSize: '16px', textAlign: 'center' },
+        { fontFamily: 'Verdana, serif', fontStyle: 'italic', fontSize: '16px', textAlign: 'center' },
+        { fontFamily: 'Courier New, monospace', fontWeight: 'normal', fontSize: '16px', textAlign: 'justify' },
+        { fontFamily: 'Times New Roman, Times, serif', fontWeight: 'bold', fontSize: '16px', textAlign: 'left' },
+        { fontFamily: 'Georgia, serif', fontStyle: 'italic', fontSize: '16px', textAlign: 'right' },
+        { fontFamily: 'Lucida Console, Monaco, monospace', fontWeight: 'normal', fontSize: '16px', textAlign: 'left' },
+        { fontFamily: 'Tahoma, Geneva, sans-serif', fontStyle: 'normal', fontSize: '16px', textAlign: 'right' },
+        { fontFamily: 'Impact, Charcoal, sans-serif', fontWeight: 'bold', fontSize: '16px', textAlign: 'center' },
+        { fontFamily: 'Comic Sans MS, Chalkboard SE, sans-serif', fontStyle: 'italic', fontSize: '16px', textAlign: 'left' },
+        { fontFamily: 'Brush Script MT, Brush Script, cursive', fontStyle: 'normal', fontSize: '16px', textAlign: 'right' }
+    ];
 
     return (
         <Box sx={{ width: 'auto', bgcolor: 'background.paper' }}>
@@ -23,45 +34,16 @@ export default function ScrollableFrameQrs({ onTabSelect }) {
                 scrollButtons="auto"
                 aria-label="scrollable auto tabs example"
                 sx={{
-                    '& .MuiTabs-scrollButtons': {
+                    '&.MuiTabs-scrollButtons': {
                         width: '20px',
                         color: '#284B63',
                     },
-
                 }}
             >
-                <Tab label={<div className='tab'>
-                    <img src={imgQr} alt="" className='w-10 m-auto' />
-                </div>} />
-                <Tab label={<div className='tab'>
-                    <img src={imgQr} alt="" className='w-10 m-auto' />
-                    <span className='absolute top-0 w-full tab-span'>Top Text</span>
-                </div>} />
-                <Tab label={<div className='tab'>
-                    <img src={imgQr} alt="" className='w-10 m-auto' />
-                    <span className='absolute w-full tab-span'>Cent Text</span>
-                </div>} />
-                <Tab label={<div className='tab'>
-                    <img src={imgQr} alt="" className='w-10 m-auto' />
-                    <span className='absolute bottom-0 tab-span'>Bott Text</span>
-                </div>} />
-
-                <Tab label={<div className='tab'>
-                    <img src={imgQr} alt="" className='w-10 m-auto' />
-                    <span className='absolute top-0 left-0 tab-span'>Top Left</span>
-                </div>} />
-                <Tab label={<div className='tab'>
-                    <img src={imgQr} alt="" className='w-10 m-auto' />
-                    <span className='absolute top-0 right-0 tab-span'>Top Right</span>
-                </div>} />
-                <Tab label={<div className='tab'>
-                    <img src={imgQr} alt="" className='w-10 m-auto' />
-                    <span className='absolute bottom-0 left-0 tab-span'>Bott Left</span>
-                </div>} />
-                <Tab label={<div className='tab'>
-                    <img src={imgQr} alt="" className='w-10 m-auto' />
-                    <span className='absolute bottom-0 right-0 tab-span'>Bott Right</span>
-                </div>} />
+                {fontStyles.map((style, index) => {
+                    const fontName = style.fontFamily ? style.fontFamily.split(',')[0] : 'x';
+                    return <Tab key={index} label={<span style={style}>{fontName}</span>} />;
+                })}
             </Tabs>
         </Box>
     );

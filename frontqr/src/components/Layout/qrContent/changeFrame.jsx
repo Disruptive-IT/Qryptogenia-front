@@ -62,7 +62,8 @@ const fabGreenStyle = {
 };
 
 export default function ChangeFrame(props) {
-    const { title, logo } = props;
+    const { qrType, qrProps } = props;
+
     const theme = useTheme();
     const [value, setValue] = React.useState(0);
 
