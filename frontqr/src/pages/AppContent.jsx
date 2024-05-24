@@ -6,7 +6,6 @@ import { useStepper } from '../context/StepperContext';
 import ChangeFrame from '../components/Layout/qrContent/changeFrame';
 import { contentTexts, dataTypeQr } from '../components/Layout/qrContent/contentData';
 import { OptionBarTwo } from '../components/Layout/optionBar';
-import { WebLinkPhone } from '../components/Layout/qrContent/socialMedia/stylePhone';
 import Valuesjson from '../pages/user/Valuesjson.json'
 
 const AppContent = () => {
@@ -15,12 +14,9 @@ const AppContent = () => {
     const navigate = useNavigate();
     const location = useLocation();
 
-    // Desestructura los valores del JSON importado
     const { appFormValues: initialAppFormValues, socialFormValues: initialSocialFormValues } = Valuesjson;
-
     const [appFormValues, setAppFormValues] = useState(initialAppFormValues);
-    // const [socialFormValues, setSocialFormValues] = useState(initialSocialFormValues);
-
+    const [socialFormValues, setSocialFormValues] = useState(initialSocialFormValues);
 
     useEffect(() => {
         setActiveStep(0);
@@ -28,7 +24,6 @@ const AppContent = () => {
 
 
     const content = contentTexts[contentName.toLowerCase().replace(/\s+/g, '-')];
-    const name = contentName.replace(/-/g, ' ');
     const name = contentName.replace(/-/g, ' ');
 
     if (!content) {
@@ -51,19 +46,17 @@ const AppContent = () => {
     return (
         <>
             <OptionBarTwo contentName={contentName} name={name} />
-            <OptionBarTwo contentName={contentName} name={name} />
             <section id='qr-content'>
                 <div className='text-center'>
-                    <h1>{name}</h1>
                     <h1>{name}</h1>
                     <p>{content}</p>
                 </div>
                 <div className='grid grid-cols-5 gap-10 w-11/12 m-auto py-10'>
                     <div className='col-span-3 bg-white shadow-xl rounded-xl'>
-                        <QrContentSwitch contentName={name} onFormChangeApp={setAppFormValues}/>
+                        <QrContentSwitch contentName={name} onFormChangeApp={setAppFormValues} onFormChange={setSocialFormValues}/>
                     </div>
                     <div className='col-span-2'>
-                        <ChangeFrame name={name} appFormValues={appFormValues}/>
+                        <ChangeFrame name={name} appFormValues={appFormValues} socialFormValues={socialFormValues}/>
                     </div>
                 </div>
             </section>

@@ -1,4 +1,4 @@
- import React from 'react';
+import React from 'react';
 import WebLinkPhoneHeader from './webLinkPhoneHeader';
 import SocialButton from './socialButton';
 import appstore from "../../../../assets/imgs/appstore.png";

@@ -4,9 +4,8 @@ import { PdfUploadComponent, LinkInput } from "./forms/Pdf";
 import SocialForm from "./forms/Social";
 import { WebLinkPhone } from "./socialMedia/stylePhone";
 import WebLinkPhonePreview from "./socialMedia/webLinkPhonePreview";
+export const QrContentSwitch = ({contentName, onFormChangeApp, onFormChange}) => {
 
-export const QrContentSwitch = ({contentName, onFormChangeApp}) => {
-    
     let qrContent;
     switch (contentName) {
         case "app store":
@@ -77,47 +76,46 @@ export const QrContentSwitch = ({contentName, onFormChangeApp}) => {
     return qrContent;
 };
 
-export const PhoneContentSwitch = ({contentName, appFormValues }) => {
-    let phoneContent;
-    switch (contentName) {
-        case "app store":                                                       
-        phoneContent = (
-                <div>
-                    <WebLinkPhonePreview appFormValues={appFormValues}/>
-                </div>
-            );
-            break;
-        
-        case "social media":
-            phoneContent = (
-                <div>
-                    <WebLinkPhone title={"HOLA MUNDO"}
-                            textColor={"blue"}/>
-                            
 
-                </div>
-            );
-            break;
-            
+export const PhoneContentSwitch = ({contentName, appFormValues, socialFormValues}) => {
+
+let phoneContent;
+switch (contentName) {
+    case "app store":                                                       
+    phoneContent = (
+            <div>
+                <WebLinkPhonePreview appFormValues={appFormValues}/>
+            </div>
+        );
+        break;
+    case "social media":
+        phoneContent = (
+            <div>
+                <WebLinkPhone socialFormValues={socialFormValues}/>
+            </div>
+        );
+        break;
         case "website url":
             phoneContent = (
                 <div>
                     <WebLinkPhone title={"HOLA MUNDO"}
-                            textColor={"blue"}/>
+                        textColor={"blue"} />
                 </div>
             );
             break;
         case "pdf":
             phoneContent = (
                 <div>
-                    <WebLinkPhonePreview appFormValues={appFormValues}/>
+                    <WebLinkPhone title={"HOLA MUNDO"}
+                        textColor={"blue"} />
                 </div>
             );
             break;
         case "news":
             phoneContent = (
                 <div>
-                    <p>NOTICIAS</p>
+                    <WebLinkPhone title={"HOLA MUNDO"}
+                        textColor={"blue"} />
                 </div>
             );
             break;
@@ -125,7 +123,7 @@ export const PhoneContentSwitch = ({contentName, appFormValues }) => {
             phoneContent = (
                 <div>
                     <WebLinkPhone title={"HOLA MUNDO"}
-                            textColor={"blue"}/>
+                        textColor={"blue"} />
                 </div>
             );
             break;
@@ -154,4 +152,3 @@ export const PhoneContentSwitch = ({contentName, appFormValues }) => {
 
     return phoneContent;
 };
-
