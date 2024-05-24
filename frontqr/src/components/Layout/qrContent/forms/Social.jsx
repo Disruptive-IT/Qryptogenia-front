@@ -2,52 +2,74 @@ import React, { useState, useRef, useEffect } from 'react';
 import { Formik, Form, Field } from "formik";
 import Select from 'react-select';
 import { SocialIcon } from 'react-social-icons'
+import { ImUpload2 } from "react-icons/im";
 import GradientColorPicker from 'react-gcolor-picker'; // Importamos el nuevo color picker
 
-export const SocialForm = () => {
+export const SocialForm = ({ onFormChange }) => {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
+  const [borderColor, setBorderColor] = useState('#ffffff')
   const [backgroundColor, setBackgroundColor] = useState('#ffffff')
   const [boxColor, setBoxColor] = useState('#ffffff')
   const [titleColor, setTitleColor] = useState('#ffffff');
   const [descriptionColor, setDescriptionColor] = useState('#ffffff');
   const [showTitleColorPicker, setShowTitleColorPicker] = useState(false);
+  const [showBorderColorPicker, setShowBorderColorPicker] = useState(false);
   const [showDescriptionColorPicker, setShowDescriptionColorPicker] = useState(false);
   const [showBackgroundColorPicker, setShowBackgroundColorPicker] = useState(false);
   const [showBoxColorPicker, setShowBoxColorPicker] = useState(false);
   const titleColorPickerRef = useRef(null);
+  const borderColorPickerRef = useRef(null);
   const descriptionColorPickerRef = useRef(null);
   const backgroundColorPickerRef = useRef(null);
   const boxColorPickerRef = useRef(null);
   const [selectedOptions, setSelectedOptions] = useState([]);
+  const [image, setImage] = useState(null); // Nueva parte del estado para la imagen
 
   const handleTitleChange = (e) => {
     setTitle(e.target.value);
+    onFormChange((prevValues) => ({ ...prevValues, title: e.target.value }));
   };
 
   const handleDescriptionChange = (e) => {
     setDescription(e.target.value);
+    onFormChange((prevValues) => ({ ...prevValues, description: e.target.value }));
+  };
+
+  const handleBorderColorChange = (newHexCoor) => {
+    setBorderColor(newHexCoor);
+    onFormChange((prevValues) => ({ ...prevValues, borderColor: newHexCoor }));
   };
 
   const handleBackgroundColorChange = (newHexColor) => {
     setBackgroundColor(newHexColor);
+    onFormChange((prevValues) => ({ ...prevValues, backgroundColor: newHexColor }));
   };
 
   const handleBoxColorChange = (newHexColor) => {
     setBoxColor(newHexColor);
+    onFormChange((prevValues) => ({ ...prevValues, boxColor: newHexColor }));
   };
 
   const handleTitleColorChange = (newHexColor) => {
     setTitleColor(newHexColor);
+    onFormChange((prevValues) => ({ ...prevValues, titleColor: newHexColor }));
   };
 
   const handleDescriptionColorChange = (newHexColor) => {
     setDescriptionColor(newHexColor);
+    onFormChange((prevValues) => ({ ...prevValues, descriptionColor: newHexColor }));
   };
 
   const handleTitleClickOutside = (e) => {
     if (titleColorPickerRef.current && !titleColorPickerRef.current.contains(e.target)) {
       setShowTitleColorPicker(false);
+    }
+  };
+
+  const handleBorderClickOutside = (e) => {
+    if (borderColorPickerRef.current && !borderColorPickerRef.current.contains(e.target)) {
+      setShowBorderColorPicker(false);
     }
   };
 
@@ -71,11 +93,13 @@ export const SocialForm = () => {
 
   useEffect(() => {
     document.addEventListener('mousedown', handleTitleClickOutside);
+    document.addEventListener('mousedown', handleBorderClickOutside);
     document.addEventListener('mousedown', handleDescriptionClickOutside);
     document.addEventListener('mousedown', handleBackgroundClickOutside);
     document.addEventListener('mousedown', handleBoxClickOutside);
     return () => {
       document.removeEventListener('mousedown', handleTitleClickOutside);
+      document.removeEventListener('mousedown', handleBorderClickOutside);
       document.removeEventListener('mousedown', handleDescriptionClickOutside);
       document.removeEventListener('mousedown', handleBackgroundClickOutside);
       document.removeEventListener('mousedown', handleBoxClickOutside);
@@ -146,165 +170,236 @@ export const SocialForm = () => {
     },
   ];
 
+  const fileInputRef = React.createRef();
+
+  const handleClick = () => {
+    fileInputRef.current.click();
+  };
+
   const handleMultiSelectChange = (selectedOptions) => {
-    setSelectedOptions(selectedOptions);
+    const updatedOptions = selectedOptions.map(option => ({
+      ...option,
+      url: ''
+    }));
+    setSelectedOptions(updatedOptions);
+    onFormChange((prevValues) => ({ ...prevValues, selectedOptions: updatedOptions }));
+  };
+
+  const handleUrlChange = (index, value) => {
+    const updatedOptions = [...selectedOptions];
+    updatedOptions[index].url = value;
+    setSelectedOptions(updatedOptions);
+    onFormChange((prevValues) => ({ ...prevValues, selectedOptions: updatedOptions }));
+  };
+
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      setImage(reader.result);
+      onFormChange((prevValues) => ({ ...prevValues, image: reader.result }));
+    };
+    if (file) {
+      reader.readAsDataURL(file);
+    }
   };
 
   return (
     <Formik
-            initialValues={initialValues}
-            onSubmit={(values, actions) => {
-                // Handle form submission logic here
-                console.log(values);
-                actions.setSubmitting(false);
-            }}
-        >
-            {({ setFieldValue }) => (
-                <Form className="max-w-4xl mx-auto mt-8 relative">
-                    <div className="p-6">
-                        <h2 className="text-xl font-semibold mb-4">Social Qr</h2>
-                        <div className="flex flex-col md:flex-row md:items-start md:mb-4">
-                            <div className="flex flex-col w-full md:w-2/3 mr-6 mb-4 md:mb-0">
-                                <label htmlFor="title" className="mb-2">Title:</label>
-                                <Field
-                                    type="text"
-                                    id="title"
-                                    placeholder="Title"
-                                    className="border w-full border-gray-300 rounded p-2"
-                                    value={title}
-                                    onChange={handleTitleChange}
-                                />
-                            </div>
-                            <div className="flex flex-col relative">
-                                <label htmlFor="titleColor" className="mb-2">Color:</label>
-                                <div className="flex items-center">
-                                    <div
-                                        className="w-20 md:w-10 h-10 border border-gray-300 rounded cursor-pointer"
-                                        style={{ background: titleColor }}
-                                        onClick={() => setShowTitleColorPicker(!showTitleColorPicker)}
-                                    ></div>
-                                    {showTitleColorPicker && (
-                                        <div className="absolute mt-2 left-0 top-full z-50" ref={titleColorPickerRef}>
-                                            <GradientColorPicker
-                                                enableAlpha={true}
-                                                disableHueSlider={false}
-                                                disableAlphaSlider={false}
-                                                disableInput={false}
-                                                disableHexInput={false}
-                                                disableRgbInput={false}
-                                                disableAlphaInput={false}
-                                                presetColors={[]}
-                                                gradient={true}
-                                                color={titleColor}
-                                                onChange={handleTitleColorChange}
-                                            />
-                                        </div>
-                                    )}
-                                </div>
-                            </div>
-                        </div>
+      initialValues={initialValues}
+      onSubmit={(values, actions) => {
+        // Handle form submission logic here
+        console.log(values);
+        actions.setSubmitting(false);
+      }}
+    >
+      {({ setFieldValue }) => (
+        <Form className="max-w-4xl mx-auto mt-8 relative">
+          <div className="p-6">
+            <h2 className="text-xl font-semibold mb-4">Social Qr</h2>
+            <div className="flex flex-col md:flex-row md:items-start md:mb-4">
+              <div className="flex flex-col w-full md:w-2/3 mr-6 mb-4 md:mb-0">
+                <label htmlFor="title" className="mb-2">Title:</label>
+                <Field
+                  type="text"
+                  id="title"
+                  placeholder="Title"
+                  className="border w-full border-gray-300 rounded p-2"
+                  value={title}
+                  onChange={handleTitleChange}
+                />
+              </div>
+              <div className="flex flex-col relative">
+                <label htmlFor="titleColor" className="mb-2">Color:</label>
+                <div className="flex items-center">
+                  <div
+                    className="w-20 md:w-10 h-10 border border-gray-300 rounded cursor-pointer"
+                    style={{ background: titleColor }}
+                    onClick={() => setShowTitleColorPicker(!showTitleColorPicker)}
+                  ></div>
+                  {showTitleColorPicker && (
+                    <div className="absolute mt-2 left-0 top-full z-50" ref={titleColorPickerRef}>
+                      <GradientColorPicker
+                        enableAlpha={true}
+                        disableHueSlider={false}
+                        disableAlphaSlider={false}
+                        disableInput={false}
+                        disableHexInput={false}
+                        disableRgbInput={false}
+                        disableAlphaInput={false}
+                        presetColors={[]}
+                        gradient={true}
+                        color={titleColor}
+                        onChange={handleTitleColorChange}
+                      />
+                    </div>
+                  )}
+                </div>
+              </div>
+            </div>
 
-                        <div className="flex flex-col md:flex-row md:items-start md:mb-4 mt-4">
-                            <div className="flex flex-col w-full md:w-2/3 mr-6 mb-4 md:mb-0">
-                                <label htmlFor="description" className="mb-2">Description:</label>
-                                <Field
-                                    as="textarea"
-                                    rows="5"
-                                    type="text"
-                                    placeholder="Description"
-                                    id="description"
-                                    className="w-full min-h-20 max-h-40 border border-gray-300 rounded p-2"
-                                    value={description}
-                                    onChange={handleDescriptionChange}
-                                />
-                            </div>
-                            <div className="flex flex-col relative">
-                                <label htmlFor="descriptionColor" className="mb-2">Color:</label>
-                                <div className="flex items-center">
-                                    <div
-                                        className="w-20 md:w-10 h-10 border border-gray-300 rounded cursor-pointer"
-                                        style={{ background: descriptionColor }}
-                                        onClick={() => setShowDescriptionColorPicker(!showDescriptionColorPicker)}
-                                    ></div>
-                                    {showDescriptionColorPicker && (
-                                        <div className="absolute mt-2 left-0 top-full z-50" ref={descriptionColorPickerRef}>
-                                            <GradientColorPicker
-                                                enableAlpha={true}
-                                                disableHueSlider={false}
-                                                disableAlphaSlider={false}
-                                                disableInput={false}
-                                                disableHexInput={false}
-                                                disableRgbInput={false}
-                                                disableAlphaInput={false}
-                                                presetColors={[]}
-                                                gradient={true}
-                                                color={descriptionColor}
-                                                onChange={handleDescriptionColorChange}
-                                            />
-                                        </div>
-                                    )}
-                                </div>
-                            </div>
-                        </div>
+            <div className="flex flex-col md:flex-row md:items-start md:mb-4 mt-4">
+              <div className="flex flex-col w-full md:w-2/3 mr-6 mb-4 md:mb-0">
+                <label htmlFor="description" className="mb-2">Description:</label>
+                <Field
+                  as="textarea"
+                  rows="5"
+                  type="text"
+                  placeholder="Description"
+                  id="description"
+                  className="w-full min-h-20 max-h-40 border border-gray-300 rounded p-2"
+                  value={description}
+                  onChange={handleDescriptionChange}
+                />
+              </div>
+              <div className="flex flex-col relative">
+                <label htmlFor="descriptionColor" className="mb-2">Color:</label>
+                <div className="flex items-center">
+                  <div
+                    className="w-20 md:w-10 h-10 border border-gray-300 rounded cursor-pointer"
+                    style={{ background: descriptionColor }}
+                    onClick={() => setShowDescriptionColorPicker(!showDescriptionColorPicker)}
+                  ></div>
+                  {showDescriptionColorPicker && (
+                    <div className="absolute mt-2 left-0 top-full z-50" ref={descriptionColorPickerRef}>
+                      <GradientColorPicker
+                        enableAlpha={true}
+                        disableHueSlider={false}
+                        disableAlphaSlider={false}
+                        disableInput={false}
+                        disableHexInput={false}
+                        disableRgbInput={false}
+                        disableAlphaInput={false}
+                        presetColors={[]}
+                        gradient={true}
+                        color={descriptionColor}
+                        onChange={handleDescriptionColorChange}
+                      />
+                    </div>
+                  )}
+                </div>
+              </div>
+            </div>
 
-                        <div className="flex flex-col md:flex-row md:items-start md:mb-4">
-                            <div className="w-full md:w-2/3 mr-6 mb-4 md:mb-0">
-                                <label htmlFor="backgroundColor" className="mb-2">Background Color:</label>
-                                <div className="flex items-center relative">
-                                    <div
-                                        className="w-20 md:w-16 h-10 border border-gray-300 rounded cursor-pointer"
-                                        style={{ background: backgroundColor }}
-                                        onClick={() => setShowBackgroundColorPicker(!showBackgroundColorPicker)}
-                                    ></div>
-                                    {showBackgroundColorPicker && (
-                                        <div className="absolute mt-2 left-0 z-50" ref={backgroundColorPickerRef}>
-                                            <GradientColorPicker
-                                                enableAlpha={true}
-                                                disableHueSlider={false}
-                                                disableAlphaSlider={false}
-                                                disableInput={false}
-                                                disableHexInput={false}
-                                                disableRgbInput={false}
-                                                disableAlphaInput={false}
-                                                presetColors={[]}
-                                                gradient={true}
-                                                color={backgroundColor}
-                                                onChange={handleBackgroundColorChange}
-                                                style={{ width: "calc(100% + 2rem)" }} // Ajuste del ancho
-                                            />
-                                        </div>
-                                    )}
-                                </div>
-                            </div>
-                            <div className="w-full md:w-2/3 mt-4 md:mt-0">
-                                <label htmlFor="boxColor" className="mb-2">Box Color:</label>
-                                <div className="flex items-center relative">
-                                    <div
-                                        className="w-20 md:w-16 h-10 border border-gray-300 rounded cursor-pointer"
-                                        style={{ background: boxColor }}
-                                        onClick={() => setShowBoxColorPicker(!showBoxColorPicker)}
-                                    ></div>
-                                    {showBoxColorPicker && (
-                                        <div className="absolute mt-2 left-0 z-50" ref={boxColorPickerRef}>
-                                            <GradientColorPicker
-                                                enableAlpha={true}
-                                                disableHueSlider={false}
-                                                disableAlphaSlider={false}
-                                                disableInput={false}
-                                                disableHexInput={false}
-                                                disableRgbInput={false}
-                                                disableAlphaInput={false}
-                                                presetColors={[]}
-                                                gradient={true}
-                                                color={boxColor}
-                                                onChange={handleBoxColorChange}
-                                                style={{ width: "calc(100% + 2rem)" }} // Ajuste del ancho
-                                            />
-                                        </div>
-                                    )}
-                                </div>
-                            </div>
-                        </div>
+            <div className="flex flex-col md:flex-row md:items-start md:mb-4">
+              <div className="w-full md:w-2/3 mr-6 mb-4 md:mb-0">
+                <label htmlFor="backgroundColor" className="mb-2">Background Color:</label>
+                <div className="flex items-center relative">
+                  <div
+                    className="w-20 md:w-16 h-10 border border-gray-300 rounded cursor-pointer"
+                    style={{ background: backgroundColor }}
+                    onClick={() => setShowBackgroundColorPicker(!showBackgroundColorPicker)}
+                  ></div>
+                  {showBackgroundColorPicker && (
+                    <div className="absolute mt-2 left-0 z-50" ref={backgroundColorPickerRef}>
+                      <GradientColorPicker
+                        enableAlpha={true}
+                        disableHueSlider={false}
+                        disableAlphaSlider={false}
+                        disableInput={false}
+                        disableHexInput={false}
+                        disableRgbInput={false}
+                        disableAlphaInput={false}
+                        presetColors={[]}
+                        gradient={true}
+                        color={backgroundColor}
+                        onChange={handleBackgroundColorChange}
+                        style={{ width: "calc(100% + 2rem)" }} // Ajuste del ancho
+                      />
+                    </div>
+                  )}
+                </div>
+                <div className="flex flex-col space-y-4 pt-4">
+                  <label>Upload Image:</label>
+                  <input type="file" className="hidden" ref={fileInputRef} accept="image/*" onChange={handleImageChange} />
+                  <button
+                    onClick={handleClick}
+                    className="text-blue-500 hover:text-blue-600 focus:outline-none"
+                  >
+                    <ImUpload2 size="30" />
+                  </button>
+                  {image && <img src={image} width="30" />}
+                </div>
+              </div>
+              <div className="w-full md:w-2/3 mt-4 md:mt-0">
+                <label htmlFor="boxColor" className="mb-2">Box Color:</label>
+                <div className="flex items-center relative">
+                  <div
+                    className="w-20 md:w-16 h-10 border border-gray-300 rounded cursor-pointer"
+                    style={{ background: boxColor }}
+                    onClick={() => setShowBoxColorPicker(!showBoxColorPicker)}
+                  ></div>
+                  {showBoxColorPicker && (
+                    <div className="absolute mt-2 left-0 z-50" ref={boxColorPickerRef}>
+                      <GradientColorPicker
+                        enableAlpha={true}
+                        disableHueSlider={false}
+                        disableAlphaSlider={false}
+                        disableInput={false}
+                        disableHexInput={false}
+                        disableRgbInput={false}
+                        disableAlphaInput={false}
+                        presetColors={[]}
+                        gradient={true}
+                        color={boxColor}
+                        onChange={handleBoxColorChange}
+                        style={{ width: "calc(100% + 2rem)" }} // Ajuste del ancho
+                      />
+                    </div>
+
+                  )}
+
+                </div>
+                <div className='pt-4'>
+                <label htmlFor="boxColor" className="mb-2">Border Profile Color:</label>
+                <div className="flex items-center relative">
+                  <div
+                    className="w-20 md:w-16 h-10 border border-gray-300 rounded cursor-pointer"
+                    style={{ background: borderColor }}
+                    onClick={() => setShowBorderColorPicker(!showBorderColorPicker)}
+                  ></div>
+                  {showBorderColorPicker && (
+                    <div className="absolute mt-2 left-0 z-50" ref={borderColorPickerRef}>
+                      <GradientColorPicker
+                        enableAlpha={true}
+                        disableHueSlider={false}
+                        disableAlphaSlider={false}
+                        disableInput={false}
+                        disableHexInput={false}
+                        disableRgbInput={false}
+                        disableAlphaInput={false}
+                        presetColors={[]}
+                        gradient={true}
+                        color={borderColor}
+                        onChange={handleBorderColorChange}
+                        style={{ width: "calc(100% + 2rem)" }} // Ajuste del ancho
+                      />
+                    </div>
+                  )}
+                </div>
+                </div>
+              </div>
+            </div>
 
             <div className="flex flex-col md:flex-row md:items-center mb-4 mt-4">
               <div className="w-full md:w-2/3">
@@ -320,7 +415,7 @@ export const SocialForm = () => {
               </div>
             </div>
 
-            {selectedOptions.map(option => (
+            {selectedOptions.map((option, index) => (
               <div className="flex items-center mb-4" key={option.value}>
                 <label htmlFor={`input_${option.value}`} className="mb-2">{option.icon}</label>
                 <Field
@@ -329,6 +424,7 @@ export const SocialForm = () => {
                   name={`input_${option.value}`}
                   placeholder={`https://www.${option.value}.com`}
                   className="w-80 border border-gray-300 rounded p-2 ml-2"
+                  onChange={(e) => handleUrlChange(index, e.target.value)}
                 />
               </div>
             ))}
@@ -340,6 +436,7 @@ export const SocialForm = () => {
         </Form>
       )}
     </Formik>
+
   );
 };
 

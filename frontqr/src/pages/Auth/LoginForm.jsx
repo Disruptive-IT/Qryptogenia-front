@@ -40,6 +40,10 @@ const LoginForm = () => {
     }
   };
 
+  const handleGoogleLogin = () => {
+    window.location.href = 'http://localhost:3000/api/auth/google';
+  };
+
   useEffect(() => {
     const fetchData = async () => {
       if (recaptchaValue) {
@@ -103,7 +107,9 @@ const LoginForm = () => {
                 />
               )}
               <SubmitButton text="Log in" />
-              <GoogleButton text="Sing in with Google" />
+              
+              <GoogleButton action={handleGoogleLogin} text="Sign in with Google" method="get" />
+              
             </div>
             <img src={logo} className="elLogoRigth" alt="" />
             <IconsRight />

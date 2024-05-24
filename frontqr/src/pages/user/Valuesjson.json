@@ -1,0 +1,27 @@
+{
+  "appFormValues": {
+    "title": "¡Bienvenidos a Mesadoko!",
+    "description": "Juega sudoko con palabras mientras te diviertes y aprendes. eeeeeeee eeee eeeee eeeeeeee eeeeee eeeeeeeeeee eeee eeeeee eeeeeee  eeeeeee eeeee eeeeee eeee eeee eeeeeeee eeee eeeeeee eeeeeeeeeee eeee eeeeeeeee",
+    "backgroundColor": "linear-gradient(180deg, rgb(253, 93, 8) 0.00%,rgb(251, 164, 14) 100.00%)",
+    "boxColor": "rgb(216, 61, 34)",
+    "titleColor": "rgb(6, 35, 254)",
+    "descriptionColor": "rgb(42, 40, 40)",
+    "borderColor": "rgb(42, 40, 40)",
+    "image": "",
+    "selectedOptions": [
+      { "value": "Google Play Store", "url": "https://play.google.com", "textTop": "GET IT ON", "textBottom": "Google Play" },
+      { "value": "App Store", "url": "https://apple.com", "textTop": "Download on the", "textBottom": "App Store" }
+    ]
+  },
+  "socialFormValues": {
+    "title": "",
+    "description": "Lorem ipsum, or lipsum as it is sometimes known, is dummy text used in laying out print, graphic or web designs. The passage is attributed to an unknown typesetter in the 15th century who is thought to have scrambled parts of Ciceros De Finibus Bonorum et Malorum for use in a type specimen book. It usually begins with:",
+    "borderColor": "#ffffff",
+    "backgroundColor": "#E7473C",
+    "boxColor": "#F0F0F0",
+    "titleColor": "#820e0e",
+    "descriptionColor": "#E7473C",
+    "image": "",
+    "selectedOptions": ""
+  }
+}

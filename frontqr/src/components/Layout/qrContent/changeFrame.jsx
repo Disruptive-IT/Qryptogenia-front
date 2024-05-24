@@ -2,6 +2,7 @@ import * as React from 'react';
 import PropTypes from 'prop-types';
 import { useTheme } from '@mui/material/styles';
 import AppBar from '@mui/material/AppBar';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import Typography from '@mui/material/Typography';
@@ -13,8 +14,8 @@ import UpIcon from '@mui/icons-material/KeyboardArrowUp';
 import { green } from '@mui/material/colors';
 import Box from '@mui/material/Box';
 import CellBox from './cellBox';
-import { WebLinkPhone } from './socialMedia/stylePhone';
-
+import { PhoneContentSwitch} from '.';
+import { contentTexts } from './contentData';
 import CustomQr from './customQr';
 
 function TabPanel(props) {
@@ -28,6 +29,7 @@ function TabPanel(props) {
             id={`action-tabpanel-${index}`}
             aria-labelledby={`action-tab-${index}`}
             {...other}
+            sx={{ width: '100%' }}
         >
             {value === index && <Box sx={{ p: 3 }}>{children}</Box>}
         </Typography>
@@ -61,15 +63,22 @@ const fabGreenStyle = {
     },
 };
 
-export default function ChangeFrame(props) {
-    const { qrType, qrProps } = props;
 
+
+export default function ChangeFrame( {name, appFormValues, socialFormValues}) {
+    const { contentName } = useParams();
     const theme = useTheme();
     const [value, setValue] = React.useState(0);
-
     const handleChange = (event, newValue) => {
         setValue(newValue);
     };
+
+    const content = contentTexts[contentName.toLowerCase().replace(/\s+/g, '-')];
+    // const name = contentName.replace(/-/g, ' ');
+
+    if (!content) {
+        return <NotFoundPage />;
+    }
 
     const transitionDuration = {
         enter: theme.transitions.duration.enteringScreen,
@@ -116,20 +125,17 @@ export default function ChangeFrame(props) {
                             },
                         }}
                     >
-                        <Tab label="Phone" {...a11yProps(0)} />
+                        <Tab label="Phone" {...a11yProps(1)} />
                         <Tab label="QR" {...a11yProps(1)} />
                     </Tabs>
                 </AppBar>
                 <TabPanel value={value} index={0} dir={theme.direction} className="w-[450px]">
                     <h2 className="text-center text-2xl font-bold mb-8">Preview CellPhone</h2>
                     <CellBox>
-                        <WebLinkPhone 
-                            title={"HOLA MUNDO"}
-                            textColor={"blue"}
-                        />
+                         <PhoneContentSwitch contentName={name} appFormValues={appFormValues} socialFormValues={socialFormValues}/>
                     </CellBox>
                 </TabPanel>
-                <TabPanel value={value} index={1} dir={theme.direction} className="xl:w-[500px] w-full  ">
+                <TabPanel value={value} index={1} dir={theme.direction} sx={{ width: '100%', maxWidth: '500px' }}>
                     <h2 className="text-center text-2xl font-bold mb-8">Preview QRytogenia</h2>
                     <CustomQr />
                 </TabPanel>

@@ -256,87 +256,90 @@ const oauth2Client = new google.auth.OAuth2(
 const scopes = [
   'https://www.googleapis.com/auth/userinfo.email',
   'https://www.googleapis.com/auth/userinfo.profile',
-]
+];
 
 const authorizationUrl = oauth2Client.generateAuthUrl({
   access_type: 'offline',
   scope: scopes,
   include_granted_scopes: true,
   prompt: 'consent'
-})
-export const googleauth = async (req, res) =>{
+});
+
+export const googleauth = async (req, res) => {
   res.header('Access-Control-Allow-Origin', 'http://localhost:5173');
   res.header('Referrer-Policy', 'no-referrer-when-downgrade');
   res.redirect(authorizationUrl);
-}
+};
 
-export const googlecall = async (req, res) =>{
+export const googlecall = async (req, res) => {
   res.header('Access-Control-Allow-Origin', 'http://localhost:5173');
   res.header('Referrer-Policy', 'no-referrer-when-downgrade');
-  const {code} = req.query
+  const { code } = req.query;
 
-  const {tokens} = await oauth2Client.getToken(code);
+  const { tokens } = await oauth2Client.getToken(code);
 
   oauth2Client.setCredentials(tokens);
 
   const oauth2 = google.oauth2({
-      auth: oauth2Client,
-      version: 'v2'
-  })
+    auth: oauth2Client,
+    version: 'v2'
+  });
 
-  const {data} = await oauth2.userinfo.get();
+  const { data } = await oauth2.userinfo.get();
 
-  if(!data.email || !data.name){
-      return res.json({
-          data: data,
-      })
+  if (!data.email || !data.name) {
+    return res.json({
+      data: data,
+    });
   }
 
   let user = await prisma.user.findUnique({
-      where: {
-          email: data.email
+    where: {
+      email: data.email
+    },
+    include: {
+      rol: true // rol
+    }
+  });
+
+  if (!user) {
+    user = await prisma.user.create({
+      data: {
+        username: data.name,
+        email: data.email,
+        profile_picture: data.picture,
+        rol: { connect: { id: 2 } }, 
+      },
+      include: {
+        rol: true // Incluir el rol
       }
-  })
-
-  if(!user){
-      user = await prisma.user.create({
-        data: {
-          username: data.name,
-          email: data.email,
-          profile_picture: data.picture,
-          rol: { connect: { id: 2 } },
-
-        },
-      })
+    });
   }
 
   const payload = {
-      id: user?.id,
-      username: user?.name,
-      email: user.email,
-      profile_picture: user.picture, // Si user.image es null, asigna una cadena vacía
-      
-  }
+    id: user.id,
+    username: user.username,
+    email: user.email,
+    profile_picture: user.profile_picture,
+    rol: user.rol.name 
+  };
 
   const secret = process.env.JWT_SECRET;
 
   const expiresIn = 60 * 60 * 1;
 
-  const token = jwt.sign(payload, secret, {expiresIn: expiresIn})
+  const token = jwt.sign(payload, secret, { expiresIn: expiresIn });
 
-  // return res.redirect(`http://localhost:3000/auth-success?token=${token}`)
-
+  return res.redirect(`http://localhost:5173/user/home?token=${token}`);
   console.log("Objeto user:", user);
 
-return res.status(200).json({
-    data: {
-        id: user.id,
-        username: data.name,
-        email: user.email,
-        profile_picture: data.picture,
-    },
-    token: token
-});
+// return res.status(200).json({
+//     data: {
+//         id: user.id,
+//         username: data.name,
+//         email: user.email,
+//         profile_picture: data.picture,
+//     },
+//     token: token
+// });
 }
-
-
