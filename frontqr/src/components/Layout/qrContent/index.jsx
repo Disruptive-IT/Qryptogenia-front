@@ -1,37 +1,38 @@
 import AppForm from "./forms/App";
-import SpotifyPlaylist from "./forms/Music";
-import {PdfUploadComponent, LinkInput } from "./forms/Pdf";
+import { YouTubePlaylistComponent } from "./forms/Music";
+import { PdfUploadComponent, LinkInput } from "./forms/Pdf";
 import SocialForm from "./forms/Social";
+import { WebLinkPhone } from "./socialMedia/stylePhone";
 
-export const QrContentSwitch = ({contentName}) => {
-    
+export const QrContentSwitch = ({ contentName, onFormChange }) => {
+
     let qrContent;
     switch (contentName) {
-        case "app store":                                                       
+        case "app store":
             qrContent = (
                 <div>
-                    <AppForm/>
+                    <AppForm />
                 </div>
             );
             break;
         case "social media":
             qrContent = (
                 <div>
-                    <SocialForm/>
+                    <SocialForm onFormChange={onFormChange} />
                 </div>
             );
             break;
         case "website url":
             qrContent = (
                 <div>
-                    <LinkInput/>
+                    <LinkInput />
                 </div>
             );
             break;
         case "pdf":
             qrContent = (
                 <div>
-                    <PdfUploadComponent/>
+                    <PdfUploadComponent />
                 </div>
             );
             break;
@@ -45,7 +46,7 @@ export const QrContentSwitch = ({contentName}) => {
         case "music":
             qrContent = (
                 <div>
-                    <SpotifyPlaylist/>
+                    <YouTubePlaylistComponent />
                 </div>
             );
             break;
@@ -73,4 +74,84 @@ export const QrContentSwitch = ({contentName}) => {
     }
 
     return qrContent;
+};
+
+
+export const PhoneContentSwitch = ({socialFormValues, contentName} ) => {
+    
+    let phoneContent;
+    switch (contentName) {
+        case "app store":
+            phoneContent = (
+                <div>
+                    <WebLinkPhone socialFormValues={socialFormValues}/>
+                </div>
+                
+            );
+            break;
+        case "social media":
+            phoneContent = (
+                <div>
+                    <WebLinkPhone socialFormValues={socialFormValues}/>
+
+
+                </div>
+            );
+            break;
+        case "website url":
+            phoneContent = (
+                <div>
+                    <WebLinkPhone title={"HOLA MUNDO"}
+                        textColor={"blue"} />
+                </div>
+            );
+            break;
+        case "pdf":
+            phoneContent = (
+                <div>
+                    <WebLinkPhone title={"HOLA MUNDO"}
+                        textColor={"blue"} />
+                </div>
+            );
+            break;
+        case "news":
+            phoneContent = (
+                <div>
+                    <WebLinkPhone title={"HOLA MUNDO"}
+                        textColor={"blue"} />
+                </div>
+            );
+            break;
+        case "music":
+            phoneContent = (
+                <div>
+                    <WebLinkPhone title={"HOLA MUNDO"}
+                        textColor={"blue"} />
+                </div>
+            );
+            break;
+        case "wifi":
+            phoneContent = (
+                <div>
+                    <p>WIFI</p>
+                </div>
+            );
+            break;
+        case "curriculum":
+            phoneContent = (
+                <div>
+                    <p>COMPARTIR LA HOJA DE VIDA</p>
+                </div>
+            );
+            break;
+        case "food menu":
+            phoneContent = (
+                <div>
+                    <p>ACÁ EL MENU DEL NEGOCIO</p>
+                </div>
+            );
+            break;
+    }
+
+    return phoneContent;
 };
