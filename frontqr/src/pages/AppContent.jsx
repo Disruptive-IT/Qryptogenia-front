@@ -29,6 +29,7 @@ const AppContent = () => {
 
     const content = contentTexts[contentName.toLowerCase().replace(/\s+/g, '-')];
     const name = contentName.replace(/-/g, ' ');
+    const name = contentName.replace(/-/g, ' ');
 
     if (!content) {
         return <NotFoundPage />;
@@ -46,11 +47,14 @@ const AppContent = () => {
         scrollToSection();
     }, [location]);
 
+
     return (
         <>
             <OptionBarTwo contentName={contentName} name={name} />
+            <OptionBarTwo contentName={contentName} name={name} />
             <section id='qr-content'>
                 <div className='text-center'>
+                    <h1>{name}</h1>
                     <h1>{name}</h1>
                     <p>{content}</p>
                 </div>

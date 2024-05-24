@@ -1,6 +1,6 @@
 import AppForm from "./forms/App";
-import SpotifyPlaylist from "./forms/Music";
-import {PdfUploadComponent, LinkInput } from "./forms/Pdf";
+import { YouTubePlaylistComponent } from "./forms/Music";
+import { PdfUploadComponent, LinkInput } from "./forms/Pdf";
 import SocialForm from "./forms/Social";
 import { WebLinkPhone } from "./socialMedia/stylePhone";
 import WebLinkPhonePreview from "./socialMedia/webLinkPhonePreview";
@@ -9,7 +9,7 @@ export const QrContentSwitch = ({contentName, onFormChangeApp}) => {
     
     let qrContent;
     switch (contentName) {
-        case "app store":                                                       
+        case "app store":
             qrContent = (
                 <div>
                     <AppForm onFormChangeApp={onFormChangeApp}/>
@@ -19,21 +19,21 @@ export const QrContentSwitch = ({contentName, onFormChangeApp}) => {
         case "social media":
             qrContent = (
                 <div>
-                    <SocialForm/>
+                    <SocialForm onFormChange={onFormChange} />
                 </div>
             );
             break;
         case "website url":
             qrContent = (
                 <div>
-                    <LinkInput/>
+                    <LinkInput />
                 </div>
             );
             break;
         case "pdf":
             qrContent = (
                 <div>
-                    <PdfUploadComponent/>
+                    <PdfUploadComponent />
                 </div>
             );
             break;
@@ -47,7 +47,7 @@ export const QrContentSwitch = ({contentName, onFormChangeApp}) => {
         case "music":
             qrContent = (
                 <div>
-                    <SpotifyPlaylist/>
+                    <YouTubePlaylistComponent />
                 </div>
             );
             break;

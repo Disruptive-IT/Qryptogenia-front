@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { useTheme } from '@mui/material/styles';
 import AppBar from '@mui/material/AppBar';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import Typography from '@mui/material/Typography';
@@ -32,6 +33,7 @@ function TabPanel(props) {
             id={`action-tabpanel-${index}`}
             aria-labelledby={`action-tab-${index}`}
             {...other}
+            sx={{ width: '100%' }}
             sx={{ width: '100%' }}
         >
             {value === index && <Box sx={{ p: 3 }}>{children}</Box>}
@@ -74,6 +76,13 @@ export default function ChangeFrame( {name, appFormValues}) {
     const handleChange = (event, newValue) => {
         setValue(newValue);
     };
+
+    const content = contentTexts[contentName.toLowerCase().replace(/\s+/g, '-')];
+    // const name = contentName.replace(/-/g, ' ');
+
+    if (!content) {
+        return <NotFoundPage />;
+    }
 
     const content = contentTexts[contentName.toLowerCase().replace(/\s+/g, '-')];
     // const name = contentName.replace(/-/g, ' ');
@@ -137,6 +146,7 @@ export default function ChangeFrame( {name, appFormValues}) {
                          <PhoneContentSwitch contentName={name} appFormValues={appFormValues} />
                     </CellBox>
                 </TabPanel>
+                <TabPanel value={value} index={1} dir={theme.direction} sx={{ width: '100%', maxWidth: '500px' }}>
                 <TabPanel value={value} index={1} dir={theme.direction} sx={{ width: '100%', maxWidth: '500px' }}>
                     <h2 className="text-center text-2xl font-bold mb-8">Preview QRytogenia</h2>
                     <CustomQr />
