@@ -15,7 +15,7 @@ import axios from 'axios';
 
 
 const RegisterForm = () => {
-  const { registerUser } = useAuthContext();
+  const { registerUser, setUser } = useAuthContext();
   const { startLoading, stopLoading } = useLoader();
   const [showPinVerification, setShowPinVerification] = useState(false);
   const [showCompleteRegister, setShowCompleteRegister] = useState(false);
@@ -52,6 +52,7 @@ const RegisterForm = () => {
   async function auth() {
     try {
       const response = await axios.get('http://localhost:3000/api/auth/google');
+
       if (response.status === 200) {
         navigate(response.data.url);
       } else {
@@ -62,7 +63,23 @@ const RegisterForm = () => {
     }
   }
 
+    async function handleGoogleLogin () {
+    try {
+      console.log("entrando al login2")
+      const response = window.location.href = 'http://localhost:3000/api/auth/google';
+      console.log("entrando al login3")
+      if (response.status === 200){
+        setUser(response.data.info.user);
+          localStorage.setItem('token', response.data.info.user.token);
+          console.log("entrando al login")
+      }else {
+        console.error('Error:', response.data.error);
+      }
+    } catch (error) {
+      console.err('Error:', err)
+    }
 
+  }
   return (
     <section className='mt-20'>
       <AuthSwitcher text="Ir al Login" to="/login" />
@@ -94,7 +111,10 @@ const RegisterForm = () => {
 
                   <div className='flex flex-col gap-4 pt-4'>
                     <SubmitButton text="Sing up" />
-                    <GoogleButton text="Sing up with Google" />
+                    
+                    <GoogleButton action={handleGoogleLogin} text="Sign up with Google" method='get' />
+                    
+
                   </div>
                 </Form>
               </Formik>
