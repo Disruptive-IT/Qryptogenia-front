@@ -128,4 +128,123 @@ function convertMillisecondsToMinutes(milliseconds) {
     return minutes + ":" + (seconds < 10 ? '0' : '') + seconds;
 }
 
-export default SpotifyPlaylistComponent;
+
+export const YouTubePlaylistComponent = () => {
+    const [playlistUrl, setPlaylistUrl] = useState('');
+    const [playlistData, setPlaylistData] = useState(null);
+    const [playlistItems, setPlaylistItems] = useState([]);
+    const [error, setError] = useState(null);
+
+    const API_KEY = 'AIzaSyCLZBS1HdgzrSe6FOZZCHjK6MP-eSDDqqQ';
+
+    const handleInputChange = (event) => {
+        setPlaylistUrl(event.target.value);
+    };
+
+    const handleSubmit = async (event) => {
+        event.preventDefault();
+
+        try {
+            const playlistId = extractPlaylistId(playlistUrl);
+            
+            // Verificar si se pudo extraer el ID de la lista de reproducción
+            if (!playlistId) {
+                throw new Error('No se pudo extraer el ID de la lista de reproducción');
+            }
+    
+            // Continuar con la solicitud HTTP
+            const playlistResponse = await axios.get(
+                `https://www.googleapis.com/youtube/v3/playlists?id=${playlistId}&key=${API_KEY}&part=snippet`
+            );
+            setPlaylistData(playlistResponse.data.items[0].snippet);
+    
+            const playlistItemsResponse = await axios.get(
+                `https://www.googleapis.com/youtube/v3/playlistItems?playlistId=${playlistId}&key=${API_KEY}&part=snippet&maxResults=50`
+            );
+            setPlaylistItems(playlistItemsResponse.data.items);
+        } catch (error) {
+            setError(error.message); // Usar error.message para obtener el mensaje de error
+        }
+    };
+    console.log(playlistItems)
+
+    const extractPlaylistId = (url) => {
+        // Patrones de URL de lista de reproducción de YouTube
+        const patterns = [
+            /(?:https?:\/\/)?(?:www\.)?youtube\.com\/playlist\?list=([a-zA-Z0-9_-]+)/,
+            /(?:https?:\/\/)?(?:www\.)?youtube\.com\/watch\?v=([a-zA-Z0-9_-]+)&list=([a-zA-Z0-9_-]+)/,
+            /(?:https?:\/\/)?(?:www\.)?youtu\.be\/([a-zA-Z0-9_-]+)\?list=([a-zA-Z0-9_-]+)/
+        ];
+    
+        // Intentar encontrar el ID de la lista de reproducción en la URL
+        for (const pattern of patterns) {
+            const match = url.match(pattern);
+            if (match) {
+                return match[1]; // Devolver el primer grupo de captura (ID de lista de reproducción)
+            }
+        }
+    
+        // Si no se encontró un ID de lista de reproducción válido en la URL
+        return null;
+    };
+
+    return (
+        <div className="max-w-md mx-auto my-8 p-6 bg-gray-100 rounded-lg shadow-md">
+            <form onSubmit={handleSubmit} className="mb-4">
+                <label className="block mb-2">
+                    Ingresa el enlace:
+                    <input
+                        type="text"
+                        value={playlistUrl}
+                        onChange={handleInputChange}
+                        className="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200"
+                    />
+                </label>
+                <button
+                    type="submit"
+                    className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 focus:outline-none focus:ring focus:ring-blue-200"
+                >
+                    Submit
+                </button>
+            </form>
+            {playlistData && (
+                <div>
+                    <h2>Información de la Lista de Reproducción:</h2>
+                    <p>Nombre: {playlistData.title}</p>
+                    <p>Descripción: {playlistData.description}</p>
+                    {/* Agrega más información de la lista de reproducción según tus necesidades */}
+                </div>
+            )}
+
+            <div className="mb-4 max-h-60 overflow-y-auto">
+                {playlistItems.length > 0 && (
+                    <div>
+                        <h2>Canciones de la Lista de Reproducción:</h2>
+                        <ul>
+                        {playlistItems.map((item, index) => (
+    <li key={index} style={{ display: 'flex', alignItems: 'center', marginBottom: '10px' }}>
+        {item.snippet.thumbnails && item.snippet.thumbnails.default && item.snippet.thumbnails.default.url && (
+            <img src={item.snippet.thumbnails.default.url} alt={item.snippet.title} style={{ width: '40px', height: '40px', marginRight: '10px' }} />
+        )}
+        <div style={{ flexGrow: '1' }}>
+            <p>{item.snippet.title}</p>
+        </div>
+    </li>
+))}
+                        </ul>
+                    </div>
+                )}
+            </div>
+
+            {error && (
+                <div>
+                    <h2 className="text-lg font-semibold mb-1">Error:</h2>
+                    <p>{error}</p>
+                </div>
+            )}
+        </div>
+    );
+};
+
+
+
