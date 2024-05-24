@@ -5,6 +5,7 @@ import ScrollableFrameQrs from './scrollableFrameQrs';
 import { useQr } from '../../../../../context/QrContext';
 import ScrollableChipText from './scrollableChipText';
 import Input from '@mui/material/Input';
+import ScrollableMain from './scrollableMain';
 
 const Frame = () => {
     const { setQrText, setQrFontStyle, setTextColor, setFontSize } = useQr();
@@ -13,13 +14,7 @@ const Frame = () => {
         setQrText(event.target.value);
     };
 
-    const handleTabSelect = (fontStyle) => {
-        setQrFontStyle(fontStyle);
-    };
-
-    const handleColorChange = (color) => {
-        setTextColor(color.hex);
-    };
+  
 
     const handleFontSizeChange = (event) => {
         setFontSize(event.target.value);
@@ -27,7 +22,6 @@ const Frame = () => {
 
     return (
         <>
-            <ScrollableFrameQrs onTabSelect={handleTabSelect} />
             <div className="flex space-x-4 items-center">
                 <InputText label="Escribir el texto" variant="filled" fullWidth onChange={handleInputChange} />
                 <div className='flex flex-col gap-2'>
@@ -37,11 +31,10 @@ const Frame = () => {
                         onChange={handleFontSizeChange}
                         style={{ width: '50px' }}
                     />
-                    <InputColor initialValue="#000" onChange={handleColorChange} placement="right" className="w-[10px]" />
                 </div>
             </div>
             <span className='text-xs text-gray-500'>*El texto tiene un limite de 20 caracteres</span>
-            <ScrollableChipText />
+            <ScrollableMain />
         </>
     );
 };

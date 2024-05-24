@@ -43,7 +43,7 @@ const CustomQr = () => {
             <div className='h-[250px] flex relative'>
                 <QR />
             </div>
-            <div className='flex flex-col h-[230px] '>
+            <div className='flex flex-col pt-5 '>
                 <div className='space-x-3 mx-auto'>
                     {options.map((option, index) => (
                         <Button
@@ -56,7 +56,7 @@ const CustomQr = () => {
                     ))}
                 </div>
 
-                <div className='p-4 space-y-4 rounded-md '>
+                <div className='p-4 space-y-4 rounded-md  '>
                     <OptionComponent onTabSelect={handleOptionSelect} />
                 </div>
             </div>
