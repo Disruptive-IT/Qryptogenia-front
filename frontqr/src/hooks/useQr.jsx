@@ -6,7 +6,7 @@ const useQrState = (initialQrType = '', initialQrProps = {}) => {
         qrText: '',
         qrFontStyle: {},
         qrColor: '#000000', 
-        textColor: '#000000', // Agrega un nuevo estado para el color del texto
+        textColor: '#000000', 
         qrProps: {
             ...initialQrProps,
             backgroundImage: null,

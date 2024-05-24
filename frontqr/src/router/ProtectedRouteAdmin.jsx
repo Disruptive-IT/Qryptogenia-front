@@ -1,33 +1,32 @@
 import { useEffect } from "react";
-import { Navigate, Outlet, useNavigate } from "react-router-dom";
-import {jwtDecode} from "jwt-decode";
+import { Navigate, useNavigate, Outlet } from "react-router-dom";
+import NotFoundPage from "../pages/NotFoundPage";
+import { useAuthContext } from "../context/AuthContext";
+import { useAuth } from "../hooks/useAuth";
 
 const ProtectedRouteAdmin = (props) => {
-    //? Se tomó la cookie en el servidor pero al momento de implementar la misma logica da error o no funciona de la misma forma
-    const token = localStorage.getItem("token"); 
+    const { user, checkToken } = useAuth();
     const navigate = useNavigate();
-    
-    function presentPage() {
-        navigate(-1);
-    }
-
-    if (!token) return <Navigate to="/" />;
 
     useEffect(() => {
-        if (token && jwtDecode(token).rol !== "ADMIN") {
-            presentPage()
+        const fetchToken = async () => {
+            await checkToken();
+        };
+        fetchToken();
+    }, []);
+
+    const isAuthenticated = user && user.rol;
+
+    if (isAuthenticated) {
+        if (user && user.rol === "ADMIN") {
+            return <Outlet {...props} />;
+        } else {
+            return <NotFoundPage />;
         }
-    }, [token && jwtDecode(token).rol !== "ADMIN"])
-
-    const decodedData = jwtDecode(token);
-
-
-    if (decodedData.rol === "ADMIN") {
-        return <Outlet {...props} />;
     }
-    else if (decodedData.rol !== "ADMIN") {
-        presentPage()
-    }
+
+    //* PARA NO ACCEDER SIN AUTH O CON ROLE NO ADMIN
+    return null;
 };
 
-export default ProtectedRouteAdmin;
+export default ProtectedRouteAdmin; 

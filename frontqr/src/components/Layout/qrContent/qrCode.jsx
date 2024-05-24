@@ -61,7 +61,7 @@ const QR = () => {
             </div>
             {qrText &&
                 <Draggable bounds="parent">
-                    <span className='px-4 rounded-lg text-center'
+                    <span className='px-4 rounded-lg text-center cursor-pointer'
                         style={{
                             ...qrFontStyle,
                             color: textColor,
