@@ -43,6 +43,8 @@ const options = [
     const descriptionColor = appFormValues.descriptionColor;
     const backgroundcolor = appFormValues.backgroundColor;
     const description = appFormValues.description;
+    const logo = appFormValues.image
+    const bordercolor = appFormValues.borderColor
   
     const data = Array.isArray(appFormValues.selectedOptions)
       ? appFormValues.selectedOptions.map(option => {
@@ -62,7 +64,7 @@ const options = [
     return (
         <div style={{ background:backgroundcolor }} className={`bg-gradient-to-b ml-1   flex flex-col h-full items-center rounded-t-[52px] rounded-b-[50px] w-full  p-2`}>
             {/* Encabezado del teléfono */}
-            <WebLinkPhoneHeader logo={mesadoko} title={title} textColor={textColor} headerColor={headerColor} description={description}  />
+            <WebLinkPhoneHeader logo={logo} title={title} textColor={textColor} headerColor={headerColor} bordercolor={bordercolor}  />
             {/* Cuerpo del teléfono */}
             <div style={{ background: backgroundcolor }} className="rounded-b-[52px] p-10 flex flex-col items-center w-full h-full">
             <h1 style={{ color: textColor }} className={`font-bold mb-4 mt-3 text-center relative ${title.length > 22 ? 'text-xl' : 'text-2xl'}`}>{title}</h1>

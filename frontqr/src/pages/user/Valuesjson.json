@@ -6,6 +6,8 @@
     "boxColor": "rgb(216, 61, 34)",
     "titleColor": "rgb(6, 35, 254)",
     "descriptionColor": "rgb(42, 40, 40)",
+    "borderColor": "rgb(42, 40, 40)",
+    "image": "",
     "selectedOptions": [
       { "value": "Google Play Store", "url": "https://play.google.com", "textTop": "GET IT ON", "textBottom": "Google Play" },
       { "value": "App Store", "url": "https://apple.com", "textTop": "Download on the", "textBottom": "App Store" }

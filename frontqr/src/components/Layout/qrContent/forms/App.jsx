@@ -4,7 +4,7 @@ import Select from 'react-select';
 import { SocialIcon } from 'react-social-icons'
 import GradientColorPicker from 'react-gcolor-picker'; // Importamos el nuevo color picker
 import PropTypes from 'prop-types';
-import { FaApple, FaGooglePlay  } from "react-icons/fa";
+import { ImUpload2 } from "react-icons/im";
 
 export const AppForm = ({ onFormChangeApp }) => {
     const [title, setTitle] = useState('');
@@ -13,15 +13,19 @@ export const AppForm = ({ onFormChangeApp }) => {
     const [boxColor, setBoxColor] = useState('#ffffff');
     const [titleColor, setTitleColor] = useState('#ffffff');
     const [descriptionColor, setDescriptionColor] = useState('#ffffff');
+    const [borderColor, setBorderColor] = useState('#ffffff')
+    const [showBorderColorPicker, setShowBorderColorPicker] = useState(false);
     const [showTitleColorPicker, setShowTitleColorPicker] = useState(false);
     const [showDescriptionColorPicker, setShowDescriptionColorPicker] = useState(false);
     const [showBackgroundColorPicker, setShowBackgroundColorPicker] = useState(false);
     const [showBoxColorPicker, setShowBoxColorPicker] = useState(false);
+    const borderColorPickerRef = useRef(null);
     const titleColorPickerRef = useRef(null);
     const descriptionColorPickerRef = useRef(null);
     const backgroundColorPickerRef = useRef(null);
     const boxColorPickerRef = useRef(null);
     const [selectedOptions, setSelectedOptions] = useState([]);
+    const [image, setImage] = useState(null);
 
     const handleTitleChange = (e) => {
         setTitle(e.target.value);
@@ -41,15 +45,21 @@ export const AppForm = ({ onFormChangeApp }) => {
         onFormChangeApp((prevValues) => ({ ...prevValues, backgroundColor: newHexColor }));
     };
 
+
     const handleBoxColorChange = (newHexColor) => {
         setBoxColor(newHexColor);
         onFormChangeApp((prevValues) => ({ ...prevValues, boxColor: newHexColor }));
-        console.log(newHexColor)
+        
     };
+    const handleBorderColorChange = (newHexCoor) => {
+        setBorderColor(newHexCoor);
+        onFormChangeApp((prevValues) => ({ ...prevValues, borderColor: newHexCoor }));
+      };
 
     const handleTitleColorChange = (newHexColor) => {
         setTitleColor(newHexColor);
         onFormChangeApp((prevValues) => ({ ...prevValues, titleColor: newHexColor }));
+        
     };
 
     const handleDescriptionColorChange = (newHexColor) => {
@@ -98,13 +108,21 @@ export const AppForm = ({ onFormChangeApp }) => {
         onFormChangeApp((prevValues) => ({ ...prevValues, selectedOptions: updatedOptions }));
       };
 
+      const handleBorderClickOutside = (e) => {
+        if (borderColorPickerRef.current && !borderColorPickerRef.current.contains(e.target)) {
+          setShowBorderColorPicker(false);
+        }
+      };
+
     useEffect(() => {
         document.addEventListener('mousedown', handleTitleClickOutside);
         document.addEventListener('mousedown', handleDescriptionClickOutside);
         document.addEventListener('mousedown', handleBackgroundClickOutside);
         document.addEventListener('mousedown', handleBoxClickOutside);
+        document.addEventListener('mousedown', handleBorderClickOutside);
         return () => {
             document.removeEventListener('mousedown', handleTitleClickOutside);
+            document.removeEventListener('mousedown', handleBorderClickOutside);
             document.removeEventListener('mousedown', handleDescriptionClickOutside);
             document.removeEventListener('mousedown', handleBackgroundClickOutside);
             document.removeEventListener('mousedown', handleBoxClickOutside);
@@ -155,6 +173,24 @@ export const AppForm = ({ onFormChangeApp }) => {
             </svg>
         }
     ];
+
+    const fileInputRef = React.createRef();
+
+    const handleClick = () => {
+        fileInputRef.current.click();
+    };
+
+    const handleImageChange = (e) => {
+        const file = e.target.files[0];
+        const reader = new FileReader();
+        reader.onloadend = () => {
+          setImage(reader.result);
+          onFormChangeApp((prevValues) => ({ ...prevValues, image: reader.result }));
+        };
+        if (file) {
+          reader.readAsDataURL(file);
+        }
+      };
 
 
     return (
@@ -282,7 +318,20 @@ export const AppForm = ({ onFormChangeApp }) => {
                                         </div>
                                     )}
                                 </div>
+                            <div className="flex flex-col space-y-4 pt-4">
+                            <label>Upload Image:</label>
+                            <input type="file" className="hidden" ref={fileInputRef} accept="image/*" onChange={handleImageChange} />
+                            <button
+                                onClick={handleClick}
+                                className="text-blue-500 hover:text-blue-600 focus:outline-none"
+                            >
+                                <ImUpload2 size="30" />
+                            </button>
+                            {image && <img src={image} width="30" />}
+                            </div>            
                             </div>
+
+
                             <div className="w-full md:w-2/3 mt-4 md:mt-0">
                                 <label htmlFor="boxColor" className="mb-2">Box Color:</label>
                                 <div className="flex items-center relative">
@@ -310,7 +359,37 @@ export const AppForm = ({ onFormChangeApp }) => {
                                         </div>
                                     )}
                                 </div>
+                                
+                        <div className='pt-4'>
+                <label htmlFor="boxColor" className="mb-2">Border Profile Color:</label>
+                <div className="flex items-center relative">
+                  <div
+                    className="w-20 md:w-16 h-10 border border-gray-300 rounded cursor-pointer"
+                    style={{ background: borderColor }}
+                    onClick={() => setShowBorderColorPicker(!showBorderColorPicker)}
+                  ></div>
+                  {showBorderColorPicker && (
+                    <div className="absolute mt-2 left-0 z-50" ref={borderColorPickerRef}>
+                      <GradientColorPicker
+                        enableAlpha={true}
+                        disableHueSlider={false}
+                        disableAlphaSlider={false}
+                        disableInput={false}
+                        disableHexInput={false}
+                        disableRgbInput={false}
+                        disableAlphaInput={false}
+                        presetColors={[]}
+                        gradient={true}
+                        color={borderColor}
+                        onChange={handleBorderColorChange}
+                        style={{ width: "calc(100% + 2rem)" }} // Ajuste del ancho
+                      />
+                    </div>
+                  )}
+                </div>
+                </div>
                             </div>
+                            
                         </div>
 
                         <div className="flex flex-col md:flex-row md:items-start md:mb-4">
