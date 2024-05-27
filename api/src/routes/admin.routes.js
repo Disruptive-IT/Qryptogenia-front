@@ -1,8 +1,10 @@
 import express from "express";
+// import {getUsers} from "../controllers/admin.controller.js"
+import {getUsers}  from "../controllers/admin.controller.js";
 
 const router = express.Router();
 
-// router.get("users", getUsers);
+router.get("/users", getUsers);
 // router.get("user/change-state", userStateChange);
 // router.get("user/:id", getUserInfo);
 

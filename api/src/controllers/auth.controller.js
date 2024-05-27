@@ -11,6 +11,7 @@ import {
 import { getDate } from "../utils/dateUtils.js";
 import { OAuth2Client } from "google-auth-library";
 import {google} from 'googleapis';
+import { USER_REFRESH_ACCOUNT_TYPE } from "google-auth-library/build/src/auth/refreshclient.js";
 
 export const register = async (req, res) => {
   const { email } = req.body;
@@ -293,7 +294,7 @@ export const googlecall = async (req, res) => {
     });
   }
 
-  let user = await prisma.user.findUnique({
+  let users = await prisma.user.findUnique({
     where: {
       email: data.email
     },
@@ -302,8 +303,8 @@ export const googlecall = async (req, res) => {
     }
   });
 
-  if (!user) {
-    user = await prisma.user.create({
+  if (!users) {
+    users = await prisma.user.create({
       data: {
         username: data.name,
         email: data.email,
@@ -316,19 +317,21 @@ export const googlecall = async (req, res) => {
     });
   }
 
-  const payload = {
-    id: user.id,
-    username: user.username,
-    email: user.email,
-    profile_picture: user.profile_picture,
-    rol: user.rol.name 
+  const user = {
+    id: users.id,
+    username: users.username,
+    email: users.email,
+    profile_picture: users.profile_picture,
+    rol: users.rol.name 
   };
 
-  const secret = process.env.JWT_SECRET;
+  // const secret = process.env.JWT_SECRET;
 
-  const expiresIn = 60 * 60 * 1;
+  // const expiresIn = 60 * 60 * 1;
 
-  const token = jwt.sign(payload, secret, { expiresIn: expiresIn });
+  // const token = jwt.sign(payload, secret, { expiresIn: expiresIn });
+
+  const token = generateToken(user, req.body.remember, res);
 
   return res.redirect(`http://localhost:5173/user/home?token=${token}`);
   console.log("Objeto user:", user);

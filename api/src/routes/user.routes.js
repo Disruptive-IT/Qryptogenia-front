@@ -8,7 +8,8 @@ import {
   changeEmail,
   sendVerifyNewEmail,
   verifyAccountt,
-  verifyNewEmail
+  verifyNewEmail,
+  
 } from "../controllers/user.controller.js";
 
 const router = express.Router();

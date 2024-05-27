@@ -10,7 +10,7 @@ const routes = Router();
 
 routes.use("/auth", authRoutes);
 routes.use("/user", VerifyTokenJWT, userRoutes); //? Indica las rutas para los autenticados (ADMIN, CLIENTE)
-routes.use("/admin", VerifyTokenJWT, Authorization("ADMIN"), adminRoutes); 
+routes.use("/admin", VerifyTokenJWT, adminRoutes); 
 
 //* RUTAS PARA CLIENTES
 //* RUTAS PARA NO AUTENTICADOS
