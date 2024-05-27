@@ -61,16 +61,19 @@ const options = [
 
 
     
-    return (
-        <div style={{ background:backgroundcolor }} className={`bg-gradient-to-b ml-1   flex flex-col h-full items-center rounded-t-[52px] rounded-b-[50px] w-full  p-2`}>
+      return (
+        <div style={{ background: backgroundcolor }} className="bg-gradient-to-b ml-1 flex flex-col h-full items-center min-w-[360px] min-h-[670px] max-w-[360px] max-h-[680px] rounded-[55px]">
             {/* Encabezado del teléfono */}
-            <WebLinkPhoneHeader logo={logo} title={title} textColor={textColor} headerColor={headerColor} bordercolor={bordercolor}  />
+            <WebLinkPhoneHeader logo={logo} title={title} textColor={textColor} headerColor={headerColor} bordercolor={bordercolor} />
             {/* Cuerpo del teléfono */}
             <div style={{ background: backgroundcolor }} className="rounded-b-[52px] p-10 flex flex-col items-center w-full h-full">
-            <h1 style={{ color: textColor }} className={`font-bold mb-4 mt-3 text-center relative ${title.length > 22 ? 'text-xl' : 'text-2xl'}`}>{title}</h1>
+               <div className="w-full">
+                <p style={{ color: textColor }} className={`font-bold mb-5 mt-3 text-center relative ${title.length > 22 ? 'text-xl' : 'text-2xl'} whitespace-pre-line break-words`}>{title}</p>
 
-                <div>
-                    <p style={{ color: descriptionColor }} className={`text-dark font-thin relative`}>{description}</p>
+               </div>
+    
+                <div className="w-full">
+                    <p style={{ color: descriptionColor }} className="text-center text-dark font-thin relative whitespace-pre-line break-words">{description}</p>
                 </div>
                 {/* Agrega aquí el contenido del cuerpo del teléfono */}
                 <SocialButton data={data} />

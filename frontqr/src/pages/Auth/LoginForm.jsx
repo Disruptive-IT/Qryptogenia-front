@@ -40,9 +40,23 @@ const LoginForm = () => {
     }
   };
 
-  const handleGoogleLogin = () => {
-    window.location.href = 'http://localhost:3000/api/auth/google';
-  };
+  async function handleGoogleLogin () {
+    try {
+      console.log("entrando al login2")
+      const response = window.location.href = 'http://localhost:3000/api/auth/google';
+      console.log("entrando al login3")
+      if (response.status === 200){
+        setUser(response.data.info.user);
+          localStorage.setItem('token', response.data.info.user.token);
+          console.log("entrando al login")
+      }else {
+        console.error('Error:', response.data.error);
+      }
+    } catch (error) {
+      console.err('Error:', err)
+    }
+
+  }
 
   useEffect(() => {
     const fetchData = async () => {
@@ -106,6 +120,7 @@ const LoginForm = () => {
                   onChange={setRecaptchaValue}
                 />
               )}
+              
               <SubmitButton text="Log in" />
               
               <GoogleButton action={handleGoogleLogin} text="Sign in with Google" method="get" />

@@ -3,7 +3,7 @@ import { FaApple } from "react-icons/fa";
 
 const SocialButton = ({ data }) => {
     return (
-      <div className="grid grid-flow-row gap-5 justify-center w-full mt-8 relative">
+      <div className="grid grid-flow-row gap-5 justify-center w-full mt-20 relative">
         {data && data.map((social, index) => (
           <a
             key={index}

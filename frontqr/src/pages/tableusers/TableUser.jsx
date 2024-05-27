@@ -39,6 +39,7 @@ const App2 = () => {
     };
 
     useEffect(() => {
+        console.log("tabla")
         const fetchData = async () => {
             const { success, data } = await getUsersData();
             if (success) {
