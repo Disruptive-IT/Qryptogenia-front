@@ -7,20 +7,30 @@ export const useAuth = (navigate) => {
     const [user, setUser] = useState(null);
     const { startLoading, stopLoading } = useLoader();
 
-    useEffect(() => {
-        redirectUser(user);
-    }, [user]);
+    // useEffect(() => {
+    //     redirectUser(user);
+    // }, [user]);
 
-    async function redirectUser(user) {
-        if (user) {
-            if (user.rol === "ADMIN") {
-                navigate("/admin/dashboard");
-            } else {
-                navigate("/user/home");
+    // async function redirectUser(user) {
+    //     if (user) {
+    //         if (user.rol === "ADMIN") {
+    //             navigate("/admin/dashboard");
+    //         } else {
+    //             navigate("/user/home");
+    //         }
+    //     }
+    // }
+
+    async function checkToken() {
+        try {
+            const res = await axios.get('/auth/check-token');
+            if (res.data.user) {
+                setUser(res.data.user);
             }
+        } catch (error) {
+            console.log('Check token MAL', error);
         }
     }
-
 
     const fetchUserData = async () => {
         try {
@@ -39,7 +49,6 @@ export const useAuth = (navigate) => {
             const res = await axios.get('/auth/logout/');
             toast.success(res.data.msg)
             setUser(null)
-            localStorage.removeItem("token") //! Temporal
             navigate("/login")
         } catch (err) {
             toast.error(err.response.data.msg)
@@ -50,8 +59,13 @@ export const useAuth = (navigate) => {
         try {
             const res = await axios.post('/auth/login', values);
             toast.success(res.data.msg)
-            setUser(res.data.info.user);
-            localStorage.setItem('token', res.data.info.user.token);
+            const user = res.data.info.user
+            setUser(user);
+            if (user.rol === "ADMIN") {
+                navigate("/admin/dashboard");
+            } else {
+                navigate("/user/home");
+            }
             return { success: true };
         } catch (err) {
             toast.error(err.response.data.msg)
@@ -228,41 +242,41 @@ export const useAuth = (navigate) => {
 
     const handleChangeEmail = async (values) => {
         try {
-          const response = await axios.post('/user/change-email', { email: values.email });
-          return response.data
+            const response = await axios.post('/user/change-email', { email: values.email });
+            return response.data
 
         } catch (error) {
-          console.error('Error changing email:', error);
+            console.error('Error changing email:', error);
         }
-      };
+    };
 
-      const handleVerifyCode = async (verificationCode) => {
+    const handleVerifyCode = async (verificationCode) => {
         try {
-          const response = await axios.post('/user/verify-account', { pin: verificationCode });
-          return response.data
+            const response = await axios.post('/user/verify-account', { pin: verificationCode });
+            return response.data
 
         } catch (error) {
-          console.error('Error verifying code:', error);
+            console.error('Error verifying code:', error);
         }
-      };
+    };
 
-      const handleChangeNewEmail = async (values) => {
+    const handleChangeNewEmail = async (values) => {
         try {
-          const response = await axios.post('/user/send-verify-new-email', { newEmail: values.newEmail });
-          return response.data
+            const response = await axios.post('/user/send-verify-new-email', { newEmail: values.newEmail });
+            return response.data
         } catch (error) {
-          console.error('Error changing email:', error);
+            console.error('Error changing email:', error);
         }
-      };
+    };
 
-      const handleVerifyNewCode = async (newVerificationCode) => {
+    const handleVerifyNewCode = async (newVerificationCode) => {
         try {
-          const response = await axios.post('/user/verify-new-email', { newPin: newVerificationCode });
-          return response.data
+            const response = await axios.post('/user/verify-new-email', { newPin: newVerificationCode });
+            return response.data
         } catch (error) {
-          console.error('Error verifying new code:', error);
+            console.error('Error verifying new code:', error);
         }
-      };
+    };
 
     return {
         user,
@@ -282,6 +296,7 @@ export const useAuth = (navigate) => {
         handleChangeEmail,
         handleVerifyCode,
         handleChangeNewEmail,
-        handleVerifyNewCode
+        handleVerifyNewCode,
+        checkToken
     };
 }

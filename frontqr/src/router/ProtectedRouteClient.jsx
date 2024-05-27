@@ -1,32 +1,33 @@
-import {useEffect} from "react";
-import { Navigate, Outlet, useNavigate } from "react-router-dom";
-import {jwtDecode} from "jwt-decode";
+import { useEffect } from "react";
+import { Navigate, useNavigate, Outlet } from "react-router-dom";
+import { useAuthContext } from "../context/AuthContext";
+import { useAuth } from "../hooks/useAuth";
+import NotFoundPage from "../pages/NotFoundPage";
 
-const ProtectedRouteUser = (props) => {
-  const token = localStorage.getItem("token"); //! Tomar de cookie
+const ProtectedRouteClient = (props) => {
+  const { user, checkToken } = useAuth();
   const navigate = useNavigate();
-  
-  function presentPage() {
-    navigate(-1);
-  }
 
-  if (!token) return <Navigate to="/" />;
+  useEffect(() => {
+      const fetchToken = async () => {
+          await checkToken();
+      };
+      fetchToken();
+  }, []);
 
-  useEffect(()=>{
-    if(token && jwtDecode(token).rol!== "CLIENT"){ 
-      presentPage()
+  const isAuthenticated = user && user.rol;
+
+  if (isAuthenticated) {
+      if (user && user.rol === "CLIENT") {
+          return <Outlet {...props} />;
+      } else {
+          return <NotFoundPage />;
       }
-  },[token && jwtDecode(token).rol!== "CLIENT"])
-
-  const decodedData = jwtDecode(token);
-
-
-  if (decodedData.rol === "CLIENT") {
-    return <Outlet {...props} />;
   }
- else if(decodedData.rol!=="ADMIN"){
-   presentPage()
-  }
+
+  //* PARA NO ACCEDER SIN AUTH O CON ROLE NO CLIENT
+  return null;
 };
 
-export default ProtectedRouteUser;
+
+export default ProtectedRouteClient;

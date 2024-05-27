@@ -8,12 +8,13 @@ import {
   forgot_password,
   recoverPassword,
   googleauth,
-  googlecall
+  googlecall,
 } from "../controllers/auth.controller.js";
 import { verifyAccount } from "../services/auth.service.js";
 const plaintextPassword = "dav39484"; // Tu contraseña en texto plano
 import jwt from "jsonwebtoken";
 import { verifyRecaptcha } from "../services/verifyRecaptcha.service.js";
+import prisma from "../lib/prisma.js";
 
 // Genera el hash de la contraseña
 const hashedPassword = bcrypt.hashSync(plaintextPassword, 10);
@@ -35,11 +36,10 @@ router.post("/password_reset/confirm", recoverPassword);
 
 router.post("/verifyRecaptcha", verifyRecaptcha);
 
-router.get("/google", googleauth)
-router.get("/google/callback", googlecall)
+router.get("/google", googleauth);
+router.get("/google/callback", googlecall);
 
-//!! Pendiente a pruebas
-router.get("/check-token", (req, res) => {
+router.get("/check-token", async (req, res) => {
   const token = req.cookies.token;
   if (!token) {
     return res.status(401).json({ message: "No token provided" });
@@ -47,9 +47,21 @@ router.get("/check-token", (req, res) => {
 
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    const rol = decoded.rol;
 
-    res.json({ rol });
+    const user = await prisma.user.findUnique({
+      where: { id: decoded.id },
+      include: {
+        rol: true,
+      },
+    });
+    const userResponse = {
+      id: user.id,
+      username: user.username,
+      email: user.email,
+      rol: user.rol.name,
+    };
+    
+    return res.status(200).json({ user: userResponse });
   } catch (error) {
     res.status(401).json({ message: "Invalid token" });
   }
