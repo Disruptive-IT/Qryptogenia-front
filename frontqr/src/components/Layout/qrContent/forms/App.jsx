@@ -9,6 +9,8 @@ import { ImUpload2 } from "react-icons/im";
 export const AppForm = ({ onFormChangeApp }) => {
     const [title, setTitle] = useState('');
     const [description, setDescription] = useState('');
+    const maxLength = 250;
+    const maxTitle = 30;
     const [backgroundColor, setBackgroundColor] = useState('#ffffff');
     const [boxColor, setBoxColor] = useState('#ffffff');
     const [titleColor, setTitleColor] = useState('#ffffff');
@@ -29,15 +31,21 @@ export const AppForm = ({ onFormChangeApp }) => {
 
     const handleTitleChange = (e) => {
         setTitle(e.target.value);
-        
         onFormChangeApp((prevValues) => ({ ...prevValues, title: e.target.value }));
+        const value = e.target.value;
+        if (value.length <= maxTitle) {
+            setTitle(value);
+        }
         
     };
 
     const handleDescriptionChange = (e) => {
         setDescription(e.target.value);
         onFormChangeApp((prevValues) => ({ ...prevValues, description: e.target.value }));
-        
+        const value = e.target.value;
+        if (value.length <= maxLength) {
+            setDescription(value);
+        }
     };
 
     const handleBackgroundColorChange = (newHexColor) => {
@@ -215,8 +223,11 @@ export const AppForm = ({ onFormChangeApp }) => {
                                     className="border w-full border-gray-300 rounded p-2"
                                     value={title}
                                     onChange={handleTitleChange}
-
+                                    maxLength={maxTitle}
                                 />
+                                <div className="text-right text-sm text-gray-900">
+                                    {title.length}/{maxTitle} Characters
+                                </div>
                             </div>
                             <div className="flex flex-col relative">
                                 <label htmlFor="titleColor" className="mb-2">Color:</label>
@@ -259,8 +270,14 @@ export const AppForm = ({ onFormChangeApp }) => {
                                     className="w-full min-h-20 max-h-40 border border-gray-300 rounded p-2"
                                     value={description}
                                     onChange={handleDescriptionChange}
+                                    maxLength={maxLength}
                                 />
+                                <div className="text-right text-sm text-gray-900">
+                                    {description.length}/{maxLength} Characters
+                                </div>
+
                             </div>
+                                
                             <div className="flex flex-col relative">
                                 <label htmlFor="descriptionColor" className="mb-2">Color:</label>
                                 <div className="flex items-center">
