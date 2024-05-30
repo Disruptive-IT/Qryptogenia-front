@@ -5,13 +5,12 @@ const useQrState = (initialQrType = '', initialQrProps = {}) => {
         qrType: initialQrType,
         qrText: '',
         qrFontStyle: {},
-        qrColor: '#000000', 
-        textColor: '#000000', 
+        qrColor: '#000000',
+        qrBgColor: '#fff',
+        textColor: '#000000',
+        textSize: 16,
         qrProps: {
             ...initialQrProps,
-            backgroundImage: null,
-            logoImage: null,
-            logoPosition: { background: true },
         },
     });
 
@@ -22,37 +21,6 @@ const useQrState = (initialQrType = '', initialQrProps = {}) => {
             qrProps: {
                 ...prevState.qrProps,
                 ...props,
-            },
-        }));
-    };
-
-    const setBackgroundImage = (image) => {
-        setQrState(prevState => ({
-            ...prevState,
-            qrProps: {
-                ...prevState.qrProps,
-                backgroundImage: image,
-            },
-        }));
-    };
-
-    const setLogoImage = (image) => {
-        setQrState(prevState => ({
-            ...prevState,
-            qrProps: {
-                ...prevState.qrProps,
-                logoImage: image,
-                logoPosition: prevState.qrProps.logoPosition || { background: true },
-            },
-        }));
-    };
-
-    const setLogoPosition = (position) => {
-        setQrState(prevState => ({
-            ...prevState,
-            qrProps: {
-                ...prevState.qrProps,
-                logoPosition: position,
             },
         }));
     };
@@ -70,21 +38,34 @@ const useQrState = (initialQrType = '', initialQrProps = {}) => {
             qrFontStyle: style,
         }));
     };
-
     const setQrColor = (color) => {
         setQrState(prevState => ({
             ...prevState,
             qrColor: color,
         }));
     };
-    const setTextColor = (color) => { 
+    const setQrBgColor = (color) => {
+        setQrState(prevState => ({
+            ...prevState,
+            qrBgColor: color,
+        }));
+    };
+    
+    const setTextColor = (color) => {
         setQrState(prevState => ({
             ...prevState,
             textColor: color,
         }));
     };
 
-    return { ...qrState, setQrData, setBackgroundImage, setLogoImage, setLogoPosition, setQrText, setQrFontStyle, setQrColor, setTextColor }; 
+    const setTextSize = (size) => {
+        setQrState(prevState => ({
+            ...prevState,
+            textSize: size,
+        }));
+    };
+
+    return { ...qrState, setQrData, setQrText, setQrFontStyle, setQrColor, setQrBgColor, setTextColor, setTextSize };
 };
 
 export default useQrState;

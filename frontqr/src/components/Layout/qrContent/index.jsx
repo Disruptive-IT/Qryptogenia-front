@@ -4,6 +4,8 @@ import { PdfUploadComponent, LinkInput } from "./forms/Pdf";
 import SocialForm from "./forms/Social";
 import { WebLinkPhone } from "./socialMedia/stylePhone";
 import WebLinkPhonePreview from "./socialMedia/webLinkPhonePreview";
+
+
 export const QrContentSwitch = ({contentName, onFormChangeApp, onFormChange}) => {
 
     let qrContent;

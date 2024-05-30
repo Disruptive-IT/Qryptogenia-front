@@ -2,34 +2,21 @@ import { useState } from 'react';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import imgQr from '../../../../assets/imgs/qr.png';
-import ScrollableDesingQrs from './scrollableDesingQrs';
+import ScrollableDesingQrs from './design/scrollableDesingQrs';
 import Frame from './frame';
 import Logo from './logo';
 import QR from '../qrCode';
+import Design from './design';
 import { useQr } from '../../../../context/QrContext';
 
-
-
-const Design = ({ onTabSelect }) => (
-    <>
-        <ScrollableDesingQrs onTabSelect={onTabSelect} />
-        <TextField
-            id="filled-secondary"
-            label="Color"
-            variant="filled"
-            color="secondary"
-            fullWidth
-        />
-    </>
-);
-
 const options = [
-    { name: 'Frame', component: Frame },
-    { name: 'Design', component: Design },
-    { name: 'Logo', component: Logo },
+    { name: 'Text', component: Frame },
+    { name: 'Pattern', component: Design },
+    { name: 'Background', component: Logo },
 ];
 
 const CustomQr = () => {
+    const { qrBgColor} = useQr();
     const [selectedOptionIndex, setSelectedOptionIndex] = useState(0);
 
     const handleOptionSelect = (index) => {
@@ -40,10 +27,10 @@ const CustomQr = () => {
 
     return (
         <div className='w-full h-[680px] rounded-md flex flex-col justify-between pb-4'>
-            <div className='h-[250px] flex relative'>
+            <div className='h-[250px] flex relative' style={{ backgroundColor: qrBgColor }}>
                 <QR />
             </div>
-            <div className='flex flex-col pt-5 '>
+            <div className='flex flex-col pt-5 min-h-[350px] '>
                 <div className='space-x-3 mx-auto'>
                     {options.map((option, index) => (
                         <Button
@@ -56,7 +43,7 @@ const CustomQr = () => {
                     ))}
                 </div>
 
-                <div className='p-4 space-y-4 rounded-md  '>
+                <div className='p-4 space-y-4 rounded-md   '>
                     <OptionComponent onTabSelect={handleOptionSelect} />
                 </div>
             </div>

@@ -1,14 +1,14 @@
 import React from 'react';
 import InputText from '../StyleInput';
 import InputColor from 'react-input-color';
-import ScrollableFrameQrs from './scrollableFrameQrs';
+import ScrollableFrameQrs from './scrollableFontText';
 import { useQr } from '../../../../../context/QrContext';
 import ScrollableChipText from './scrollableChipText';
 import Input from '@mui/material/Input';
 import ScrollableMain from './scrollableMain';
 
 const Frame = () => {
-    const { setQrText, setQrFontStyle, setTextColor, setFontSize } = useQr();
+    const { setQrText } = useQr();
 
     const handleInputChange = (event) => {
         setQrText(event.target.value);

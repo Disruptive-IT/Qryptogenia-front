@@ -13,8 +13,6 @@ import ReCAPTCHA from "react-google-recaptcha";
 import { IoIosMail } from "react-icons/io";
 import { FaLock } from "react-icons/fa";
 
-import axios from "../../libs/axios"
-
 const LoginForm = () => {
   const { loginUser } = useAuthContext();
   const { startLoading, stopLoading } = useLoader();

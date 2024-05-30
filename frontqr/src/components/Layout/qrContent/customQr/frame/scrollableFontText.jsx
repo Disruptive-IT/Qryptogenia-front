@@ -1,15 +1,12 @@
-import * as React from 'react';
+import { useState } from 'react';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import Box from '@mui/material/Box';
+import { useQr } from '../../../../../context/QrContext';
 
-export default function ScrollableFrameQrs({ onTabSelect }) {
-    const [value, setValue] = React.useState(0);
-
-    const handleChange = (event, newValue) => {
-        setValue(newValue);
-        onTabSelect(fontStyles[newValue]);
-    };
+export default function ScrollableFontText() {
+    const { setQrFontStyle } = useQr();
+    const [value, setValue] = useState(0);
 
     const fontStyles = [
         { width: "50px", background: "#f2f2f2", padding: "0.5rem", borderRadius: "5px" },
@@ -24,6 +21,10 @@ export default function ScrollableFrameQrs({ onTabSelect }) {
         { fontFamily: 'Comic Sans MS, Chalkboard SE, sans-serif', fontStyle: 'italic', fontSize: '16px', textAlign: 'left' },
         { fontFamily: 'Brush Script MT, Brush Script, cursive', fontStyle: 'normal', fontSize: '16px', textAlign: 'right' }
     ];
+    const handleChange = (event, newValue) => {
+        setValue(newValue);
+        setQrFontStyle(fontStyles[newValue]);
+    };
 
     return (
         <Box sx={{ width: 'auto', bgcolor: 'background.paper' }}>
