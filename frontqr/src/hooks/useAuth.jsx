@@ -159,7 +159,6 @@ export const useAuth = (navigate) => {
         try {
             const response = await axios.get('/admin/users');
             const data = response.data;
-            console.log(data)
             return { success: true, data: data };
         } catch (error) {
             console.error('Error fetching data:', error);

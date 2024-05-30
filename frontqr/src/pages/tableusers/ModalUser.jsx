@@ -45,7 +45,7 @@ const UserModal = ({ openDialog, setOpenDialog, selectedUser }) => {
                             <div >
                                 <p className="text-gray-1000 mb-1">Username: {selectedUser.username}</p>
                                 <p className="text-gray-1000 mb-1">Email: {selectedUser.email}</p>
-                                <p className="text-gray-1000 mb-1">Status: {selectedUser.is_active ? 'Activo' : 'Inactivo'}</p>
+                                <p className="text-gray-1000 mb-1">Status: {selectedUser.state ? 'Activo' : 'Inactivo'}</p>
                             </div>
                         </div>
                     )}

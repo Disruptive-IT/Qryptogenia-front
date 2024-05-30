@@ -27,7 +27,7 @@ const CustomQr = () => {
 
     return (
         <div className='w-full h-[680px] rounded-md flex flex-col justify-between pb-4'>
-            <div className='h-[250px] flex relative' style={{ backgroundColor: qrBgColor }}>
+            <div className='h-[250px] w-[90%] mx-auto flex relative' style={{ backgroundColor: qrBgColor }}>
                 <QR />
             </div>
             <div className='flex flex-col pt-5 min-h-[350px] '>
@@ -43,7 +43,7 @@ const CustomQr = () => {
                     ))}
                 </div>
 
-                <div className='p-4 space-y-4 rounded-md   '>
+                <div className='p-4 space-y-4 rounded-md w-[90%] mx-auto  '>
                     <OptionComponent onTabSelect={handleOptionSelect} />
                 </div>
             </div>

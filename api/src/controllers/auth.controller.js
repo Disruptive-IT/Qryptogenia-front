@@ -277,72 +277,64 @@ export const googlecall = async (req, res) => {
   res.header('Referrer-Policy', 'no-referrer-when-downgrade');
   const { code } = req.query;
 
-  const { tokens } = await oauth2Client.getToken(code);
+  try {
+    const { tokens } = await oauth2Client.getToken(code);
+    oauth2Client.setCredentials(tokens);
 
-  oauth2Client.setCredentials(tokens);
-
-  const oauth2 = google.oauth2({
-    auth: oauth2Client,
-    version: 'v2'
-  });
-
-  const { data } = await oauth2.userinfo.get();
-
-  if (!data.email || !data.name) {
-    return res.json({
-      data: data,
+    const oauth2 = google.oauth2({
+      auth: oauth2Client,
+      version: 'v2'
     });
-  }
 
-  let users = await prisma.user.findUnique({
-    where: {
-      email: data.email
-    },
-    include: {
-      rol: true // rol
+    const { data } = await oauth2.userinfo.get();
+
+    if (!data.email || !data.name) {
+      return res.json({ data: data });
     }
-  });
 
-  if (!users) {
-    users = await prisma.user.create({
-      data: {
-        username: data.name,
-        email: data.email,
-        profile_picture: data.picture,
-        rol: { connect: { id: 2 } }, 
+    let users = await prisma.user.findUnique({
+      where: {
+        email: data.email
       },
       include: {
-        rol: true // Incluir el rol
+        rol: true // rol
       }
     });
+
+    if (!users) {
+      users = await prisma.user.create({
+        data: {
+          username: data.name,
+          email: data.email,
+          profile_picture: data.picture,
+          rol: { connect: { id: 2 } }, 
+        },
+        include: {
+          rol: true // Incluir el rol
+        }
+      });
+    }
+
+    const user = {
+      id: users.id,
+      username: users.username,
+      email: users.email,
+      profile_picture: users.profile_picture,
+      rol: users.rol.name 
+    };
+
+    const token = generateToken(user, req.body.remember, res);
+
+    // redirijcion segun el rol
+    if (user.rol === 'ADMIN') {
+      return res.redirect(`http://localhost:5173/admin/dashboard?token=${token}`);
+    } else if (user.rol === 'CLIENT') {
+      return res.redirect(`http://localhost:5173/user/home?token=${token}`);
+    } else {
+      return res.redirect(`http://localhost:5173/home`);
+    }
+  } catch (error) {
+    console.error('Error during Google authentication', error);
+    res.status(500).json({ message: 'Internal Server Error' });
   }
-
-  const user = {
-    id: users.id,
-    username: users.username,
-    email: users.email,
-    profile_picture: users.profile_picture,
-    rol: users.rol.name 
-  };
-
-  // const secret = process.env.JWT_SECRET;
-
-  // const expiresIn = 60 * 60 * 1;
-
-  // const token = jwt.sign(payload, secret, { expiresIn: expiresIn });
-
-  const token = generateToken(user, req.body.remember, res);
-
-  return res.redirect(`http://localhost:5173/user/home?token=${token}`);
-  console.log("Objeto user:", user);
-
-// return res.status(200).json({
-//     data: {
-//         id: user.id,
-//         username: data.name,
-//         email: user.email,
-//         profile_picture: data.picture,
-//     },
-//     token: token
-// });
-}
+};

@@ -1,9 +1,17 @@
+import { useState } from 'react';
 import { useQr } from '../../../../../context/QrContext';
 import { ColorPicker } from './colorPicker';
+import Tabs from '@mui/material/Tabs';
+import Tab from '@mui/material/Tab';
 
 export const ScrollableStyleText = () => {
     const { setTextColor, setTextSize, textSize } = useQr();
-  
+    const [value, setValue] = useState(0);
+
+    const handleChange = (event, newValue) => {
+        setValue(newValue);
+    };
+
     const handleColorChange = (color) => {
         setTextColor(color);
     };
@@ -14,14 +22,26 @@ export const ScrollableStyleText = () => {
 
     return (
         <div className='w-full space-y-8'>
-            <div className='flex justify-center gap-4 px-2'>
-                <div className='cursor-pointer hover:bg-gray-500 transition-all delay-75 px-2 rounded-md shadow-xl' style={{ fontSize: '30px', fontWeight: 'bold', textTransform: 'uppercase', color: '#fff', textShadow: '-3px 0 black, 0 3px black, 3px 0 black, 0 -3px black' }}>A</div>
-                <div className='cursor-pointer hover:bg-gray-500 transition-all delay-75 px-2 rounded-md shadow-xl' style={{ fontSize: '30px', fontWeight: 'bold', textTransform: 'uppercase', textShadow: '3px 3px #888888' }}>B</div>
-                <div className='cursor-pointer hover:bg-gray-500 transition-all delay-75 px-2 rounded-md shadow-xl' style={{ fontSize: '30px', fontWeight: 'bold', textTransform: 'uppercase', textShadow: '-3px 0 white, 0 3px white, 3px 0 white, 0 -3px white' }}>C</div>
-                <div className='cursor-pointer hover:bg-gray-500 transition-all delay-75 px-2 rounded-md shadow-xl' style={{ fontSize: '30px', fontWeight: 'bold', textTransform: 'uppercase', color: '#fff', textShadow: '-3px 0 black, 0 3px black, 3px 0 black, 0 -3px black' }}>D</div>
-                <div className='cursor-pointer hover:bg-gray-500 transition-all delay-75 px-2 rounded-md shadow-xl' style={{ fontSize: '30px', fontWeight: 'bold', textTransform: 'uppercase', textShadow: '3px 3px #888888' }}>E</div>
-                <div className='cursor-pointer hover:bg-gray-500 transition-all delay-75 px-2 rounded-md shadow-xl' style={{ fontSize: '30px', fontWeight: 'bold', textTransform: 'uppercase', textShadow: '-3px 0 white, 0 3px white, 3px 0 white, 0 -3px white' }}>F</div>
-            </div>
+            <Tabs
+                value={value}
+                onChange={handleChange}
+                variant="scrollable"
+                scrollButtons="auto"
+                aria-label="scrollable auto tabs example"
+                sx={{
+                    '&.MuiTabs-scrollButtons': {
+                        width: '20px',
+                        color: '#284B63',
+                    },
+                }}
+            >
+                <Tab label="A" style={{ fontSize: '25px', fontWeight: 'bold', textTransform: 'uppercase', color: '#fff', textShadow: '-3px 0 black, 0 3px black, 3px 0 black, 0 -3px black' }} />
+                <Tab label="B" style={{ fontSize: '25px', fontWeight: 'bold', textTransform: 'uppercase', textShadow: '3px 3px #888888' }} />
+                <Tab label="C" style={{ fontSize: '25px', fontWeight: 'bold', textTransform: 'uppercase', textShadow: '-3px 0 white, 0 3px white, 3px 0 white, 0 -3px white' }} />
+                <Tab label="D" style={{ fontSize: '25px', fontWeight: 'bold', textTransform: 'uppercase', color: '#fff', textShadow: '-3px 0 black, 0 3px black, 3px 0 black, 0 -3px black' }} />
+                <Tab label="E" style={{ fontSize: '25px', fontWeight: 'bold', textTransform: 'uppercase', textShadow: '3px 3px #888888' }} />
+                <Tab label="F" style={{ fontSize: '25px', fontWeight: 'bold', textTransform: 'uppercase', textShadow: '-3px 0 white, 0 3px white, 3px 0 white, 0 -3px white' }} />
+            </Tabs>
             <div className='relative justify-evenly items-center flex gap-4'>
                 <ColorPicker setColor={handleColorChange} />
                 <label htmlFor="fontSize" className="mb-2">Font Size:</label>
