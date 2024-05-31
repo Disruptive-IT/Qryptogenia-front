@@ -41,7 +41,7 @@ export const LinkInput = ({ onSubmit }) => {
   };
 
   return (
-    <div className="max-w-md mx-auto p-6 bg-gray-100 rounded-lg shadow-md">
+    <div className="max-w-md mx-auto bg-gray-100 rounded-lg shadow-md">
       <form className="flex flex-col items-center">
         <label className="mb-4 text-lg font-semibold">Write the URL:</label>
         <input

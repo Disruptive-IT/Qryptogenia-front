@@ -66,7 +66,7 @@ const AppContent = () => {
                     <p>{content}</p>
                 </div>
                 <div className='grid grid-cols-1 lg:grid-cols-5 gap-10 w-11/12 m-auto py-10'>
-                    <div className='col-span-1 lg:col-span-3 bg-white shadow-xl rounded-xl'>
+                    <div className='col-span-1 lg:col-span-3 bg-white shadow-xl rounded-xl p-6'>
                         <QrContentSwitch contentName={name} onFormChangeApp={setAppFormValues} onFormChange={setSocialFormValues} onFormChangeMusic={setMusicFormValues} />
                     </div>
                     {/* Componente de vista previa visible solo en pantallas grandes */}
