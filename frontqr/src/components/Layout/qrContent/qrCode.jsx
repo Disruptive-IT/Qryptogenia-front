@@ -3,16 +3,11 @@ import QRCode from 'qrcode.react';
 import Draggable from 'react-draggable';
 import '../styles/qrCode.css';
 import { useQr } from '../../../context/QrContext';
-import InputColor from 'react-input-color';
 
 const QR = () => {
-    const { qrType, qrProps, qrFontStyle, qrColor, qrText, textColor, setQrColor } = useQr();
+    const { qrType, qrProps, textSize, qrColor, qrText, textColor, qrFontStyle } = useQr();
     const { logoPosition, logoImage } = qrProps;
     const [qrValue, setQrValue] = useState('');
-
-    const handleColorChange = (color) => {
-        setQrColor(color.hex);
-    };
 
     useEffect(() => {
         let value = "";
@@ -56,18 +51,16 @@ const QR = () => {
                     fgColor={qrColor}
                 />
             </div>
-            <div className='absolute top-5 right-5'>
-                <InputColor initialValue="#000" onChange={handleColorChange} placement="right" />
-            </div>
             {qrText &&
                 <Draggable bounds="parent">
                     <span className='px-4 rounded-lg text-center cursor-pointer'
                         style={{
-                            ...qrFontStyle,
+                            fontSize: textSize,
                             color: textColor,
                             background: '#ccc',
                             opacity: 1,
                             position: 'absolute',
+                            fontFamily: qrFontStyle.fontFamily,
                         }}
                     >
                         {qrText}

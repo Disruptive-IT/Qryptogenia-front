@@ -4,8 +4,6 @@ import cloudinary from 'cloudinary';
 import bcrypt from "bcryptjs";
 import { sendVerificationChangeEmail, sendVerificationChangeNewEmail } from "../services/mail.service.js";
 
-
-
 const checkPassword = async (user, password) => {
   try {
     // Comparar la contraseña proporcionada con la contraseña almacenada en la base de datos usando bcrypt
