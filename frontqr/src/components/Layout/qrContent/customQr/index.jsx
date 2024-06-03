@@ -7,7 +7,6 @@ import Frame from './frame';
 import Logo from './logo';
 import QR from '../qrCode';
 import Design from './design';
-import { useQr } from '../../../../context/QrContext';
 
 const options = [
     { name: 'Text', component: Frame },
@@ -16,7 +15,6 @@ const options = [
 ];
 
 const CustomQr = () => {
-    const { qrBgColor} = useQr();
     const [selectedOptionIndex, setSelectedOptionIndex] = useState(0);
 
     const handleOptionSelect = (index) => {
@@ -26,11 +24,11 @@ const CustomQr = () => {
     const OptionComponent = options[selectedOptionIndex].component;
 
     return (
-        <div className='w-full h-[680px] rounded-md flex flex-col justify-between pb-4'>
-            <div className='h-[250px] w-[90%] mx-auto flex relative' style={{ backgroundColor: qrBgColor }}>
+        <div className='w-full h-[600px] rounded-md flex flex-col justify-between pb-4 '>
+            <div className='w-[90%] mx-auto flex relative mb-5'>
                 <QR />
             </div>
-            <div className='flex flex-col pt-5 min-h-[350px] '>
+            <div className='flex flex-col min-h-[350px]'>
                 <div className='space-x-3 mx-auto'>
                     {options.map((option, index) => (
                         <Button
@@ -43,13 +41,9 @@ const CustomQr = () => {
                     ))}
                 </div>
 
-                <div className='p-4 space-y-4 rounded-md w-[90%] mx-auto  '>
+                <div className='p-4 space-y-4 rounded-md w-[80%] mx-auto  '>
                     <OptionComponent onTabSelect={handleOptionSelect} />
                 </div>
-            </div>
-            <div className='flex justify-around mt-4'>
-                <Button variant="contained">Descargar PNG</Button>
-                <Button variant="contained">Descargar SVG</Button>
             </div>
         </div>
     );

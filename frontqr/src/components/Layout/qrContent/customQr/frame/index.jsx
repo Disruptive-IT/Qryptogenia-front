@@ -1,6 +1,5 @@
 import React from 'react';
 import InputText from '../StyleInput';
-import InputColor from 'react-input-color';
 import ScrollableFrameQrs from './scrollableFontText';
 import { useQr } from '../../../../../context/QrContext';
 import ScrollableChipText from './scrollableChipText';

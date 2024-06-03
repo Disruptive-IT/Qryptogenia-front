@@ -6,66 +6,119 @@ const useQrState = (initialQrType = '', initialQrProps = {}) => {
         qrText: '',
         qrFontStyle: {},
         qrColor: '#000000',
-        qrBgColor: '#fff',
+        qrBgColor: null,
         textColor: '#000000',
+        qrImageInfo: {
+            qrImage: null, 
+            qrImageCentered: false,
+            qrImagePositionX: 0,
+            qrImagePositionY: 0, 
+            qrIncludeMargin: false
+        },
         textSize: 16,
         qrProps: {
-            ...initialQrProps,
+          ...initialQrProps,
         },
     });
 
     const setQrData = (type, props) => {
         setQrState(prevState => ({
-            ...prevState,
+          ...prevState,
             qrType: type,
             qrProps: {
-                ...prevState.qrProps,
-                ...props,
+              ...prevState.qrProps,
+              ...props,
             },
         }));
     };
 
     const setQrText = (text) => {
         setQrState(prevState => ({
-            ...prevState,
+          ...prevState,
             qrText: text,
         }));
     };
 
     const setQrFontStyle = (style) => {
         setQrState(prevState => ({
-            ...prevState,
+          ...prevState,
             qrFontStyle: style,
         }));
     };
+
     const setQrColor = (color) => {
         setQrState(prevState => ({
-            ...prevState,
+          ...prevState,
             qrColor: color,
         }));
     };
+
     const setQrBgColor = (color) => {
         setQrState(prevState => ({
-            ...prevState,
+          ...prevState,
             qrBgColor: color,
         }));
     };
-    
+
     const setTextColor = (color) => {
         setQrState(prevState => ({
-            ...prevState,
+          ...prevState,
             textColor: color,
         }));
     };
 
     const setTextSize = (size) => {
         setQrState(prevState => ({
-            ...prevState,
+          ...prevState,
             textSize: size,
         }));
     };
 
-    return { ...qrState, setQrData, setQrText, setQrFontStyle, setQrColor, setQrBgColor, setTextColor, setTextSize };
+    const updateQrImageInfo = (newInfo) => {
+        setQrState(prevState => ({
+          ...prevState,
+            qrImageInfo: {
+              ...prevState.qrImageInfo,
+              ...newInfo,
+            },
+        }));
+    };
+
+    const setQrImage = (image) => {
+        updateQrImageInfo({ qrImage: image });
+    };
+
+    const setQrImageCentered = (centered) => {
+        updateQrImageInfo({ qrImageCentered: centered });
+    };
+
+    const setQrImagePositionX = (x) => {
+        updateQrImageInfo({ qrImagePositionX: x });
+    };
+
+    const setQrImagePositionY = (y) => {
+        updateQrImageInfo({ qrImagePositionY: y });
+    };
+
+    const setQrIncludeMargin = (margin) => {
+        updateQrImageInfo({ qrIncludeMargin: margin });
+    };
+    
+    return { 
+      ...qrState, 
+        setQrData, 
+        setQrText, 
+        setQrFontStyle, 
+        setQrImage, 
+        setQrColor, 
+        setQrBgColor, 
+        setTextColor, 
+        setTextSize, 
+        setQrImageCentered, 
+        setQrImagePositionX, 
+        setQrImagePositionY,
+        setQrIncludeMargin
+    };
 };
 
 export default useQrState;
