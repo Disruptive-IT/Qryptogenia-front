@@ -25,7 +25,7 @@ const AppContent = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
 
     useEffect(() => {
-        setActiveStep(0);
+        setActiveStep(1);
     }, []);
 
 

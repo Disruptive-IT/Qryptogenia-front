@@ -7,7 +7,7 @@ const HomePage = () => {
     const { setActiveStep } = useStepper();
 
     useEffect(() => {
-        setActiveStep(null);
+        setActiveStep(0);
     }, []);
 
     return (
