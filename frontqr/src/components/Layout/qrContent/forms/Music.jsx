@@ -207,7 +207,6 @@ export const MusicForm = ({ onFormChangeMusic }) => {
         >
             {({ setFieldValue }) => (
                 <Form className="max-w-4xl mx-auto mt-8 relative">
-                    <div className="p-6">
                         <h2 className="text-xl font-semibold mb-4">Social Qr</h2>
                         <div className="flex flex-col md:flex-row md:items-start md:mb-4">
                             <div className="flex flex-col w-full md:w-2/3 mr-6 mb-4 md:mb-0">
@@ -426,7 +425,6 @@ export const MusicForm = ({ onFormChangeMusic }) => {
                         <div className="flex items-center mb-4">
                             <button type="submit" className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600">Submit</button>
                         </div>
-                    </div>
                 </Form>
             )}
         </Formik>

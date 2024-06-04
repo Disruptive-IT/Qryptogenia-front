@@ -96,27 +96,10 @@ switch (contentName) {
             </div>
         );
         break;
-        case "website url":
-            phoneContent = (
-                <div>
-                    <WebLinkPhone title={"HOLA MUNDO"}
-                        textColor={"blue"} />
-                </div>
-            );
-            break;
-        case "pdf":
-            phoneContent = (
-                <div>
-                    <WebLinkPhone title={"HOLA MUNDO"}
-                        textColor={"blue"} />
-                </div>
-            );
-            break;
         case "news":
             phoneContent = (
                 <div>
-                    <WebLinkPhone title={"HOLA MUNDO"}
-                        textColor={"blue"} />
+                    <p>News</p>
                 </div>
             );
             break;
