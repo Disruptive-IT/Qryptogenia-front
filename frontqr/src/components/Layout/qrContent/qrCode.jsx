@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import QRCode from 'qrcode.react';
+import React, { useEffect, useRef } from 'react';
+import QRCodeStyling from 'qr-code-styling';
 import Draggable from 'react-draggable';
 import '../styles/qrCode.css';
 import { useQr } from '../../../context/QrContext';
@@ -7,8 +7,33 @@ import InputColor from 'react-input-color';
 
 const QR = () => {
     const { qrType, qrProps, qrFontStyle, qrColor, qrText, textColor, setQrColor } = useQr();
-    const { logoPosition, logoImage } = qrProps;
-    const [qrValue, setQrValue] = useState('');
+    const { logoPosition, logoImage, dotsType, cornersSquareType, cornersDotType } = qrProps;
+    const qrRef = useRef(null);
+    const qrCode = useRef(new QRCodeStyling({
+        width: 300,
+        height: 300,
+        data: '',
+        image: logoImage,
+        dotsOptions: {
+            color: qrColor,
+            type: dotsType || 'rounded'
+        },
+        cornersSquareOptions: {
+            color: qrColor,
+            type: cornersSquareType || 'extra-rounded'
+        },
+        cornersDotOptions: {
+            color: qrColor,
+            type: cornersDotType || 'dot'
+        },
+        backgroundOptions: {
+            color: "#ffffff",
+        },
+        imageOptions: {
+            crossOrigin: "anonymous",
+            margin: 20,
+        },
+    }));
 
     const handleColorChange = (color) => {
         setQrColor(color.hex);
@@ -32,30 +57,31 @@ const QR = () => {
             default:
                 value = "";
         }
-        setQrValue(value);
-    }, [qrType, qrProps]);
+        qrCode.current.update({
+            data: value,
+            image: logoImage,
+            dotsOptions: {
+                color: qrColor,
+                type: dotsType || 'rounded'
+            },
+            cornersSquareOptions: {
+                color: qrColor,
+                type: cornersSquareType || 'extra-rounded'
+            },
+            cornersDotOptions: {
+                color: qrColor,
+                type: cornersDotType || 'dot'
+            },
+        });
+    }, [qrType, qrProps, qrColor, dotsType, cornersSquareType, cornersDotType, logoImage]);
 
-    const imageSettings = logoPosition && !logoPosition.background ? {
-        src: logoImage,
-        x: logoPosition.x,
-        y: logoPosition.y,
-        height: 50,
-        width: 50,
-        excavate: true,
-    } : null;
+    useEffect(() => {
+        qrCode.current.append(qrRef.current);
+    }, []);
 
     return (
         <>
-            <div className="qr-wrapper m-auto">
-                {logoPosition && logoPosition.background && <img src={logoImage} style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', opacity: 0.6 }} />}
-                <QRCode
-                    value={qrValue}
-                    size={200}
-                    imageSettings={imageSettings}
-                    bgColor={"transparent"}
-                    fgColor={qrColor}
-                />
-            </div>
+            <div className="qr-wrapper m-auto" ref={qrRef}></div>
             <div className='absolute top-5 right-5'>
                 <InputColor initialValue="#000" onChange={handleColorChange} placement="right" />
             </div>

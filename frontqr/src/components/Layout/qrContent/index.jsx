@@ -98,8 +98,7 @@ switch (contentName) {
         case "website url":
             phoneContent = (
                 <div>
-                    <WebLinkPhone title={"HOLA MUNDO"}
-                        textColor={"blue"} />
+                    <WebLinkPhonePreview appFormValues={appFormValues}/>
                 </div>
             );
             break;

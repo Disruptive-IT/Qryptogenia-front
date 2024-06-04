@@ -1,27 +1,71 @@
 import { useState } from 'react';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
-import imgQr from '../../../../assets/imgs/qr.png';
 import ScrollableDesingQrs from './scrollableDesingQrs';
 import Frame from './frame';
 import Logo from './logo';
 import QR from '../qrCode';
 import { useQr } from '../../../../context/QrContext';
 
+const Design = ({ onTabSelect }) => {
+    const { setQrColor, setDotsType, setCornersSquareType, setCornersDotType } = useQr();
 
+    const handleColorChange = (event) => {
+        setQrColor(event.target.value);
+    };
 
-const Design = ({ onTabSelect }) => (
-    <>
-        <ScrollableDesingQrs onTabSelect={onTabSelect} />
-        <TextField
-            id="filled-secondary"
-            label="Color"
-            variant="filled"
-            color="secondary"
-            fullWidth
-        />
-    </>
-);
+    const handleDotsTypeChange = (event) => {
+        setDotsType(event.target.value);
+    };
+
+    const handleCornersSquareTypeChange = (event) => {
+        setCornersSquareType(event.target.value);
+    };
+
+    const handleCornersDotTypeChange = (event) => {
+        setCornersDotType(event.target.value);
+    };
+
+    return (
+        <>
+            <ScrollableDesingQrs onTabSelect={onTabSelect} />
+            <TextField
+                id="filled-secondary"
+                label="Color"
+                variant="filled"
+                color="secondary"
+                fullWidth
+                onChange={handleColorChange}
+            />
+            <div>
+                <label>Dots Type:</label>
+                <select onChange={handleDotsTypeChange}>
+                    <option value="rounded">Rounded</option>
+                    <option value="dots">Dots</option>
+                    <option value="classy">Classy</option>
+                    <option value="classy-rounded">Classy Rounded</option>
+                    <option value="square">Square</option>
+                    <option value="extra-rounded">Extra Rounded</option>
+                </select>
+            </div>
+            <div>
+                <label>Corners Square Type:</label>
+                <select onChange={handleCornersSquareTypeChange}>
+                    <option value="dot">Dot</option>
+                    <option value="square">Square</option>
+                    <option value="extra-rounded">Extra Rounded</option>
+                </select>
+            </div>
+            <div>
+                <label>Corners Dot Type:</label>
+                <select onChange={handleCornersDotTypeChange}>
+                    <option value="dot">Dot</option>
+                    <option value="square">Square</option>
+                </select>
+            </div>
+        </>
+    );
+};
 
 const options = [
     { name: 'Frame', component: Frame },
