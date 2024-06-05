@@ -166,10 +166,10 @@ export default function ChangeFrame({ name, appFormValues, socialFormValues, mus
                         <h2 className="text-center text-2xl font-bold mb-8">Preview QRytogenia</h2>
                         <CustomQr />
                     </div>
-                    <div className='absolute bottom-0 left-0 right-0 w-full bg-white py-4 flex justify-around items-center z-10'> 
+                    {/* <div className='absolute bottom-0 left-0 right-0 w-full bg-white py-4 flex justify-around items-center z-10'> 
                         <Button variant="contained">Descargar PNG</Button>
                         <Button variant="contained">Descargar SVG</Button>
-                    </div>
+                    </div> */}
                 </TabPanel>
             </Box>
         </section >

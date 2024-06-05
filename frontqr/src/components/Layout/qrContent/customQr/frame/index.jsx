@@ -1,6 +1,5 @@
 import React from 'react';
 import InputText from '../StyleInput';
-import ScrollableFrameQrs from './scrollableFontText';
 import { useQr } from '../../../../../context/QrContext';
 import ScrollableChipText from './scrollableChipText';
 import Input from '@mui/material/Input';

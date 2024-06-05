@@ -1,12 +1,50 @@
-import React, { useEffect, useState } from 'react';
-import QRCode from 'qrcode.react';
+import React, { useEffect, useRef } from 'react';
+import QRCodeStyling from 'qr-code-styling';
 import Draggable from 'react-draggable';
 import '../styles/qrCode.css';
 import { useQr } from '../../../context/QrContext';
+import InputColor from 'react-input-color';
+
 
 const QR = () => {
-    const { qrType, qrImageInfo, qrProps, qrBgColor, textSize, qrColor, qrText, textColor, qrFontStyle } = useQr();
-    const [qrValue, setQrValue] = useState('');
+    const { qrType, qrProps, qrFontStyle, qrColor, qrText, textColor, setQrColor } = useQr();
+    const { logoPosition, logoImage, dotsType, cornersSquareType, cornersDotType } = qrProps;
+    const qrRef = useRef(null);
+    const qrCode = useRef(null);
+
+    const handleColorChange = (color) => {
+        setQrColor(color.hex);
+    };
+
+    useEffect(() => {
+        if (!qrCode.current) {
+            qrCode.current = new QRCodeStyling({
+                width: 300,
+                height: 300,
+                data: '',
+                image: logoImage,
+                dotsOptions: {
+                    color: qrColor,
+                    type: dotsType || 'rounded'
+                },
+                cornersSquareOptions: {
+                    color: qrColor,
+                    type: cornersSquareType || 'extra-rounded'
+                },
+                cornersDotOptions: {
+                    color: qrColor,
+                    type: cornersDotType || 'dot'
+                },
+                backgroundOptions: {
+                    color: "#ffffff",
+                },
+                imageOptions: {
+                    crossOrigin: "anonymous",
+                    margin: 20,
+                },
+            });
+        }
+    }, []);
 
     useEffect(() => {
         let value = "";
@@ -26,40 +64,43 @@ const QR = () => {
             default:
                 value = "";
         }
-        setQrValue(value);
-    }, [qrType, qrProps]);
+        qrCode.current.update({
+            data: value,
+            image: logoImage,
+            dotsOptions: {
+                color: qrColor,
+                type: dotsType || 'rounded'
+            },
+            cornersSquareOptions: {
+                color: qrColor,
+                type: cornersSquareType || 'extra-rounded'
+            },
+            cornersDotOptions: {
+                color: qrColor,
+                type: cornersDotType || 'dot'
+            },
+        });
+    }, [qrType, qrProps, qrColor, dotsType, cornersSquareType, cornersDotType, logoImage]);
 
-    const imageSettings = qrImageInfo.qrImage? {
-        src: qrImageInfo.qrImage,
-        x: qrImageInfo.qrImageCentered? undefined : qrImageInfo.qrImagePositionX,
-        y: qrImageInfo.qrImageCentered? undefined : qrImageInfo.qrImagePositionY,
-        height: 50,
-        width: 50,
-        excavate: true,
-    } : null;
+    useEffect(() => {
+        qrCode.current.append(qrRef.current);
+    }, []);
 
     return (
         <>
-            <div className="qr-wrapper m-auto"  style={{ backgroundColor: qrBgColor }}>
-                <QRCode
-                    value={qrValue}
-                    size={200}
-                    imageSettings={imageSettings}
-                    bgColor={"transparent"}
-                    fgColor={qrColor}
-                    includeMargin={qrImageInfo.qrIncludeMargin}
-                />
+            <div className="qr-wrapper m-auto" ref={qrRef}></div>
+            <div className='absolute top-5 right-5'>
+                <InputColor initialValue="#000" onChange={handleColorChange} placement="right" />
             </div>
             {qrText &&
                 <Draggable bounds="parent">
                     <span className='px-4 rounded-lg text-center cursor-pointer'
                         style={{
-                            fontSize: textSize,
+                            ...qrFontStyle,
                             color: textColor,
                             background: '#ccc',
                             opacity: 1,
                             position: 'absolute',
-                            fontFamily: qrFontStyle.fontFamily,
                         }}
                     >
                         {qrText}
