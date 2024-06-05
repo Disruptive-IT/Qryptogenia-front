@@ -12,7 +12,7 @@ export const PdfUploadComponent = () => {
   }
 
   return (
-    <div className="flex flex-col items-center justify-center h-screen">
+    <div className="flex flex-col items-center justify-center ">
       <div className="text-5xl text-gray-700">
         <img src={pdf} className='w-36' />
       </div>
