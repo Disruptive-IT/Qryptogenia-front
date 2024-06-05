@@ -88,7 +88,8 @@ const QR = () => {
 
     return (
         <>
-            <div className="qr-wrapper m-auto" ref={qrRef}></div>
+            <div className="flex items-center justify-center w-full" ref={qrRef}>
+            </div>
             <div className='absolute top-5 right-5'>
                 <InputColor initialValue="#000" onChange={handleColorChange} placement="right" />
             </div>
