@@ -23,5 +23,19 @@
     "descriptionColor": "#E7473C",
     "image": "",
     "selectedOptions": ""
+  },
+  "musicFormValues": {
+    "title": "",
+    "description": "Lorem ipsum, or lipsum as it is sometimes known, is dummy text used in laying out print, graphic or web designs. The passage is attributed to an unknown typesetter in the 15th century who is thought to have scrambled parts of Ciceros De Finibus Bonorum et Malorum for",
+    "backgroundColor": "linear-gradient(180deg, rgb(0, 0, 0) 0.00%,rgb(50, 152, 153) 100.00%)",
+    "boxColor": "#F0F0F0",
+    "titleColor": "#820e0e",
+    "descriptionColor": "#bebdbd",
+    "image": "",
+    "selectedOptions": [
+      {"value": "deezer"},
+      {"value": "youtube"},
+      {"value": "soundcloud"}
+    ]
   }
 }

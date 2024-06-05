@@ -2,10 +2,9 @@ import * as React from 'react';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import Box from '@mui/material/Box';
-import imgQr from '../../../../assets/imgs/qr.png';
-import pattern1 from '../../../../assets/imgs/patter1.avif';
-import pattern2 from '../../../../assets/imgs/patter1.avif';
-import './style.css';
+import imgQr from '../../../../../assets/imgs/qr.png';
+import pattern1 from '../../../../../assets/imgs/patter1.avif';
+import pattern2 from '../../../../../assets/imgs/patter1.avif';
 
 const qrStyles = [
     { id: 1, color: 'transparent', borderColor: 'transparent', shape: 'none', backgroundType: 'none' },

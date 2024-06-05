@@ -1,250 +1,435 @@
-import React, { useState } from 'react';
-import axios from 'axios';
+import React, { useState, useRef, useEffect } from 'react';
+import { Formik, Form, Field } from "formik";
+import Select from 'react-select';
+import { SocialIcon } from 'react-social-icons'
+import { ImUpload2 } from "react-icons/im";
+import GradientColorPicker from 'react-gcolor-picker'; // Importamos el nuevo color picker
 
-const SpotifyPlaylistComponent = () => {
-    const [playlistUrl, setPlaylistUrl] = useState('');
-    const [accessToken, setAccessToken] = useState('');
-    const [playlistData, setPlaylistData] = useState(null);
-    const [playlistTracks, setPlaylistTracks] = useState([]);
-    const [error, setError] = useState(null);
+export const MusicForm = ({ onFormChangeMusic }) => {
+    const [title, setTitle] = useState('');
+    const [description, setDescription] = useState('');
+    const [borderColor, setBorderColor] = useState('#ffffff')
+    const [backgroundColor, setBackgroundColor] = useState('linear-gradient(180deg, rgb(0, 0, 0) 0.00%,rgb(50, 152, 153) 100.00%)')
+    const [boxColor, setBoxColor] = useState('linear-gradient(180deg, rgb(0, 0, 0) 0.00%,rgb(50, 152, 153) 100.00%)')
+    const [titleColor, setTitleColor] = useState('#ffffff');
+    const [descriptionColor, setDescriptionColor] = useState('#ffffff');
+    const [showTitleColorPicker, setShowTitleColorPicker] = useState(false);
+    const [showBorderColorPicker, setShowBorderColorPicker] = useState(false);
+    const [showDescriptionColorPicker, setShowDescriptionColorPicker] = useState(false);
+    const [showBackgroundColorPicker, setShowBackgroundColorPicker] = useState(false);
+    const [showBoxColorPicker, setShowBoxColorPicker] = useState(false);
+    const titleColorPickerRef = useRef(null);
+    const borderColorPickerRef = useRef(null);
+    const descriptionColorPickerRef = useRef(null);
+    const backgroundColorPickerRef = useRef(null);
+    const boxColorPickerRef = useRef(null);
+    const [selectedOptions, setSelectedOptions] = useState([]);
+    const [image, setImage] = useState(null); // Nueva parte del estado para la imagen
 
-    const clientId = '18098b15ae484da3b8a5245ecb6727fc';
-    const clientSecret = 'b8dfc66fb17643eaaa47586a4e2cb8e2';
-
-    const handleInputChange = (event) => {
-        setPlaylistUrl(event.target.value);
+    const handleTitleChange = (e) => {
+        setTitle(e.target.value);
+        onFormChangeMusic((prevValues) => ({ ...prevValues, title: e.target.value }));
     };
 
-    const handleSubmit = async (event) => {
-        event.preventDefault();
+    const handleDescriptionChange = (e) => {
+        setDescription(e.target.value);
+        onFormChangeMusic((prevValues) => ({ ...prevValues, description: e.target.value }));
+    };
 
-        try {
-            // Obtener el token de acceso
-            const authString = btoa(`${clientId}:${clientSecret}`);
-            const response = await axios.post(
-                'https://accounts.spotify.com/api/token',
-                'grant_type=client_credentials',
-                {
-                    headers: {
-                        Authorization: `Basic ${authString}`,
-                        'Content-Type': 'application/x-www-form-urlencoded',
-                    },
-                }
-            );
-            const accessToken = response.data.access_token;
-            setAccessToken(accessToken);
+    const handleBorderColorChange = (newHexCoor) => {
+        setBorderColor(newHexCoor);
+        onFormChangeMusic((prevValues) => ({ ...prevValues, borderColor: newHexCoor }));
+    };
 
-            // Obtener los datos de la playlist
-            const playlistId = playlistUrl.split('/').pop();
-            const playlistResponse = await axios.get(
-                `https://api.spotify.com/v1/playlists/${playlistId}`,
-                {
-                    headers: {
-                        Authorization: `Bearer ${accessToken}`,
-                    },
-                }
-            );
-            setPlaylistData(playlistResponse.data);
-            console.log(playlistResponse)
+    const handleBackgroundColorChange = (newHexColor) => {
+        setBackgroundColor(newHexColor);
+        onFormChangeMusic((prevValues) => ({ ...prevValues, backgroundColor: newHexColor }));
+    };
 
-            // Obtener los tracks de la playlist
-            const tracksResponse = await axios.get(
-                `https://api.spotify.com/v1/playlists/${playlistId}/tracks`,
-                {
-                    headers: {
-                        Authorization: `Bearer ${accessToken}`,
-                    },
-                }
-            );
-            setPlaylistTracks(tracksResponse.data.items);
-        } catch (error) {
-            setError(error.response.data);
+    const handleBoxColorChange = (newHexColor) => {
+        setBoxColor(newHexColor);
+        onFormChangeMusic((prevValues) => ({ ...prevValues, boxColor: newHexColor }));
+    };
+
+    const handleTitleColorChange = (newHexColor) => {
+        setTitleColor(newHexColor);
+        onFormChangeMusic((prevValues) => ({ ...prevValues, titleColor: newHexColor }));
+    };
+
+    const handleDescriptionColorChange = (newHexColor) => {
+        setDescriptionColor(newHexColor);
+        onFormChangeMusic((prevValues) => ({ ...prevValues, descriptionColor: newHexColor }));
+    };
+
+    const handleTitleClickOutside = (e) => {
+        if (titleColorPickerRef.current && !titleColorPickerRef.current.contains(e.target)) {
+            setShowTitleColorPicker(false);
+        }
+    };
+
+    const handleBorderClickOutside = (e) => {
+        if (borderColorPickerRef.current && !borderColorPickerRef.current.contains(e.target)) {
+            setShowBorderColorPicker(false);
+        }
+    };
+
+    const handleDescriptionClickOutside = (e) => {
+        if (descriptionColorPickerRef.current && !descriptionColorPickerRef.current.contains(e.target)) {
+            setShowDescriptionColorPicker(false);
+        }
+    };
+
+    const handleBackgroundClickOutside = (e) => {
+        if (backgroundColorPickerRef.current && !backgroundColorPickerRef.current.contains(e.target)) {
+            setShowBackgroundColorPicker(false);
+        }
+    };
+
+    const handleBoxClickOutside = (e) => {
+        if (boxColorPickerRef.current && !boxColorPickerRef.current.contains(e.target)) {
+            setShowBoxColorPicker(false);
+        }
+    };
+
+    useEffect(() => {
+        document.addEventListener('mousedown', handleTitleClickOutside);
+        document.addEventListener('mousedown', handleBorderClickOutside);
+        document.addEventListener('mousedown', handleDescriptionClickOutside);
+        document.addEventListener('mousedown', handleBackgroundClickOutside);
+        document.addEventListener('mousedown', handleBoxClickOutside);
+        return () => {
+            document.removeEventListener('mousedown', handleTitleClickOutside);
+            document.removeEventListener('mousedown', handleBorderClickOutside);
+            document.removeEventListener('mousedown', handleDescriptionClickOutside);
+            document.removeEventListener('mousedown', handleBackgroundClickOutside);
+            document.removeEventListener('mousedown', handleBoxClickOutside);
+        };
+    }, []);
+
+    const initialValues = {
+        title: '',
+        description: '',
+    };
+
+    const options = [
+        {
+            value: 'youtube', label: (
+                <div style={{ display: 'flex', alignItems: 'center' }}>
+                    <img style={{ marginRight: '5px', width: '25px', height: '25px' }} src="https://img.icons8.com/color/48/youtube-music.png" alt="youtube-music" />
+                    <span>YouTube Music</span>
+                </div>
+            ), icon: <img style={{ marginTop: '8px', marginRight: '5px', width: '40px', height: '40px' }} src="https://img.icons8.com/color/48/youtube-music.png" alt="youtube-music" />
+        },
+        {
+            value: 'soundcloud', label: (
+                <div style={{ display: 'flex', alignItems: 'center' }}>
+                    <img style={{ marginRight: '5px', width: '25px', height: '25px' }} src='https://img.icons8.com/?size=100&id=13669&format=png&color=000000'/>
+                    <span>SoundCloud</span>
+                </div>
+            ), icon: <img style={{ marginTop: '8px', marginRight: '5px', width: '40px', height: '40px' }} src='https://img.icons8.com/?size=100&id=13669&format=png&color=000000'/>
+        },
+        {
+            value: 'deezer', label: (
+                <div style={{ display: 'flex', alignItems: 'center' }}>
+                    <img width="25" height="25" style={{ marginRight: '5px' }} src="https://img.icons8.com/external-tal-revivo-bold-tal-revivo/48/external-deezer-a-french-online-music-streaming-service-logo-bold-tal-revivo.png" alt="external-deezer-a-french-online-music-streaming-service-logo-bold-tal-revivo"/>
+                    <span>Deezer</span>
+                </div>
+            ), icon: <img style={{ marginTop: '8px', marginRight: '5px', width: '40px', height: '40px' }} src='https://img.icons8.com/external-tal-revivo-bold-tal-revivo/48/external-deezer-a-french-online-music-streaming-service-logo-bold-tal-revivo.png'/>
+        },
+        {
+            value: 'spotify', label: (
+                <div style={{ display: 'flex', alignItems: 'center' }}>
+                    <img width="25" height="25" style={{ marginRight: '5px' }} src="https://img.icons8.com/?size=100&id=G9XXzb9XaEKX&format=png&color=000000"/>
+                    <span>Spotify</span>
+                </div>
+            ), icon: <img style={{ marginTop: '8px', marginRight: '5px', width: '40px', height: '40px' }} src='https://img.icons8.com/?size=100&id=lxwUaALAeQmr&format=png&color=000000'/>
+        },
+        {
+            value: 'amazon', label: (
+                <div style={{ display: 'flex', alignItems: 'center' }}>
+                    <img width="25" height="25" style={{ marginRight: '5px' }} src="https://img.icons8.com/?size=100&id=lxwUaALAeQmr&format=png&color=000000"/>
+                    <span>Amazon</span>
+                </div>
+            ), icon: <img style={{ marginTop: '8px', marginRight: '5px', width: '40px', height: '40px' }} src='https://img.icons8.com/?size=100&id=lxwUaALAeQmr&format=png&color=000000'/>
+        },
+        {
+            value: 'apple', label: (
+                <div style={{ display: 'flex', alignItems: 'center' }}>
+                    <img width="25" height="25" style={{ marginRight: '5px' }} src="https://img.icons8.com/?size=100&id=Bri4HBrgCsPa&format=png&color=000000"/>
+                    <span>Apple Music</span>
+                </div>
+            ), icon: <img style={{ marginTop: '8px', marginRight: '5px', width: '40px', height: '40px' }} src='https://img.icons8.com/?size=100&id=Bri4HBrgCsPa&format=png&color=000000'/>
+        },
+    ];
+
+    const fileInputRef = React.createRef();
+
+    const handleClick = () => {
+        fileInputRef.current.click();
+    };
+
+    const handleMultiSelectChange = (selectedOptions) => {
+        const updatedOptions = selectedOptions.map(option => ({
+            ...option,
+            url: ''
+        }));
+        setSelectedOptions(updatedOptions);
+        onFormChangeMusic((prevValues) => ({ ...prevValues, selectedOptions: updatedOptions }));
+    };
+
+    const handleUrlChange = (index, value) => {
+        const updatedOptions = [...selectedOptions];
+        updatedOptions[index].url = value;
+        setSelectedOptions(updatedOptions);
+        onFormChangeMusic((prevValues) => ({ ...prevValues, selectedOptions: updatedOptions }));
+    };
+
+    const handleImageChange = (e) => {
+        const file = e.target.files[0];
+        const reader = new FileReader();
+        reader.onloadend = () => {
+            setImage(reader.result);
+            onFormChangeMusic((prevValues) => ({ ...prevValues, image: reader.result }));
+        };
+        if (file) {
+            reader.readAsDataURL(file);
         }
     };
 
     return (
-        <div className="max-w-md mx-auto my-8 p-6 bg-gray-100 rounded-lg shadow-md">
-            <form onSubmit={handleSubmit} className="mb-4">
-                <label className="block mb-2">
-                    Ingresa el enlace:
-                    <input
-                        type="text"
-                        value={playlistUrl}
-                        onChange={handleInputChange}
-                        className="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200"
-                    />
-                </label>
-                <button
-                    type="submit"
-                    className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 focus:outline-none focus:ring focus:ring-blue-200"
-                >
-                    Submit
-                </button>
-            </form>
-            {playlistData && (
-                <div>
-                    <h2>Información de la Playlist:</h2>
-                    <p>Nombre: {playlistData.name}</p>
-                    <p>Descripción: {playlistData.description}</p>
-                    <p>Propietario: {playlistData.owner.display_name}</p>
-                    {/* Agrega más información de la playlist según tus necesidades */}
-                </div>
-            )}
+        <Formik
+            initialValues={initialValues}
+            onSubmit={(values, actions) => {
+                // Handle form submission logic here
+                console.log(values);
+                actions.setSubmitting(false);
+            }}
+        >
+            {({ setFieldValue }) => (
+                <Form className="max-w-4xl mx-auto mt-8 relative">
+                        <h2 className="text-xl font-semibold mb-4">Social Qr</h2>
+                        <div className="flex flex-col md:flex-row md:items-start md:mb-4">
+                            <div className="flex flex-col w-full md:w-2/3 mr-6 mb-4 md:mb-0">
+                                <label htmlFor="title" className="mb-2">Title:</label>
+                                <Field
+                                    type="text"
+                                    id="title"
+                                    placeholder="Title"
+                                    className="border w-full border-gray-300 rounded p-2"
+                                    value={title}
+                                    maxLength="16"
+                                    onChange={handleTitleChange}
+                                />
+                            </div>
+                            <div className="flex flex-col relative">
+                                <label htmlFor="titleColor" className="mb-2">Color:</label>
+                                <div className="flex items-center">
+                                    <div
+                                        className="w-20 md:w-10 h-10 border border-gray-300 rounded cursor-pointer"
+                                        style={{ background: titleColor }}
+                                        onClick={() => setShowTitleColorPicker(!showTitleColorPicker)}
+                                    ></div>
+                                    {showTitleColorPicker && (
+                                        <div className="absolute mt-2 left-0 top-full z-50" ref={titleColorPickerRef}>
+                                            <GradientColorPicker
+                                                enableAlpha={true}
+                                                disableHueSlider={false}
+                                                disableAlphaSlider={false}
+                                                disableInput={false}
+                                                disableHexInput={false}
+                                                disableRgbInput={false}
+                                                disableAlphaInput={false}
+                                                presetColors={[]}
+                                                gradient={true}
+                                                color={titleColor}
+                                                onChange={handleTitleColorChange}
+                                            />
+                                        </div>
+                                    )}
+                                </div>
+                            </div>
+                        </div>
 
-            <div className="mb-4 max-h-60 overflow-y-auto">
-                {playlistData && playlistData.tracks && (
-                    <div>
-                        <h2>Canciones de la Playlist:</h2>
-                        <ul>
-                            {playlistData.tracks.items.map((track, index) => (
-                                <li key={index} style={{ display: 'flex', alignItems: 'center', marginBottom: '10px' }}>
-                                    <img src={track.track.album.images[0].url} alt={track.track.album.name} style={{ width: '40px', height: '40px', marginRight: '10px' }} />
-                                    <div style={{ flexGrow: '1' }}>
-                                        <p>{track.track.name}</p>
-                                        <p>{track.track.album.name}</p>
-                                        <p>{convertMillisecondsToMinutes(track.track.duration_ms)}</p>
+                        <div className="flex flex-col md:flex-row md:items-start md:mb-4 mt-4">
+                            <div className="flex flex-col w-full md:w-2/3 mr-6 mb-4 md:mb-0">
+                                <label htmlFor="description" className="mb-2">Description:</label>
+                                <Field
+                                    as="textarea"
+                                    rows="5"
+                                    type="text"
+                                    placeholder="Description"
+                                    maxLength="207"
+                                    id="description"
+                                    className="w-full min-h-20 max-h-40 border border-gray-300 rounded p-2"
+                                    value={description}
+                                    onChange={handleDescriptionChange}
+                                />
+                            </div>
+                            <div className="flex flex-col relative">
+                                <label htmlFor="descriptionColor" className="mb-2">Color:</label>
+                                <div className="flex items-center">
+                                    <div
+                                        className="w-20 md:w-10 h-10 border border-gray-300 rounded cursor-pointer"
+                                        style={{ background: descriptionColor }}
+                                        onClick={() => setShowDescriptionColorPicker(!showDescriptionColorPicker)}
+                                    ></div>
+                                    {showDescriptionColorPicker && (
+                                        <div className="absolute mt-2 left-0 top-full z-50" ref={descriptionColorPickerRef}>
+                                            <GradientColorPicker
+                                                enableAlpha={true}
+                                                disableHueSlider={false}
+                                                disableAlphaSlider={false}
+                                                disableInput={false}
+                                                disableHexInput={false}
+                                                disableRgbInput={false}
+                                                disableAlphaInput={false}
+                                                presetColors={[]}
+                                                gradient={true}
+                                                color={descriptionColor}
+                                                onChange={handleDescriptionColorChange}
+                                            />
+                                        </div>
+                                    )}
+                                </div>
+                            </div>
+                        </div>
+
+                        <div className="flex flex-col md:flex-row md:items-start md:mb-4">
+                            <div className="w-full md:w-2/3 mr-6 mb-4 md:mb-0">
+                                <label htmlFor="backgroundColor" className="mb-2">Background Color:</label>
+                                <div className="flex items-center relative">
+                                    <div
+                                        className="w-20 md:w-16 h-10 border border-gray-300 rounded cursor-pointer"
+                                        style={{ background: backgroundColor }}
+                                        onClick={() => setShowBackgroundColorPicker(!showBackgroundColorPicker)}
+                                    ></div>
+                                    {showBackgroundColorPicker && (
+                                        <div className="absolute mt-2 left-0 z-50" ref={backgroundColorPickerRef}>
+                                            <GradientColorPicker
+                                                enableAlpha={true}
+                                                disableHueSlider={false}
+                                                disableAlphaSlider={false}
+                                                disableInput={false}
+                                                disableHexInput={false}
+                                                disableRgbInput={false}
+                                                disableAlphaInput={false}
+                                                presetColors={[]}
+                                                gradient={true}
+                                                color={backgroundColor}
+                                                onChange={handleBackgroundColorChange}
+                                                style={{ width: "calc(100% + 2rem)" }} // Ajuste del ancho
+                                            />
+                                        </div>
+                                    )}
+                                </div>
+                                <div className="flex flex-col space-y-4 pt-4">
+                                    <label>Upload Image:</label>
+                                    <input type="file" className="hidden" ref={fileInputRef} accept="image/*" onChange={handleImageChange} />
+                                    <button
+                                        onClick={handleClick}
+                                        className="text-blue-500 hover:text-blue-600 focus:outline-none"
+                                    >
+                                        <ImUpload2 size="30" />
+                                    </button>
+                                    {image && <img src={image} width="30" />}
+                                </div>
+                            </div>
+                            <div className="w-full md:w-2/3 mt-4 md:mt-0">
+                                <label htmlFor="boxColor" className="mb-2">Box Color:</label>
+                                <div className="flex items-center relative">
+                                    <div
+                                        className="w-20 md:w-16 h-10 border border-gray-300 rounded cursor-pointer"
+                                        style={{ background: boxColor }}
+                                        onClick={() => setShowBoxColorPicker(!showBoxColorPicker)}
+                                    ></div>
+                                    {showBoxColorPicker && (
+                                        <div className="absolute mt-2 left-0 z-50" ref={boxColorPickerRef}>
+                                            <GradientColorPicker
+                                                enableAlpha={true}
+                                                disableHueSlider={false}
+                                                disableAlphaSlider={false}
+                                                disableInput={false}
+                                                disableHexInput={false}
+                                                disableRgbInput={false}
+                                                disableAlphaInput={false}
+                                                presetColors={[]}
+                                                gradient={true}
+                                                color={boxColor}
+                                                onChange={handleBoxColorChange}
+                                                style={{ width: "calc(100% + 2rem)" }} // Ajuste del ancho
+                                            />
+                                        </div>
+
+                                    )}
+
+                                </div>
+                                <div className='pt-4'>
+                                    <label htmlFor="boxColor" className="mb-2">Border Profile Color:</label>
+                                    <div className="flex items-center relative">
+                                        <div
+                                            className="w-20 md:w-16 h-10 border border-gray-300 rounded cursor-pointer"
+                                            style={{ background: borderColor }}
+                                            onClick={() => setShowBorderColorPicker(!showBorderColorPicker)}
+                                        ></div>
+                                        {showBorderColorPicker && (
+                                            <div className="absolute mt-2 left-0 z-50" ref={borderColorPickerRef}>
+                                                <GradientColorPicker
+                                                    enableAlpha={true}
+                                                    disableHueSlider={false}
+                                                    disableAlphaSlider={false}
+                                                    disableInput={false}
+                                                    disableHexInput={false}
+                                                    disableRgbInput={false}
+                                                    disableAlphaInput={false}
+                                                    presetColors={[]}
+                                                    gradient={true}
+                                                    color={borderColor}
+                                                    onChange={handleBorderColorChange}
+                                                    style={{ width: "calc(100% + 2rem)" }} // Ajuste del ancho
+                                                />
+                                            </div>
+                                        )}
                                     </div>
-                                </li>
-                            ))}
-                        </ul>
-                    </div>
-                )}
-            </div>
+                                </div>
+                            </div>
+                        </div>
 
+                        <div className="flex flex-col md:flex-row md:items-center mb-4 mt-4">
+                            <div className="w-full md:w-2/3">
+                                <label htmlFor="multiselect" className="mb-2">Multiselect:</label>
+                                <Select
+                                    id="multiselect"
+                                    options={options}
+                                    isMulti
+                                    className="basic-multi-select w-full"
+                                    classNamePrefix="select"
+                                    onChange={handleMultiSelectChange}
+                                />
+                            </div>
+                        </div>
 
-            {error && (
-                <div>
-                    <h2 className="text-lg font-semibold mb-1">Error:</h2>
-                    <p>{error}</p>
-                </div>
+                        {selectedOptions.map((option, index) => (
+                            <div className="flex items-center mb-4" key={option.value}>
+                                <label htmlFor={`input_${option.value}`} className="mb-2">{option.icon}</label>
+                                <Field
+                                    type="text"
+                                    id={`input_${option.value}`}
+                                    name={`input_${option.value}`}
+                                    placeholder={`https://www.${option.value}.com`}
+                                    className="w-80 border border-gray-300 rounded p-2 ml-2"
+                                    onChange={(e) => handleUrlChange(index, e.target.value)}
+                                />
+                            </div>
+                        ))}
+
+                        <div className="flex items-center mb-4">
+                            <button type="submit" className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600">Submit</button>
+                        </div>
+                </Form>
             )}
-        </div>
+        </Formik>
+
     );
 };
 
-function convertMillisecondsToMinutes(milliseconds) {
-    const minutes = Math.floor(milliseconds / 60000);
-    const seconds = ((milliseconds % 60000) / 1000).toFixed(0);
-    return minutes + ":" + (seconds < 10 ? '0' : '') + seconds;
-}
-
-
-export const YouTubePlaylistComponent = () => {
-    const [playlistUrl, setPlaylistUrl] = useState('');
-    const [playlistData, setPlaylistData] = useState(null);
-    const [playlistItems, setPlaylistItems] = useState([]);
-    const [error, setError] = useState(null);
-
-    const API_KEY = 'AIzaSyCLZBS1HdgzrSe6FOZZCHjK6MP-eSDDqqQ';
-
-    const handleInputChange = (event) => {
-        setPlaylistUrl(event.target.value);
-    };
-
-    const handleSubmit = async (event) => {
-        event.preventDefault();
-
-        try {
-            const playlistId = extractPlaylistId(playlistUrl);
-            
-            // Verificar si se pudo extraer el ID de la lista de reproducción
-            if (!playlistId) {
-                throw new Error('No se pudo extraer el ID de la lista de reproducción');
-            }
-    
-            // Continuar con la solicitud HTTP
-            const playlistResponse = await axios.get(
-                `https://www.googleapis.com/youtube/v3/playlists?id=${playlistId}&key=${API_KEY}&part=snippet`
-            );
-            setPlaylistData(playlistResponse.data.items[0].snippet);
-    
-            const playlistItemsResponse = await axios.get(
-                `https://www.googleapis.com/youtube/v3/playlistItems?playlistId=${playlistId}&key=${API_KEY}&part=snippet&maxResults=50`
-            );
-            setPlaylistItems(playlistItemsResponse.data.items);
-        } catch (error) {
-            setError(error.message); // Usar error.message para obtener el mensaje de error
-        }
-    };
-    console.log(playlistItems)
-
-    const extractPlaylistId = (url) => {
-        // Patrones de URL de lista de reproducción de YouTube
-        const patterns = [
-            /(?:https?:\/\/)?(?:www\.)?youtube\.com\/playlist\?list=([a-zA-Z0-9_-]+)/,
-            /(?:https?:\/\/)?(?:www\.)?youtube\.com\/watch\?v=([a-zA-Z0-9_-]+)&list=([a-zA-Z0-9_-]+)/,
-            /(?:https?:\/\/)?(?:www\.)?youtu\.be\/([a-zA-Z0-9_-]+)\?list=([a-zA-Z0-9_-]+)/
-        ];
-    
-        // Intentar encontrar el ID de la lista de reproducción en la URL
-        for (const pattern of patterns) {
-            const match = url.match(pattern);
-            if (match) {
-                return match[1]; // Devolver el primer grupo de captura (ID de lista de reproducción)
-            }
-        }
-    
-        // Si no se encontró un ID de lista de reproducción válido en la URL
-        return null;
-    };
-
-    return (
-        <div className="max-w-md mx-auto my-8 p-6 bg-gray-100 rounded-lg shadow-md">
-            <form onSubmit={handleSubmit} className="mb-4">
-                <label className="block mb-2">
-                    Ingresa el enlace:
-                    <input
-                        type="text"
-                        value={playlistUrl}
-                        onChange={handleInputChange}
-                        className="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200"
-                    />
-                </label>
-                <button
-                    type="submit"
-                    className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 focus:outline-none focus:ring focus:ring-blue-200"
-                >
-                    Submit
-                </button>
-            </form>
-            {playlistData && (
-                <div>
-                    <h2>Información de la Lista de Reproducción:</h2>
-                    <p>Nombre: {playlistData.title}</p>
-                    <p>Descripción: {playlistData.description}</p>
-                    {/* Agrega más información de la lista de reproducción según tus necesidades */}
-                </div>
-            )}
-
-            <div className="mb-4 max-h-60 overflow-y-auto">
-                {playlistItems.length > 0 && (
-                    <div>
-                        <h2>Canciones de la Lista de Reproducción:</h2>
-                        <ul>
-                        {playlistItems.map((item, index) => (
-    <li key={index} style={{ display: 'flex', alignItems: 'center', marginBottom: '10px' }}>
-        {item.snippet.thumbnails && item.snippet.thumbnails.default && item.snippet.thumbnails.default.url && (
-            <img src={item.snippet.thumbnails.default.url} alt={item.snippet.title} style={{ width: '40px', height: '40px', marginRight: '10px' }} />
-        )}
-        <div style={{ flexGrow: '1' }}>
-            <p>{item.snippet.title}</p>
-        </div>
-    </li>
-))}
-                        </ul>
-                    </div>
-                )}
-            </div>
-
-            {error && (
-                <div>
-                    <h2 className="text-lg font-semibold mb-1">Error:</h2>
-                    <p>{error}</p>
-                </div>
-            )}
-        </div>
-    );
-};
-
-
-
+export default MusicForm;

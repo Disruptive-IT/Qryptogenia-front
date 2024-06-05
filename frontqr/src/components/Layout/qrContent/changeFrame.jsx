@@ -1,6 +1,7 @@
 import * as React from 'react';
 import PropTypes from 'prop-types';
 import { useTheme } from '@mui/material/styles';
+import useMediaQuery from '@mui/material/useMediaQuery';
 import AppBar from '@mui/material/AppBar';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import Tabs from '@mui/material/Tabs';
@@ -65,17 +66,31 @@ const fabGreenStyle = {
 
 
 
-export default function ChangeFrame( {name, appFormValues, socialFormValues}) {
+export default function ChangeFrame({ name, appFormValues, socialFormValues, musicFormValues }) {
     const { contentName } = useParams();
     const theme = useTheme();
-    const [value, setValue] = React.useState(0);
+    const isSmallScreen = useMediaQuery(theme.breakpoints.down(1023)); // Detecta si la pantalla es pequeña
+    const isSpecialContent = ['pdf', 'website-url'].includes(contentName.toLowerCase()); // Verifica si contentName es "pdf" o "url"
+    const [value, setValue] = React.useState((isSmallScreen || isSpecialContent) ? 1 : 0); // Inicializa en el tab de "QR" si la pantalla es pequeña o el contentName es especial
+    const [isTabClickable, setIsTabClickable] = React.useState(true);
+
+    console.log(contentName)
+
+    React.useEffect(() => {
+        if (isSmallScreen || isSpecialContent) {
+            setValue(1); // Cambia al tab de "QR" si la pantalla es pequeña o el contentName es especial
+            setIsTabClickable(false); // Hace el tab "QR" no clickeable
+        } else {
+            setValue(0); // Cambia al tab de "Phone" si la pantalla es grande y el contentName no es especial
+            setIsTabClickable(true); // Hace los tabs clickeables
+        }
+    }, [isSmallScreen, isSpecialContent]);
+
     const handleChange = (event, newValue) => {
         setValue(newValue);
     };
 
     const content = contentTexts[contentName.toLowerCase().replace(/\s+/g, '-')];
-    // const name = contentName.replace(/-/g, ' ');
-
     if (!content) {
         return <NotFoundPage />;
     }
@@ -108,7 +123,7 @@ export default function ChangeFrame( {name, appFormValues, socialFormValues}) {
 
     return (
         <section className="relative w-full h-full bg-white shadow-xl rounded-xl">
-            <Box className="flex justify-center flex-col items-center">
+            <Box className="flex justify-center items-center flex-col w-full h-full">
                 <AppBar position="static" sx={{ background: "transparent", textAlign: "center", borderRadius: "20px 20px 0 0", boxShadow: "0 0 10px 0 #ccc" }} >
                     <Tabs
                         value={value}
@@ -125,19 +140,30 @@ export default function ChangeFrame( {name, appFormValues, socialFormValues}) {
                             },
                         }}
                     >
-                        <Tab label="Phone" {...a11yProps(1)} />
-                        <Tab label="QR" {...a11yProps(1)} />
+                        {!(isSmallScreen || isSpecialContent) && <Tab label="Phone" />}  {/* Oculta el tab "Phone" en pantallas pequeñas o para contentName especial */}
+                        <Tab label="QR" disabled={!isTabClickable} />
                     </Tabs>
                 </AppBar>
-                <TabPanel value={value} index={0} dir={theme.direction} className="w-[450px]">
-                    <h2 className="text-center text-2xl font-bold mb-8">Preview CellPhone</h2>
-                    <CellBox>
-                         <PhoneContentSwitch contentName={name} appFormValues={appFormValues} socialFormValues={socialFormValues}/>
-                    </CellBox>
-                </TabPanel>
-                <TabPanel value={value} index={1} dir={theme.direction} sx={{ width: '100%', maxWidth: '500px' }}>
-                    <h2 className="text-center text-2xl font-bold mb-8">Preview QRytogenia</h2>
-                    <CustomQr />
+                {!(isSmallScreen || isSpecialContent) && (
+                    <TabPanel value={value} index={0} dir={theme.direction} className="w-full flex justify-center">
+                        <div className="w-full max-w-[450px]">
+                            <h2 className="text-center text-2xl font-bold mb-8">Preview CellPhone</h2>
+                            <CellBox className="w-full">
+                                <PhoneContentSwitch
+                                    contentName={name}
+                                    appFormValues={appFormValues}
+                                    socialFormValues={socialFormValues}
+                                    musicFormValues={musicFormValues}
+                                />
+                            </CellBox>
+                        </div>
+                    </TabPanel>
+                )}
+                <TabPanel value={value} index={1} dir={theme.direction} className="w-full flex justify-center">
+                    <div className="w-full max-w-[500px]">
+                        <h2 className="text-center text-2xl font-bold mb-8">Preview QRytogenia</h2>
+                        <CustomQr />
+                    </div>
                 </TabPanel>
 
                 {/* {fabs.map((fab, index) => (
