@@ -31,6 +31,10 @@ export const AuthProvider = ({ children }) => {
         await loadProfileImage();
     };
 
+    useEffect(() => {
+        auth.checkToken();
+    }, []);
+
     return (
         <AuthContext.Provider value={{...auth, profileImage, updateProfileImage}}>
             {children}

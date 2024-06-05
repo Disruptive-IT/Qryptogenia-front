@@ -33,12 +33,14 @@ export default function UserProfileMenu() {
                 onClose={handleCloseUserMenu} 
             >
                 <MenuItem onClick={handleCloseUserMenu}>
-                    <RouterLink to="/admin/profile" style={{ textDecoration: 'none', color: 'inherit' }}>
+                    <RouterLink to="/user/profile" style={{ textDecoration: 'none', color: 'inherit' }}>
                         <Typography textAlign="center">Profile</Typography>
                     </RouterLink>
                 </MenuItem>
-                <MenuItem onClick={() => { logoutUser(); handleCloseUserMenu(); }}>
-                    <Typography textAlign="center">Logout</Typography>
+                <MenuItem onClick={handleCloseUserMenu}>
+                    <RouterLink to="/user/qr" style={{ textDecoration: 'none', color: 'inherit' }}>
+                        <Typography textAlign="center">Qr's</Typography>
+                    </RouterLink>
                 </MenuItem>
             </Menu>
         </>

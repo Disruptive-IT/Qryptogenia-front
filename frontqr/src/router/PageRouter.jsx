@@ -1,9 +1,8 @@
-import { Navigate, Route, Router, Routes } from "react-router-dom";
+import { Navigate, Route, Routes } from "react-router-dom";
 import Dashboard from "../pages/Admin/Dashboard";
 import Profile from "../pages/Admin/profile/profilePage";
 import LoginForm from "../pages/Auth/LoginForm";
 import HomePage from "../pages/HomePage";
-import UserHome from "../pages/user/UserHome";
 import ProtectedRouteAdmin from "./ProtectedRouteAdmin";
 import ProtectedRouteClient from "./ProtectedRouteClient";
 import ProtectedRoutePublic from "./ProtectedRoutePublic";
@@ -18,26 +17,27 @@ import LayoutUser from "../pages/templates/User/Layout";
 import { useLoader } from '../context/LoaderContext';
 import Loader from '../components/UI/loader/Loader';
 import AppContent from "../pages/AppContent";
+import App from "../pages/tableqr/app";
+import { useAuthContext } from "../context/AuthContext";
 
 export const PageRouter = () => {
     const { isLoading } = useLoader();
+    const { user } = useAuthContext();
 
     return (
         <>
             <Routes>
                 {/* Home Routes */}
+                <Route path="/" element={<LayoutHome />}>
+                    <Route index element={<HomePage />} />
+                    <Route path="login" element={user ? <Navigate to="/user/home" replace /> : <LoginForm />} />
+                    <Route path="register" element={user ? <Navigate to="/user/home" replace /> : <RegisterForm />} />
+                    <Route path="recoverPassword" element={user ? <Navigate to="/user/home" replace /> : <RecoverPassForm />} />
+                    <Route path="forgotPassword" element={user ? <Navigate to="/user/home" replace /> : <ForgotPassForm />} />
+                </Route>
 
-                <Route path="/" element={<ProtectedRoutePublic />}>
-                    <Route element={<LayoutHome />}>
-                        <Route index element={<Navigate to="/home" replace />} />
-                        <Route path="home" element={<HomePage />} />
-                        <Route path="login" element={<LoginForm />} />
-                        <Route path="register" element={<RegisterForm />} />
-                        <Route path="recoverPassword" element={<RecoverPassForm />} />
-                        <Route path="forgotPassword" element={<ForgotPassForm />} />
-                        
-                        <Route path="/qr/:contentName" element={<AppContent />} />
-                    </Route>
+                <Route path="/qr/:contentName" element={user ? <LayoutUser /> : <LayoutHome />}>
+                    <Route index element={<AppContent />} />
                 </Route>
 
                 {/* Admin Routes */}
@@ -52,12 +52,14 @@ export const PageRouter = () => {
                 {/* User Routes */}
                 <Route path="/user" element={<ProtectedRouteClient />}>
                     <Route element={<LayoutUser />}>
-                        <Route index element={<Navigate to="/home" replace />} />
-                        <Route path="home" element={<UserHome />} />
-                        <Route path="profile" element={<Profile />} />      
+                        <Route index element={<HomePage />} />
+                        <Route path="home" element={<HomePage />} />
+                        <Route path="profile" element={<Profile />} />
+                        <Route path="qr" element={<App />} />      
                     </Route>
                 </Route>
 
+                {/* 404 Route */}
                 <Route path="*" element={<NotFoundPage />} />
             </Routes>
             {isLoading && <Loader />}
