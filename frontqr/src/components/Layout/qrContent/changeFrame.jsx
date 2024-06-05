@@ -15,9 +15,11 @@ import UpIcon from '@mui/icons-material/KeyboardArrowUp';
 import { green } from '@mui/material/colors';
 import Box from '@mui/material/Box';
 import CellBox from './cellBox';
-import { PhoneContentSwitch} from '.';
+import { PhoneContentSwitch } from '.';
 import { contentTexts } from './contentData';
 import CustomQr from './customQr';
+import Button from '@mui/material/Button';
+import './index.css'
 
 function TabPanel(props) {
     const { children, value, index, ...other } = props;
@@ -159,30 +161,16 @@ export default function ChangeFrame({ name, appFormValues, socialFormValues, mus
                         </div>
                     </TabPanel>
                 )}
-                <TabPanel value={value} index={1} dir={theme.direction} className="w-full flex justify-center">
-                    <div className="w-full max-w-[500px]">
+                <TabPanel value={value} index={1} dir={theme.direction} className="w-full flex justify-center cont-custom-qr overflow-y-scroll">
+                    <div className="w-full max-w-[500px] relative">
                         <h2 className="text-center text-2xl font-bold mb-8">Preview QRytogenia</h2>
                         <CustomQr />
                     </div>
+                    <div className='absolute bottom-0 left-0 right-0 w-full bg-white py-4 flex justify-around items-center z-10'> 
+                        <Button variant="contained">Descargar PNG</Button>
+                        <Button variant="contained">Descargar SVG</Button>
+                    </div>
                 </TabPanel>
-
-                {/* {fabs.map((fab, index) => (
-                    <Zoom
-                        key={fab.color}
-                        in={value === index}
-                        timeout={transitionDuration}
-                        style={{
-                            position: "absolute",
-                            top:60,
-                            transitionDelay: `${value === index ? transitionDuration.exit : 0}ms`,
-                        }}
-                        unmountOnExit
-                    >
-                        <Fab sx={fab.sx} aria-label={fab.label} color={fab.color}>
-                            {fab.icon}
-                        </Fab>
-                    </Zoom>
-                ))} */}
             </Box>
         </section >
     );

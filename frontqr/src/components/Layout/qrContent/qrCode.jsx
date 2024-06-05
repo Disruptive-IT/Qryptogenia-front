@@ -5,8 +5,7 @@ import '../styles/qrCode.css';
 import { useQr } from '../../../context/QrContext';
 
 const QR = () => {
-    const { qrType, qrProps, textSize, qrColor, qrText, textColor, qrFontStyle } = useQr();
-    const { logoPosition, logoImage } = qrProps;
+    const { qrType, qrImageInfo, qrProps, qrBgColor, textSize, qrColor, qrText, textColor, qrFontStyle } = useQr();
     const [qrValue, setQrValue] = useState('');
 
     useEffect(() => {
@@ -30,10 +29,10 @@ const QR = () => {
         setQrValue(value);
     }, [qrType, qrProps]);
 
-    const imageSettings = logoPosition && !logoPosition.background ? {
-        src: logoImage,
-        x: logoPosition.x,
-        y: logoPosition.y,
+    const imageSettings = qrImageInfo.qrImage? {
+        src: qrImageInfo.qrImage,
+        x: qrImageInfo.qrImageCentered? undefined : qrImageInfo.qrImagePositionX,
+        y: qrImageInfo.qrImageCentered? undefined : qrImageInfo.qrImagePositionY,
         height: 50,
         width: 50,
         excavate: true,
@@ -41,14 +40,14 @@ const QR = () => {
 
     return (
         <>
-            <div className="qr-wrapper m-auto">
-                {logoPosition && logoPosition.background && <img src={logoImage} style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', opacity: 0.6 }} />}
+            <div className="qr-wrapper m-auto"  style={{ backgroundColor: qrBgColor }}>
                 <QRCode
                     value={qrValue}
                     size={200}
                     imageSettings={imageSettings}
                     bgColor={"transparent"}
                     fgColor={qrColor}
+                    includeMargin={qrImageInfo.qrIncludeMargin}
                 />
             </div>
             {qrText &&

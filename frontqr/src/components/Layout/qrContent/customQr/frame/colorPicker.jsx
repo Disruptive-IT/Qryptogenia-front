@@ -35,7 +35,7 @@ export const ColorPicker = ({ setColor }) => {
                 style={{ background: selectColor }}
                 onClick={ShowColorPicker}
             ></div>
-            <div ref={colorPickerRef} className='absolute left-[-300px] top-[-300px] w-[30px]'>
+            <div ref={colorPickerRef} className='absolute left-[-150px] top-[0px] w-[30px]'>
                 {showColorPicker && (<GradientColorPicker
                     enableAlpha={true}
                     disableHueSlider={false}
