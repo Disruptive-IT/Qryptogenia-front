@@ -87,7 +87,7 @@ const CustomQr = () => {
             <div className='h-[250px] flex relative '>
                 <QR />
             </div>
-            <div className='flex flex-col pt-5 '>
+            <div className='flex flex-col h-[390px] pt-5 '>
                 <div className='space-x-3 mx-auto'>
                     {options.map((option, index) => (
                         <Button
@@ -99,15 +99,10 @@ const CustomQr = () => {
                         </Button>
                     ))}
                 </div>
-
                 <div className='p-4 space-y-4 rounded-md  '>
                     <OptionComponent onTabSelect={handleOptionSelect} />
                 </div>
             </div>
-            {/* <div className='flex justify-around mt-4'>
-                <Button variant="contained">Descargar PNG</Button>
-                <Button variant="contained">Descargar SVG</Button>
-            </div> */}
         </div>
     );
 }
