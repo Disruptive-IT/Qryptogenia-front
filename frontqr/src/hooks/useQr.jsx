@@ -4,10 +4,6 @@ const useQrState = (initialQrType = '', initialQrProps = {}) => {
     const [qrState, setQrState] = useState({
         qrType: initialQrType,
         qrColor: '#000000',
-<<<<<<< HEAD
-=======
-        textColor: '#000000',
->>>>>>> styledark
         qrProps: {
             ...initialQrProps,
             backgroundImage: null,
@@ -16,7 +12,9 @@ const useQrState = (initialQrType = '', initialQrProps = {}) => {
             dotsType: 'rounded',
             cornersSquareType: 'extra-rounded',
             cornersDotType: 'dot',
-<<<<<<< HEAD
+            dotsColor: '#000000',
+            cornersSquareColor: '#000000',
+            cornersDotColor: '#000000'
         },
         qrImageInfo: {
             qrImage: null,
@@ -30,8 +28,6 @@ const useQrState = (initialQrType = '', initialQrProps = {}) => {
             qrTextFontStyle: {},
             qrTextPositionX: 0,
             qrTextPositionY: 0,
-=======
->>>>>>> styledark
         },
     });
 
@@ -47,8 +43,6 @@ const useQrState = (initialQrType = '', initialQrProps = {}) => {
     };
 
     const setBackgroundImage = (image) => {
-<<<<<<< HEAD
-=======
         setQrState(prevState => ({
             ...prevState,
             qrProps: {
@@ -58,57 +52,22 @@ const useQrState = (initialQrType = '', initialQrProps = {}) => {
         }));
     };
 
-    const setLogoImage = (image) => {
+
+    const setQrProps = (newProps) => {
         setQrState(prevState => ({
             ...prevState,
             qrProps: {
                 ...prevState.qrProps,
-                logoImage: image,
-                logoPosition: prevState.qrProps.logoPosition || { background: true },
+                ...newProps,
             },
         }));
     };
 
-    const setLogoPosition = (position) => {
-        setQrState(prevState => ({
-            ...prevState,
-            qrProps: {
-                ...prevState.qrProps,
-                logoPosition: position,
-            },
-        }));
-    };
 
-    const setQrText = (text) => {
->>>>>>> styledark
+    const setQrColor = (color) => {
         setQrState(prevState => ({
             ...prevState,
-            qrProps: {
-                ...prevState.qrProps,
-                backgroundImage: image,
-            },
-        }));
-    };
-
-    const setLogoImage = (image) => {
-        setQrState(prevState => ({
-            ...prevState,
-            qrProps: {
-                ...prevState.qrProps,
-                logoImage: image,
-                logoPosition: prevState.qrProps.logoPosition || { background: true },
-            },
-        }));
-    };
-
-<<<<<<< HEAD
-    const setLogoPosition = (position) => {
-        setQrState(prevState => ({
-            ...prevState,
-            qrProps: {
-                ...prevState.qrProps,
-                logoPosition: position,
-            },
+            qrColor: color,
         }));
     };
 
@@ -122,16 +81,6 @@ const useQrState = (initialQrType = '', initialQrProps = {}) => {
         }));
     };
 
-=======
->>>>>>> styledark
-    const setQrColor = (color) => {
-        setQrState(prevState => ({
-            ...prevState,
-            qrColor: color,
-        }));
-    };
-
-<<<<<<< HEAD
     const setCornersSquareType = (type) => {
         setQrState(prevState => ({
             ...prevState,
@@ -150,6 +99,18 @@ const useQrState = (initialQrType = '', initialQrProps = {}) => {
                 cornersDotType: type,
             },
         }));
+    };
+
+    const setDotsColor = (color) => {
+        setQrProps({ dotsColor: color });
+    };
+
+    const setCornersSquareColor = (color) => {
+        setQrProps({ cornersSquareColor: color });
+    };
+
+    const setCornersDotColor = (color) => {
+        setQrProps({ cornersDotColor: color });
     };
 
     // ----------------------------- TEXT
@@ -172,8 +133,6 @@ const useQrState = (initialQrType = '', initialQrProps = {}) => {
         updateQrTextProps({ qrTextFontStyle: style });
     };
 
-=======
->>>>>>> styledark
     const setTextColor = (color) => {
         updateQrTextProps({ qrTextColor: color });
     };
@@ -198,7 +157,6 @@ const useQrState = (initialQrType = '', initialQrProps = {}) => {
         }));
     };
 
-<<<<<<< HEAD
     const setQrImage = (image) => {
         updateQrImageInfo({ qrImage: image });
     };
@@ -215,60 +173,28 @@ const useQrState = (initialQrType = '', initialQrProps = {}) => {
         updateQrImageInfo({ qrImagePositionY: y });
     };
 
-
     return {
         ...qrState,
         setQrData,
-        setBackgroundImage,
-        setLogoImage,
-        setLogoPosition,
         setQrText,
         setQrFontStyle,
         setQrColor,
         setTextColor,
-        setQrTextPositionX,
-        setQrTextPositionY,
         setDotsType,
         setCornersSquareType,
         setCornersDotType,
+        setDotsColor,
+        setCornersSquareColor,
+        setCornersDotColor,
+        setBackgroundImage,
+        setQrTextPositionX,
+        setQrTextPositionY,
         setQrImage,
         setQrImageCentered,
         setQrImagePositionX,
         setQrImagePositionY,
     };
-=======
-    const setDotsType = (type) => {
-        setQrState(prevState => ({
-            ...prevState,
-            qrProps: {
-                ...prevState.qrProps,
-                dotsType: type,
-            },
-        }));
-    };
 
-    const setCornersSquareType = (type) => {
-        setQrState(prevState => ({
-            ...prevState,
-            qrProps: {
-                ...prevState.qrProps,
-                cornersSquareType: type,
-            },
-        }));
-    };
-
-    const setCornersDotType = (type) => {
-        setQrState(prevState => ({
-            ...prevState,
-            qrProps: {
-                ...prevState.qrProps,
-                cornersDotType: type,
-            },
-        }));
-    };
-
-    return { ...qrState, setQrData, setBackgroundImage, setLogoImage, setLogoPosition, setQrText, setQrFontStyle, setQrColor, setTextColor, setDotsType, setCornersSquareType, setCornersDotType };
->>>>>>> styledark
 };
 
 export default useQrState;

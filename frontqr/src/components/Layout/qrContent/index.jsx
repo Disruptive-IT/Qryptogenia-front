@@ -1,5 +1,4 @@
 import AppForm from "./forms/App";
-import { YouTubePlaylistComponent } from "./forms/Music";
 import { PdfUploadComponent, LinkInput } from "./forms/Pdf";
 import SocialForm from "./forms/Social";
 import { WebLinkPhone } from "./socialMedia/stylePhone";
@@ -46,7 +45,8 @@ export const QrContentSwitch = ({contentName, onFormChangeApp, onFormChange}) =>
         case "music":
             qrContent = (
                 <div>
-                    <YouTubePlaylistComponent />
+                    //!! NO SE ESTA IMPORTANDO CON EL NOMBRE CORRECTO, CORREGIR
+                    {/* <YouTubePlaylistComponent /> */}
                 </div>
             );
             break;
