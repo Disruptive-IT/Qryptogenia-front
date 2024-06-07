@@ -17,10 +17,7 @@ const useQrState = (initialQrType = '', initialQrProps = {}) => {
             cornersDotColor: '#000000'
         },
         qrImageInfo: {
-            qrImage: null,
-            qrImageCentered: true,
-            qrImagePositionX: 0,
-            qrImagePositionY: 0,
+            qrImage: null
         },
         qrTextProps: {
             qrText: '',
@@ -161,17 +158,6 @@ const useQrState = (initialQrType = '', initialQrProps = {}) => {
         updateQrImageInfo({ qrImage: image });
     };
 
-    const setQrImageCentered = (centered) => {
-        updateQrImageInfo({ qrImageCentered: centered });
-    };
-
-    const setQrImagePositionX = (x) => {
-        updateQrImageInfo({ qrImagePositionX: x });
-    };
-
-    const setQrImagePositionY = (y) => {
-        updateQrImageInfo({ qrImagePositionY: y });
-    };
 
     return {
         ...qrState,
@@ -190,9 +176,6 @@ const useQrState = (initialQrType = '', initialQrProps = {}) => {
         setQrTextPositionX,
         setQrTextPositionY,
         setQrImage,
-        setQrImageCentered,
-        setQrImagePositionX,
-        setQrImagePositionY,
     };
 
 };

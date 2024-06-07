@@ -7,7 +7,6 @@ import InputColor from 'react-input-color'
 const QR = () => {
     const { qrType, qrProps, qrImageInfo, qrTextProps, setQrColor, setDotsColor, setCornersSquareColor, setCornersDotColor } = useQr();
     const { logoImage, dotsType, cornersSquareType, cornersDotType, dotsColor, cornersSquareColor, cornersDotColor } = qrProps;
-    const { qrImage, qrImageCentered, qrImagePositionX, qrImagePositionY, qrIncludeMargin } = qrImageInfo;
     const qrRef = useRef(null);
     const qrCode = useRef(null);
 
@@ -18,10 +17,9 @@ const QR = () => {
     useEffect(() => {
         if (!qrCode.current) {
             qrCode.current = new QRCodeStyling({
-                width: 300,
-                height: 300,
+                width: 250,
+                height: 250,
                 data: '',
-                image: logoImage,
                 dotsOptions: {
                     color: dotsColor,
                     type: dotsType || 'rounded'
@@ -41,11 +39,9 @@ const QR = () => {
                     crossOrigin: "anonymous",
                     hideBackgroundDots: true,
                     margin: 0,
-                    // position: "absolute",
-                    // right: '10px',
-                    // top: '10px'
                 },
             });
+            qrCode.current.append(qrRef.current);
         }
     }, []);
 
@@ -69,7 +65,6 @@ const QR = () => {
         }
         qrCode.current.update({
             data: value,
-            image: logoImage,
             dotsOptions: {
                 color: dotsColor,
                 type: dotsType || 'rounded'
@@ -82,21 +77,14 @@ const QR = () => {
                 color: cornersDotColor,
                 type: cornersDotType || 'dot'
             },
+            image: qrImageInfo.qrImage,  
             imageOptions: {
                 crossOrigin: "anonymous",
-                imageSize: qrImageCentered ? 0.4 : undefined,
-                x: qrImageCentered ? undefined : qrImagePositionX,
-                y: qrImageCentered ? undefined : qrImagePositionY,
-                // position: "absolute",
-                // right: '10px',
-                // top: '10px'
+                hideBackgroundDots: true,
+                margin: 0,
             },
         });
     }, [qrType, qrProps, qrImageInfo, dotsColor, cornersSquareColor, cornersDotColor, dotsType, cornersSquareType, cornersDotType, logoImage]);
-
-    useEffect(() => {
-        qrCode.current.append(qrRef.current);
-    }, []);
 
     return (
         <>
