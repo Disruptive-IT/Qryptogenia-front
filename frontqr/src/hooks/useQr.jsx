@@ -15,6 +15,9 @@ const useQrState = (initialQrType = '', initialQrProps = {}) => {
             dotsType: 'rounded',
             cornersSquareType: 'extra-rounded',
             cornersDotType: 'dot',
+            dotsColor: '#000000',
+            cornersSquareColor: '#000000',
+            cornersDotColor: '#000000'
         },
     });
 
@@ -29,33 +32,12 @@ const useQrState = (initialQrType = '', initialQrProps = {}) => {
         }));
     };
 
-    const setBackgroundImage = (image) => {
+    const setQrProps = (newProps) => {
         setQrState(prevState => ({
             ...prevState,
             qrProps: {
                 ...prevState.qrProps,
-                backgroundImage: image,
-            },
-        }));
-    };
-
-    const setLogoImage = (image) => {
-        setQrState(prevState => ({
-            ...prevState,
-            qrProps: {
-                ...prevState.qrProps,
-                logoImage: image,
-                logoPosition: prevState.qrProps.logoPosition || { background: true },
-            },
-        }));
-    };
-
-    const setLogoPosition = (position) => {
-        setQrState(prevState => ({
-            ...prevState,
-            qrProps: {
-                ...prevState.qrProps,
-                logoPosition: position,
+                ...newProps,
             },
         }));
     };
@@ -118,7 +100,32 @@ const useQrState = (initialQrType = '', initialQrProps = {}) => {
         }));
     };
 
-    return { ...qrState, setQrData, setBackgroundImage, setLogoImage, setLogoPosition, setQrText, setQrFontStyle, setQrColor, setTextColor, setDotsType, setCornersSquareType, setCornersDotType };
+    const setDotsColor = (color) => {
+        setQrProps({ dotsColor: color });
+    };
+
+    const setCornersSquareColor = (color) => {
+        setQrProps({ cornersSquareColor: color });
+    };
+
+    const setCornersDotColor = (color) => {
+        setQrProps({ cornersDotColor: color });
+    };
+
+    return { 
+        ...qrState, 
+        setQrData, 
+        setQrText, 
+        setQrFontStyle, 
+        setQrColor, 
+        setTextColor, 
+        setDotsType, 
+        setCornersSquareType, 
+        setCornersDotType,
+        setDotsColor,
+        setCornersSquareColor,
+        setCornersDotColor
+    };
 };
 
 export default useQrState;

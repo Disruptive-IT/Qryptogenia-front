@@ -3,18 +3,13 @@ import QRCodeStyling from 'qr-code-styling';
 import Draggable from 'react-draggable';
 import '../styles/qrCode.css';
 import { useQr } from '../../../context/QrContext';
-import InputColor from 'react-input-color';
-
+import GradientColorPicker from 'react-gcolor-picker';
 
 const QR = () => {
-    const { qrType, qrProps, qrFontStyle, qrColor, qrText, textColor, setQrColor } = useQr();
-    const { logoPosition, logoImage, dotsType, cornersSquareType, cornersDotType } = qrProps;
+    const { qrType, qrProps, qrFontStyle, qrText, textColor, setQrColor, setDotsColor, setCornersSquareColor, setCornersDotColor } = useQr();
+    const { logoImage, dotsType, cornersSquareType, cornersDotType, dotsColor, cornersSquareColor, cornersDotColor } = qrProps;
     const qrRef = useRef(null);
     const qrCode = useRef(null);
-
-    const handleColorChange = (color) => {
-        setQrColor(color.hex);
-    };
 
     useEffect(() => {
         if (!qrCode.current) {
@@ -24,15 +19,15 @@ const QR = () => {
                 data: '',
                 image: logoImage,
                 dotsOptions: {
-                    color: qrColor,
+                    color: dotsColor,
                     type: dotsType || 'rounded'
                 },
                 cornersSquareOptions: {
-                    color: qrColor,
+                    color: cornersSquareColor,
                     type: cornersSquareType || 'extra-rounded'
                 },
                 cornersDotOptions: {
-                    color: qrColor,
+                    color: cornersDotColor,
                     type: cornersDotType || 'dot'
                 },
                 backgroundOptions: {
@@ -68,19 +63,19 @@ const QR = () => {
             data: value,
             image: logoImage,
             dotsOptions: {
-                color: qrColor,
+                color: dotsColor,
                 type: dotsType || 'rounded'
             },
             cornersSquareOptions: {
-                color: qrColor,
+                color: cornersSquareColor,
                 type: cornersSquareType || 'extra-rounded'
             },
             cornersDotOptions: {
-                color: qrColor,
+                color: cornersDotColor,
                 type: cornersDotType || 'dot'
             },
         });
-    }, [qrType, qrProps, qrColor, dotsType, cornersSquareType, cornersDotType, logoImage]);
+    }, [qrType, qrProps, dotsColor, cornersSquareColor, cornersDotColor, dotsType, cornersSquareType, cornersDotType, logoImage]);
 
     useEffect(() => {
         qrCode.current.append(qrRef.current);
@@ -88,11 +83,7 @@ const QR = () => {
 
     return (
         <>
-            <div className="flex items-center justify-center w-full" ref={qrRef}>
-            </div>
-            <div className='absolute top-5 right-5'>
-                <InputColor initialValue="#000" onChange={handleColorChange} placement="right" />
-            </div>
+            <div className="flex items-center justify-center w-full" ref={qrRef}></div>
             {qrText &&
                 <Draggable bounds="parent">
                     <span className='px-4 rounded-lg text-center cursor-pointer'
