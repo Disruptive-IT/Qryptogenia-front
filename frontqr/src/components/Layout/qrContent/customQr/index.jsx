@@ -1,10 +1,12 @@
 import { useState } from 'react';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
+import imgQr from '../../../../assets/imgs/qr.png';
 import ScrollableDesingQrs from './design/scrollableDesingQrs';
 import Frame from './frame';
 import Logo from './logo';
-import QR from '../qrCode';  // Asegúrate de que la ruta sea correcta
+import QR from '../qrCode';
+import Design from './design';
 import { useQr } from '../../../../context/QrContext';
 
 const Design = ({ onTabSelect }) => {
@@ -84,10 +86,10 @@ const CustomQr = () => {
 
     return (
         <div className='w-full h-[680px] rounded-md flex flex-col justify-between pb-4'>
-            <div className='h-[250px] flex relative '>
+            <div className='h-[250px] w-[90%] mx-auto flex relative' style={{ backgroundColor: qrBgColor }}>
                 <QR />
             </div>
-            <div className='flex flex-col h-[390px] pt-5 '>
+            <div className='flex flex-col pt-5 min-h-[350px] '>
                 <div className='space-x-3 mx-auto'>
                     {options.map((option, index) => (
                         <Button
@@ -99,7 +101,8 @@ const CustomQr = () => {
                         </Button>
                     ))}
                 </div>
-                <div className='p-4 space-y-4 rounded-md  '>
+
+                <div className='p-4 space-y-4 rounded-md w-[90%] mx-auto  '>
                     <OptionComponent onTabSelect={handleOptionSelect} />
                 </div>
             </div>
