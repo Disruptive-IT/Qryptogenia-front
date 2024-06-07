@@ -21,6 +21,9 @@ EMAIL_PASSWORD=sxtrpeohgczmfgky
 EMAIL_USER=qryptogenia@gmail.com
 
 RECAPTCHA_KEY=6LfjjfMpAAAAAGCx5qorVX-eEke9o44f5s01K7D-
+
+Este va un archivo .env en el front
+VITE_RECAPTCHA_SITE_KEY=6LfjjfMpAAAAAGCx5qorVX-eEke9o44f5s01K7D-
 ```
 ### Generate JWT_SECRET 
 ```bash

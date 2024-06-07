@@ -13,3 +13,25 @@
   padding: 0 0.1rem;
 }
 
+.qr-container {
+  position: relative;
+  width: 420px; /* Ajusta el tamaño según sea necesario */
+  height: 280px; /* Ajusta el tamaño según sea necesario */
+  border: 1px solid #ccc;
+  margin-top: 20px;
+  overflow: hidden;
+}
+
+.moving-text {
+  position: absolute;
+  white-space: nowrap;
+  font-size: 14px;
+  background-color: rgba(
+    255,
+    255,
+    255,
+    0.7
+  ); /* Fondo semitransparente para mejor visibilidad */
+  padding: 2px 5px;
+  border-radius: 3px;
+}
