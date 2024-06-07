@@ -46,7 +46,6 @@ const Logo = () => {
         setQrImagePositionY(newValue);
     };
 
-
     const handleCenteredImageChange = (event) => {
         const isChecked = event.target.checked;
         setIsCenteredImage(isChecked);
@@ -139,7 +138,7 @@ const Logo = () => {
                                     />
                                 </FormControl>
                             </div>
-                            <div className='w-ful flex gap-3 items-center justify-between'>
+                            <div className='w-full flex gap-3 items-center justify-between'>
                                 <div>
                                     <label htmlFor="posicionamientoX" className="pr-2">Posicionamiento X:</label>
                                     <Slider

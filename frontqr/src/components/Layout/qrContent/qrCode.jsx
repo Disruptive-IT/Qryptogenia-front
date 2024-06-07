@@ -1,14 +1,13 @@
 import React, { useEffect, useRef } from 'react';
 import QRCodeStyling from 'qr-code-styling';
-import Draggable from 'react-draggable';
 import '../styles/qrCode.css';
 import { useQr } from '../../../context/QrContext';
 import InputColor from 'react-input-color';
 
-
 const QR = () => {
-    const { qrType, qrProps, qrFontStyle, qrColor, qrText, textColor, setQrColor } = useQr();
-    const { logoPosition, logoImage, dotsType, cornersSquareType, cornersDotType } = qrProps;
+    const { qrType, qrProps, qrImageInfo, qrTextProps, qrColor, setQrColor } = useQr();
+    const { logoImage, dotsType, cornersSquareType, cornersDotType } = qrProps;
+    const { qrImage, qrImageCentered, qrImagePositionX, qrImagePositionY, qrIncludeMargin } = qrImageInfo;
     const qrRef = useRef(null);
     const qrCode = useRef(null);
 
@@ -40,12 +39,16 @@ const QR = () => {
                 },
                 imageOptions: {
                     crossOrigin: "anonymous",
-                    margin: 20,
+                    hideBackgroundDots: true,
+                    margin: 0,
+                    // position: "absolute",
+                    // right: '10px',
+                    // top: '10px'
                 },
             });
         }
     }, []);
-
+        
     useEffect(() => {
         let value = "";
         switch (qrType) {
@@ -66,7 +69,7 @@ const QR = () => {
         }
         qrCode.current.update({
             data: value,
-            image: logoImage,
+            image: qrImage,
             dotsOptions: {
                 color: qrColor,
                 type: dotsType || 'rounded'
@@ -79,8 +82,17 @@ const QR = () => {
                 color: qrColor,
                 type: cornersDotType || 'dot'
             },
+            imageOptions: {
+                crossOrigin: "anonymous",
+                imageSize: qrImageCentered ? 0.4 : undefined,
+                x: qrImageCentered ? undefined : qrImagePositionX,
+                y: qrImageCentered ? undefined : qrImagePositionY,
+                // position: "absolute",
+                // right: '10px',
+                // top: '10px'
+            },
         });
-    }, [qrType, qrProps, qrColor, dotsType, cornersSquareType, cornersDotType, logoImage]);
+    }, [qrType, qrImageInfo, qrProps, qrColor, dotsType, cornersSquareType, cornersDotType, qrImage]);
 
     useEffect(() => {
         qrCode.current.append(qrRef.current);
@@ -88,26 +100,23 @@ const QR = () => {
 
     return (
         <>
-            <div className="flex items-center justify-center w-full" ref={qrRef}>
-            </div>
+            <div className="flex items-center justify-center w-full" ref={qrRef}></div>
             <div className='absolute top-5 right-5'>
                 <InputColor initialValue="#000" onChange={handleColorChange} placement="right" />
             </div>
-            {qrText &&
-                <Draggable bounds="parent">
-                    <span className='px-4 rounded-lg text-center cursor-pointer'
-                        style={{
-                            ...qrFontStyle,
-                            color: textColor,
-                            background: '#ccc',
-                            opacity: 1,
-                            position: 'absolute',
-                        }}
-                    >
-                        {qrText}
-                    </span>
-                </Draggable>
-            }
+            {qrTextProps.qrText && (
+                <span
+                    style={{
+                        position: 'absolute',
+                        top: `${qrTextProps.qrTextPositionY}px`,
+                        left: `${qrTextProps.qrTextPositionX}px`,
+                        color: qrTextProps.qrTextColor,
+                        ...qrTextProps.qrTextFontStyle
+                    }}
+                >
+                    {qrTextProps.qrText}
+                </span>
+            )}
         </>
     );
 };
