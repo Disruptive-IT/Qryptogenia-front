@@ -2,6 +2,7 @@ import { Router } from "express";
 import authRoutes from "./auth.routes.js";
 import userRoutes from "./user.routes.js";
 import adminRoutes from "./admin.routes.js";
+import musicRoutes from "./music.routes.js"
 
 import VerifyTokenJWT from "../middleware//VerifyTokenJWT.js";
 import Authorization from "../middleware/Authorization.js";
@@ -13,6 +14,7 @@ routes.use("/user", VerifyTokenJWT, userRoutes); //? Indica las rutas para los a
 routes.use("/admin", VerifyTokenJWT, adminRoutes); 
 
 //* RUTAS PARA CLIENTES
+routes.use(musicRoutes);  // Usa las rutas de música
 //* RUTAS PARA NO AUTENTICADOS
 
 export default routes;

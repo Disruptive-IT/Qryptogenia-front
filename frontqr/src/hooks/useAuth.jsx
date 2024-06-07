@@ -31,6 +31,7 @@ export const useAuth = (navigate) => {
             console.log('Check token MAL', error);
         }
     }
+    
 
     const fetchUserData = async () => {
         try {
@@ -278,6 +279,16 @@ export const useAuth = (navigate) => {
         }
     };
 
+    const getMusicData = async (id) => {
+        try {
+            const response = await axios.get(`/music/${id}`);
+            return { success: true, data: response.data };
+        } catch (error) {
+            console.error('Error fetching music data:', error);
+            return { success: false, error: 'Error fetching music data' };
+        }
+    };
+
     return {
         user,
         loginUser,
@@ -297,6 +308,7 @@ export const useAuth = (navigate) => {
         handleVerifyCode,
         handleChangeNewEmail,
         handleVerifyNewCode,
-        checkToken
+        checkToken,
+        getMusicData
     };
 }

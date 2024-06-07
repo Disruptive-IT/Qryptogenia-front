@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import QRTable from './QRTable';
 import './app.css';
+import UserTable from './userTable';
 
 const App = () => {
     const [qrCodes, setQRCodes] = useState([
@@ -20,6 +21,18 @@ const App = () => {
         code.type.toLowerCase().includes(searchQuery.toLowerCase()) ||
         code.status.toLowerCase().includes(searchQuery.toLowerCase())
     );
+
+    const columns = [
+        { header: 'QR Code Name', accessor: 'name' },
+        { header: 'QR Code Type', accessor: 'type' },
+        { header: 'Scans', accessor: 'scans' },
+        { header: 'Status', accessor: 'status', render: (item) => (
+            <span className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${item.status === 'Active' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}`}>
+                {item.status}
+            </span>
+        ) },
+        { header: 'Date', accessor: 'date' },
+    ];
 
     return (
         <div className="flex h-screen">
@@ -41,7 +54,8 @@ const App = () => {
                         onChange={handleSearch}
                     />
                 </div>
-                <QRTable qrCodes={filteredQRCodes} />
+                <QRTable data={filteredQRCodes} columns={columns} />
+                <UserTable/>
             </div>
         </div>
     );

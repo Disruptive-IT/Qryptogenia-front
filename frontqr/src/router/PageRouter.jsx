@@ -17,8 +17,9 @@ import LayoutUser from "../pages/templates/User/Layout";
 import { useLoader } from '../context/LoaderContext';
 import Loader from '../components/UI/loader/Loader';
 import AppContent from "../pages/AppContent";
-import App from "../pages/tableqr/app";
+import App from "../components/UI/tables/app";
 import { useAuthContext } from "../context/AuthContext";
+import WebLinkPhoneMusicPage from "../pages/viewsQr/WebLinkPhoneMusicPage";
 
 export const PageRouter = () => {
     const { isLoading } = useLoader();
@@ -34,12 +35,16 @@ export const PageRouter = () => {
                     <Route path="register" element={user ? <Navigate to="/user/home" replace /> : <RegisterForm />} />
                     <Route path="recoverPassword" element={user ? <Navigate to="/user/home" replace /> : <RecoverPassForm />} />
                     <Route path="forgotPassword" element={user ? <Navigate to="/user/home" replace /> : <ForgotPassForm />} />
+                    
                 </Route>
 
                 <Route path="/qr/:contentName" element={user ? <LayoutUser /> : <LayoutHome />}>
                     <Route index element={<AppContent />} />
                 </Route>
 
+                <Route path="music/:id" element={<WebLinkPhoneMusicPage/>} />
+
+                
                 {/* Admin Routes */}
                 <Route path="/admin" element={<ProtectedRouteAdmin />}>
                     <Route element={<LayoutAdmin />}>
