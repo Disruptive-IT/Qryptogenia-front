@@ -1,61 +1,75 @@
-import React from 'react';
-import InputText from '../StyleInput';
-import { useQr } from '../../../../../context/QrContext';
-import ScrollableChipText from './scrollableChipText';
-import Input from '@mui/material/Input';
-import ScrollableMain from './scrollableMain';
-import Slider from '@mui/material/Slider';
+    import React, { useEffect, useState } from 'react';
+    import InputText from '../StyleInput';
+    import { useQr } from '../../../../../context/QrContext';
+    import ScrollableChipText from './scrollableChipText';
+    import Input from '@mui/material/Input';
+    import ScrollableMain from './scrollableMain';
+    import Slider from '@mui/material/Slider';
+    import Checkbox from '@mui/material/Checkbox'; 
 
-const Frame = () => {
-    const { setQrText, setQrTextPositionY, setQrTextPositionX } = useQr();
+    const Frame = () => {
+        const { setQrText, setQrTextPositionY, setQrTextPositionX } = useQr();
+        const [isFullRangeEnabled, setIsFullRangeEnabled] = useState(true);
 
-    const handleInputChange = (e) => {
-        setQrText(e.target.value);
-    };
-    const handlePositionYChange = (e) => {
-        setQrTextPositionY(e.target.value);
-    };
-    const handlePositionXChange = (e) => {
-        setQrTextPositionX(e.target.value);
-    };
+        const handleInputChange = (e) => {
+            setQrText(e.target.value);
+        };
 
-    return (
-        <>
-            <div className="flex space-x-4 items-center">
-                <InputText label="Escribir el texto" variant="filled" fullWidth onChange={handleInputChange} />
-            </div>
-            <span className='text-xs text-gray-500'>*El texto tiene un limite de 20 caracteres</span>
+        const handlePositionXChange = (e, newValue) => {
+            setQrTextPositionX(Math.min(Math.max(newValue, 0), 80));
+        };
 
-            <div className='w-ful flex gap-3 items-center justify-around'>
-                <div>
-                    <label htmlFor="posicionamientoX" className="pr-2">Posicionamiento X:</label>
-                    <Slider
-                        aria-label="PosicionamientoX"
-                        defaultValue={0}
-                        color="secondary"
-                        min={10}
-                        max={400}
-                        step={1}
-                        onChange={(event, newValue) => handlePositionXChange(event, Math.round(newValue))}
-                    />
+        const toggleRange = () => {
+            setIsFullRangeEnabled(!isFullRangeEnabled); 
+        };
+
+        useEffect(() => {
+            setQrTextPositionY(isFullRangeEnabled? 90 : 0);
+        }, [isFullRangeEnabled]);
+
+        return (
+            <>
+                <div className="flex space-x-4 items-center">
+                    <InputText label="Write the text" variant="filled" inputProps={{ maxLength: 10 }} fullWidth onChange={handleInputChange}/>
                 </div>
-                <div>
-                    <label htmlFor="posicionamientoY" className="pl-2">Posicionamiento Y:</label>
-                    <Slider
-                        aria-label="PosicionamientoY"
-                        defaultValue={0}
-                        color="secondary"
-                        min={-30}
-                        max={250}
-                        step={1}
-                        onChange={(event, newValue) => handlePositionYChange(event, Math.round(newValue))}
-                    />
+                <span className='text-xs text-gray-500'>*The text has a limit of 10 characters</span>
+
+                <div className='flex justify-between gap-4 items-center'>
+                    <span>Position </span>
+                    <div className='flex gap-4 items-center'>
+                        <span htmlFor="positioningX" className="pr-2">X:</span>
+                        <div className='flex items-center justify-center'>
+                            <Slider
+                                size="small"
+                                defaultValue={0}
+                                aria-label="PositioningX"
+                                valueLabelDisplay="on"
+                                color="secondary"
+                                min={0}
+                                max={100}
+                                step={1}
+                                sx={{ width: "120px" }}
+                                onChange={(event, newValue) => handlePositionXChange(event, newValue)}
+                            />
+                        </div>
+                    </div>
+                    <div className='flex gap-4 items-center'>
+                        <span htmlFor="positioningY" className="pl-2">Y:</span>
+                        <div>
+                            <Checkbox
+                                id="fullRangeToggle"
+                                checked={isFullRangeEnabled}
+                                onChange={toggleRange}
+                                color="secondary"
+                            />
+                            <label htmlFor="fullRangeToggle" className="ml-2">{isFullRangeEnabled? '100%' : '0%'}</label>
+                        </div>
+                    </div>
                 </div>
-            </div>
 
-            <ScrollableMain />
-        </>
-    );
-};
+                <ScrollableMain />
+            </>
+        );
+    };
 
-export default Frame;
+    export default Frame;

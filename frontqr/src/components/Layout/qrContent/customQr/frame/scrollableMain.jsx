@@ -24,8 +24,8 @@ function ScrollableMain() {
     }
 
     return (
-        <div>
-            <div className='flex justify-between gap-4 my-6'>
+        <>
+            <div className='flex justify-between gap-4 '>
                 <button
                     className={getButtonClass('Fuentes')}
                     onClick={() => setTab('Fuentes')}
@@ -48,7 +48,7 @@ function ScrollableMain() {
             {tab === 'Fuentes' && <Fuentes />}
             {tab === 'Estilos' && <Estilos />}
             {tab === 'Burbujas' && <Burbujas />}
-        </div>
+        </>
     );
 }
 

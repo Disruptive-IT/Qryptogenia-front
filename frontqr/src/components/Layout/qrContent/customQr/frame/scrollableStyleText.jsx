@@ -43,7 +43,7 @@ export const ScrollableStyleText = () => {
                 <Tab label="F" style={{ fontSize: '25px', fontWeight: 'bold', textTransform: 'uppercase', textShadow: '-3px 0 white, 0 3px white, 3px 0 white, 0 -3px white' }} />
             </Tabs>
             <div className='relative justify-evenly items-center flex gap-4'>
-                <ColorPicker setColor={handleColorChange} />
+                <ColorPicker setColor={handleColorChange} position={"top-[-380px] left-[100px]"} />
                 <label htmlFor="fontSize" className="mb-2">Font Size:</label>
                 <input
                     type="range"

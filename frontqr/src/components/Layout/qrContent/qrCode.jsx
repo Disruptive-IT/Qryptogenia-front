@@ -4,14 +4,10 @@ import '../styles/qrCode.css';
 import { useQr } from '../../../context/QrContext';
 
 const QR = () => {
-    const { qrType, qrProps, qrImageInfo, qrTextProps, setQrColor, qrBgColor, setDotsColor, setCornersSquareColor, setCornersDotColor } = useQr();
-    const { logoImage, dotsType, cornersSquareType, cornersDotType, dotsColor, cornersSquareColor, cornersDotColor } = qrProps;
+    const { qrType, qrBgColor, qrProps, qrImageInfo, qrTextProps } = useQr();
+    const { logoImage, marcoType, dotsType, cornersSquareType, cornersDotType, dotsColor, cornersSquareColor, cornersDotColor } = qrProps;
     const qrRef = useRef(null);
     const qrCode = useRef(null);
-
-    const handleColorChange = (color) => {
-        setQrColor(color.hex);
-    };
 
     useEffect(() => {
         if (!qrCode.current) {
@@ -32,17 +28,18 @@ const QR = () => {
                     type: cornersDotType || 'dot'
                 },
                 backgroundOptions: {
-                    color: "#ffffff",
+                    color: "transparent",
                 },
                 imageOptions: {
                     crossOrigin: "anonymous",
                     hideBackgroundDots: true,
-                    margin: 0,
+                    margin: 2,
+                    imageSize: qrImageInfo.qrImageSize
                 },
             });
             qrCode.current.append(qrRef.current);
         }
-    }, [qrBgColor, dotsColor, cornersSquareColor, cornersDotColor, dotsType, cornersSquareType, cornersDotType]); // Añade qrBgColor a la lista de dependencias
+    }, [dotsColor, cornersSquareColor, cornersDotColor, dotsType, cornersSquareType, cornersDotType]); 
 
     useEffect(() => {
         let value = "";
@@ -65,6 +62,9 @@ const QR = () => {
         qrCode.current.update({
             data: value ? value : 'www.qryptogenia.com',
             margin: 10,
+            backgroundOptions: {
+                color: "transparent",
+            },
             dotsOptions: {
                 color: dotsColor,
                 type: dotsType || 'rounded'
@@ -77,9 +77,6 @@ const QR = () => {
                 color: cornersDotColor,
                 type: cornersDotType || 'dot'
             },
-            backgroundOptions: {
-                color: qrBgColor || "#ffffff",
-            },
             image: qrImageInfo.qrImage,
             imageOptions: {
                 crossOrigin: "anonymous",
@@ -88,22 +85,23 @@ const QR = () => {
                 imageSize: qrImageInfo.qrImageSize
             },
         });
-    }, [qrType, qrProps, qrImageInfo, dotsColor, cornersSquareColor, cornersDotColor, dotsType, cornersSquareType, cornersDotType, logoImage, qrBgColor]); // Añade qrBgColor a la lista de dependencias
+    }, [qrType, qrProps, qrImageInfo, dotsColor, cornersSquareColor, cornersDotColor, dotsType, cornersSquareType, cornersDotType, logoImage]);
 
     return (
         <>
-            <div className='m-auto'>
-                <div className="flex items-center justify-center w-full" ref={qrRef} ></div>
-            </div>
-            <div className='absolute top-5 right-5'>
+        <div className='m-auto p-10 border-2' style={{...marcoType.style, backgroundColor: marcoType.type === 'default' ? 'transparent' : qrBgColor}}>
+                <div className="flex items-center justify-center w-full" ref={qrRef}></div>
             </div>
             {qrTextProps.qrText && (
                 <span
                     style={{
                         position: 'absolute',
-                        top: `${qrTextProps.qrTextPositionY}px`,
-                        left: `${qrTextProps.qrTextPositionX}px`,
+                        top: `${qrTextProps.qrTextPositionY}%`,
+                        left: `${qrTextProps.qrTextPositionX}%`,
                         color: qrTextProps.qrTextColor,
+                        whiteSpace: 'pre-wrap',
+                        overflowWrap: 'break-word',
+                        width: '100px',
                         ...qrTextProps.qrTextFontStyle
                     }}
                 >

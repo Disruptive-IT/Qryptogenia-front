@@ -5,7 +5,7 @@ import { ColorPicker } from '../frame/colorPicker';
 import Slider from '@mui/material/Slider';
 
 const Logo = () => {
-    const { setQrImage, setQrBgColor, setQrImageSize } = useQr();
+    const { setQrImage, setQrBgColor, setQrImageSize, qrImageInfo } = useQr();
     const [includeImage, setIncludeImage] = useState(false);
 
     const handleImageChange = (event) => {
@@ -30,6 +30,7 @@ const Logo = () => {
         const isChecked = event.target.checked;
         setIncludeImage(isChecked);
         if (!isChecked) {
+            setQrImageSize(0.5)
             setQrImage(null);
         }
     };
@@ -38,7 +39,7 @@ const Logo = () => {
         <div className='w-screen lg:w-90 p-2'>
             <div className='flex gap-5'>
                 <div className='flex gap-3 items-center'>
-                    <span>Color fondo:</span>
+                    <span>Background color:</span>
                     <ColorPicker setColor={handleColorBgQr} />
                 </div>
             </div>
@@ -61,22 +62,23 @@ const Logo = () => {
                             color="primary"
                         />
                     }
-                    label="Incluir Imagen:"
+                    label="Include Image:"
                 />
                 <label htmlFor="raised-button-file">
-                    <Button variant="contained" component="span" className='mt-2' fullWidth disabled={!includeImage}>
-                        Subir imagen
+                    <Button variant="contained" component="span" className='mt-2 large fullWidth' disabled={!includeImage}>
+                        Upload image
                     </Button>
                 </label>
                 <FormGroup className={`my-5 ${includeImage? 'h-[200px]' : ''}`}>
                     {includeImage && (
                         <div>
-                            <FormLabel component="legend">Configuración</FormLabel>
+                            <FormLabel component="legend">Settings</FormLabel>
                             <div className='flex justify-between items-center my-4 gap-5'>
                                 <TextField
                                     id="outlined-number"
-                                    label="Tamaño de la imagen"
+                                    label="Image size"
                                     type="number"
+                                    value= {qrImageInfo.qrImageSize}
                                     InputProps={{
                                         inputProps: {
                                             min: 0.1, 
@@ -84,7 +86,7 @@ const Logo = () => {
                                             step: 0.1, 
                                         },
                                     }}
-                                    className='mr-4 w-full'
+                                    className='mr-4 w-1/2'
                                     disabled={!includeImage}
                                     onChange={handleQrImageSize}
                                     readOnly

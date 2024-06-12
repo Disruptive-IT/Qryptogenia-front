@@ -13,15 +13,6 @@
   padding: 0 0.1rem;
 }
 
-.qr-container {
-  position: relative;
-  width: 420px; /* Ajusta el tamaño según sea necesario */
-  height: 280px; /* Ajusta el tamaño según sea necesario */
-  border: 1px solid #ccc;
-  margin-top: 20px;
-  overflow: hidden;
-}
-
 .moving-text {
   position: absolute;
   white-space: nowrap;

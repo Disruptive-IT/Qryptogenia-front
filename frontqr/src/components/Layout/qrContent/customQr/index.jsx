@@ -3,6 +3,8 @@ import Button from '@mui/material/Button';
 import ScrollableDesingQrs from './design/scrollableDesingQrs';
 import Scrollcornersqueare from './design/scrollcornersquare';
 import Scrollcornerdot from './design/scrollcornerdot';
+import ScrollableMarcogQrs from './design/scrollableMarcoQrs';
+
 import Frame from './frame';
 import Logo from './logo';
 import QR from '../qrCode';
@@ -15,7 +17,7 @@ import { MdQrCodeScanner } from "react-icons/md";
 
 const Design = ({ onTabSelect }) => {
     const [tabValue, setTabValue] = useState(0);
-    const { qrProps, setQrColor, setDotsType, setCornersSquareType, setCornersDotType, setDotsColor, setCornersSquareColor, setCornersDotColor } = useQr();
+    const { qrProps, setQrColor, setMarcoType, setDotsType, setCornersSquareType, setCornersDotType, setDotsColor, setCornersSquareColor, setCornersDotColor } = useQr();
     const [colorPickerStates, setColorPickerStates] = useState({
         isDotsColorPickerOpen: false,
         isCornersSquareColorPickerOpen: false,
@@ -71,6 +73,10 @@ const Design = ({ onTabSelect }) => {
         }
     };
 
+    const handleStyleMarco = (type) => {
+        setMarcoType(type);
+    };
+    
     const handleStyleChange = (type) => {
         setDotsType(type);
     };
@@ -86,11 +92,17 @@ const Design = ({ onTabSelect }) => {
     return (
         <>
             <Tabs value={tabValue} onChange={handleTabChange}>
+                <Tab icon={<MdQrCodeScanner />} label="Qr frame" />
                 <Tab icon={<MdQrCodeScanner />} label="Dots" />
                 <Tab icon={<MdQrCodeScanner />} label="Corners Square" />
                 <Tab icon={<MdQrCodeScanner />} label="Corners Dot" />
             </Tabs>
             {tabValue === 0 && (
+                <div>
+                    <ScrollableMarcogQrs onStyleClick={handleStyleMarco} />
+                </div>
+            )}
+            {tabValue === 1 && (
                 <div>
                     <ScrollableDesingQrs onStyleClick={handleStyleChange} />
                     <div className="flex items-center mb-5 ml-5">
@@ -118,7 +130,7 @@ const Design = ({ onTabSelect }) => {
                     </div>
                 </div>
             )}
-            {tabValue === 1 && (
+            {tabValue === 2 && (
                 <div>
                     <Scrollcornersqueare onStyleClick={handleStyleChangecorner} />
                     <div className="flex items-center mb-5">
@@ -146,7 +158,7 @@ const Design = ({ onTabSelect }) => {
                     </div>
                 </div>
             )}
-            {tabValue === 2 && (
+            {tabValue === 3 && (
                 <div>
                     <Scrollcornerdot onStyleClick={handleStyleChangecornerdot} />
                     <div className="flex items-center mb-5">
@@ -194,11 +206,11 @@ const CustomQr = () => {
     const OptionComponent = options[selectedOptionIndex].component;
 
     return (
-        <div className='w-full h-[680px] rounded-md flex flex-col justify-between pb-4'>
-            <div className='h-[250px] flex relative '>
+        <div className='w-full rounded-md flex flex-col justify-between pb-4'>
+            <div className='flex relative mt-4 py-8'>
                 <QR />
             </div>
-            <div className='flex flex-col h-[390px] pt-5 '>
+            <div className='flex flex-col h-[500px] pt-5  '>
                 <div className='space-x-3 mx-auto'>
                     {options.map((option, index) => (
                         <Button

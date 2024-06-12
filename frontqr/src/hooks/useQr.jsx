@@ -10,6 +10,7 @@ const useQrState = (initialQrType = '', initialQrProps = {}) => {
             backgroundImage: null,
             logoImage: null,
             logoPosition: { background: true },
+            marcoType: 'default',
             dotsType: 'rounded',
             cornersSquareType: 'extra-rounded',
             cornersDotType: 'dot',
@@ -19,7 +20,7 @@ const useQrState = (initialQrType = '', initialQrProps = {}) => {
         },
         qrImageInfo: {
             qrImage: null,
-            qrImageSize: "16"
+            qrImageSize: 0.5
         },
         qrTextProps: {
             qrText: '',
@@ -74,6 +75,16 @@ const useQrState = (initialQrType = '', initialQrProps = {}) => {
         setQrState(prevState => ({
             ...prevState,
             qrBgColor: color,
+        }));
+    };
+
+    const setMarcoType = (type) => {
+        setQrState(prevState => ({
+            ...prevState,
+            qrProps: {
+                ...prevState.qrProps,
+                marcoType: type,
+            },
         }));
     };
 
@@ -181,6 +192,7 @@ const useQrState = (initialQrType = '', initialQrProps = {}) => {
         setQrColor,
         setQrBgColor,
         setTextColor,
+        setMarcoType,
         setDotsType,
         setCornersSquareType,
         setCornersDotType,
