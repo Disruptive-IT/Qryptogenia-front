@@ -7,12 +7,12 @@ import pattern1 from '../../../../../assets/imgs/patter1.avif';
 import pattern2 from '../../../../../assets/imgs/patter1.avif';
 
 const qrStyles = [
-    { id: 1, color: 'transparent', borderColor: 'transparent', shape: 'none', backgroundType: 'none' },
-    { id: 2, color: '#284B63', borderColor: '#284B63', shape: 'circle', backgroundType: 'solid' },
-    { id: 3, color: '#284B63', borderColor: '#284B63', shape: 'square', backgroundType: 'pattern', patternImage: pattern1 },
-    { id: 4, color: '#284B63', borderColor: '#284B63', shape: 'rounded', backgroundType: 'solid' },
-    { id: 5, color: '#284B63', borderColor: '#284B63', shape: 'hexagon', backgroundType: 'pattern', patternImage: pattern2 },
-    { id: 6, color: '#284B63', borderColor: '#284B63', shape: 'octagon', backgroundType: 'none' },
+    { id: 1, type: 'rounded', color: 'transparent', borderColor: 'transparent', shape: 'none', backgroundType: 'none' },
+    { id: 2, type: 'dots', color: '#284B63', borderColor: '#284B63', shape: 'circle', backgroundType: 'solid' },
+    { id: 3, type: 'classy', color: '#284B63', borderColor: '#284B63', shape: 'square', backgroundType: 'pattern', patternImage: pattern1 },
+    { id: 4, type: 'classy-rounded', color: '#284B63', borderColor: '#284B63', shape: 'rounded', backgroundType: 'solid' },
+    { id: 5, type: 'square', color: '#284B63', borderColor: '#284B63', shape: 'hexagon', backgroundType: 'pattern', patternImage: pattern2 },
+    { id: 6, type: 'extra-rounded', color: '#284B63', borderColor: '#284B63', shape: 'octagon', backgroundType: 'none' },
 ];
 
 const getShapeStyle = (shape) => {
@@ -37,13 +37,13 @@ const getBackgroundStyle = (backgroundType, color, patternImage) => {
         case 'solid':
             return { backgroundColor: color };
         case 'pattern':
-            return { backgroundImage: `url(${patternImage})`, backgroundSize: 'cover' }; // Utilizar la imagen de patrón específica
+            return { backgroundImage: `url(${patternImage})`, backgroundSize: 'cover' };
         default:
             return { backgroundColor: 'transparent' };
     }
 };
 
-export default function ScrollableDesignQrs() {
+export default function ScrollableDesignQrs({ onStyleClick }) {
     const [value, setValue] = React.useState(0);
 
     const handleChange = (event, newValue) => {
@@ -79,6 +79,7 @@ export default function ScrollableDesignQrs() {
                                     borderStyle: 'solid',
                                     padding: '10px'
                                 }}
+                                onClick={() => onStyleClick(style.type)}
                             >
                                 <img src={imgQr} alt="" className='w-10 m-auto' />
                             </div>

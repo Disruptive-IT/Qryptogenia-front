@@ -1,20 +1,27 @@
 import { useState, useRef, useEffect } from 'react';
 import Button from '@mui/material/Button';
 import ScrollableDesingQrs from './design/scrollableDesingQrs';
+import Scrollcornersqueare from './design/scrollcornersquare';
+import Scrollcornerdot from './design/scrollcornerdot';
 import Frame from './frame';
 import Logo from './logo';
 import QR from '../qrCode';
 import { useQr } from '../../../../context/QrContext';
+import { Tabs, Tab } from '@mui/material';
 import GradientColorPicker from 'react-gcolor-picker';
+import Accordion from './design/accordion';
+import { Fa1 } from "react-icons/fa6";
+import { MdQrCodeScanner } from "react-icons/md";
 
 const Design = ({ onTabSelect }) => {
-    const { setQrColor, setDotsType, setCornersSquareType, setCornersDotType, setDotsColor, setCornersSquareColor, setCornersDotColor } = useQr();
+    const [tabValue, setTabValue] = useState(0);
+    const { qrProps, setQrColor, setDotsType, setCornersSquareType, setCornersDotType, setDotsColor, setCornersSquareColor, setCornersDotColor } = useQr();
     const [colorPickerStates, setColorPickerStates] = useState({
         isDotsColorPickerOpen: false,
         isCornersSquareColorPickerOpen: false,
         isCornersDotColorPickerOpen: false,
     });
-    const [currentColorPicker, setCurrentColorPicker] = useState(null); // Nuevo estado para rastrear qué colorPicker está abierto
+    const [currentColorPicker, setCurrentColorPicker] = useState(null);
 
     const colorPickerRefs = {
         dots: useRef(null),
@@ -27,7 +34,11 @@ const Design = ({ onTabSelect }) => {
             ...prevState,
             [type]: !prevState[type],
         }));
-        setCurrentColorPicker(type); // Establecer el colorPicker actualmente abierto
+        setCurrentColorPicker(type);
+    };
+
+    const handleTabChange = (event, newValue) => {
+        setTabValue(newValue);
     };
 
     const handleClickOutside = (event) => {
@@ -49,6 +60,7 @@ const Design = ({ onTabSelect }) => {
     }, []);
 
     const handleColorChange = (color, type) => {
+        console.log(`Color changed for ${type}:`, color);
         setQrColor(color);
         if (type === 'dots') {
             setDotsColor(color);
@@ -59,97 +71,113 @@ const Design = ({ onTabSelect }) => {
         }
     };
 
+    const handleStyleChange = (type) => {
+        setDotsType(type);
+    };
+
+    const handleStyleChangecorner = (type) => {
+        setCornersSquareType(type);
+    };
+
+    const handleStyleChangecornerdot = (type) => {
+        setCornersDotType(type);
+    };
+
     return (
         <>
-            <div className="flex items-center mb-4">
-                <label>Dots Type:</label>
-                <select onChange={(event) => setDotsType(event.target.value)}>
-                    <option value="rounded">Rounded</option>
-                    <option value="dots">Dots</option>
-                    <option value="classy">Classy</option>
-                    <option value="classy-rounded">Classy Rounded</option>
-                    <option value="square">Square</option>
-                    <option value="extra-rounded">Extra Rounded</option>
-                </select>
-                <div
-                    className="w-10 h-10 border border-gray-300 rounded cursor-pointer ml-2"
-                    style={{ background: colorPickerStates.isDotsColorPickerOpen && currentColorPicker === 'dots' ? useQr().qrProps.dotsColor : '#fff' }}
-                    onClick={() => handleToggleColorPicker('isDotsColorPickerOpen')}
-                ></div>
-                {colorPickerStates.isDotsColorPickerOpen && (
-                    <div className="absolute z-50" ref={colorPickerRefs.dots}>
-                        <GradientColorPicker
-                            enableAlpha={true}
-                            disableHueSlider={false}
-                            disableAlphaSlider={false}
-                            disableInput={false}
-                            disableHexInput={false}
-                            disableRgbInput={false}
-                            disableAlphaInput={false}
-                            presetColors={[]}
-                            onChange={(color) => handleColorChange(color, 'dots')}
-                        />
+            <Tabs value={tabValue} onChange={handleTabChange}>
+                <Tab icon={<MdQrCodeScanner />} label="Dots" />
+                <Tab icon={<MdQrCodeScanner />} label="Corners Square" />
+                <Tab icon={<MdQrCodeScanner />} label="Corners Dot" />
+            </Tabs>
+            {tabValue === 0 && (
+                <div>
+                    <ScrollableDesingQrs onStyleClick={handleStyleChange} />
+                    <div className="flex items-center mb-5 ml-5">
+                        <label>Dots Color:</label>
+                        <div
+                            className="w-10 h-10 border border-gray-300 rounded cursor-pointer ml-3 mt-5 mb-5"
+                            style={{ background: colorPickerStates.isDotsColorPickerOpen && currentColorPicker === 'dots' ? qrProps.dotsColor : qrProps.dotsColor || '#D14B08' }}
+                            onClick={() => handleToggleColorPicker('isDotsColorPickerOpen')}
+                        ></div>
+                        {colorPickerStates.isDotsColorPickerOpen && (
+                            <div className="absolute z-50" ref={colorPickerRefs.dots}>
+                                <GradientColorPicker
+                                    enableAlpha={true}
+                                    disableHueSlider={false}
+                                    disableAlphaSlider={false}
+                                    disableInput={false}
+                                    disableHexInput={false}
+                                    disableRgbInput={false}
+                                    disableAlphaInput={false}
+                                    presetColors={[]}
+                                    onChange={(color) => handleColorChange(color, 'dots')}
+                                />
+                            </div>
+                        )}
                     </div>
-                )}
-            </div>
-            <div className="flex items-center mb-4">
-                <label>Corners Square Type:</label>
-                <select onChange={(event) => setCornersSquareType(event.target.value)}>
-                    <option value="dot">Dot</option>
-                    <option value="square">Square</option>
-                    <option value="extra-rounded">Extra Rounded</option>
-                </select>
-                <div
-                    className="w-10 h-10 border border-gray-300 rounded cursor-pointer ml-2"
-                    style={{ background: colorPickerStates.isCornersSquareColorPickerOpen && currentColorPicker === 'cornersSquare' ? useQr().qrProps.cornersSquareColor : '#fff' }}
-                    onClick={() => handleToggleColorPicker('isCornersSquareColorPickerOpen')}
-                ></div>
-                {colorPickerStates.isCornersSquareColorPickerOpen && (
-                    <div className="absolute z-50" ref={colorPickerRefs.cornersSquare}>
-                        <GradientColorPicker
-                            enableAlpha={true}
-                            disableHueSlider={false}
-                            disableAlphaSlider={false}
-                            disableInput={false}
-                            disableHexInput={false}
-                            disableRgbInput={false}
-                            disableAlphaInput={false}
-                            presetColors={[]}
-                            onChange={(color) => handleColorChange(color, 'cornersSquare')}
-                        />
+                </div>
+            )}
+            {tabValue === 1 && (
+                <div>
+                    <Scrollcornersqueare onStyleClick={handleStyleChangecorner} />
+                    <div className="flex items-center mb-5">
+                        <label>Corners Square Color:</label>
+                        <div
+                            className="w-10 h-10 border border-gray-300 rounded cursor-pointer ml-3 mt-5 mb-5"
+                            style={{ background: colorPickerStates.isCornersSquareColorPickerOpen && currentColorPicker === 'cornersSquare' ? qrProps.cornersSquareColor : qrProps.cornersSquareColor || '#fff' }}
+                            onClick={() => handleToggleColorPicker('isCornersSquareColorPickerOpen')}
+                        ></div>
+                        {colorPickerStates.isCornersSquareColorPickerOpen && (
+                            <div className="absolute z-50" ref={colorPickerRefs.cornersSquare}>
+                                <GradientColorPicker
+                                    enableAlpha={true}
+                                    disableHueSlider={false}
+                                    disableAlphaSlider={false}
+                                    disableInput={false}
+                                    disableHexInput={false}
+                                    disableRgbInput={false}
+                                    disableAlphaInput={false}
+                                    presetColors={[]}
+                                    onChange={(color) => handleColorChange(color, 'cornersSquare')}
+                                />
+                            </div>
+                        )}
                     </div>
-                )}
-            </div>
-            <div className="flex items-center mb-4">
-                <label>Corners Dot Type:</label>
-                <select onChange={(event) => setCornersDotType(event.target.value)}>
-                    <option value="dot">Dot</option>
-                    <option value="square">Square</option>
-                </select>
-                <div
-                    className="w-10 h-10 border border-gray-300 rounded cursor-pointer ml-2"
-                    style={{ background: colorPickerStates.isCornersDotColorPickerOpen && currentColorPicker === 'cornersDot' ? useQr().qrProps.cornersDotColor : '#fff' }}
-                    onClick={() => handleToggleColorPicker('isCornersDotColorPickerOpen')}
-                ></div>
-                {colorPickerStates.isCornersDotColorPickerOpen && (
-                    <div className="absolute z-50" ref={colorPickerRefs.cornersDot}>
-                        <GradientColorPicker
-                            enableAlpha={true}
-                            disableHueSlider={false}
-                            disableAlphaSlider={false}
-                            disableInput={false}
-                            disableHexInput={false}
-                            disableRgbInput={false}
-                            disableAlphaInput={false}
-                            presetColors={[]}
-                            onChange={(color) => handleColorChange(color, 'cornersDot')}
-                        />
+                </div>
+            )}
+            {tabValue === 2 && (
+                <div>
+                    <Scrollcornerdot onStyleClick={handleStyleChangecornerdot} />
+                    <div className="flex items-center mb-5">
+                        <label>Corners Dot Color:</label>
+                        <div
+                            className="w-10 h-10 border border-gray-300 rounded cursor-pointer ml-3 mt-5 mb-5"
+                            style={{ background: colorPickerStates.isCornersDotColorPickerOpen && currentColorPicker === 'cornersDot' ? qrProps.cornersDotColor : qrProps.cornersDotColor || '#fff' }}
+                            onClick={() => handleToggleColorPicker('isCornersDotColorPickerOpen')}
+                        ></div>
+                        {colorPickerStates.isCornersDotColorPickerOpen && (
+                            <div className="absolute z-50" ref={colorPickerRefs.cornersDot}>
+                                <GradientColorPicker
+                                    enableAlpha={true}
+                                    disableHueSlider={false}
+                                    disableAlphaSlider={false}
+                                    disableInput={false}
+                                    disableHexInput={false}
+                                    disableRgbInput={false}
+                                    disableAlphaInput={false}
+                                    presetColors={[]}
+                                    onChange={(color) => handleColorChange(color, 'cornersDot')}
+                                />
+                            </div>
+                        )}
                     </div>
-                )}
-            </div>
+                </div>
+            )}
         </>
     );
 };
+
 const options = [
     { name: 'Frame', component: Frame },
     { name: 'Design', component: Design },

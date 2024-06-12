@@ -2,7 +2,6 @@ import React, { useEffect, useRef } from 'react';
 import QRCodeStyling from 'qr-code-styling';
 import '../styles/qrCode.css';
 import { useQr } from '../../../context/QrContext';
-import InputColor from 'react-input-color'
 
 const QR = () => {
     const { qrType, qrProps, qrImageInfo, qrTextProps, setQrColor, setDotsColor, setCornersSquareColor, setCornersDotColor } = useQr();
@@ -90,7 +89,7 @@ const QR = () => {
         <>
             <div className="flex items-center justify-center w-full" ref={qrRef}></div>
             <div className='absolute top-5 right-5'>
-                <InputColor initialValue="#000" onChange={handleColorChange} placement="right" />
+                
             </div>
             {qrTextProps.qrText && (
                 <span
