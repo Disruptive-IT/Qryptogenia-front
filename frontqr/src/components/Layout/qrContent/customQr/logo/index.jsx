@@ -5,7 +5,7 @@ import { ColorPicker } from '../frame/colorPicker';
 import Slider from '@mui/material/Slider';
 
 const Logo = () => {
-    const { setQrImage, setQrBgColor } = useQr();
+    const { setQrImage, setQrBgColor, setQrImageSize } = useQr();
     const [includeImage, setIncludeImage] = useState(false);
 
     const handleImageChange = (event) => {
@@ -19,6 +19,10 @@ const Logo = () => {
         setQrBgColor(color);
     };
 
+    const handleQrImageSize = (size) => {
+        setQrImageSize(size);
+    };
+    
     const handleIncludeImageChange = (event) => {
         const isChecked = event.target.checked;
         setIncludeImage(isChecked);
@@ -27,7 +31,7 @@ const Logo = () => {
             setQrImage(null);
         }
     };
- 
+
 
     return (
         <div className='w-screen lg:w-90 p-2'>
@@ -81,6 +85,7 @@ const Logo = () => {
                                     }}
                                     className='mr-4 w-full'
                                     disabled={!includeImage}
+                                    onChange={handleQrImageSize}
                                 />
                             </div>
                         </div>

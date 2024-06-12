@@ -4,6 +4,7 @@ const useQrState = (initialQrType = '', initialQrProps = {}) => {
     const [qrState, setQrState] = useState({
         qrType: initialQrType,
         qrColor: '#000000',
+        qrBgColor: 'transparent',
         qrProps: {
             ...initialQrProps,
             backgroundImage: null,
@@ -17,7 +18,8 @@ const useQrState = (initialQrType = '', initialQrProps = {}) => {
             cornersDotColor: '#000000'
         },
         qrImageInfo: {
-            qrImage: null
+            qrImage: null,
+            qrImageSize: "16"
         },
         qrTextProps: {
             qrText: '',
@@ -65,6 +67,13 @@ const useQrState = (initialQrType = '', initialQrProps = {}) => {
         setQrState(prevState => ({
             ...prevState,
             qrColor: color,
+        }));
+    };
+
+    const setQrBgColor = (color) => {
+        setQrState(prevState => ({
+            ...prevState,
+            qrBgColor: color,
         }));
     };
 
@@ -126,6 +135,7 @@ const useQrState = (initialQrType = '', initialQrProps = {}) => {
         updateQrTextProps({ qrText: text });
     };
 
+    
     const setQrFontStyle = (style) => {
         updateQrTextProps({ qrTextFontStyle: style });
     };
@@ -154,6 +164,10 @@ const useQrState = (initialQrType = '', initialQrProps = {}) => {
         }));
     };
 
+    const setQrImageSize = (size) => {
+        updateQrImageInfo({ qrImageSize: size });
+    };
+
     const setQrImage = (image) => {
         updateQrImageInfo({ qrImage: image });
     };
@@ -165,6 +179,7 @@ const useQrState = (initialQrType = '', initialQrProps = {}) => {
         setQrText,
         setQrFontStyle,
         setQrColor,
+        setQrBgColor,
         setTextColor,
         setDotsType,
         setCornersSquareType,
@@ -176,6 +191,7 @@ const useQrState = (initialQrType = '', initialQrProps = {}) => {
         setQrTextPositionX,
         setQrTextPositionY,
         setQrImage,
+        setQrImageSize,
     };
 
 };

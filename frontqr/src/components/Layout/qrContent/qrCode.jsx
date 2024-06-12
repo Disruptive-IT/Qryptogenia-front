@@ -4,7 +4,7 @@ import '../styles/qrCode.css';
 import { useQr } from '../../../context/QrContext';
 
 const QR = () => {
-    const { qrType, qrProps, qrImageInfo, qrTextProps, setQrColor, setDotsColor, setCornersSquareColor, setCornersDotColor } = useQr();
+    const { qrType, qrProps, qrImageInfo, qrTextProps, setQrColor, qrBgColor, setDotsColor, setCornersSquareColor, setCornersDotColor } = useQr();
     const { logoImage, dotsType, cornersSquareType, cornersDotType, dotsColor, cornersSquareColor, cornersDotColor } = qrProps;
     const qrRef = useRef(null);
     const qrCode = useRef(null);
@@ -18,7 +18,7 @@ const QR = () => {
             qrCode.current = new QRCodeStyling({
                 width: 250,
                 height: 250,
-                data: '',
+                data: 'www.qryptogenia.com',
                 dotsOptions: {
                     color: dotsColor,
                     type: dotsType || 'rounded'
@@ -42,7 +42,7 @@ const QR = () => {
             });
             qrCode.current.append(qrRef.current);
         }
-    }, []);
+    }, [qrBgColor, dotsColor, cornersSquareColor, cornersDotColor, dotsType, cornersSquareType, cornersDotType]); // Añade qrBgColor a la lista de dependencias
 
     useEffect(() => {
         let value = "";
@@ -63,7 +63,8 @@ const QR = () => {
                 value = "";
         }
         qrCode.current.update({
-            data: value,
+            data: value ? value : 'www.qryptogenia.com',
+            margin: 10,
             dotsOptions: {
                 color: dotsColor,
                 type: dotsType || 'rounded'
@@ -76,20 +77,25 @@ const QR = () => {
                 color: cornersDotColor,
                 type: cornersDotType || 'dot'
             },
-            image: qrImageInfo.qrImage,  
+            backgroundOptions: {
+                color: qrBgColor || "#ffffff",
+            },
+            image: qrImageInfo.qrImage,
             imageOptions: {
                 crossOrigin: "anonymous",
                 hideBackgroundDots: true,
                 margin: 0,
+                // size: Number(qrImageInfo.qrImageSize)
+                size: 0.2
+
             },
         });
-    }, [qrType, qrProps, qrImageInfo, dotsColor, cornersSquareColor, cornersDotColor, dotsType, cornersSquareType, cornersDotType, logoImage]);
+    }, [qrType, qrProps, qrImageInfo, dotsColor, cornersSquareColor, cornersDotColor, dotsType, cornersSquareType, cornersDotType, logoImage, qrBgColor]); // Añade qrBgColor a la lista de dependencias
 
     return (
         <>
-            <div className="flex items-center justify-center w-full" ref={qrRef}></div>
+            <div className="flex items-center justify-center w-full" ref={qrRef} ></div>
             <div className='absolute top-5 right-5'>
-                
             </div>
             {qrTextProps.qrText && (
                 <span
