@@ -84,17 +84,17 @@ const QR = () => {
             imageOptions: {
                 crossOrigin: "anonymous",
                 hideBackgroundDots: true,
-                margin: 0,
-                // size: Number(qrImageInfo.qrImageSize)
-                size: 0.2
-
+                margin: 2,
+                imageSize: qrImageInfo.qrImageSize
             },
         });
     }, [qrType, qrProps, qrImageInfo, dotsColor, cornersSquareColor, cornersDotColor, dotsType, cornersSquareType, cornersDotType, logoImage, qrBgColor]); // Añade qrBgColor a la lista de dependencias
 
     return (
         <>
-            <div className="flex items-center justify-center w-full" ref={qrRef} ></div>
+            <div className='m-auto'>
+                <div className="flex items-center justify-center w-full" ref={qrRef} ></div>
+            </div>
             <div className='absolute top-5 right-5'>
             </div>
             {qrTextProps.qrText && (

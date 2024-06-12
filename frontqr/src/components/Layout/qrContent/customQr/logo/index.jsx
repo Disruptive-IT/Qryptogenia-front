@@ -19,19 +19,20 @@ const Logo = () => {
         setQrBgColor(color);
     };
 
-    const handleQrImageSize = (size) => {
-        setQrImageSize(size);
+    const handleQrImageSize = (event) => {
+        const size = parseFloat(event.target.value);
+        if (size >= 0.1 && size <= 1) {
+            setQrImageSize(size);
+        }
     };
     
     const handleIncludeImageChange = (event) => {
         const isChecked = event.target.checked;
         setIncludeImage(isChecked);
-        setIsCenteredImage(isChecked);
         if (!isChecked) {
             setQrImage(null);
         }
     };
-
 
     return (
         <div className='w-screen lg:w-90 p-2'>
@@ -67,7 +68,7 @@ const Logo = () => {
                         Subir imagen
                     </Button>
                 </label>
-                <FormGroup className={`my-5 ${includeImage ? 'h-[200px]' : ''}`}>
+                <FormGroup className={`my-5 ${includeImage? 'h-[200px]' : ''}`}>
                     {includeImage && (
                         <div>
                             <FormLabel component="legend">Configuración</FormLabel>
@@ -78,14 +79,15 @@ const Logo = () => {
                                     type="number"
                                     InputProps={{
                                         inputProps: {
-                                            min: 1,
-                                            max: 100,
-                                            step: 1,
+                                            min: 0.1, 
+                                            max: 1, 
+                                            step: 0.1, 
                                         },
                                     }}
                                     className='mr-4 w-full'
                                     disabled={!includeImage}
                                     onChange={handleQrImageSize}
+                                    readOnly
                                 />
                             </div>
                         </div>
