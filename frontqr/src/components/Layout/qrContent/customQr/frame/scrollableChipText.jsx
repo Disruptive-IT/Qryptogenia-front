@@ -3,8 +3,10 @@ import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import Box from '@mui/material/Box';
 import Chip from '@mui/material/Chip';
+import { useQr } from '../../../../../context/QrContext';
 
 const bubbleStyles = [
+    { borderRadius: '0', padding: '0', backgroundColor: "transparent" },
     { borderRadius: '50%', padding: '8px 12px' },
     { borderRadius: '25% 75% / 75% 25%', padding: '6px 14px' },
     { borderRadius: '30% 70% / 70% 30%', padding: '7px 13px' },
@@ -17,15 +19,16 @@ const bubbleStyles = [
     { borderRadius: '20% 80% 30% 70% / 60% 40% 60% 40%', padding: '17px 19px' },
 ];
 
-export default function ScrollableChipText({ onTabSelect }) {
+export default function ScrollableChipText() {
     const [value, setValue] = React.useState(0);
+    const { setTextChip } = useQr();
 
     const handleChange = (event, newValue) => {
+        setTextChip(bubbleStyles[newValue])
         setValue(newValue);
-        onTabSelect(bubbleStyles[newValue]);
     };
 
-    const tabLabels = ['Stay positive', 'Work hard', 'Make it happen', 'Focus on goal', 'Believe in yourself', 'Keep moving', 'Never give up', 'Stay strong', 'Be humble', 'Embrace change'];
+    const tabLabels = ['Default', 'Stay positive', 'Work hard', 'Make it happen', 'Focus on goal', 'Believe in yourself', 'Keep moving', 'Never give up', 'Stay strong', 'Be humble', 'Embrace change'];
 
     return (
         <Box sx={{ width: 'auto', bgcolor: 'background.paper' }}>
@@ -50,7 +53,7 @@ export default function ScrollableChipText({ onTabSelect }) {
                                 label={tabLabels[index]}
                                 style={{
                                     backgroundColor: index === value ? '#284B63' : 'gray',
-                                    color: 'white',
+                                    color: index === 0 ? 'black' : 'white',
                                     ...bubbleStyles[index % bubbleStyles.length],
                                 }}
                             />

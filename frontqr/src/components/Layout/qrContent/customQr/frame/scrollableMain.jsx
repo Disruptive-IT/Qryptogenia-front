@@ -2,53 +2,43 @@ import * as React from 'react';
 import ScrollableChipText from './scrollableChipText';
 import { useQr } from '../../../../../context/QrContext';
 import ScrollableFontText from './scrollableFontText';
-import { ScrollableStyleText } from './scrollableStyleText';
+import Tabs from '@mui/material/Tabs';
+import Tab from '@mui/material/Tab';
+import Box from '@mui/material/Box';
 
 function Fuentes() {
-    return <ScrollableFontText />
-}
-
-function Estilos() {
-    return <ScrollableStyleText />;
+    return <ScrollableFontText />;
 }
 
 function Burbujas() {
-    return <ScrollableChipText />
+    return <ScrollableChipText />;
 }
 
 function ScrollableMain() {
-    const [tab, setTab] = React.useState('Fuentes');
+    const [value, setValue] = React.useState(0);
 
-    const getButtonClass = (buttonTab) => {
-        return `bg-[${tab === buttonTab ? '#d2d2d2' : '#f2f2f2'}] w-full text-dark-blue py-2 rounded-md shadow-md`;
-    }
+    const handleChange = (event, newValue) => {
+        setValue(newValue);
+    };
 
     return (
-        <>
-            <div className='flex justify-between gap-4 '>
-                <button
-                    className={getButtonClass('Fuentes')}
-                    onClick={() => setTab('Fuentes')}
-                >
-                    Fuentes
-                </button>
-                <button
-                    className={getButtonClass('Estilos')}
-                    onClick={() => setTab('Estilos')}
-                >
-                    Estilos
-                </button>
-                <button
-                    className={getButtonClass('Burbujas')}
-                    onClick={() => setTab('Burbujas')}
-                >
-                    Burbujas
-                </button>
-            </div>
-            {tab === 'Fuentes' && <Fuentes />}
-            {tab === 'Estilos' && <Estilos />}
-            {tab === 'Burbujas' && <Burbujas />}
-        </>
+        <Box sx={{ width: '100%', bgcolor: 'background.paper' }}>
+            <Tabs
+                value={value}
+                onChange={handleChange}
+                variant="fullWidth"
+                centered
+                aria-label="tabs text"
+                TabProps={{
+                    dir: 'rtl', 
+                }}
+            >
+                <Tab label="Fuentes" />
+                <Tab label="Burbujas" />
+            </Tabs>
+            {value === 0 && <Fuentes />}
+            {value === 1 && <Burbujas />}
+        </Box>
     );
 }
 

@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 import { useQr } from '../../../../../context/QrContext';
 import { Checkbox, FormControlLabel, Button, TextField, FormGroup, FormControl, FormLabel } from '@mui/material';
-import { ColorPicker } from '../frame/colorPicker';
+import { ColorPicker } from '../colorPicker';
 import Slider from '@mui/material/Slider';
 
 const Logo = () => {
-    const { setQrImage, setQrBgColor, setQrImageSize, qrImageInfo } = useQr();
+    const { setQrImage, setQrImageSize, qrImageInfo } = useQr();
     const [includeImage, setIncludeImage] = useState(false);
 
     const handleImageChange = (event) => {
@@ -13,10 +13,6 @@ const Logo = () => {
             const imageUrl = URL.createObjectURL(event.target.files[0]);
             setQrImage(imageUrl);
         }
-    };
-
-    const handleColorBgQr = (color) => {
-        setQrBgColor(color);
     };
 
     const handleQrImageSize = (event) => {
@@ -36,14 +32,7 @@ const Logo = () => {
     };
 
     return (
-        <div className='w-screen lg:w-90 p-2'>
-            <div className='flex gap-5'>
-                <div className='flex gap-3 items-center'>
-                    <span>Background color:</span>
-                    <ColorPicker setColor={handleColorBgQr} />
-                </div>
-            </div>
-
+        <div>
             <input
                 accept="image/*"
                 style={{ display: 'none' }}
@@ -53,7 +42,7 @@ const Logo = () => {
                 disabled={!includeImage}
             />
 
-            <div className='my-5 space-x-2 w-[40vw] lg:w-[28vw]'>
+            <div className='my-5 space-x-2'>
                 <FormControlLabel
                     control={
                         <Checkbox

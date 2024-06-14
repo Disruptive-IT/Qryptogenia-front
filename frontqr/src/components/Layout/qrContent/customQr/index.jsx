@@ -76,7 +76,7 @@ const Design = ({ onTabSelect }) => {
     const handleStyleMarco = (type) => {
         setMarcoType(type);
     };
-    
+
     const handleStyleChange = (type) => {
         setDotsType(type);
     };
@@ -190,14 +190,20 @@ const Design = ({ onTabSelect }) => {
     );
 };
 
+const Dowload = ({ onTabSelect }) => {
+    <p>Descargar</p>
+}
+
 const options = [
     { name: 'Frame', component: Frame },
     { name: 'Design', component: Design },
     { name: 'Logo', component: Logo },
+    { name: 'Dowload', component: Dowload },
 ];
 
 const CustomQr = () => {
     const [selectedOptionIndex, setSelectedOptionIndex] = useState(0);
+    const { qrTextProps } = useQr();
 
     const handleOptionSelect = (index) => {
         setSelectedOptionIndex(index);
@@ -207,10 +213,10 @@ const CustomQr = () => {
 
     return (
         <div className='w-full rounded-md flex flex-col justify-between pb-4'>
-            <div className='flex relative mt-4 py-8'>
+            <div className={`flex relative mb-4 py-8 max-h-[400px] ${qrTextProps.qrText ? 'bg-gray-100 min-h-[380px]' : ''}`}>
                 <QR />
             </div>
-            <div className='flex flex-col h-[500px] pt-5  '>
+            <div className='flex flex-col h-[400px]  '>
                 <div className='space-x-3 mx-auto'>
                     {options.map((option, index) => (
                         <Button

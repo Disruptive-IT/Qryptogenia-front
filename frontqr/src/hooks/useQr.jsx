@@ -24,10 +24,12 @@ const useQrState = (initialQrType = '', initialQrProps = {}) => {
         },
         qrTextProps: {
             qrText: '',
+            qrTextSize: "16px",
             qrTextColor: '#000000',
             qrTextFontStyle: {},
             qrTextPositionX: 0,
             qrTextPositionY: 0,
+            qrTextChip: 0,
         },
     });
 
@@ -146,9 +148,13 @@ const useQrState = (initialQrType = '', initialQrProps = {}) => {
         updateQrTextProps({ qrText: text });
     };
 
-    
+
     const setQrFontStyle = (style) => {
         updateQrTextProps({ qrTextFontStyle: style });
+    };
+
+    const setTextSize = (size) => {
+        updateQrTextProps({ qrTextSize: size });
     };
 
     const setTextColor = (color) => {
@@ -161,6 +167,10 @@ const useQrState = (initialQrType = '', initialQrProps = {}) => {
 
     const setQrTextPositionY = (y) => {
         updateQrTextProps({ qrTextPositionY: y });
+    };
+
+    const setTextChip = (shape) => {
+        updateQrTextProps({ qrTextChip: shape });
     };
 
     // ----------------------------- IMG
@@ -200,8 +210,10 @@ const useQrState = (initialQrType = '', initialQrProps = {}) => {
         setCornersSquareColor,
         setCornersDotColor,
         setBackgroundImage,
+        setTextSize,
         setQrTextPositionX,
         setQrTextPositionY,
+        setTextChip,
         setQrImage,
         setQrImageSize,
     };

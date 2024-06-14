@@ -39,7 +39,7 @@ const QR = () => {
             });
             qrCode.current.append(qrRef.current);
         }
-    }, [dotsColor, cornersSquareColor, cornersDotColor, dotsType, cornersSquareType, cornersDotType]); 
+    }, [dotsColor, cornersSquareColor, cornersDotColor, dotsType, cornersSquareType, cornersDotType]);
 
     useEffect(() => {
         let value = "";
@@ -89,7 +89,7 @@ const QR = () => {
 
     return (
         <>
-        <div className='m-auto p-10 border-2' style={{...marcoType.style, backgroundColor: marcoType.type === 'default' ? 'transparent' : qrBgColor}}>
+            <div className='m-auto border-4' style={{ ...marcoType.style, backgroundColor: marcoType.type === 'default' ? 'transparent' : qrBgColor, transition: 'all 0.5s ease', }}>
                 <div className="flex items-center justify-center w-full" ref={qrRef}></div>
             </div>
             {qrTextProps.qrText && (
@@ -99,9 +99,12 @@ const QR = () => {
                         top: `${qrTextProps.qrTextPositionY}%`,
                         left: `${qrTextProps.qrTextPositionX}%`,
                         color: qrTextProps.qrTextColor,
+                        fontSize: qrTextProps.qrTextSize,
                         whiteSpace: 'pre-wrap',
                         overflowWrap: 'break-word',
                         width: '100px',
+                        ...(qrTextProps.qrTextChip ? { backgroundColor: "gray" } : {}),
+                        ...qrTextProps.qrTextChip,
                         ...qrTextProps.qrTextFontStyle
                     }}
                 >

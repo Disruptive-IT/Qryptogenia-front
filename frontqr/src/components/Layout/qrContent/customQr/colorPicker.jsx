@@ -29,7 +29,7 @@ export const ColorPicker = ({ setColor, position }) => {
     }, []);
 
     return (
-        <div className='relative justify-evenly items-center flex gap-4'>
+        <div className='relative justify-evenly items-center flex gap-4 z-20'>
             <div
                 className="w-20 md:w-10 h-10 border border-gray-300 rounded cursor-pointer"
                 style={{ background: selectColor }}
