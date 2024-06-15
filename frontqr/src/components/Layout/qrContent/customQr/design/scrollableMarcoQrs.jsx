@@ -3,18 +3,21 @@ import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import Box from '@mui/material/Box';
 import imgQr from '../../../../../assets/imgs/qr.png';
+import frame1 from '../../../../../assets/imgs/frame1.png';
+import qrframe from '../../../../../assets/imgs/qrframe.png';
 import pattern1 from '../../../../../assets/imgs/patter1.avif';
 import pattern2 from '../../../../../assets/imgs/patter1.avif';
-
+import { MdOutlineQrCode, MdOutlineQrCode2  } from "react-icons/md";
+import { TbLetterX } from "react-icons/tb";
+import { MdOutlineCancel } from "react-icons/md";
 const qrStyles = [
-    { id: 1, type: 'default', style: { borderColor: 'transparent' }, shape: 'none', backgroundType: 'none' },
-    { id: 2, type: 'circle', style: { borderRadius: '50%', borderColor: '#284B63' }, shape: 'circle', backgroundType: 'solid' },
-    { id: 3, type: 'square', style: { borderRadius: '0', borderColor: '#284B63' }, shape: 'square', backgroundType: 'pattern', patternImage: pattern1 },
-    { id: 4, type: 'rounded', style: { borderRadius: '15px', borderColor: '#284B63' }, shape: 'rounded', backgroundType: 'solid' },
-    { id: 5, type: 'hexagon', style: { clipPath: 'polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%)', borderColor: '#284B63' }, backgroundType: 'pattern', patternImage: pattern2 },
-    { id: 6, type: 'octagon', style: { clipPath: 'polygon(30% 0%, 70% 0%, 100% 30%, 100% 70%, 70% 100%, 30% 100%, 0% 70%, 0% 30%)', borderColor: '#284B63' }, shape: 'octagon', backgroundType: 'none' },
+    { id: 1, type: 'default', icon: TbLetterX , style: { borderColor: 'transparent' }, shape: 'none', backgroundType: 'none', backgroundType: 'pattern' },
+    { id: 2, type: 'circle', icon: MdOutlineQrCode2, style: { borderRadius: '50%', borderColor: '#000000' }, shape: 'circle', backgroundType: 'pattern' },
+    { id: 3, type: 'square', icon: MdOutlineQrCode2, style: { borderRadius: '0', borderColor: '#000000' }, shape: 'square', backgroundType: 'pattern' },
+    { id: 4, type: 'rounded', icon: MdOutlineQrCode2, style: { borderRadius: '15px', borderColor: '#000000' }, shape: 'rounded', backgroundType: 'pattern' },
+    { id: 5, type: 'hexagon', icon: MdOutlineQrCode2, style: { clipPath: 'polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 24%)', borderColor: '#000000 ' }, shape: 'hexagon', backgroundType: 'pattern',  },
+    { id: 6, type: 'octagon', icon: MdOutlineQrCode2, style: { clipPath: 'polygon(30% 0%, 70% 0%, 100% 30%, 100% 70%, 70% 100%, 30% 100%, 0% 70%, 0% 30%)', borderColor: '#000000' }, shape: 'octagon', backgroundType: 'pattern',},
 ];
-
 
 const getShapeStyle = (shape) => {
     switch (shape) {
@@ -25,7 +28,7 @@ const getShapeStyle = (shape) => {
         case 'square':
             return { borderRadius: '0' };
         case 'hexagon':
-            return { clipPath: 'polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%)' };
+            return { clipPath: 'polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 24%)' };
         case 'octagon':
             return { clipPath: 'polygon(30% 0%, 70% 0%, 100% 30%, 100% 70%, 70% 100%, 30% 100%, 0% 70%, 0% 30%)' };
         default:
@@ -40,22 +43,18 @@ const getBackgroundStyle = (backgroundType, color, patternImage) => {
         case 'pattern':
             return { backgroundImage: `url(${patternImage})`, backgroundSize: 'cover' };
         default:
-            return { backgroundColor: 'transparent' };
+            return { backgroundColor: '#000000' };
     }
 };
 
-export default function ScrollableMarcoQrs({ onStyleClick }) {
-    const [value, setValue] = React.useState(0);
-
-    const handleChange = (event, newValue) => {
-        setValue(newValue);
-    };
+export default function ScrollableMarcoQrs({ onStyleClick, value, onChange }) {
+    
 
     return (
         <Box sx={{ width: 'auto', bgcolor: 'background.paper' }}>
             <Tabs
                 value={value}
-                onChange={handleChange}
+                onChange={onChange}
                 variant="scrollable"
                 scrollButtons="auto"
                 aria-label="scrollable auto tabs example"
@@ -74,15 +73,15 @@ export default function ScrollableMarcoQrs({ onStyleClick }) {
                                 className='tab'
                                 style={{
                                     ...getShapeStyle(style.shape),
-                                    ...getBackgroundStyle(style.backgroundType, style.style.backgroundColor, style.patternImage),
+                                    ...getBackgroundStyle(style.backgroundType, style.style.backgroundColor, style.patternImage,),
                                     borderColor: style.style.borderColor,
                                     borderWidth: style.shape !== 'none' ? '2px' : '0px',
                                     borderStyle: 'solid',
-                                    padding: '10px'
+                                    padding: '20px'
                                 }}
                                 onClick={() => onStyleClick(style)}
                             >
-                                <img src={imgQr} alt="" className='w-10 m-auto' />
+                                <style.icon size={35} />
                             </div>
                         }
                     />

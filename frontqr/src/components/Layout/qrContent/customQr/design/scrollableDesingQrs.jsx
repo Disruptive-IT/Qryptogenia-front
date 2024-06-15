@@ -2,35 +2,25 @@ import * as React from 'react';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import Box from '@mui/material/Box';
-import imgQr from '../../../../../assets/imgs/qr.png';
+import imgQr from '../../../../../assets/imgs/dots1.png';
+import dots2 from '../../../../../assets/imgs/dots2.png';
+import dots4 from '../../../../../assets/imgs/dots4.png';
+import dots5 from '../../../../../assets/imgs/dots5.png';
+import dots6 from '../../../../../assets/imgs/dots6.png';
+import dots3 from '../../../../../assets/imgs/dots3.png';
 import pattern1 from '../../../../../assets/imgs/patter1.avif';
 import pattern2 from '../../../../../assets/imgs/patter1.avif';
 
 const qrStyles = [
-    { id: 1, type: 'rounded', color: 'transparent', borderColor: 'transparent', shape: 'none', backgroundType: 'none' },
-    { id: 2, type: 'dots', color: '#284B63', borderColor: '#284B63', shape: 'circle', backgroundType: 'solid' },
-    { id: 3, type: 'classy', color: '#284B63', borderColor: '#284B63', shape: 'square', backgroundType: 'pattern', patternImage: pattern1 },
-    { id: 4, type: 'classy-rounded', color: '#284B63', borderColor: '#284B63', shape: 'rounded', backgroundType: 'solid' },
-    { id: 5, type: 'square', color: '#284B63', borderColor: '#284B63', shape: 'hexagon', backgroundType: 'pattern', patternImage: pattern2 },
-    { id: 6, type: 'extra-rounded', color: '#284B63', borderColor: '#284B63', shape: 'octagon', backgroundType: 'none' },
+    { id: 1, type: 'rounded', color: '#284B63', borderColor: '#284B63', shape: 'rounded', backgroundType: 'none', patternImage: imgQr },
+    { id: 2, type: 'dots', color: '#284B63', borderColor: '#284B63', shape: 'rounded', backgroundType: 'none', patternImage: dots2 },
+    
+    { id: 4, type: 'classy-rounded', color: '#284B63', borderColor: '#284B63', shape: 'rounded', backgroundType: 'none', patternImage: dots4 },
+    { id: 5, type: 'square', color: '#284B63', borderColor: '#284B63', shape: 'rounded', backgroundType: 'none', patternImage: dots5 },
+    { id: 6, type: 'extra-rounded', color: '#284B63', borderColor: '#284B63', shape: 'rounded', backgroundType: 'none', patternImage: dots6 },
+    { id: 3, type: 'classy', color: '#284B63', borderColor: '#284B63', shape: 'rounded', backgroundType: 'none', patternImage: dots3  },
 ];
 
-const getShapeStyle = (shape) => {
-    switch (shape) {
-        case 'circle':
-            return { borderRadius: '50%' };
-        case 'rounded':
-            return { borderRadius: '15px' };
-        case 'square':
-            return { borderRadius: '0' };
-        case 'hexagon':
-            return { clipPath: 'polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%)' };
-        case 'octagon':
-            return { clipPath: 'polygon(30% 0%, 70% 0%, 100% 30%, 100% 70%, 70% 100%, 30% 100%, 0% 70%, 0% 30%)' };
-        default:
-            return {};
-    }
-};
 
 const getBackgroundStyle = (backgroundType, color, patternImage) => {
     switch (backgroundType) {
@@ -43,18 +33,12 @@ const getBackgroundStyle = (backgroundType, color, patternImage) => {
     }
 };
 
-export default function ScrollableDesignQrs({ onStyleClick }) {
-    const [value, setValue] = React.useState(0);
-
-    const handleChange = (event, newValue) => {
-        setValue(newValue);
-    };
-
+export default function ScrollableDesignQrs({ onStyleClick, value, onChange }) {
     return (
         <Box sx={{ width: 'auto', bgcolor: 'background.paper' }}>
             <Tabs
                 value={value}
-                onChange={handleChange}
+                onChange={onChange}
                 variant="scrollable"
                 scrollButtons="auto"
                 aria-label="scrollable auto tabs example"
@@ -72,16 +56,16 @@ export default function ScrollableDesignQrs({ onStyleClick }) {
                             <div
                                 className='tab'
                                 style={{
-                                    ...getShapeStyle(style.shape),
+                                    
                                     ...getBackgroundStyle(style.backgroundType, style.color, style.patternImage),
                                     borderColor: style.borderColor,
                                     borderWidth: style.shape !== 'none' ? '2px' : '0px',
                                     borderStyle: 'solid',
-                                    padding: '10px'
+                                    padding: '14px'
                                 }}
                                 onClick={() => onStyleClick(style.type)}
                             >
-                                <img src={imgQr} alt="" className='w-10 m-auto' />
+                                <img src={style.patternImage} alt="" className='w-12 m-auto' />
                             </div>
                         }
                     />
