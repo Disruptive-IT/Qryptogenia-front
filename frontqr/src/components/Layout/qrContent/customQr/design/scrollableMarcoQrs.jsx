@@ -14,7 +14,7 @@ import { TbLetterX } from "react-icons/tb";
 import { MdOutlineCancel } from "react-icons/md";
 
 const qrStyles = [
-    { id: 1, type: 'default', icon: TbLetterX, style: { borderColor: 'transparent', border: 0 }, shape: 'none', backgroundType: 'none', backgroundType: 'pattern' },
+    { id: 1, type: 'default', icon: TbLetterX, style: { borderColor: 'transparent', border: 0 }, shape: 'none', backgroundType: 'pattern' },
     { id: 2, type: 'circle', icon: MdOutlineQrCode2, style: { borderRadius: '50%', borderColor: '#000000', padding: '50px' }, shape: 'circle', backgroundType: 'pattern' },
     { id: 3, type: 'square', icon: MdOutlineQrCode2, style: { borderRadius: '0', borderColor: '#000000' }, shape: 'square', backgroundType: 'pattern' },
     { id: 4, type: 'rounded', icon: MdOutlineQrCode2, style: { borderRadius: '15px', borderColor: '#000000' }, shape: 'rounded', backgroundType: 'pattern' },
