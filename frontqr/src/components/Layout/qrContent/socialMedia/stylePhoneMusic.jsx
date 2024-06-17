@@ -61,13 +61,55 @@ export const WebLinkPhoneMusic = ({musicFormValues}) => {
   <div className='relative bg-white rounded-2xl -mt-14 border-4 shadow-lg' style={{ borderColor: musicFormValues.borderColor }}>
     <img className='w-36 rounded-2xl' src={musicFormValues.image || logot} alt="" />
   </div>
-  <div className='mt-4 mb-2 w-[90%] text-center'>
-    <h1 className='text-2xl mb-2' style={{ color: musicFormValues.titleColor }}>{musicFormValues.title}</h1>
-    <p className='break-words' style={{ color: musicFormValues.descriptionColor }}>{musicFormValues.description}</p>
-  </div>
+  <div className="mt-4 mb-2 w-[90%] text-center">
+      <h1
+        className="text-2xl mb-2 font-bold"
+        style={{ color: musicFormValues.titleColor }}
+      >
+        {musicFormValues.title}
+      </h1>
+      <div
+        className="break-words overflow-y-auto max-h-[200px] custom-scrollbar text-lg leading-relaxed relative"
+        style={{ color: musicFormValues.descriptionColor }}
+      >
+        {musicFormValues.description}
+      </div>
+    </div>
 </div>
 
       <SocialButton data={data} />
     </div>
     )
 }
+
+const globalStyles = `
+  .custom-scrollbar {
+    scrollbar-width: thin; /* Para Firefox */
+    scrollbar-color: rgba(0, 0, 0, 0.5) transparent; /* Para Firefox */
+  }
+
+  .custom-scrollbar::-webkit-scrollbar {
+    width: 8px; /* Ancho de la barra de desplazamiento para WebKit */
+  }
+
+  .custom-scrollbar::-webkit-scrollbar-track {
+    background: transparent; /* Fondo del track */
+  }
+
+  .custom-scrollbar::-webkit-scrollbar-thumb {
+    background-color: rgba(0, 0, 0, 0.5); /* Color del pulgar */
+    border-radius: 10px; /* Borde redondeado del pulgar */
+    border: 2px solid transparent; /* Espacio alrededor del pulgar */
+    background-clip: padding-box; /* Ajuste del fondo */
+  }
+
+  .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+    background-color: rgba(0, 0, 0, 0.7); /* Color del pulgar al pasar el ratón */
+  }
+`;
+
+// Insertar los estilos globales
+const styleSheet = document.createElement("style");
+styleSheet.type = "text/css";
+styleSheet.innerText = globalStyles;
+document.head.appendChild(styleSheet);

@@ -1,6 +1,6 @@
 import { Navigate, Route, Routes } from "react-router-dom";
 import Dashboard from "../pages/Admin/Dashboard";
-import Profile from "../pages/Admin/profile/profilePage";
+import Profile from "../../src/components/Admin/profile/profilePage";
 import LoginForm from "../pages/Auth/LoginForm";
 import HomePage from "../pages/HomePage";
 import ProtectedRouteAdmin from "./ProtectedRouteAdmin";
@@ -19,7 +19,7 @@ import Loader from '../components/UI/loader/Loader';
 import AppContent from "../pages/AppContent";
 import App from "../components/UI/tables/app";
 import { useAuthContext } from "../context/AuthContext";
-import WebLinkPhoneMusicPage from "../pages/viewsQr/WebLinkPhoneMusicPage";
+import WebLinkPhoneMusicPage from "../components/Layout/viewsQr/WebLinkPhoneMusicPage";
 
 export const PageRouter = () => {
     const { isLoading } = useLoader();

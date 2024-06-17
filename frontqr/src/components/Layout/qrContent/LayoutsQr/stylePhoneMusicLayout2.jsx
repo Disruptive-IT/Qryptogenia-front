@@ -48,7 +48,7 @@ export const MusicLayout = ({ musicFormValues }) => {
         name: option.value,
         icon: originalOption ? originalOption.icon : null,
         url: option.url,
-        textTop: originalOption ? originalOption.textTop : '', // Aquí está la corrección
+        textTop: originalOption ? originalOption.textTop : '',
         textBottom: originalOption ? originalOption.textBottom : '',
       };
     })
@@ -56,40 +56,42 @@ export const MusicLayout = ({ musicFormValues }) => {
 
   return (
     <div
-  className="flex flex-col min-h-screen w-full items-center justify-center"
-  style={{ background: musicFormValues.backgroundColor }}
->
-  <div
-    className="flex flex-col items-center mt-10 md:mt-28 bg-white rounded-2xl w-[90%] sm:w-[400px] md:w-[600px] min-h-[400px] max-h-[600px] p-6 shadow-lg"
-    style={{ background: musicFormValues.backgroundColor }}
-  >
-    <div
-      className="relative bg-white rounded-2xl -mt-14 border-4 shadow-md p-1 transition-shadow hover:shadow-xl"
-      style={{ borderColor: musicFormValues.borderColor }}
+      className="flex flex-col md:flex-row min-h-screen w-full items-center justify-center"
+      style={{ background: musicFormValues.backgroundColor }}
     >
-      <img
-        className="w-36 rounded-2xl"
-        src={musicFormValues.image || logot}
-        alt=""
-      />
-    </div>
-    <div className="mt-4 mb-2 w-[90%] text-center">
-      <h1
-        className="text-2xl mb-2 font-bold"
-        style={{ color: musicFormValues.titleColor }}
-      >
-        {musicFormValues.title}
-      </h1>
       <div
-        className="break-words overflow-y-auto max-h-[200px] custom-scrollbar text-lg leading-relaxed"
-        style={{ color: musicFormValues.descriptionColor }}
+        className="flex flex-col items-center mt-10 md:mt-28 bg-white rounded-lg w-[90%] sm:w-[400px] md:w-[600px] min-h-[400px] max-h-[600px] p-6 shadow-lg"
+        style={{ background: musicFormValues.backgroundColor }}
       >
-        {musicFormValues.description}
+        <div
+          className="relative bg-white rounded-2xl -mt-14 border-4 shadow-md p-1 transition-shadow hover:shadow-xl"
+          style={{ borderColor: musicFormValues.borderColor }}
+        >
+          <img
+            className="w-36 rounded-2xl"
+            src={musicFormValues.image || logot}
+            alt=""
+          />
+        </div>
+        <div className="mt-4 mb-2 w-[90%] text-center">
+          <h1
+            className="text-2xl mb-2 font-bold"
+            style={{ color: musicFormValues.titleColor }}
+          >
+            {musicFormValues.title}
+          </h1>
+          <div
+            className="break-words overflow-y-auto max-h-[200px] custom-scrollbar text-lg leading-relaxed"
+            style={{ color: musicFormValues.descriptionColor }}
+          >
+            {musicFormValues.description}
+          </div>
+        </div>
+      </div>
+      <div className="md:ml-6 mt-4 md:mt-0">
+        <SocialButton data={data} />
       </div>
     </div>
-  </div>
-  <SocialButton data={data} />
-</div>
   );
 }
 

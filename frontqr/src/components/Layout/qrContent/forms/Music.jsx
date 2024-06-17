@@ -8,10 +8,12 @@ import GradientColorPicker from 'react-gcolor-picker'; // Importamos el nuevo co
 export const MusicForm = ({ onFormChangeMusic }) => {
     const [title, setTitle] = useState('');
     const [description, setDescription] = useState('');
+    const maxLength = 250;
+    const maxTitle = 30;
     const [borderColor, setBorderColor] = useState('#ffffff')
     const [backgroundColor, setBackgroundColor] = useState('linear-gradient(180deg, rgb(0, 0, 0) 0.00%,rgb(50, 152, 153) 100.00%)')
     const [boxColor, setBoxColor] = useState('linear-gradient(180deg, rgb(0, 0, 0) 0.00%,rgb(50, 152, 153) 100.00%)')
-    const [titleColor, setTitleColor] = useState('#ffffff');
+    const [titleColor, setTitleColor] = useState('#820e0e');
     const [descriptionColor, setDescriptionColor] = useState('#ffffff');
     const [showTitleColorPicker, setShowTitleColorPicker] = useState(false);
     const [showBorderColorPicker, setShowBorderColorPicker] = useState(false);
@@ -217,9 +219,12 @@ export const MusicForm = ({ onFormChangeMusic }) => {
                                     placeholder="Title"
                                     className="border w-full border-gray-300 rounded p-2"
                                     value={title}
-                                    maxLength="16"
+                                    maxLength={maxTitle}
                                     onChange={handleTitleChange}
                                 />
+                                <div className="text-right text-sm text-gray-900">
+                                    {title.length}/{maxTitle} Characters
+                                </div>
                             </div>
                             <div className="flex flex-col relative">
                                 <label htmlFor="titleColor" className="mb-2">Color:</label>
@@ -258,12 +263,15 @@ export const MusicForm = ({ onFormChangeMusic }) => {
                                     rows="5"
                                     type="text"
                                     placeholder="Description"
-                                    maxLength="207"
+                                    maxLength={maxLength}
                                     id="description"
                                     className="w-full min-h-20 max-h-40 border border-gray-300 rounded p-2"
                                     value={description}
                                     onChange={handleDescriptionChange}
                                 />
+                                <div className="text-right text-sm text-gray-900">
+                                    {description.length}/{maxLength} Characters
+                                </div>
                             </div>
                             <div className="flex flex-col relative">
                                 <label htmlFor="descriptionColor" className="mb-2">Color:</label>

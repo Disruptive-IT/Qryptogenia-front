@@ -16,18 +16,18 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
 .App {
   text-align: center;
 }
 
-:root{
-  --DarkBlue:  #284B63;
+:root {
+  --DarkBlue: #284B63;
   --LigthBlue: #3C6E71;
-  --MyGray:    #D9D9D9;
-  --MyRed:     #CC2905;
-  --MyBlack:   #353535;
+  --MyGray: #D9D9D9;
+  --MyRed: #CC2905;
+  --MyBlack: #353535;
 }
-
 
 .form-inline {
   width: 100%;
@@ -50,27 +50,61 @@ span.input-group-addon {
 }
 
 .center {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-top: 5%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 5%;
 }
 
 /* Linea hover del menu principal */
-.hover-line::after { 
+.hover-line::after {
   content: "";
   display: block;
   width: 0;
   height: 2px;
   background: #3c6e71;
   transition: width 0.3s;
- }
- 
+}
+
 .hover-line:not(.active-line):hover::after {
   width: 100%;
- }
- 
- .hover-line.active-line::after {
+}
+
+.hover-line.active-line::after {
   width: 100%;
- }
- 
+}
+
+/* Scrollbar personalizado para WebKit (Chrome, Safari) */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: #ccc;
+  border-radius: 10px;
+  border: 2px solid #f5f5f5;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: #bbb;
+}
+
+/* Scrollbar personalizado para Firefox */
+html {
+  scrollbar-width: thin;
+  scrollbar-color: #ccc transparent;
+}
+
+body {
+  scrollbar-width: thin;
+  scrollbar-color: #ccc transparent;
+}
+
+/* Ocultar flechas de scroll en WebKit */
+::-webkit-scrollbar-button {
+  display: none;
+}
