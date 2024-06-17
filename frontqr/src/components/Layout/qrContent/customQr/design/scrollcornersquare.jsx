@@ -3,13 +3,16 @@ import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import Box from '@mui/material/Box';
 import imgQr from '../../../../../assets/imgs/qr.png';
+import squeare1 from '../../../../../assets/imgs/cornersquare1.png';
+import squeare3 from '../../../../../assets/imgs/cornersquare2.png';
+import squeare2 from '../../../../../assets/imgs/cornersquare3.png';
 import pattern1 from '../../../../../assets/imgs/patter1.avif';
 import pattern2 from '../../../../../assets/imgs/patter1.avif';
 
 const qrStyles = [
-    { id: 1, type: 'dot', color: 'transparent', borderColor: 'transparent', shape: 'none', backgroundType: 'none' },
-    { id: 2, type: 'square', color: '#284B63', borderColor: '#284B63', shape: 'circle', backgroundType: 'solid' },
-    { id: 3, type: 'extra-rounded', color: '#284B63', borderColor: '#284B63', shape: 'square', backgroundType: 'pattern', patternImage: pattern1 },
+    { id: 1, type: 'dot', color: '#284B63', borderColor: '#284B63', shape: 'rounded', backgroundType: 'none', patternImage: squeare1 },
+    { id: 2, type: 'square', color: '#284B63', borderColor: '#284B63', shape: 'rounded', backgroundType: 'none', patternImage: squeare2 },
+    { id: 3, type: 'extra-rounded', color: '#284B63', borderColor: '#284B63', shape: 'rounded', backgroundType: 'none', patternImage: squeare3 },
     
 ];
 
@@ -41,21 +44,21 @@ const getBackgroundStyle = (backgroundType, color, patternImage) => {
     }
 };
 
-export default function Scrollcornersqueare({ onStyleClick }) {
-    const [value, setValue] = React.useState(0);
-
-    const handleChange = (event, newValue) => {
-        setValue(newValue);
-    };
-
+export default function Scrollcornersqueare({ onStyleClick, value, onChange  }) {
     return (
         <Box sx={{ width: 'auto', bgcolor: 'background.paper' }}>
             <Tabs
                 value={value}
-                onChange={handleChange}
+                onChange={onChange}
                 variant="scrollable"
                 scrollButtons="auto"
                 aria-label="scrollable auto tabs example"
+                TabIndicatorProps={{
+                    style: {
+                      backgroundColor: "",
+                      height: '4px'
+                    }
+                  }}
                 sx={{
                     '& .MuiTabs-scrollButtons': {
                         width: '20px',
@@ -75,11 +78,11 @@ export default function Scrollcornersqueare({ onStyleClick }) {
                                     borderColor: style.borderColor,
                                     borderWidth: style.shape !== 'none' ? '2px' : '0px',
                                     borderStyle: 'solid',
-                                    padding: '10px'
+                                    padding: '14px'
                                 }}
                                 onClick={() => onStyleClick(style.type)}
                             >
-                                <img src={imgQr} alt="" className='w-10 m-auto' />
+                                <img src={style.patternImage} alt="" className='w-12 m-auto' />
                             </div>
                         }
                     />
