@@ -28,10 +28,10 @@ export const useAuth = (navigate) => {
                 setUser(res.data.user);
             }
         } catch (error) {
-            console.log('Check token MAL', error);
+
         }
     }
-    
+
 
     const fetchUserData = async () => {
         try {
