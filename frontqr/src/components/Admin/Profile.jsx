@@ -42,6 +42,9 @@ export default function UserProfileMenu() {
                         <Typography textAlign="center">Qr's</Typography>
                     </RouterLink>
                 </MenuItem>
+                <MenuItem onClick={handleCloseUserMenu}>
+                        <Typography textAlign="center" onClick={logoutUser}>Logout</Typography>
+                </MenuItem>
             </Menu>
         </>
     );
