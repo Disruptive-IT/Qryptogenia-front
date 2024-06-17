@@ -1,9 +1,11 @@
 import AppForm from "./forms/App";
 import { PdfUploadComponent, LinkInput } from "./forms/Pdf";
 import SocialForm from "./forms/Social";
+import MusicForm from "./forms/Music";
 import { WebLinkPhone } from "./socialMedia/stylePhone";
 import WebLinkPhonePreview from "./socialMedia/webLinkPhonePreview";
-export const QrContentSwitch = ({contentName, onFormChangeApp, onFormChange}) => {
+import { WebLinkPhoneMusic } from "./socialMedia/stylePhoneMusic";
+export const QrContentSwitch = ({contentName, onFormChangeApp, onFormChange, onFormChangeMusic}) => {
 
     let qrContent;
     switch (contentName) {
@@ -45,8 +47,7 @@ export const QrContentSwitch = ({contentName, onFormChangeApp, onFormChange}) =>
         case "music":
             qrContent = (
                 <div>
-                    //!! NO SE ESTA IMPORTANDO CON EL NOMBRE CORRECTO, CORREGIR
-                    {/* <YouTubePlaylistComponent /> */}
+                    <MusicForm onFormChangeMusic={onFormChangeMusic}/>
                 </div>
             );
             break;
@@ -77,7 +78,7 @@ export const QrContentSwitch = ({contentName, onFormChangeApp, onFormChange}) =>
 };
 
 
-export const PhoneContentSwitch = ({contentName, appFormValues, socialFormValues}) => {
+export const PhoneContentSwitch = ({contentName, appFormValues, socialFormValues, musicFormValues}) => {
 
 let phoneContent;
 switch (contentName) {
@@ -121,8 +122,7 @@ switch (contentName) {
         case "music":
             phoneContent = (
                 <div>
-                    <WebLinkPhone title={"HOLA MUNDO"}
-                        textColor={"blue"} />
+                    <WebLinkPhoneMusic musicFormValues={musicFormValues}/>
                 </div>
             );
             break;

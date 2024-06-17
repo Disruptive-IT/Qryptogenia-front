@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useParams } from 'react-router-dom';
-import { useAuth } from '../../../hooks/';
+import { useAuth } from '../../../hooks/useAuth';
 import { MusicLayout } from '../qrContent/LayoutsQr/stylePhoneMusicLayout';
 
 const WebLinkPhoneMusicPage = () => {
