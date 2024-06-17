@@ -53,6 +53,12 @@ export default function Scrollcornersqueare({ onStyleClick, value, onChange  }) 
                 variant="scrollable"
                 scrollButtons="auto"
                 aria-label="scrollable auto tabs example"
+                TabIndicatorProps={{
+                    style: {
+                      backgroundColor: "",
+                      height: '4px'
+                    }
+                  }}
                 sx={{
                     '& .MuiTabs-scrollButtons': {
                         width: '20px',

@@ -41,6 +41,12 @@ export default function ScrollableDesignQrs({ onStyleClick, value, onChange }) {
                 onChange={onChange}
                 variant="scrollable"
                 scrollButtons="auto"
+                TabIndicatorProps={{
+                    style: {
+                      backgroundColor: "",
+                      height: '4px'
+                    }
+                  }}
                 aria-label="scrollable auto tabs example"
                 sx={{
                     '& .MuiTabs-scrollButtons': {

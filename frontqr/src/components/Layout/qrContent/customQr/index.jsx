@@ -113,20 +113,27 @@ const Design = ({ onTabSelect }) => {
                     variant="scrollable"
                     scrollButtons="auto"
                     aria-label="scrollable auto tabs example"
-                    textColor={tabTextColor}
+                    
                     TabIndicatorProps={{
                         style: {
-                          backgroundColor: "#FF001F"
+                          backgroundColor: "#FF001F",
+                          height: '4px'
                         }
                       }}
-                    sx={{
+                      sx={{
                         '& .MuiTabs-scrollButtons': {
                             width: '20px',
                             color: '#284B63',
                         },
                         '& .Mui-selected': {
-                    color: tabTextColor,
-                },
+                            color: '#FF001F', // cplor del texto seleccionado
+                        },
+                        '& .MuiTab-root': {
+                            color: '#808080', // color text
+                            '&.Mui-selected': {
+                                color: '#FF001F', ///coolor cuadro
+                            }
+                        },
                     }}
                     
                 >
