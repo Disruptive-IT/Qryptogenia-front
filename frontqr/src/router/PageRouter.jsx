@@ -12,7 +12,7 @@ import NotFoundPage from "../pages/NotFoundPage";
 import { RecoverPassForm } from "../pages/Auth/RecoverPassPage";
 import { ForgotPassForm } from "../pages/Auth/ForgotPassPage";
 import LayoutAdmin from "../pages/templates/Admin/Layout";
-import App2 from "../pages/tableusers/TableUser";
+import App2 from "../components/tableusers/TableUser"
 import LayoutUser from "../pages/templates/User/Layout";
 import { useLoader } from '../context/LoaderContext';
 import Loader from '../components/UI/loader/Loader';

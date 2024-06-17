@@ -17,10 +17,13 @@ JWT_SECRET=47a8ec4d8752b9be493521b340f0aa2b847b8bd51d0a051c925ff1fe768dfc79
 NODE_ENV=development
 
 EMAIL_HOST=smtp.gmail.com
-EMAIL_PASSWORD=CONTRASEÑA-APLICACION
-EMAIL_USER=CORREO
+EMAIL_PASSWORD=sxtrpeohgczmfgky
+EMAIL_USER=qryptogenia@gmail.com
 
-RECAPTCHA_KEY=
+RECAPTCHA_KEY=6LfjjfMpAAAAAGCx5qorVX-eEke9o44f5s01K7D-
+
+Este va un archivo .env en el front
+VITE_RECAPTCHA_SITE_KEY=6LfjjfMpAAAAAGCx5qorVX-eEke9o44f5s01K7D-
 ```
 ### Generate JWT_SECRET 
 ```bash

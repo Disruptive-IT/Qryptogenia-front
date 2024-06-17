@@ -2,18 +2,35 @@ import React, { useState } from 'react';
 import QRTable from './QRTable';
 import './app.css';
 import UserTable from './userTable';
+import { FaDownload } from 'react-icons/fa';
+import { MdOutlineEdit, MdDelete, MdVisibility } from "react-icons/md";
+
+const DownloadAction = ({ item }) => (
+    <FaDownload className="text-gray-500 hover:text-gray-700 cursor-pointer mr-3" />
+);
+
+const EditAction = ({ item }) => (
+    <MdOutlineEdit className="text-gray-500 hover:text-gray-700 cursor-pointer mr-3" />
+);
 
 const App = () => {
     const [qrCodes, setQRCodes] = useState([
         { name: 'Essay', type: 'Website URL', scans: 540, status: 'Active', date: '10.03.2024' },
         { name: 'QWE', type: 'Music', scans: 536, status: 'Active', date: '05.01.2024' },
         { name: 'Finance', type: 'Wi-fi', scans: 877, status: 'Active', date: '02.01.2024' },
-        { name: 'Photos', type: 'App', scans: 1000, status: 'Inactive', date: '01.01.2024' }
+        { name: 'Photos', type: 'App', scans: 1000, status: 'Inactive', date: '01.01.2024' },
+        { name: 'New QR', type: 'Website URL', scans: 120, status: 'Active', date: '12.03.2024' },
+        { name: 'Old QR', type: 'App', scans: 1500, status: 'Inactive', date: '15.01.2024' },
+        { name: 'Sample QR', type: 'Wi-fi', scans: 200, status: 'Active', date: '18.02.2024' },
+        
     ]);
+
     const [searchQuery, setSearchQuery] = useState('');
+    const [currentPage, setCurrentPage] = useState(1);
 
     const handleSearch = (event) => {
         setSearchQuery(event.target.value);
+        setCurrentPage(1); // Reset current page to 1 on new search
     };
 
     const filteredQRCodes = qrCodes.filter(code =>
@@ -21,6 +38,12 @@ const App = () => {
         code.type.toLowerCase().includes(searchQuery.toLowerCase()) ||
         code.status.toLowerCase().includes(searchQuery.toLowerCase())
     );
+
+    const totalPages = Math.ceil(filteredQRCodes.length / 7);
+
+    const handlePageChange = (page) => {
+        setCurrentPage(page);
+    };
 
     const columns = [
         { header: 'QR Code Name', accessor: 'name' },
@@ -32,7 +55,10 @@ const App = () => {
             </span>
         ) },
         { header: 'Date', accessor: 'date' },
+        { header: 'Actions', accessor: 'actions' },
     ];
+
+    const tableqr = [DownloadAction, EditAction];
 
     return (
         <div className="flex h-screen">
@@ -54,8 +80,15 @@ const App = () => {
                         onChange={handleSearch}
                     />
                 </div>
-                <QRTable data={filteredQRCodes} columns={columns} />
-                <UserTable/>
+                <QRTable 
+                    data={filteredQRCodes} 
+                    columns={columns} 
+                    actions={tableqr} 
+                    currentPage={currentPage} 
+                    totalPages={totalPages} 
+                    onPageChange={handlePageChange} 
+                />
+                {/* <UserTable /> */}
             </div>
         </div>
     );
