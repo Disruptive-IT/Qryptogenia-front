@@ -30,6 +30,7 @@ const useQrState = (initialQrType = '', initialQrProps = {}) => {
             qrTextPositionX: 0,
             qrTextPositionY: 0,
             qrTextChip: 0,
+            qrTextChipColor: "#284B63"
         },
     });
 
@@ -173,6 +174,10 @@ const useQrState = (initialQrType = '', initialQrProps = {}) => {
         updateQrTextProps({ qrTextChip: shape });
     };
 
+    const setTextChipColor = (color) => {
+        updateQrTextProps({ qrTextChipColor: color });
+    };
+
     // ----------------------------- IMG
 
     const updateQrImageInfo = (newInfo) => {
@@ -214,6 +219,7 @@ const useQrState = (initialQrType = '', initialQrProps = {}) => {
         setQrTextPositionX,
         setQrTextPositionY,
         setTextChip,
+        setTextChipColor,
         setQrImage,
         setQrImageSize,
     };

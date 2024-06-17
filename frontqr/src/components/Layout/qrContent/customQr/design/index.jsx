@@ -1,6 +1,5 @@
 import React from 'react';
 import ScrollableDesingQrs from './scrollableDesingQrs';
-import InputText from '../StyleInput';
 import { ColorPicker } from '../frame/colorPicker';
 import { useQr } from '../../../../../context/QrContext';
 

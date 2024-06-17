@@ -1,8 +1,8 @@
 import { useEffect, useRef, useState } from 'react';
 import GradientColorPicker from 'react-gcolor-picker';
 
-export const ColorPicker = ({ setColor, position }) => {
-    const [selectColor, setSelectColor] = useState('#ffffff');
+export const ColorPicker = ({ setColor, initialColor = '#ffffff', position }) => {
+    const [selectColor, setSelectColor] = useState(initialColor);
     const [showColorPicker, setShowColorPicker] = useState(false);
     const colorPickerRef = useRef(null);
 
