@@ -270,18 +270,6 @@ const Design = ({ onTabSelect }) => {
         </>
     );
 };
-const Dowload = () => {
-
-    return (
-        <CustomDialog
-            open={true}
-            title="Download Options"
-            content="Choose your download option:"
-            primaryButtonText="Download QR Code"
-            secondaryButtonText="Cancel"
-        />
-    );
-};
 
 
 const options = [
@@ -293,7 +281,7 @@ const options = [
 const CustomQr = () => {
     const [selectedOptionIndex, setSelectedOptionIndex] = useState(0);
     const { qrTextProps } = useQr();
-    const [isDownloadModalOpen, setIsDownloadModalOpen] = useState(false); 
+    const [isDownloadModalOpen, setIsDownloadModalOpen] = useState(false);
 
 
     const handleOptionSelect = (index) => {
@@ -301,11 +289,11 @@ const CustomQr = () => {
     };
 
     const Dowload = () => {
-        setIsDownloadModalOpen(true); 
+        setIsDownloadModalOpen(true);
     };
 
     const handleCloseDownloadModal = () => {
-        setIsDownloadModalOpen(false); 
+        setIsDownloadModalOpen(false);
     };
     const OptionComponent = options[selectedOptionIndex].component;
 
@@ -314,8 +302,8 @@ const CustomQr = () => {
             <div className={`flex relative mb-4 py-8 max-h-[400px] ${qrTextProps.qrText ? 'bg-gray-100 min-h-[380px]' : ''}`}>
                 <QR />
             </div>
-            <div className='flex flex-col h-[400px] w-full '>
-                <div className='space-x-3 mx-auto'>
+            <div className='flex flex-col h-[400px] w-full'>
+                <div className='space-x-3 mx-auto flex flex-row items-center overflow-x-auto'>
                     {options.map((option, index) => (
                         <Button
                             variant="outlined"
@@ -339,19 +327,32 @@ const CustomQr = () => {
                     <Button
                         variant="contained"
                         color="primary"
-                        onClick={Dowload} 
+                        onClick={Dowload}
                     >
+                        {/* Save and download */}
                         Finish
                     </Button>
-                    {isDownloadModalOpen && ( 
+                    {isDownloadModalOpen && (
                         <CustomDialog
                             open={isDownloadModalOpen}
                             title="Download Options"
-                            content="Choose your download option:"
+                            content={
+                                <>
+                                    <p>Choose your download option.</p>
+                                    <select className='mt-4'>
+                                        <option value="">Select a format...</option>
+                                        <option value="png">PNG</option>
+                                        <option value="jpg">JPEG</option>
+                                        <option value="pdf">PDF</option>
+                                        <option value="svg">SVG</option>
+                                        <option value="txt">Texto</option>
+                                    </select>
+                                </>
+                            }
                             primaryButtonText="Download QR Code"
                             secondaryButtonText="Cancel"
-                            primaryButtonAction={handleCloseDownloadModal} 
-                            secondaryButtonAction={handleCloseDownloadModal} 
+                            primaryButtonAction={handleCloseDownloadModal}
+                            secondaryButtonAction={handleCloseDownloadModal}
                         />
                     )}
 

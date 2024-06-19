@@ -4,7 +4,7 @@ const useQrState = (initialQrType = '', initialQrProps = {}) => {
     const [qrState, setQrState] = useState({
         qrType: initialQrType,
         qrColor: '#000000',
-        qrBgColor: 'transparent',
+        qrBgColor: 'Transparent',
         qrProps: {
             ...initialQrProps,
             backgroundImage: null,

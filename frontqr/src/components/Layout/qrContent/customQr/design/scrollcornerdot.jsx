@@ -33,10 +33,10 @@ export default function Scrollcornerdot({ onStyleClick, value, onChange }) {
                 aria-label="scrollable auto tabs example"
                 TabIndicatorProps={{
                     style: {
-                      backgroundColor: "",
-                      height: '4px'
+                        backgroundColor: "",
+                        height: '4px'
                     }
-                  }}
+                }}
                 sx={{
                     '& .MuiTabs-scrollButtons': {
                         width: '20px',
