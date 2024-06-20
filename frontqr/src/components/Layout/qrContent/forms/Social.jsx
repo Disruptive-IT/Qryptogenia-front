@@ -27,6 +27,18 @@ export const SocialForm = ({ onFormChange }) => {
   const boxColorPickerRef = useRef(null);
   const [selectedOptions, setSelectedOptions] = useState([]);
   const [image, setImage] = useState(null); // Nueva parte del estado para la imagen
+  const [formErrors, setFormErrors] = useState({});
+
+  const validateForm = (values) => {
+    const errors = {};
+    if (!values.title) {
+      errors.title = 'Title is required';
+    }
+    if (selectedOptions.length === 0) {
+      errors.selectedOptions = 'At least one option must be selected';
+    }
+    return errors;
+  };
 
   const handleTitleChange = (e) => {
     setTitle(e.target.value);
@@ -210,12 +222,19 @@ export const SocialForm = ({ onFormChange }) => {
     <Formik
       initialValues={initialValues}
       onSubmit={(values, actions) => {
-        // Handle form submission logic here
-        console.log(values);
-        actions.setSubmitting(false);
+        const errors = validateForm(values);
+        if (Object.keys(errors).length > 0) {
+          setFormErrors(errors);
+          actions.setSubmitting(false);
+        } else {
+          setFormErrors({});
+          // Handle form submission logic here
+          console.log(values);
+          actions.setSubmitting(false);
+        }
       }}
     >
-      {({ setFieldValue }) => (
+      {({ setFieldValue, handleSubmit }) => (
         <Form className="max-w-4xl mx-auto mt-8 relative">
           <h2 className="text-xl font-semibold mb-4">Social Qr</h2>
           <div className="flex flex-col md:flex-row md:items-start md:mb-4">
@@ -228,11 +247,15 @@ export const SocialForm = ({ onFormChange }) => {
                 className="border w-full border-gray-300 rounded p-2"
                 value={title}
                 maxLength={maxTitle}
-                onChange={handleTitleChange}
+                onChange={(e) => {
+                  handleTitleChange(e);
+                  setFieldValue('title', e.target.value);
+                }}
               />
               <div className="text-right text-sm text-gray-900">
                 {title.length}/{maxTitle} Characters
               </div>
+              {formErrors.title && <div className="text-red-500 text-sm">{formErrors.title}</div>}
             </div>
             <div className="flex flex-col relative">
               <label htmlFor="titleColor" className="mb-2">Color:</label>
@@ -419,8 +442,14 @@ export const SocialForm = ({ onFormChange }) => {
                 isMulti
                 className="basic-multi-select w-full"
                 classNamePrefix="select"
-                onChange={handleMultiSelectChange}
+                onChange={(selected) => {
+                  handleMultiSelectChange(selected);
+                  setFieldValue('selectedOptions', selected);
+                }}
               />
+              {formErrors.selectedOptions && (
+                <div className="text-red-500 text-sm">{formErrors.selectedOptions}</div>
+              )}
             </div>
           </div>
 

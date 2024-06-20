@@ -22,7 +22,11 @@
     "titleColor": "#820e0e",
     "descriptionColor": "#E7473C",
     "image": "",
-    "selectedOptions": ""
+    "selectedOptions": [
+      {"value": "facebook"},
+      {"value": "instagram"},
+      {"value": "x"}
+    ]
   },
   "musicFormValues": {
     "title": "Titulo",
