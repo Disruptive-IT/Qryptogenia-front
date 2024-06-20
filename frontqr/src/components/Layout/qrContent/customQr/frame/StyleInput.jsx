@@ -3,14 +3,13 @@ import { styled } from '@mui/material/styles';
 
 const InputText = styled(TextField)({
   '& .MuiFilledInput-root': {
-    backgroundColor: '#fff', 
-    borderRadius: 5,
-    border: "2px solid #A0AAB4",
+    backgroundColor: '#f2f2f2',
+    borderRadius: 5, 
     '&:hover': {
-      backgroundColor: '#f2f2f2',
+      backgroundColor: '#ddd',
       '&.MuiFilledInput-underline:before': {
-        borderBottom: 'none', 
-        transition: 'none',
+        borderBottom: 'none',
+        transition: 'none', 
       },
     },
     '&.Mui-focused': {
@@ -18,16 +17,17 @@ const InputText = styled(TextField)({
     },
   },
   '& .MuiFilledInput-underline:before': {
-    borderBottomColor: 'transparent', 
-    transition: 'none',
+    borderBottomColor: 'transparent',
+    transition: 'none', 
   },
   '& .MuiFilledInput-underline:after': {
     borderBottomColor: 'transparent', 
   },
   '& .MuiInputLabel-root': {
-    color: '#A0AAB4', 
+    color: '#A0AAB4',
     '&.Mui-focused': {
-      color: '#284B63', 
+      color: '#000', 
+      fontWeight: 'bold',
     },
   },
 });

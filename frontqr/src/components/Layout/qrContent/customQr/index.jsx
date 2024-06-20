@@ -14,9 +14,10 @@ import { Tabs, Tab } from '@mui/material';
 import GradientColorPicker from 'react-gcolor-picker';
 import Accordion from './design/accordion';
 import { Fa1 } from "react-icons/fa6";
-import { MdQrCodeScanner, MdOutlineQrCode, MdOutlineQrCode2  } from "react-icons/md";
+import { MdQrCodeScanner, MdOutlineQrCode, MdOutlineQrCode2 } from "react-icons/md";
 import { IoQrCodeOutline } from "react-icons/io5";
 import { SlFrame } from "react-icons/sl";
+import CustomDialog from '../../../UI/modals/Modal';
 
 const Design = ({ onTabSelect }) => {
     const [tabValue, setTabValue] = useState(0);
@@ -114,14 +115,14 @@ const Design = ({ onTabSelect }) => {
                     variant="scrollable"
                     scrollButtons="auto"
                     aria-label="scrollable auto tabs example"
-                    
+
                     TabIndicatorProps={{
                         style: {
-                          backgroundColor: "#FF001F",
-                          height: '4px'
+                            backgroundColor: "#FF001F",
+                            height: '4px'
                         }
-                      }}
-                      sx={{
+                    }}
+                    sx={{
                         '& .MuiTabs-scrollButtons': {
                             width: '20px',
                             color: '#284B63',
@@ -136,40 +137,40 @@ const Design = ({ onTabSelect }) => {
                             }
                         },
                     }}
-                    
+
                 >
                     <Tab icon={<SlFrame />} label="Qr frame" sx={{
-                                fontSize: '14px',fontWeight: 'bold',
-                            }}/>
+                        fontSize: '14px', fontWeight: 'bold',
+                    }} />
                     <Tab icon={<MdOutlineQrCode2 />} label="Dots" sx={{
-                                fontSize: '14px',fontWeight: 'bold',
-                            }}/>
+                        fontSize: '14px', fontWeight: 'bold',
+                    }} />
                     <Tab icon={<MdOutlineQrCode />} label="Corners Square" sx={{
-                                fontSize: '14px',fontWeight: 'bold',
-                            }}/>
+                        fontSize: '14px', fontWeight: 'bold',
+                    }} />
                     <Tab icon={<IoQrCodeOutline />} label="Corners Dot" sx={{
-                                fontSize: '14px',fontWeight: 'bold',
-                            }}/>
+                        fontSize: '14px', fontWeight: 'bold',
+                    }} />
                 </Tabs>
             </div>
             {tabValue === 0 && (
                 <div>
-                    <ScrollableMarcogQrs 
-                        onStyleClick={handleStyleMarco} 
-                        value={subTabValues[0]} 
-                        onChange={(event, newValue) => handleSubTabChange(0, newValue)} 
+                    <ScrollableMarcogQrs
+                        onStyleClick={handleStyleMarco}
+                        value={subTabValues[0]}
+                        onChange={(event, newValue) => handleSubTabChange(0, newValue)}
                     />
                 </div>
             )}
             {tabValue === 1 && (
                 <div >
-                    <ScrollableDesingQrs 
-                        onStyleClick={handleStyleChange} 
-                        value={subTabValues[1]} 
-                        onChange={(event, newValue) => handleSubTabChange(1, newValue)} 
+                    <ScrollableDesingQrs
+                        onStyleClick={handleStyleChange}
+                        value={subTabValues[1]}
+                        onChange={(event, newValue) => handleSubTabChange(1, newValue)}
                     />
                     <div className="flex items-center mb-5 ml-7">
-                       
+
                         <div className="flex items-center border border-gray-300 rounded p-2 ml-3 mt-5 mb-1">
                             <div
                                 className="w-10 h-10 border border-gray-300 rounded cursor-pointer"
@@ -198,13 +199,13 @@ const Design = ({ onTabSelect }) => {
             )}
             {tabValue === 2 && (
                 <div className='ml-4'>
-                    <Scrollcornersqueare 
-                        onStyleClick={handleStyleChangecorner} 
-                        value={subTabValues[2]} 
-                        onChange={(event, newValue) => handleSubTabChange(2, newValue)} 
+                    <Scrollcornersqueare
+                        onStyleClick={handleStyleChangecorner}
+                        value={subTabValues[2]}
+                        onChange={(event, newValue) => handleSubTabChange(2, newValue)}
                     />
                     <div className="flex items-center mb-5 ml-1">
-                        
+
                         <div className="flex items-center border border-gray-300 rounded p-2 ml-3 mt-5 mb-5">
                             <div
                                 className="w-10 h-10 border border-gray-300 rounded cursor-pointer"
@@ -233,13 +234,13 @@ const Design = ({ onTabSelect }) => {
             )}
             {tabValue === 3 && (
                 <div className='ml-4'>
-                    <Scrollcornerdot 
-                        onStyleClick={handleStyleChangecornerdot} 
-                        value={subTabValues[3]} 
-                        onChange={(event, newValue) => handleSubTabChange(3, newValue)} 
+                    <Scrollcornerdot
+                        onStyleClick={handleStyleChangecornerdot}
+                        value={subTabValues[3]}
+                        onChange={(event, newValue) => handleSubTabChange(3, newValue)}
                     />
                     <div className="flex items-center mb-5 ml-1">
-                        
+
                         <div className="flex items-center border border-gray-300 rounded p-2 ml-3 mt-5 mb-5">
                             <div
                                 className="w-10 h-10 border border-gray-300 rounded cursor-pointer"
@@ -270,25 +271,30 @@ const Design = ({ onTabSelect }) => {
     );
 };
 
-const Dowload = ({ onTabSelect }) => {
-    <p>Descargar</p>
-}
 
 const options = [
     { name: 'Frame', component: Frame },
     { name: 'Design', component: Design },
     { name: 'Logo', component: Logo },
-    { name: 'Dowload', component: Dowload },
 ];
 
 const CustomQr = () => {
     const [selectedOptionIndex, setSelectedOptionIndex] = useState(0);
     const { qrTextProps } = useQr();
+    const [isDownloadModalOpen, setIsDownloadModalOpen] = useState(false);
+
 
     const handleOptionSelect = (index) => {
         setSelectedOptionIndex(index);
     };
 
+    const Dowload = () => {
+        setIsDownloadModalOpen(true);
+    };
+
+    const handleCloseDownloadModal = () => {
+        setIsDownloadModalOpen(false);
+    };
     const OptionComponent = options[selectedOptionIndex].component;
 
     return (
@@ -296,8 +302,8 @@ const CustomQr = () => {
             <div className={`flex relative mb-4 py-8 max-h-[400px] ${qrTextProps.qrText ? 'bg-gray-100 min-h-[380px]' : ''}`}>
                 <QR />
             </div>
-            <div className='flex flex-col h-[400px]  '>
-                <div className='space-x-3 mx-auto'>
+            <div className='flex flex-col h-[400px] w-full'>
+                <div className='space-x-3 mx-auto flex flex-row items-center overflow-x-auto'>
                     {options.map((option, index) => (
                         <Button
                             variant="outlined"
@@ -318,6 +324,38 @@ const CustomQr = () => {
                             {option.name}
                         </Button>
                     ))}
+                    <Button
+                        variant="contained"
+                        color="primary"
+                        onClick={Dowload}
+                    >
+                        {/* Save and download */}
+                        Finish
+                    </Button>
+                    {isDownloadModalOpen && (
+                        <CustomDialog
+                            open={isDownloadModalOpen}
+                            title="Download Options"
+                            content={
+                                <>
+                                    <p>Choose your download option.</p>
+                                    <select className='mt-4'>
+                                        <option value="">Select a format...</option>
+                                        <option value="png">PNG</option>
+                                        <option value="jpg">JPEG</option>
+                                        <option value="pdf">PDF</option>
+                                        <option value="svg">SVG</option>
+                                        <option value="txt">Texto</option>
+                                    </select>
+                                </>
+                            }
+                            primaryButtonText="Download QR Code"
+                            secondaryButtonText="Cancel"
+                            primaryButtonAction={handleCloseDownloadModal}
+                            secondaryButtonAction={handleCloseDownloadModal}
+                        />
+                    )}
+
                 </div>
                 <div className='p-4 space-y-4 rounded-md'>
                     <OptionComponent onTabSelect={handleOptionSelect} />

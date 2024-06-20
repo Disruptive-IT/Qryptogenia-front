@@ -1,4 +1,3 @@
-import MenuDrawer from '../../../components/UI/menu/menuDrawer';
 import StepperQr from '../../../components/UI/utils/stepper';
 import Navbar from './Header';
 import { Outlet, useLocation } from 'react-router-dom';
@@ -17,7 +16,6 @@ function LayoutHome() {
             <main className="flex-grow mt-8">
                 <Outlet />
             </main>
-            <MenuDrawer />
         </div>
     );
 }

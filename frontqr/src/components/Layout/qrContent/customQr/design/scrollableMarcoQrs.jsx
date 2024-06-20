@@ -53,7 +53,7 @@ const getBackgroundStyle = (backgroundType, color, patternImage) => {
 
 
 export default function ScrollableMarcoQrs({ onStyleClick, value, onChange }) {
-    const { setQrBgColor } = useQr()
+    const { setQrBgColor, qrBgColor } = useQr()
 
     const handleColorBgQr = (color) => {
         setQrBgColor(color);
@@ -102,9 +102,12 @@ export default function ScrollableMarcoQrs({ onStyleClick, value, onChange }) {
                     />
                 ))}
             </Tabs>
-            <div className='flex gap-3 mt-4 items-center'>
+            <div className='flex items-center mt-4 gap-4'>
                 <span>Background color:</span>
-                <ColorPicker setColor={handleColorBgQr} />
+                <div className="flex items-center p-3 gap-2 w-auto bg-white border border-gray-300 rounded shadow-md" >
+                    <ColorPicker setColor={handleColorBgQr} initialColor={qrBgColor} />
+                    <span>{qrBgColor}</span>
+                </div>
             </div>
         </Box>
     );

@@ -33,33 +33,42 @@ export default function ScrollableFontText() {
     };
 
     const handleFontSizeChange = (e, newValue) => {
-        setTextSize(`${newValue}px`); 
+        setTextSize(`${newValue}px`);
     };
 
     return (
-        <Box sx={{ width: 'auto', bgcolor: 'background.paper' }}>
+        <Box sx={{ width: 'auto', bgcolor: 'background.paper', marginTop: "10px" }}>
             <Tabs
                 value={value}
                 onChange={handleChange}
                 variant="scrollable"
                 scrollButtons="auto"
-                aria-label="scrollable auto tabs example"
+                aria-label="scrollable font tabs"
                 sx={{
                     '&.MuiTabs-scrollButtons': {
                         width: '20px',
                         color: '#284B63',
                     },
                 }}
+                TabIndicatorProps={{
+                    style: {
+                        backgroundColor: "",
+                        height: '4px'
+                    }
+                }}
             >
                 {fontStyles.map((style, index) => {
                     const fontName = style.fontFamily ? style.fontFamily.split(',')[0] : 'x';
-                    return <Tab key={index} label={<span style={style}>{fontName}</span>} />;
+                    return <Tab key={index} sx={{ margin: "5px" }} label={<span style={style}>{fontName}</span>} />;
                 })}
             </Tabs>
-            <div className='relative justify-between items-center flex gap-4 mt-4'>
+            <div className='relative space-y-4 p-4'>
                 <div className='flex gap-4 items-center'>
                     <span className="mb-2">Text color: </span>
-                    <ColorPicker setColor={handleColorChange} position={"top-[-380px] left-[100px]"} />
+                    <div className="flex items-center p-3 gap-2 w-auto bg-white border border-gray-300 rounded shadow-md" >
+                        <ColorPicker setColor={handleColorChange} initialColor={qrTextProps.qrTextColor} position={"top-[-380px] left-[100px]"} />
+                        <span>{qrTextProps.qrTextColor}</span>
+                    </div>
                 </div>
                 <div className='flex gap-4 items-center'>
                     <span className="mb-2">Font Size:</span>

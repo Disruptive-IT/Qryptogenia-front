@@ -93,23 +93,26 @@ const QR = () => {
                 <div className="flex items-center justify-center w-full" ref={qrRef}></div>
             </div>
             {qrTextProps.qrText && (
-                <span
+                <div
                     style={{
                         position: 'absolute',
                         top: `${qrTextProps.qrTextPositionY}%`,
                         left: `${qrTextProps.qrTextPositionX}%`,
                         color: qrTextProps.qrTextColor,
                         fontSize: qrTextProps.qrTextSize,
-                        whiteSpace: 'pre-wrap',
-                        overflowWrap: 'break-word',
-                        width: '100px',
-                        ...(qrTextProps.qrTextChip ? { backgroundColor: "gray" } : {}),
+                        maxWidth: '180px',
+                        ...(qrTextProps.qrTextChip ? { backgroundColor: qrTextProps.qrTextChipColor } : {}),
                         ...qrTextProps.qrTextChip,
                         ...qrTextProps.qrTextFontStyle
                     }}
                 >
-                    {qrTextProps.qrText}
-                </span>
+                    <span className='m-4 text-center' style={{
+                        whiteSpace: 'pre-wrap',
+                        overflowWrap: 'break-word',
+                    }}>
+                        {qrTextProps.qrText}
+                    </span>
+                </div>
             )}
         </>
     );

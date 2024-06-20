@@ -1,71 +1,84 @@
-import React, { useEffect, useState } from 'react';
-import InputText from '../StyleInput';
-import { useQr } from '../../../../../context/QrContext';
+import * as React from 'react';
 import ScrollableChipText from './scrollableChipText';
-import Input from '@mui/material/Input';
-import ScrollableMain from './scrollableMain';
-import Slider from '@mui/material/Slider';
-import Checkbox from '@mui/material/Checkbox';
-import Switch from '@mui/material/Switch';
+import { useQr } from '../../../../../context/QrContext';
+import ScrollableFontText from './scrollableFontText';
+import ScrollableInputText from './scrollableInputText';
+import Tabs from '@mui/material/Tabs';
+import Tab from '@mui/material/Tab';
+import Box from '@mui/material/Box';
+import { LuTextCursorInput } from "react-icons/lu";
+import { FaFont } from "react-icons/fa";
+import { MdBubbleChart } from "react-icons/md";
+
+function InputText() {
+    return <ScrollableInputText />;
+}
+
+function Fuentes() {
+    return <ScrollableFontText />;
+}
+
+function Burbujas() {
+    return <ScrollableChipText />;
+}
 
 const Frame = () => {
-    const { setQrText, setQrTextPositionY, setQrTextPositionX } = useQr();
-    const [isFullRangeEnabled, setIsFullRangeEnabled] = useState(true);
+    const [value, setValue] = React.useState(0);
 
-    const handleInputChange = (e) => {
-        setQrText(e.target.value);
+    const handleChange = (event, newValue) => {
+        setValue(newValue);
     };
-
-    const handlePositionXChange = (e, newValue) => {
-        setQrTextPositionX(Math.min(Math.max(newValue, 0), 78));
-    };
-
-    const toggleRange = () => {
-        setIsFullRangeEnabled(!isFullRangeEnabled);
-    };
-
-    useEffect(() => {
-        setQrTextPositionY(isFullRangeEnabled ? 85 : 0);
-    }, [isFullRangeEnabled]);
 
     return (
-        <>
-            <div className="flex space-x-4 items-center">
-                <InputText label="Write the text" variant="filled" inputProps={{ maxLength: 20 }} fullWidth onChange={handleInputChange} />
-            </div>
-            <span className='text-xs text-gray-500'>*The text has a limit of 10 characters</span>
-
-            <div className='flex justify-between gap-4 items-center'>
-                <span>Position </span>
-                <div className='flex gap-4 items-center'>
-                    <span htmlFor="positioningX" className="pr-2">X:</span>
-                    <div className='flex items-center justify-center'>
-                        <Slider
-                            size="small"
-                            defaultValue={0}
-                            aria-label="PositioningX"
-                            valueLabelDisplay="on"
-                            color="secondary"
-                            min={0}
-                            max={100}
-                            step={1}
-                            sx={{ width: "120px" }}
-                            onChange={(event, newValue) => handlePositionXChange(event, newValue)}
-                        />
-                    </div>
-                </div>
-                <div className='flex gap-4 items-center'>
-                    <span htmlFor="positioningY" className="pl-2">Y:</span>
-                    <div>
-                        <Switch id="fullRangeToggle" checked={isFullRangeEnabled} onChange={toggleRange} color="secondary" />
-                        <label htmlFor="fullRangeToggle" className="ml-2">{isFullRangeEnabled ? 'Bottom' : 'Top'}</label>
-                    </div>
-                </div>
-            </div>
-
-            <ScrollableMain />
-        </>
+        <Box sx={{ width: '100%', bgcolor: 'background.paper' }}>
+            <Tabs
+                value={value}
+                onChange={handleChange}
+                variant="fullWidth"
+                scrollButtons="auto"
+                aria-label="scrollable tabs text"
+                centered
+                TabProps={{
+                    dir: 'rtl',
+                }}
+                TabIndicatorProps={{
+                    style: {
+                        backgroundColor: "#FF001F",
+                        height: '4px'
+                    }
+                }}
+                sx={{
+                    '& .MuiTabs-scrollButtons': {
+                        width: '20px',
+                        color: '#284B63',
+                    },
+                    '& .Mui-selected': {
+                        color: '#FF001F',
+                    },
+                    '& .MuiTab-root': {
+                        color: '#808080',
+                        '&.Mui-selected': {
+                            color: '#FF001F',
+                        }
+                    },
+                }}
+            >
+                <Tab label="Input Text" icon={<LuTextCursorInput />} sx={{
+                    fontSize: '14px', fontWeight: 'bold',
+                }} />
+                <Tab label="Styles" icon={<FaFont />} sx={{
+                    fontSize: '14px', fontWeight: 'bold',
+                }} />
+                <Tab label="Text Bubbles" icon={<MdBubbleChart />} sx={{
+                    fontSize: '14px', fontWeight: 'bold',
+                }} />
+            </Tabs>
+            {value === 0 && <InputText />}
+            {value === 1 && <Fuentes />}
+            {value === 2 && <Burbujas />}
+        </Box >
     );
-};
+}
 
 export default Frame;
+
