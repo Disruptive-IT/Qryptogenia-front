@@ -59,7 +59,11 @@ function MenuDrawer(props) {
     }, [location]);
 
     return (
-        <Root>
+        <Root sx={{
+            '@media (min-width:768px)': {
+                display: 'none',
+            }
+        }}>
             <CssBaseline />
             <Global
                 styles={{
@@ -81,9 +85,6 @@ function MenuDrawer(props) {
                 alignItems: 'center',
                 justifyContent: 'center',
                 backgroundColor: '#284B63',
-                '@media (min-width:768px)': {
-                    display: 'none',
-                }
             }}>
                 <Button
                     onClick={toggleDrawer(!open)}
