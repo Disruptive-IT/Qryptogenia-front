@@ -25,8 +25,12 @@ const AppContent = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
 
     useEffect(() => {
+        // Restablecer los valores de los formularios al cambiar de ruta
+        setAppFormValues(initialAppFormValues);
+        setSocialFormValues(initialSocialFormValues);
+        setMusicFormValues(initialMusicFormValues);
         setActiveStep(1);
-    }, []);
+    }, [contentName]);
 
 
     const content = contentTexts[contentName.toLowerCase().replace(/\s+/g, '-')];

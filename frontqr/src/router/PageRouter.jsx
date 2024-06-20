@@ -20,6 +20,7 @@ import AppContent from "../pages/AppContent";
 import App from "../components/UI/tables/app";
 import { useAuthContext } from "../context/AuthContext";
 import WebLinkPhoneMusicPage from "../components/Layout/viewsQr/WebLinkPhoneMusicPage";
+import WebLinkPhoneStorePage from "../components/Layout/viewsQr/webLinkPhoneStorePage"
 
 export const PageRouter = () => {
     const { isLoading } = useLoader();
@@ -43,6 +44,7 @@ export const PageRouter = () => {
                 </Route>
 
                 <Route path="music/:id" element={<WebLinkPhoneMusicPage/>} />
+                <Route path="store/:id" element={<WebLinkPhoneStorePage/>} />
 
                 
                 {/* Admin Routes */}

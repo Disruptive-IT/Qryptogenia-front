@@ -1,9 +1,10 @@
 import React from 'react';
 import { FaApple } from "react-icons/fa";
+import { SocialIcon } from 'react-social-icons'
 
-const SocialButton = ({ data }) => {
+export const SocialButton = ({ data }) => {
     return (
-      <div className="grid grid-flow-row gap-5 justify-center w-full mt-10 relative">
+      <div className="grid grid-flow-row gap-4 justify-center w-full mt-10 relative">
         {data && data.map((social, index) => (
           <a
             key={index}
@@ -30,4 +31,26 @@ const SocialButton = ({ data }) => {
     );
   };
   
-  export default SocialButton;
+
+  export const SocialButtonM = ({ data }) => {
+    console.log(data)
+    return (
+      <div className='flex gap-3 justify-center flex-wrap w-full mt-20 mb-5'>
+        {data && data.map((social, index) => (
+          <a
+            target="_blank"
+            rel="noopener noreferrer"
+            href={social.url}
+            key={index}
+            type="button"
+            className="relative bg-gray-100 p-2 min-w-32 h-12 rounded-lg flex gap-2 items-center"
+            style={{ cursor: "pointer" }}
+          >
+            <SocialIcon network={social.name.toLowerCase()} style={{ width: 30, height: 30 }} />
+            {/* Mostrar el nombre del botón solo en pantallas grandes */}
+          </a>
+  
+        ))}
+      </div>
+    )
+  }
