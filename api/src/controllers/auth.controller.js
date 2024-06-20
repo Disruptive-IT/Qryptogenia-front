@@ -338,3 +338,51 @@ export const googlecall = async (req, res) => {
     res.status(500).json({ message: 'Internal Server Error' });
   }
 };
+
+
+export const save = async (req, res) => {
+  try {
+    const { userId, qrData } = req.body;
+    const newQR = await prisma.qr.create({
+        data: {
+            description: qrData.description || '',
+            qr: qrData.qr || '',
+            userId: userId,
+            QrPreview: {
+                create: qrData.qrPreview
+            },
+            QrText: {
+                create: {
+                    ...qrData.qrText,
+                    QrTextFont: {
+                        create: qrData.qrTextFont
+                    },
+                    QrTextBubble: {
+                        create: qrData.qrTextBubble
+                    }
+                }
+            },
+            QrDesign: {
+                create: qrData.qrDesign
+            },
+            QrLogo: {
+                create: qrData.qrLogo
+            }
+        }
+    });
+    res.status(201).json({ message: 'QR saved successfully', qr: newQR });
+} catch (error) {
+    res.status(400).json({ error: error.message });
+}
+}
+
+
+export const getQrs = async (req, res) => {
+  try {
+    const { userId } = req.params;
+    const qrs = await prisma.qr.findMany({ where: { userId } });
+    res.status(200).json({ qrs });
+} catch (error) {
+    res.status(400).json({ error: error.message });
+}
+};
