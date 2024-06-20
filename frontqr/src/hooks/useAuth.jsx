@@ -298,6 +298,16 @@ export const useAuth = (navigate) => {
             return { success: false, error: 'Error fetching music data' };
         }
     };
+    
+    const getStoreData = async (id) => {
+        try {
+            const response = await axios.get(`/store/${id}`);
+            return { success: true, data: response.data };
+        } catch (error) {
+            console.error('Error fetching music data:', error);
+            return { success: false, error: 'Error fetching music data' };
+        }
+    };
 
     return {
         user,
@@ -320,6 +330,7 @@ export const useAuth = (navigate) => {
         handleVerifyNewCode,
         checkToken,
         getMusicData,
-        getSocialData
+        getSocialData,
+        getStoreData
     };
 }
