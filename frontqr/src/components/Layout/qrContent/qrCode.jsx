@@ -2,6 +2,7 @@ import React, { useEffect, useRef } from 'react';
 import QRCodeStyling from 'qr-code-styling';
 import '../styles/qrCode.css';
 import { useQr } from '../../../context/QrContext';
+import axios from 'axios';
 
 const QR = () => {
     const { qrType, qrBgColor, qrProps, qrImageInfo, qrTextProps } = useQr();
@@ -87,6 +88,62 @@ const QR = () => {
         });
     }, [qrType, qrProps, qrImageInfo, dotsColor, cornersSquareColor, cornersDotColor, dotsType, cornersSquareType, cornersDotType, logoImage]);
 
+    const saveQrData = async () => {
+        const qrData = {
+            description: qrType,
+            qr: qrProps.link || 'default qr data',
+            qrPreview: {
+                title: qrProps.title || '',
+                colorTitle: qrProps.colorTitle || '',
+                description: qrProps.description || '',
+                descriptionColor: qrProps.descriptionColor || '',
+                boxColor: qrProps.boxColor || '',
+                borderImg: qrProps.borderImg || '',
+                imgBoxBackgroud: qrProps.imgBoxBackgroud || '',
+                backgroudColor: qrProps.backgroudColor || '',
+                SelectOptions: '{}'
+            },
+            qrText: {
+                text: qrTextProps.qrText || '',
+                positionX: qrTextProps.qrTextPositionX || 0,
+                positionY: qrTextProps.qrTextPositionY || 0,
+                colorText: qrTextProps.qrTextColor || '#000000',
+                fontSize: parseInt(qrTextProps.qrTextSize, 10) || 14 // Asegúrate de que sea un número entero
+            },
+            qrTextFont: {
+                fontFamily: qrTextProps.qrTextFontStyle.fontFamily || 'Arial'
+            },
+            qrTextBubble: {
+                burbble: qrTextProps.qrTextChip || 'chip',
+                color: qrTextProps.qrTextChipColor || 'gray'
+            },
+            qrDesign: {
+                frame: qrProps.frame || 'classic',
+                frameColor: qrProps.frameColor || '#ffffff',
+                dots: qrProps.dots || 'rounded',
+                dotsColor: qrProps.dotsColor || '#000000',
+                cornerSquare: qrProps.cornerSquare || 'extra-rounded',
+                cornerSquareColor: qrProps.cornerSquareColor || '#000000',
+                cornerDot: qrProps.cornerDot || 'dot',
+                cornerDotColor: qrProps.cornerDotColor || '#000000'
+            },
+            qrLogo: {
+                logo: qrImageInfo.qrImage || 'logo image url',
+                size: qrImageInfo.qrImageSize || 0.2
+            }
+        };
+
+        try {
+            const response = await axios.post('http://localhost:3000/api/auth/save', {
+                userId: 'dc3562ca-7621-4924-bda9-82d887c16a5d', // replace with actual userId
+                qrData: qrData
+            });
+            console.log(response.data);
+        } catch (error) {
+            console.error(error.response.data);
+        }
+    };
+
     return (
         <>
             <div className='m-auto border-4' style={{ ...marcoType.style, backgroundColor: marcoType.type === 'default' ? 'transparent' : qrBgColor, transition: 'all 0.5s ease', }}>
@@ -114,6 +171,7 @@ const QR = () => {
                     </span>
                 </div>
             )}
+            <button onClick={saveQrData}>Save QR</button>
         </>
     );
 };
