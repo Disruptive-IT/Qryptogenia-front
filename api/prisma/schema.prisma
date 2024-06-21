@@ -129,7 +129,6 @@ model Qr {
   userId String
   QrType QrType?
 
-  // New relations
   QrDesign   QrDesign   @relation(fields: [qrDesignId], references: [id])
   qrDesignId String     @unique
   QrText     QrText?
@@ -170,7 +169,6 @@ model QrText {
   colorText String
   fontSize  Int
 
-  // New relations
   qr             Qr           @relation(fields: [qrId], references: [id])
   qrId           String       @unique
   QrTextFont     QrTextFont   @relation(fields: [qrTextFontId], references: [id])
@@ -183,7 +181,6 @@ model QrTextFont {
   id         String @id @default(uuid())
   fontFamily String
 
-  // New relation
   QrText QrText[]
 }
 
@@ -192,7 +189,6 @@ model QrTextBubble {
   burbble String
   color   String
 
-  // New relation
   QrText QrText[]
 }
 
@@ -207,7 +203,6 @@ model QrDesign {
   cornerDot         String
   cornerDotColor    String
 
-  // New relation
   Qr Qr?
 }
 

@@ -1,38 +1,91 @@
 import prisma from "../../lib/prisma.js";
+import { getDate } from "../../utils/dateUtils.js";
 import { useSend } from "../../utils/useSend.js";
 
 export const save = async (req, res) => {
   try {
-    const { qrData } = req.body;
-    // const userId = req.userId;
-    const userId = qrData.userId;
+    const { userId, qrData } = req.body;
+    let dateCurrent = getDate();
+
+    if (!qrData) {
+      return res.status(400).json({ error: "qrData is required" });
+    }
+
+    const qrDesign = await prisma.qrDesign.create({
+      data: {
+        frame: qrData.qrDesign.frame,
+        frameColor: qrData.qrDesign.frameColor,
+        dots: qrData.qrDesign.dots,
+        dotsColor: qrData.qrDesign.dotsColor,
+        cornerSquare: qrData.qrDesign.cornerSquare,
+        cornerSquareColor: qrData.qrDesign.cornerSquareColor,
+        cornerDot: qrData.qrDesign.cornerDot,
+        cornerDotColor: qrData.qrDesign.cornerDotColor,
+      },
+    });
 
     const newQR = await prisma.qr.create({
       data: {
-        typeQr: qrData.typeQr || "",
-        qr: qrData.qr || "",
-        QrText: {
-          create: {
-            ...qrData.qrText,
-            QrTextFont: {
-              create: qrData.qrTextFont,
-            },
-            QrTextBubble: {
-              create: qrData.qrTextBubble,
-            },
-          },
-        },
-        QrDesign: {
-          create: qrData.qrDesign,
-        },
-        QrLogo: {
-          create: qrData.qrLogo,
-        },
+        description: qrData.description,
+        qr: qrData.qr,
+        userId: userId,
+        createdAt: dateCurrent,
+        qrDesignId: qrDesign.id,
       },
     });
-    res.status(201).json(useSend("QR saved successfully"));
+
+    const qrLogo = await prisma.qrLogo.create({
+      data: {
+        logo: qrData.qrLogo.logo,
+        size: qrData.qrLogo.size,
+        qrId: newQR.id
+      },
+    });
+    
+    const qrPreview = await prisma.qrPreview.create({
+      data: {
+        title: qrData.qrPreview.title,
+        colorTitle: qrData.qrPreview.colorTitle,
+        description: qrData.qrPreview.description,
+        descriptionColor: qrData.qrPreview.descriptionColor,
+        boxColor: qrData.qrPreview.boxColor,
+        borderImg: qrData.qrPreview.borderImg,
+        imgBoxBackgroud: qrData.qrPreview.imgBoxBackgroud,
+        backgroudColor: qrData.qrPreview.backgroudColor,
+        SelectOptions: qrData.qrPreview.SelectOptions,
+        qrId: newQR.id
+      },
+    });
+
+    const qrTextFont = await prisma.qrTextFont.create({
+      data: {
+        fontFamily: qrData.qrTextFont.fontFamily,
+      },
+    });
+
+    const qrTextBubble = await prisma.qrTextBubble.create({
+      data: {
+        burbble: qrData.qrTextBubble.burbble,
+        color: qrData.qrTextBubble.color,
+      },
+    });
+
+    const qrText = await prisma.qrText.create({
+      data: {
+        text: qrData.qrText.text,
+        positionX: qrData.qrText.positionX,
+        positionY: qrData.qrText.positionY,
+        colorText: qrData.qrText.colorText,
+        fontSize: qrData.qrText.fontSize,
+        qrTextFontId: qrTextFont.id,
+        qrTextBubbleId: qrTextBubble.id,
+        qrId: newQR.id
+      },
+    });
+
+    res.status(201).json({ message: "QR saved successfully", qr: newQR });
   } catch (error) {
-    res.status(500).json(useSend({ error: error.message }));
+    res.status(400).json({ error: error.message });
   }
 };
 
