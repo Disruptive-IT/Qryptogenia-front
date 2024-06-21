@@ -10,7 +10,7 @@ import {
 } from "../services/auth.service.js";
 import { getDate } from "../utils/dateUtils.js";
 import { OAuth2Client } from "google-auth-library";
-import {google} from 'googleapis';
+import { google } from "googleapis";
 import { USER_REFRESH_ACCOUNT_TYPE } from "google-auth-library/build/src/auth/refreshclient.js";
 
 export const register = async (req, res) => {
@@ -247,34 +247,33 @@ export const recoverPassword = async (req, res) => {
   }
 };
 
-
 const oauth2Client = new google.auth.OAuth2(
   process.env.CLIENT_ID,
   process.env.CLIENT_SECRET,
-  'http://localhost:3000/api/auth/google/callback'
+  "http://localhost:3000/api/auth/google/callback"
 );
 
 const scopes = [
-  'https://www.googleapis.com/auth/userinfo.email',
-  'https://www.googleapis.com/auth/userinfo.profile',
+  "https://www.googleapis.com/auth/userinfo.email",
+  "https://www.googleapis.com/auth/userinfo.profile",
 ];
 
 const authorizationUrl = oauth2Client.generateAuthUrl({
-  access_type: 'offline',
+  access_type: "offline",
   scope: scopes,
   include_granted_scopes: true,
-  prompt: 'consent'
+  prompt: "consent",
 });
 
 export const googleauth = async (req, res) => {
-  res.header('Access-Control-Allow-Origin', 'http://localhost:5173');
-  res.header('Referrer-Policy', 'no-referrer-when-downgrade');
+  res.header("Access-Control-Allow-Origin", "http://localhost:5173");
+  res.header("Referrer-Policy", "no-referrer-when-downgrade");
   res.redirect(authorizationUrl);
 };
 
 export const googlecall = async (req, res) => {
-  res.header('Access-Control-Allow-Origin', 'http://localhost:5173');
-  res.header('Referrer-Policy', 'no-referrer-when-downgrade');
+  res.header("Access-Control-Allow-Origin", "http://localhost:5173");
+  res.header("Referrer-Policy", "no-referrer-when-downgrade");
   const { code } = req.query;
 
   try {
@@ -283,7 +282,7 @@ export const googlecall = async (req, res) => {
 
     const oauth2 = google.oauth2({
       auth: oauth2Client,
-      version: 'v2'
+      version: "v2",
     });
 
     const { data } = await oauth2.userinfo.get();
@@ -294,11 +293,11 @@ export const googlecall = async (req, res) => {
 
     let users = await prisma.user.findUnique({
       where: {
-        email: data.email
+        email: data.email,
       },
       include: {
-        rol: true // rol
-      }
+        rol: true, // rol
+      },
     });
 
     if (!users) {
@@ -307,11 +306,11 @@ export const googlecall = async (req, res) => {
           username: data.name,
           email: data.email,
           profile_picture: data.picture,
-          rol: { connect: { id: 2 } }, 
+          rol: { connect: { id: 2 } },
         },
         include: {
-          rol: true // Incluir el rol
-        }
+          rol: true, // Incluir el rol
+        },
       });
     }
 
@@ -320,69 +319,24 @@ export const googlecall = async (req, res) => {
       username: users.username,
       email: users.email,
       profile_picture: users.profile_picture,
-      rol: users.rol.name 
+      rol: users.rol.name,
     };
 
     const token = generateToken(user, req.body.remember, res);
 
     // redirijcion segun el rol
-    if (user.rol === 'ADMIN') {
-      return res.redirect(`http://localhost:5173/admin/dashboard?token=${token}`);
-    } else if (user.rol === 'CLIENT') {
+    if (user.rol === "ADMIN") {
+      return res.redirect(
+        `http://localhost:5173/admin/dashboard?token=${token}`
+      );
+    } else if (user.rol === "CLIENT") {
       return res.redirect(`http://localhost:5173/user/home?token=${token}`);
     } else {
       return res.redirect(`http://localhost:5173/home`);
     }
   } catch (error) {
-    console.error('Error during Google authentication', error);
-    res.status(500).json({ message: 'Internal Server Error' });
+    console.error("Error during Google authentication", error);
+    res.status(500).json({ message: "Internal Server Error" });
   }
 };
 
-
-export const save = async (req, res) => {
-  try {
-    const { userId, qrData } = req.body;
-    const newQR = await prisma.qr.create({
-        data: {
-            description: qrData.description || '',
-            qr: qrData.qr || '',
-            userId: userId,
-            QrPreview: {
-                create: qrData.qrPreview
-            },
-            QrText: {
-                create: {
-                    ...qrData.qrText,
-                    QrTextFont: {
-                        create: qrData.qrTextFont
-                    },
-                    QrTextBubble: {
-                        create: qrData.qrTextBubble
-                    }
-                }
-            },
-            QrDesign: {
-                create: qrData.qrDesign
-            },
-            QrLogo: {
-                create: qrData.qrLogo
-            }
-        }
-    });
-    res.status(201).json({ message: 'QR saved successfully', qr: newQR });
-} catch (error) {
-    res.status(400).json({ error: error.message });
-}
-}
-
-
-export const getQrs = async (req, res) => {
-  try {
-    const { userId } = req.params;
-    const qrs = await prisma.qr.findMany({ where: { userId } });
-    res.status(200).json({ qrs });
-} catch (error) {
-    res.status(400).json({ error: error.message });
-}
-};

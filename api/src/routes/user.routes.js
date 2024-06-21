@@ -10,7 +10,7 @@ import {
   verifyAccountt,
   verifyNewEmail,
   
-} from "../controllers/user.controller.js";
+} from "../controllers/user/user.controller.js";
 
 const router = express.Router();
 

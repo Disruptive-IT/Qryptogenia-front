@@ -1,8 +1,8 @@
-import prisma from "../lib/prisma.js";
-import { useSend } from "../utils/useSend.js";
+import prisma from "../../lib/prisma.js";
+import { useSend } from "../../utils/useSend.js";
 import cloudinary from 'cloudinary';
 import bcrypt from "bcryptjs";
-import { sendVerificationChangeEmail, sendVerificationChangeNewEmail } from "../services/mail.service.js";
+import { sendVerificationChangeEmail, sendVerificationChangeNewEmail } from "../../services/mail.service.js";
 
 const checkPassword = async (user, password) => {
   try {
@@ -175,10 +175,8 @@ export const changePassword = async (req, res) => {
       data: { password: encriptpass },
     });
 
-    // Retorna una respuesta de éxito
     return res.status(200).json({ message: 'Contraseña cambiada con éxito.' });
   } catch (error) {
-    console.error('Error al cambiar la contraseña:', error);
     return res.status(500).json({ error: 'Error al cambiar la contraseña.' });
   }
 };

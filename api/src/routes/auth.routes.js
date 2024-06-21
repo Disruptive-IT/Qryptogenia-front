@@ -9,8 +9,6 @@ import {
   recoverPassword,
   googleauth,
   googlecall,
-  save,
-  getQrs
 } from "../controllers/auth.controller.js";
 import { verifyAccount } from "../services/auth.service.js";
 const plaintextPassword = "dav39484"; // Tu contraseña en texto plano
@@ -32,9 +30,6 @@ router.post("/complete-register", completeRegister);
 router.post("/login", login);
 router.get("/logout", logout);
 router.post("/confirm", verifyAccount);
-
-router.post("/save", save);
-router.get("/userId", getQrs);
 
 router.post("/password_reset", forgot_password);
 router.post("/password_reset/confirm", recoverPassword);

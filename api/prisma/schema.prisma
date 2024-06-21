@@ -13,7 +13,7 @@ model User {
   username        String
   email           String    @unique @db.VarChar(255)
   password        String?
-  createdAt        DateTime  @default(now()) @db.Timestamp(0)
+  createdAt       DateTime  @default(now()) @db.Timestamp(0)
   update_date     DateTime?
   state           Boolean   @default(true)
 
@@ -53,7 +53,7 @@ model Membership {
   MembershipBenefits MembershipBenefits[]
 }
 
-// ! Capchat por intentos fallidos
+// ! Capchat por intentos fallidos  
 // ! Check box para terminos y condiciones
 model LoginLogs {
   id                String    @id @default(uuid())
@@ -67,8 +67,8 @@ model LoginLogs {
 }
 
 model PreRegister {
-  id                    String   @id @default(uuid())
-  email                 String   @unique @db.VarChar(255)
+  id                    String    @id @default(uuid())
+  email                 String    @unique @db.VarChar(255)
   createdAt             DateTime
   last_pin_generated_at DateTime?
   pin                   Int
@@ -96,7 +96,7 @@ model Permission {
 }
 
 model MembershipBenefits {
-  id          String   @id @default(uuid())
+  id          String    @id @default(uuid())
   createdAt   DateTime
   update_date DateTime?
 
@@ -118,10 +118,10 @@ model Benefits {
 }
 
 model Qr {
-  id          String   @id @default(uuid())
+  id          String    @id @default(uuid())
   description String
   qr          String
-  state       Boolean  @default(true)
+  state       Boolean   @default(true)
   createdAt   DateTime
   update_date DateTime?
 
@@ -130,99 +130,92 @@ model Qr {
   QrType QrType?
 
   // New relations
-  QrPreview QrPreview @relation(fields: [qrPreviewId], references: [id])
-  qrPreviewId String @unique
-  QrText QrText @relation(fields: [qrTextId], references: [id])
-  qrTextId String @unique
-  QrDesign QrDesign @relation(fields: [qrDesignId], references: [id])
-  qrDesignId String @unique
-  QrLogo QrLogo @relation(fields: [qrLogoId], references: [id])
-  qrLogoId String @unique
+  QrDesign   QrDesign   @relation(fields: [qrDesignId], references: [id])
+  qrDesignId String     @unique
+  QrText     QrText?
+  QrLogo     QrLogo?
+  QrPreview  QrPreview?
 }
 
 model QrType {
-  id          String   @id @default(uuid())
+  id          String @id @default(uuid())
+  type        String
   description String
-  state       Boolean  @default(true)
-  createdAt   DateTime
-  update_date DateTime?
 
   qr   Qr     @relation(fields: [qrId], references: [id])
   qrId String @unique
 }
 
-
-model QrPreview{
-  id String @id @default(uuid())
-  title String
-  colorTitle String
-  description String
+model QrPreview {
+  id               String  @id @default(uuid())
+  title            String
+  colorTitle       String
+  description      String
   descriptionColor String
-  boxColor String
-  borderImg String
-  imgBoxBackgroud String?
-  backgroudColor String
-  SelectOptions Json
-
-  // New relation
-  Qr Qr?
+  boxColor         String
+  borderImg        String
+  imgBoxBackgroud  String?
+  backgroudColor   String
+  SelectOptions    Json
+  
+  qr   Qr     @relation(fields: [qrId], references: [id])
+  qrId String @unique
 }
 
-
-model QrText{
-  id String @id @default(uuid())
-  text String
+model QrText {
+  id        String @id @default(uuid())
+  text      String
   positionX Int
   positionY Int
   colorText String
-  fontSize Int
+  fontSize  Int
 
   // New relations
-  Qr Qr?
-  QrTextFont QrTextFont @relation(fields: [qrTextFontId], references: [id])
-  qrTextFontId String
-  QrTextBubble QrTextBubble @relation(fields: [qrTextBubbleId], references: [id])
+  qr             Qr           @relation(fields: [qrId], references: [id])
+  qrId           String       @unique
+  QrTextFont     QrTextFont   @relation(fields: [qrTextFontId], references: [id])
+  qrTextFontId   String
+  QrTextBubble   QrTextBubble @relation(fields: [qrTextBubbleId], references: [id])
   qrTextBubbleId String
 }
 
-model QrTextFont{
-  id String @id @default(uuid())
+model QrTextFont {
+  id         String @id @default(uuid())
   fontFamily String
 
   // New relation
   QrText QrText[]
 }
 
-model QrTextBubble{
-  id String @id @default(uuid())
+model QrTextBubble {
+  id      String @id @default(uuid())
   burbble String
-  color String
+  color   String
 
   // New relation
   QrText QrText[]
 }
 
-model QrDesign{
-  id String @id @default(uuid())
-  frame String
-  frameColor String
-  dots String
-  dotsColor String
-  cornerSquare String
+model QrDesign {
+  id                String @id @default(uuid())
+  frame             String
+  frameColor        String
+  dots              String
+  dotsColor         String
+  cornerSquare      String
   cornerSquareColor String
-  cornerDot String
-  cornerDotColor String
+  cornerDot         String
+  cornerDotColor    String
 
   // New relation
   Qr Qr?
 }
 
-model QrLogo{
-  id String @id @default(uuid())
+model QrLogo {
+  id   String @id @default(uuid())
   logo String
   size Int
 
-  // New relation
-  Qr Qr?
+  qr   Qr     @relation(fields: [qrId], references: [id])
+  qrId String @unique
 }
-
