@@ -119,29 +119,29 @@ const QR = () => {
             },
             qrDesign: {
                 frame: qrProps.frame || 'classic',
-                frameColor: qrProps.frameColor || '#ffffff',
-                dots: qrProps.dots || 'rounded',
-                dotsColor: qrProps.dotsColor || '#000000',
-                cornerSquare: qrProps.cornerSquare || 'extra-rounded',
-                cornerSquareColor: qrProps.cornerSquareColor || '#000000',
-                cornerDot: qrProps.cornerDot || 'dot',
-                cornerDotColor: qrProps.cornerDotColor || '#000000'
+                frameColor: qrProps.frameColor || '#000000',
+                dots: qrProps.dotsType,
+                dotsColor: qrProps.dotsColor,
+                cornerSquare: qrProps.cornersSquareType,
+                cornerSquareColor: qrProps.cornersSquareColor,
+                cornerDot: qrProps.cornersDotType,
+                cornerDotColor: qrProps.cornersDotColor
             },
             qrLogo: {
-                logo: qrImageInfo.qrImage || 'logo image url',
-                size: qrImageInfo.qrImageSize || 0.2
+                logo: qrImageInfo.qrImage || 'null',
+                size: qrImageInfo.qrImageSize
             }
         };
 
         try {
             const response = await axios.post('http://localhost:3000/api/qr/user/save', {
-                userId: '1a0aa10e-1038-46a1-afd9-f284c013fca9', 
-                qrData: qrData
+              userId: '845a4f01-6d1e-47b5-b3e0-a0ad2f3da4ef',
+              qrData: qrData,
             });
-            console.log(response.data);
-        } catch (error) {
-            console.error(error.response.data);
-        }
+            console.log('QR saved successfully', response.data);
+          } catch (error) {
+            console.error('Error saving QR:', error.response ? error.response.data : error.message);
+          }
     };
 
     return (
