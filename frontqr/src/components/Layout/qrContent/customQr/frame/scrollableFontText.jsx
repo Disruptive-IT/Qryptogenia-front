@@ -33,7 +33,7 @@ export default function ScrollableFontText() {
     };
 
     const handleFontSizeChange = (e, newValue) => {
-        setTextSize(`${newValue}px`);
+        setTextSize(newValue);
     };
 
     return (

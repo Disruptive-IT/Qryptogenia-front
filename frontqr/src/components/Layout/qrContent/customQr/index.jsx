@@ -6,7 +6,7 @@ import Scrollcornerdot from './design/scrollcornerdot';
 import ScrollableMarcogQrs from './design/scrollableMarcoQrs';
 import Frame from './frame';
 import Logo from './logo';
-import QR from '../qrCode';
+import QR, { saveQrData } from '../qrCode';
 import '../../../../../src/assets/style/index.css'
 import '../../styles/qrCode.css'
 import { useQr } from '../../../../context/QrContext';
@@ -280,16 +280,19 @@ const options = [
 
 const CustomQr = () => {
     const [selectedOptionIndex, setSelectedOptionIndex] = useState(0);
-    const { qrTextProps } = useQr();
+    const { qrType, qrColor, qrBgColor, qrProps, qrImageInfo, qrTextProps } = useQr();
     const [isDownloadModalOpen, setIsDownloadModalOpen] = useState(false);
-
 
     const handleOptionSelect = (index) => {
         setSelectedOptionIndex(index);
     };
 
     const Dowload = () => {
-        setIsDownloadModalOpen(true);
+    saveQrData(qrType, qrColor, qrBgColor, qrProps, qrImageInfo, qrTextProps).then(() => {
+            setIsDownloadModalOpen(true);
+        }).catch((error) => {
+            console.error('Error saving QR:', error);
+        });
     };
 
     const handleCloseDownloadModal = () => {

@@ -4,12 +4,6 @@ import { ColorPicker } from '../frame/colorPicker';
 import { useQr } from '../../../../../context/QrContext';
 
 const Design = ({ onTabSelect }) => {
-    const { setQrColor, setQrBgColor } = useQr();
-
-    const handleColorQr = (color) => {
-        setQrColor(color);
-    };
-
 
     return (
         <>

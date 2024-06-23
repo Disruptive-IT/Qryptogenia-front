@@ -24,12 +24,12 @@ const useQrState = (initialQrType = '', initialQrProps = {}) => {
         },
         qrTextProps: {
             qrText: '',
-            qrTextSize: "16px",
+            qrTextSize: 16,
             qrTextColor: '#000000',
-            qrTextFontStyle: {},
+            qrTextFontStyle: "Arial",
             qrTextPositionX: 0,
             qrTextPositionY: 0,
-            qrTextChip: 0,
+            qrTextChip:  {},
             qrTextChipColor: "#284B63"
         },
     });
