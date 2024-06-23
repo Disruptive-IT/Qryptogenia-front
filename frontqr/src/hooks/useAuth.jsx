@@ -28,7 +28,7 @@ export const useAuth = (navigate) => {
                 setUser(res.data.user);
             }
         } catch (error) {
-
+            console.log("...")
         }
     }
 

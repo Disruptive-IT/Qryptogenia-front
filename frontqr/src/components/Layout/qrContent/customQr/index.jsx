@@ -287,13 +287,13 @@ const CustomQr = () => {
         setSelectedOptionIndex(index);
     };
 
-    const Dowload = () => {
-    saveQrData(qrType, qrColor, qrBgColor, qrProps, qrImageInfo, qrTextProps).then(() => {
+    const Dowload = async () => {
+        const res = await saveQrData(qrType, qrColor, qrBgColor, qrProps, qrImageInfo, qrTextProps);
+        if (res) {
             setIsDownloadModalOpen(true);
-        }).catch((error) => {
-            console.error('Error saving QR:', error);
-        });
+        }
     };
+
 
     const handleCloseDownloadModal = () => {
         setIsDownloadModalOpen(false);

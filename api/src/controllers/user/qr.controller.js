@@ -4,18 +4,15 @@ import { useSend } from "../../utils/useSend.js";
 
 export const save = async (req, res) => {
   try {
-    const { userId, qrData } = req.body;
+    const { qrData } = req.body;
+    const userId = req.userId;
     let dateCurrent = new getDate()
-
-    if (!qrData) {
-      return res.status(400).json({ error: "qrData is required" });
-    }
 
     // Crear qrDesign
     const qrDesign = await prisma.qrDesign.create({
       data: {
         frame: qrData.qrDesign.frame,
-        frameColor: qrData.qrDesign.frameColor,
+        frameColor: "#000",
         dots: qrData.qrDesign.dots,
         dotsColor: qrData.qrDesign.dotsColor,
         cornerSquare: qrData.qrDesign.cornerSquare,
@@ -28,8 +25,9 @@ export const save = async (req, res) => {
     // Crear el QR principal primero
     const newQR = await prisma.qr.create({
       data: {
-        description: qrData.description,
-        qr: qrData.qr,
+        // ! Tabla qrtype
+        description: qrData.qr.description,
+        qr: qrData.qr.data,
         userId: userId,
         createdAt: dateCurrent,
         qrDesignId: qrDesign.id,
@@ -90,10 +88,10 @@ export const save = async (req, res) => {
       },
     });
 
-    res.status(201).json({ message: "QR saved successfully", qr: newQR });
-  } catch (error) {
-    console.error(error);
-    res.status(400).json({ error: error.message });
+    res.status(201).json(useSend("QR saved successfully"));
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).json(useSend(err.message ));
   }
 };
 

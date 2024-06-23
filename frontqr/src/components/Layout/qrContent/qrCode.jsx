@@ -2,7 +2,8 @@ import React, { useEffect, useRef } from 'react';
 import QRCodeStyling from 'qr-code-styling';
 import '../styles/qrCode.css';
 import { useQr } from '../../../context/QrContext';
-import axios from 'axios';
+import axios from "../../../libs/axios";
+import { toast } from 'sonner';
 
 
 export const saveQrData = async (qrType, qrColor, qrBgColor, qrProps, qrImageInfo, qrTextProps) => {
@@ -56,11 +57,14 @@ export const saveQrData = async (qrType, qrColor, qrBgColor, qrProps, qrImageInf
     };
 
     console.log('QR saved successfully', qrData);
-    // const response = await axios.post('http://localhost:3000/api/qr/user/save', {
-    //     userId: '845a4f01-6d1e-47b5-b3e0-a0ad2f3da4ef',
-    //     qrData: qrData,
-    // });
-
+    try {
+        const res = await axios.post('/qr/save', qrData);
+        toast.success(res.data.msg)
+        return true;
+    } catch (err) {
+        toast.error(err.response.data.msg)
+        return false;
+    }
 };
 
 

@@ -1,17 +1,13 @@
 import jwt from "jsonwebtoken";
 import prisma from "../lib/prisma.js";
+import { useSend } from "../utils/useSend.js";
 
-const NO_AUTH_TOKEN = "No authentication token, authorization denied.";
+const NO_AUTH_TOKEN = "Authentication required";
 const TOKEN_VERIFICATION_FAILED = "Token verification failed, authorization denied.";
 const USER_DOESNT_EXIST = "User doesn't exist, authorization denied.";
 
 const sendErrorResponse = (res, message) => {
-  return res.status(401).json({
-    success: false,
-    result: null,
-    message: message,
-    jwtExpired: true,
-  });
+  return res.status(401).json(useSend(message));
 };
 
 const VerifyTokenJWT = async (req, res, next) => {

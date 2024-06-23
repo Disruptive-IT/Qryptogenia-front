@@ -13,7 +13,7 @@ const routes = Router();
 
 routes.use("/auth", authRoutes);
 routes.use("/user", VerifyTokenJWT, userRoutes);
-routes.use("/qr/user", userQrRoutes);
+routes.use("/qr", VerifyTokenJWT, userQrRoutes);
 routes.use("/admin", VerifyTokenJWT, adminRoutes); 
 
 //* RUTAS PARA CLIENTES
