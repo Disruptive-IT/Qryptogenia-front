@@ -6,9 +6,9 @@ export const save = async (req, res) => {
   try {
     const { qrData } = req.body;
     const userId = req.userId;
-    let dateCurrent = new getDate()
-    console.log('Received qrData:', qrData);
-    console.log('Received userId:', userId);
+    let dateCurrent = new getDate();
+    console.log("Received qrData:", qrData);
+    console.log("Received userId:", userId);
 
     // Crear qrDesign
     const qrDesign = await prisma.qrDesign.create({
@@ -23,30 +23,34 @@ export const save = async (req, res) => {
         cornerDotColor: qrData.qrDesign.cornerDotColor,
       },
     });
-    console.log('qrDesign created:', qrDesign);
+    console.log("qrDesign created:", qrDesign);
 
-    // Crear el QR principal primero
+    let qrType = await prisma.qrType.findFirst({
+      where: {
+        type: qrData.qr.qrType,
+      },
+    });
+
     const newQR = await prisma.qr.create({
       data: {
-        // ! Tabla qrtype
-        description: qrData.qr.description,
         qr: qrData.qr.data,
         userId: userId,
         createdAt: dateCurrent,
         qrDesignId: qrDesign.id,
+        qrTypeId: qrType.id,
       },
     });
-    console.log('newQR created:', newQR);
+    console.log("newQR created:", newQR);
 
     // Crear qrLogo
     const qrLogo = await prisma.qrLogo.create({
       data: {
         logo: qrData.qrLogo.logo || null,
-        size: qrData.qrLogo.size|| null,
+        size: qrData.qrLogo.size,
         qrId: newQR.id,
       },
     });
-    console.log('qrLogo created:', qrLogo);
+    console.log("qrLogo created:", qrLogo);
 
     // Crear qrPreview
     const qrPreview = await prisma.qrPreview.create({
@@ -63,44 +67,47 @@ export const save = async (req, res) => {
         qrId: newQR.id,
       },
     });
-    console.log('qrPreview created:', qrPreview);
+    console.log("qrPreview created:", qrPreview);
 
-    // Crear qrTextFont
-    const qrTextFont = await prisma.qrTextFont.create({
-      data: {
-        fontFamily: qrData.qrTextFont.fontFamily,
-      },
-    });
-    console.log('qrTextFont created:', qrTextFont);
+    // Crear qrTextFont solo si el texto no está vacío
+    if (qrData.qrText.text !== "") {
+      // Crear qrTextFont
+      const qrTextFont = await prisma.qrTextFont.create({
+        data: {
+          fontFamily: qrData.qrTextFont.fontFamily,
+        },
+      });
+      console.log("qrTextFont created:", qrTextFont);
 
-    // Crear qrTextBubble
-    const qrTextBubble = await prisma.qrTextBubble.create({
-      data: {
-        burbble: qrData.qrTextBubble.burbble,
-        color: qrData.qrTextBubble.color,
-      },
-    });
-    console.log('qrTextBubble created:', qrTextBubble);
+      // Crear qrTextBubble
+      const qrTextBubble = await prisma.qrTextBubble.create({
+        data: {
+          burbble: qrData.qrTextBubble.burbble,
+          color: qrData.qrTextBubble.color,
+        },
+      });
+      console.log("qrTextBubble created:", qrTextBubble);
 
-    // Crear qrText
-    const qrText = await prisma.qrText.create({
-      data: {
-        text: qrData.qrText.text,
-        positionX: qrData.qrText.positionX,
-        positionY: qrData.qrText.positionY,
-        colorText: qrData.qrText.colorText,
-        fontSize: qrData.qrText.fontSize,
-        qrTextFontId: qrTextFont.id,
-        qrTextBubbleId: qrTextBubble.id,
-        qrId: newQR.id,
-      },
-    });
-    console.log('qrText created:', qrText);
+      // Crear qrText
+      const qrText = await prisma.qrText.create({
+        data: {
+          text: qrData.qrText.text,
+          positionX: qrData.qrText.positionX,
+          positionY: qrData.qrText.positionY,
+          colorText: qrData.qrText.colorText,
+          fontSize: qrData.qrText.fontSize,
+          qrTextFontId: qrTextFont.id,
+          qrTextBubbleId: qrTextBubble.id,
+          qrId: newQR.id,
+        },
+      });
+      console.log("qrText created:", qrText);
+    }
 
     res.status(201).json(useSend("QR saved successfully"));
   } catch (err) {
     console.error(err.message);
-    res.status(500).json(useSend(err.message ));
+    res.status(500).json(useSend(err.message));
   }
 };
 

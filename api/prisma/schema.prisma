@@ -53,8 +53,6 @@ model Membership {
   MembershipBenefits MembershipBenefits[]
 }
 
-// ! Capchat por intentos fallidos  
-// ! Check box para terminos y condiciones
 model LoginLogs {
   id                String    @id @default(uuid())
   failed_login      Int?      @default(0)
@@ -119,18 +117,18 @@ model Benefits {
 
 model Qr {
   id          String    @id @default(uuid())
-  description String
   qr          String
   state       Boolean   @default(true)
   createdAt   DateTime
   update_date DateTime?
 
-  user   User    @relation(fields: [userId], references: [id])
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId String
-  QrType QrType?
 
-  QrDesign   QrDesign   @relation(fields: [qrDesignId], references: [id])
+  QrDesign   QrDesign   @relation(fields: [qrDesignId], references: [id], onDelete: Cascade)
   qrDesignId String     @unique
+  qrType     QrType     @relation(fields: [qrTypeId], references: [id])
+  qrTypeId   String
   QrText     QrText?
   QrLogo     QrLogo?
   QrPreview  QrPreview?
@@ -138,11 +136,9 @@ model Qr {
 
 model QrType {
   id          String @id @default(uuid())
-  type        String
+  type        String 
   description String
-
-  qr   Qr     @relation(fields: [qrId], references: [id])
-  qrId String @unique
+  Qr          Qr[]
 }
 
 model QrPreview {
@@ -156,8 +152,8 @@ model QrPreview {
   imgBoxBackgroud  String?
   backgroudColor   String
   SelectOptions    Json
-  
-  qr   Qr     @relation(fields: [qrId], references: [id])
+
+  qr   Qr     @relation(fields: [qrId], references: [id], onDelete: Cascade)
   qrId String @unique
 }
 
@@ -169,7 +165,7 @@ model QrText {
   colorText String
   fontSize  Int
 
-  qr             Qr           @relation(fields: [qrId], references: [id])
+  qr             Qr           @relation(fields: [qrId], references: [id], onDelete: Cascade)
   qrId           String       @unique
   QrTextFont     QrTextFont   @relation(fields: [qrTextFontId], references: [id])
   qrTextFontId   String
@@ -179,14 +175,14 @@ model QrText {
 
 model QrTextFont {
   id         String @id @default(uuid())
-  fontFamily String
+  fontFamily Json
 
   QrText QrText[]
 }
 
 model QrTextBubble {
   id      String @id @default(uuid())
-  burbble String
+  burbble Json
   color   String
 
   QrText QrText[]
@@ -209,8 +205,8 @@ model QrDesign {
 model QrLogo {
   id   String @id @default(uuid())
   logo String
-  size Int
+  size String
 
-  qr   Qr     @relation(fields: [qrId], references: [id])
+  qr   Qr     @relation(fields: [qrId], references: [id], onDelete: Cascade)
   qrId String @unique
 }

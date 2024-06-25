@@ -288,6 +288,11 @@ const CustomQr = () => {
     };
 
     const Dowload = async () => {
+        if (qrType === "default") {
+            alert("Please select a valid QR type");
+            return;
+        }
+
         const res = await saveQrData(qrType, qrColor, qrBgColor, qrProps, qrImageInfo, qrTextProps);
         if (res) {
             setIsDownloadModalOpen(true);

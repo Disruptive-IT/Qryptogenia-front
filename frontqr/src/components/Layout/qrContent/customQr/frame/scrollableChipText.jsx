@@ -7,21 +7,19 @@ import { useQr } from '../../../../../context/QrContext';
 import { ColorPicker } from '../colorPicker';
 import useQrState from '../../../../../hooks/useQr';
 
-const style = [
-    { id: 1, bubbleStyles: { borderRadius: '0', padding: '0', backgroundColor: "transparent" } },
-    { id: 2, bubbleStyles: { borderRadius: '50%', padding: '8px 12px' } },
-    { id: 3, bubbleStyles: { borderRadius: '25% 75% / 75% 25%', padding: '6px 14px' } },
-    { id: 4, bubbleStyles: { borderRadius: '30% 70% / 70% 30%', padding: '7px 13px' } },
-    { id: 5, bubbleStyles: { borderRadius: '40% 60% / 60% 40%', padding: '9px 11px' } },
-    { id: 6, bubbleStyles: { borderRadius: '100% 0% / 0% 100%', padding: '10px 15px' } },
-    { id: 7, bubbleStyles: { borderRadius: '50% 50% 0 0 / 50% 50% 0 0', padding: '12px 18px' } },
-    { id: 8, bubbleStyles: { borderRadius: '0 0 50% 50% / 0 0 50% 50%', padding: '14px 16px' } },
-    { id: 9, bubbleStyles: { borderRadius: '50% 0 0 50% / 50% 0 0 50%', padding: '15px 17px' } },
-    { id: 10, bubbleStyles: { borderRadius: '0 50% 50% 0 / 0 50% 50% 0', padding: '16px 18px' } },
-    { id: 11, bubbleStyles: { borderRadius: '20% 80% 30% 70% / 60% 40% 60% 40%', padding: '17px 19px' } },
+const bubbleStyles = [
+    { borderRadius: '0', padding: '0', backgroundColor: "transparent"},
+    { borderRadius: '50%', padding: '8px 12px' },
+    { borderRadius: '25% 75% / 75% 25%', padding: '6px 14px' },
+    { borderRadius: '30% 70% / 70% 30%', padding: '7px 13px' },
+    { borderRadius: '40% 60% / 60% 40%', padding: '9px 11px' },
+    { borderRadius: '100% 0% / 0% 100%', padding: '10px 15px' },
+    { borderRadius: '50% 50% 0 0 / 50% 50% 0 0', padding: '12px 18px' },
+    { borderRadius: '0 0 50% 50% / 0 0 50% 50%', padding: '14px 16px' },
+    { borderRadius: '50% 0 0 50% / 50% 0 0 50%', padding: '15px 17px' },
+    { borderRadius: '0 50% 50% 0 / 0 50% 50% 0', padding: '16px 18px' },
+    { borderRadius: '20% 80% 30% 70% / 60% 40% 60% 40%', padding: '17px 19px' },
 ];
-
-
 
 export default function ScrollableChipText() {
     const [value, setValue] = React.useState(0);
@@ -70,7 +68,7 @@ export default function ScrollableChipText() {
                                     backgroundColor: index === value ? qrTextProps.qrTextChipColor : 'gray',
                                     color: index === 0 ? 'black' : 'white',
                                     ...bubbleStyles[index % bubbleStyles.length],
-                                    margin: "10px"
+                                    margin: "10px" 
                                 }}
                             />
                         }

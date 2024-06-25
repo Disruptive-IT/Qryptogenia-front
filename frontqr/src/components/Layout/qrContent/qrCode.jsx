@@ -8,12 +8,10 @@ import { toast } from 'sonner';
 
 export const saveQrData = async (qrType, qrColor, qrBgColor, qrProps, qrImageInfo, qrTextProps) => {
     
-
     const qrData = {
         qr: {
             data: qrProps.link || 'default qr data',
             qrType,
-            description: qrType,
             qrColor,
             qrBgColor,
         },
@@ -36,7 +34,7 @@ export const saveQrData = async (qrType, qrColor, qrBgColor, qrProps, qrImageInf
             fontSize: qrTextProps.qrTextSize
         },
         qrTextFont: {
-            fontFamily: qrTextProps.qrTextFontStyle || "Arial"
+            fontFamily: qrTextProps.qrTextFontStyle || 'Arial, sans-serif'
         },
         qrTextBubble: {
             burbble: JSON.stringify(qrTextProps.qrTextChip),
@@ -54,7 +52,7 @@ export const saveQrData = async (qrType, qrColor, qrBgColor, qrProps, qrImageInf
         },
         qrLogo: {
             logo: qrImageInfo.qrImage || 'null',
-            size: qrImageInfo.qrImageSize
+            size: qrImageInfo.qrImageSize.toString()
         }
     };
 

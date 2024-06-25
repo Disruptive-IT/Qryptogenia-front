@@ -17,11 +17,13 @@ const Logo = () => {
 
     const handleQrImageSize = (event) => {
         const size = parseFloat(event.target.value);
-        if (size >= 0.1 && size <= 1) {
-            setQrImageSize(size);
+        if (!isNaN(size) && size >= 0.1 && size <= 1) {
+            const roundedSize = Math.round(size * 10) / 10; 
+            setQrImageSize(roundedSize);
         }
     };
-    
+
+
     const handleIncludeImageChange = (event) => {
         const isChecked = event.target.checked;
         setIncludeImage(isChecked);
@@ -58,7 +60,7 @@ const Logo = () => {
                         Upload image
                     </Button>
                 </label>
-                <FormGroup className={`my-5 ${includeImage? 'h-[200px]' : ''}`}>
+                <FormGroup className={`my-5 ${includeImage ? 'h-[200px]' : ''}`}>
                     {includeImage && (
                         <div>
                             <FormLabel component="legend">Settings</FormLabel>
@@ -67,18 +69,17 @@ const Logo = () => {
                                     id="outlined-number"
                                     label="Image size"
                                     type="number"
-                                    value= {qrImageInfo.qrImageSize}
+                                    value={qrImageInfo.qrImageSize}
                                     InputProps={{
                                         inputProps: {
-                                            min: 0.1, 
-                                            max: 1, 
-                                            step: 0.1, 
+                                            min: 0.1,
+                                            max: 1,
+                                            step: 0.1,
                                         },
                                     }}
                                     className='mr-4 w-1/2'
                                     disabled={!includeImage}
                                     onChange={handleQrImageSize}
-                                    readOnly
                                 />
                             </div>
                         </div>

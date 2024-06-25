@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-const useQrState = (initialQrType = '', initialQrProps = {}) => {
+const useQrState = (initialQrType = 'default', initialQrProps = {}) => {
     const [qrState, setQrState] = useState({
         qrType: initialQrType,
         qrColor: '#000000',
