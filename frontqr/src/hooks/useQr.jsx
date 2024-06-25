@@ -26,7 +26,7 @@ const useQrState = (initialQrType = '', initialQrProps = {}) => {
             qrText: '',
             qrTextSize: 16,
             qrTextColor: '#000000',
-            qrTextFontStyle: "Arial",
+            qrTextFontStyle: "",
             qrTextPositionX: 0,
             qrTextPositionY: 0,
             qrTextChip:  {},

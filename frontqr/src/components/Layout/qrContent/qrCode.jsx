@@ -36,7 +36,7 @@ export const saveQrData = async (qrType, qrColor, qrBgColor, qrProps, qrImageInf
             fontSize: qrTextProps.qrTextSize
         },
         qrTextFont: {
-            fontFamily: qrTextProps.qrTextFontStyle
+            fontFamily: qrTextProps.qrTextFontStyle || "Arial"
         },
         qrTextBubble: {
             burbble: JSON.stringify(qrTextProps.qrTextChip),
@@ -63,11 +63,11 @@ export const saveQrData = async (qrType, qrColor, qrBgColor, qrProps, qrImageInf
     try {
         const res = await axios.post('/qr/save', { qrData });
         console.log('Server response:', res.data);
-        toast.success(res.data.message);
+        toast.success(res.data.msg);
         return true;
     } catch (err) {
         console.error('Error from server:', err.response.data);
-        toast.error(err.response.data.error);
+        toast.error(err.response.data.msg);
         return false;
     }
 };
