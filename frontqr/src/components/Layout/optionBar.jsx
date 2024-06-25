@@ -7,6 +7,7 @@ import logo from "../../../public/Logo.png";
 import { dataTypeQr } from "./qrContent/contentData";
 import { useNavigate } from "react-router-dom";
 import menu from "../../assets/imgs/QR-types/menu.png";
+import Swal from 'sweetalert2';
 
 export const OptionBar = () => {
 
@@ -40,9 +41,21 @@ export const OptionBarTwo = (props) => {
   const navigate = useNavigate();
 
   const handleItemClick = (item) => {
-    alert("Los cambios se perderán"); //* Acá debería ir un modal de confirmación 
-    navigate(`/qr/${item.name.toLowerCase().replace(/\s+/g, '-')}`);
-  };
+    Swal.fire({
+        title: 'Confirmación',
+        text: '¿Estás seguro de que deseas salir? Los cambios no guardados se perderán.',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Salir', 
+        cancelButtonText: 'Cancelar'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            navigate(`/qr/${item.name.toLowerCase().replace(/\s+/g, '-')}`);
+        }
+    });
+};
 
   useEffect(() => {
     const path = dataTypeQr.findIndex(item => item.name.toLowerCase() === title);

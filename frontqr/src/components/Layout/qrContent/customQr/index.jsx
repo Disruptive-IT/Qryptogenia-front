@@ -18,6 +18,7 @@ import { MdQrCodeScanner, MdOutlineQrCode, MdOutlineQrCode2 } from "react-icons/
 import { IoQrCodeOutline } from "react-icons/io5";
 import { SlFrame } from "react-icons/sl";
 import CustomDialog from '../../../UI/modals/Modal';
+import Swal from 'sweetalert2';
 
 const Design = ({ onTabSelect }) => {
     const [tabValue, setTabValue] = useState(0);
@@ -287,9 +288,14 @@ const CustomQr = () => {
         setSelectedOptionIndex(index);
     };
 
+
     const Dowload = async () => {
         if (qrType === "default") {
-            alert("Please select a valid QR type");
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: 'Please select a valid QR type',
+            });
             return;
         }
 
@@ -298,6 +304,7 @@ const CustomQr = () => {
             setIsDownloadModalOpen(true);
         }
     };
+
 
 
     const handleCloseDownloadModal = () => {
@@ -337,7 +344,6 @@ const CustomQr = () => {
                         color="primary"
                         onClick={Dowload}
                     >
-                        {/* Save and download */}
                         Finish
                     </Button>
                     {isDownloadModalOpen && (
