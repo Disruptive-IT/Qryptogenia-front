@@ -7,12 +7,14 @@ export const save = async (req, res) => {
     const { qrData } = req.body;
     const userId = req.userId;
     let dateCurrent = new getDate()
+    console.log('Received qrData:', qrData);
+    console.log('Received userId:', userId);
 
     // Crear qrDesign
     const qrDesign = await prisma.qrDesign.create({
       data: {
         frame: qrData.qrDesign.frame,
-        frameColor: "#000",
+        frameColor: qrData.qrDesign.frameColor,
         dots: qrData.qrDesign.dots,
         dotsColor: qrData.qrDesign.dotsColor,
         cornerSquare: qrData.qrDesign.cornerSquare,
@@ -21,6 +23,7 @@ export const save = async (req, res) => {
         cornerDotColor: qrData.qrDesign.cornerDotColor,
       },
     });
+    console.log('qrDesign created:', qrDesign);
 
     // Crear el QR principal primero
     const newQR = await prisma.qr.create({
@@ -33,6 +36,7 @@ export const save = async (req, res) => {
         qrDesignId: qrDesign.id,
       },
     });
+    console.log('newQR created:', newQR);
 
     // Crear qrLogo
     const qrLogo = await prisma.qrLogo.create({
@@ -42,6 +46,7 @@ export const save = async (req, res) => {
         qrId: newQR.id,
       },
     });
+    console.log('qrLogo created:', qrLogo);
 
     // Crear qrPreview
     const qrPreview = await prisma.qrPreview.create({
@@ -58,6 +63,7 @@ export const save = async (req, res) => {
         qrId: newQR.id,
       },
     });
+    console.log('qrPreview created:', qrPreview);
 
     // Crear qrTextFont
     const qrTextFont = await prisma.qrTextFont.create({
@@ -65,6 +71,7 @@ export const save = async (req, res) => {
         fontFamily: qrData.qrTextFont.fontFamily,
       },
     });
+    console.log('qrTextFont created:', qrTextFont);
 
     // Crear qrTextBubble
     const qrTextBubble = await prisma.qrTextBubble.create({
@@ -73,6 +80,7 @@ export const save = async (req, res) => {
         color: qrData.qrTextBubble.color,
       },
     });
+    console.log('qrTextBubble created:', qrTextBubble);
 
     // Crear qrText
     const qrText = await prisma.qrText.create({
@@ -87,6 +95,7 @@ export const save = async (req, res) => {
         qrId: newQR.id,
       },
     });
+    console.log('qrText created:', qrText);
 
     res.status(201).json(useSend("QR saved successfully"));
   } catch (err) {

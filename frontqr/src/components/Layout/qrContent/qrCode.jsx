@@ -7,6 +7,7 @@ import { toast } from 'sonner';
 
 
 export const saveQrData = async (qrType, qrColor, qrBgColor, qrProps, qrImageInfo, qrTextProps) => {
+    
 
     const qrData = {
         qr: {
@@ -38,11 +39,12 @@ export const saveQrData = async (qrType, qrColor, qrBgColor, qrProps, qrImageInf
             fontFamily: qrTextProps.qrTextFontStyle
         },
         qrTextBubble: {
-            burbble: qrTextProps.qrTextChip,
+            burbble: JSON.stringify(qrTextProps.qrTextChip),
             color: qrTextProps.qrTextChipColor
         },
         qrDesign: {
-            frame: qrProps.marcoType.shape,
+            frame: qrProps.marcoType.shape || 'default',
+            frameColor: qrBgColor,
             dots: qrProps.dotsType,
             dotsColor: qrProps.dotsColor,
             cornerSquare: qrProps.cornersSquareType,
@@ -56,13 +58,16 @@ export const saveQrData = async (qrType, qrColor, qrBgColor, qrProps, qrImageInf
         }
     };
 
-    console.log('QR saved successfully', qrData);
+    console.log('Sending qrData to server:', qrData);
+
     try {
-        const res = await axios.post('/qr/save', qrData);
-        toast.success(res.data.msg)
+        const res = await axios.post('/qr/save', { qrData });
+        console.log('Server response:', res.data);
+        toast.success(res.data.message);
         return true;
     } catch (err) {
-        toast.error(err.response.data.msg)
+        console.error('Error from server:', err.response.data);
+        toast.error(err.response.data.error);
         return false;
     }
 };
@@ -178,7 +183,7 @@ const QR = () => {
                         {qrTextProps.qrText}
                     </span>
                 </div>
-            )}¿
+            )}
         </>
     );
 };
