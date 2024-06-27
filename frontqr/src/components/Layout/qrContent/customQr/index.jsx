@@ -317,7 +317,7 @@ const CustomQr = () => {
             <div className={`flex relative mb-4 py-8 max-h-[400px] ${qrTextProps.qrText ? 'bg-gray-100 min-h-[380px]' : ''}`}>
                 <QR />
             </div>
-            <div className='flex flex-col h-[400px] w-full'>
+            <div className='flex flex-col h-[400px] w-full px-8'>
                 <div className='space-x-3 mx-auto flex flex-row items-center overflow-x-auto'>
                     {options.map((option, index) => (
                         <Button
