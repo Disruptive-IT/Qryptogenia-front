@@ -145,7 +145,7 @@ model QrPreview {
   id               String  @id @default(uuid())
   title            String
   colorTitle       String
-  description      String
+  description      String   @db.VarChar(300)
   descriptionColor String
   boxColor         String
   borderImg        String

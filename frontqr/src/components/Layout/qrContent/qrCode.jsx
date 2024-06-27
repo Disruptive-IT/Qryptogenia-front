@@ -5,9 +5,7 @@ import { useQr } from '../../../context/QrContext';
 import axios from "../../../libs/axios";
 import { toast } from 'sonner';
 
-
-export const saveQrData = async (qrType, qrColor, qrBgColor, qrProps, qrImageInfo, qrTextProps) => {
-    
+export const saveQrData = async (qrType, qrColor, qrBgColor, qrProps, qrImageInfo, qrTextProps, appFormValues) => {
     const qrData = {
         qr: {
             data: qrProps.link || 'default qr data',
@@ -16,15 +14,15 @@ export const saveQrData = async (qrType, qrColor, qrBgColor, qrProps, qrImageInf
             qrBgColor,
         },
         qrPreview: {
-            title: qrProps.title || '',
-            colorTitle: qrProps.colorTitle || '',
-            description: qrProps.description || '',
-            descriptionColor: qrProps.descriptionColor || '',
-            boxColor: qrProps.boxColor || '',
-            borderImg: qrProps.borderImg || '',
-            imgBoxBackgroud: qrProps.imgBoxBackgroud || '',
-            backgroudColor: qrProps.backgroudColor || '',
-            SelectOptions: {}
+            title: appFormValues.title || '',
+            colorTitle: appFormValues.titleColor || '',
+            description: appFormValues.description || '',
+            descriptionColor: appFormValues.descriptionColor || '',
+            boxColor: appFormValues.boxColor || '',
+            borderImg: appFormValues.borderColor || '',
+            imgBoxBackgroud: appFormValues.image || '',
+            backgroudColor: appFormValues.backgroundColor || '',
+            SelectOptions: appFormValues.selectedOptions || '[]',
         },
         qrText: {
             text: qrTextProps.qrText,
@@ -64,16 +62,26 @@ export const saveQrData = async (qrType, qrColor, qrBgColor, qrProps, qrImageInf
         toast.success(res.data.msg);
         return true;
     } catch (err) {
-        console.error('Error from server:', err.response.data);
-        toast.error(err.response.data.msg);
+        const errorMessage = err.response && err.response.data && err.response.data.msg 
+            ? err.response.data.msg 
+            : 'An unknown error occurred';
+
+        console.error('Error from server:', errorMessage);
+        toast.error(errorMessage);
         return false;
     }
 };
 
-
 const QR = () => {
-    const { qrType, qrBgColor, qrProps, qrImageInfo, qrTextProps } = useQr();
-    const { logoImage, marcoType, dotsType, cornersSquareType, cornersDotType, dotsColor, cornersSquareColor, cornersDotColor } = qrProps;
+    const { qrType, qrBgColor, qrProps, qrImageInfo, qrTextProps, appFormValues } = useQr();
+
+    console.log('QR Component - qrType:', qrType);
+    console.log('QR Component - qrBgColor:', qrBgColor);
+    console.log('QR Component - qrProps:', qrProps);
+    console.log('QR Component - qrImageInfo:', qrImageInfo);
+    console.log('QR Component - qrTextProps:', qrTextProps);
+    console.log('QR Component - appFormValues:', appFormValues);
+
     const qrRef = useRef(null);
     const qrCode = useRef(null);
 
@@ -84,16 +92,16 @@ const QR = () => {
                 height: 250,
                 data: 'www.qryptogenia.com',
                 dotsOptions: {
-                    color: dotsColor,
-                    type: dotsType || 'rounded'
+                    color: qrProps.dotsColor,
+                    type: qrProps.dotsType || 'rounded'
                 },
                 cornersSquareOptions: {
-                    color: cornersSquareColor,
-                    type: cornersSquareType || 'extra-rounded'
+                    color: qrProps.cornersSquareColor,
+                    type: qrProps.cornersSquareType || 'extra-rounded'
                 },
                 cornersDotOptions: {
-                    color: cornersDotColor,
-                    type: cornersDotType || 'dot'
+                    color: qrProps.cornersDotColor,
+                    type: qrProps.cornersDotType || 'dot'
                 },
                 backgroundOptions: {
                     color: "transparent",
@@ -107,7 +115,7 @@ const QR = () => {
             });
             qrCode.current.append(qrRef.current);
         }
-    }, [dotsColor, cornersSquareColor, cornersDotColor, dotsType, cornersSquareType, cornersDotType]);
+    }, [qrProps, qrImageInfo]);
 
     useEffect(() => {
         let value = "";
@@ -134,16 +142,16 @@ const QR = () => {
                 color: "transparent",
             },
             dotsOptions: {
-                color: dotsColor,
-                type: dotsType || 'rounded'
+                color: qrProps.dotsColor,
+                type: qrProps.dotsType || 'rounded'
             },
             cornersSquareOptions: {
-                color: cornersSquareColor,
-                type: cornersSquareType || 'extra-rounded'
+                color: qrProps.cornersSquareColor,
+                type: qrProps.cornersSquareType || 'extra-rounded'
             },
             cornersDotOptions: {
-                color: cornersDotColor,
-                type: cornersDotType || 'dot'
+                color: qrProps.cornersDotColor,
+                type: qrProps.cornersDotType || 'dot'
             },
             image: qrImageInfo.qrImage,
             imageOptions: {
@@ -153,11 +161,11 @@ const QR = () => {
                 imageSize: qrImageInfo.qrImageSize
             },
         });
-    }, [qrType, qrProps, qrImageInfo, dotsColor, cornersSquareColor, cornersDotColor, dotsType, cornersSquareType, cornersDotType, logoImage]);
+    }, [qrType, qrProps, qrImageInfo]);
 
     return (
         <>
-            <div className='m-auto border-4' style={{ ...marcoType.style, backgroundColor: marcoType.type === 'default' ? 'transparent' : qrBgColor, transition: 'all 0.5s ease', }}>
+            <div className='m-auto border-4' style={{ ...qrProps.marcoType.style, backgroundColor: qrProps.marcoType.type === 'default' ? 'transparent' : qrBgColor, transition: 'all 0.5s ease', }}>
                 <div className="flex items-center justify-center w-full" ref={qrRef}></div>
             </div>
             {qrTextProps.qrText && (
@@ -182,6 +190,7 @@ const QR = () => {
                     </span>
                 </div>
             )}
+            
         </>
     );
 };

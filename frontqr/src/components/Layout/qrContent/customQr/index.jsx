@@ -281,7 +281,7 @@ const options = [
 
 const CustomQr = () => {
     const [selectedOptionIndex, setSelectedOptionIndex] = useState(0);
-    const { qrType, qrColor, qrBgColor, qrProps, qrImageInfo, qrTextProps } = useQr();
+    const { qrType, qrColor, qrBgColor, qrProps, qrImageInfo, qrTextProps, appFormValues } = useQr();
     const [isDownloadModalOpen, setIsDownloadModalOpen] = useState(false);
 
     const handleOptionSelect = (index) => {
@@ -299,7 +299,7 @@ const CustomQr = () => {
             return;
         }
 
-        const res = await saveQrData(qrType, qrColor, qrBgColor, qrProps, qrImageInfo, qrTextProps);
+        const res = await saveQrData(qrType, qrColor, qrBgColor, qrProps, qrImageInfo, qrTextProps, appFormValues);
         if (res) {
             setIsDownloadModalOpen(true);
         }
@@ -322,7 +322,7 @@ const CustomQr = () => {
                     {options.map((option, index) => (
                         <Button
                             variant="outlined"
-                            href="#text-buttons"
+                            
                             onClick={() => handleOptionSelect(index)}
                             key={index}
                             sx={{
