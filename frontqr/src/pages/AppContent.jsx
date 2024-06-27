@@ -9,10 +9,10 @@ import { OptionBarTwo } from '../components/Layout/optionBar';
 import Valuesjson from '../pages/user/Valuesjson.json';
 import Modal from 'react-modal';
 import CellBox from '../components/Layout/qrContent/cellBox';
+import {useQr} from '../context/QrContext';
 
 Modal.setAppElement('#root');
 
-const initialAppFormValues = Valuesjson.appFormValues;
 const initialSocialFormValues = Valuesjson.socialFormValues;
 const initialMusicFormValues = Valuesjson.musicFormValues;
 
@@ -22,21 +22,30 @@ const AppContent = () => {
     const navigate = useNavigate();
     const location = useLocation();
 
-    const [appFormValues, setAppFormValues] = useState(initialAppFormValues);
+    const { appFormValues, setAppFormValues } = useQr();
     const [socialFormValues, setSocialFormValues] = useState(initialSocialFormValues);
     const [musicFormValues, setMusicFormValues] = useState(initialMusicFormValues);
     const [isModalOpen, setIsModalOpen] = useState(false);
 
+    console.log(appFormValues)
+    console.log(setAppFormValues)
+
     useEffect(() => {
         // Restablecer los valores de los formularios al cambiar de ruta
-        setAppFormValues(initialAppFormValues);
+        setAppFormValues(Valuesjson.appFormValues);
         setSocialFormValues(initialSocialFormValues);
         setMusicFormValues(initialMusicFormValues);
         setActiveStep(1);
     }, [setActiveStep]);
 
     useEffect(() => {
-        setAppFormValues(initialAppFormValues);
+        // Actualizar los estados locales cuando appFormValues cambie
+        setSocialFormValues(appFormValues.socialFormValues);
+        setMusicFormValues(appFormValues.musicFormValues);
+    }, [appFormValues]);
+
+    useEffect(() => {
+        setAppFormValues(Valuesjson.appFormValues);
         setSocialFormValues(initialSocialFormValues);
         setMusicFormValues(initialMusicFormValues);
     }, [location]);
