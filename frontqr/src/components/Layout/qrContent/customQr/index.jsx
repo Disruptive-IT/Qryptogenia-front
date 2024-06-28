@@ -19,6 +19,7 @@ import { IoQrCodeOutline } from "react-icons/io5";
 import { SlFrame } from "react-icons/sl";
 import CustomDialog from '../../../UI/modals/Modal';
 import Swal from 'sweetalert2';
+import { toast } from 'sonner';
 
 const Design = ({ onTabSelect }) => {
     const [tabValue, setTabValue] = useState(0);
@@ -292,23 +293,26 @@ const CustomQr = () => {
     const Dowload = async () => {
         if (qrType === "default") {
             Swal.fire({
-                icon: 'error',
-                title: 'Oops...',
-                text: 'Please select a valid QR type',
+                icon: 'warning',
+                title: 'Generate the QR code...',
+                html: 'Please complete all the required fields before generating the QR code'
             });
             return;
         }
 
-        const res = await saveQrData(qrType, qrColor, qrBgColor, qrProps, qrImageInfo, qrTextProps, appFormValues);
-        if (res) {
-            setIsDownloadModalOpen(true);
-        }
-    };
+        const { value: qrName } = await Swal.fire({
+            title: 'Save QR Code',
+            html:
+                '<input id="swal-input1" class="swal2-input" placeholder="Enter QR code name...">' +
+                '<p style="font-size: 0.8em; color: #888;">Please enter a name for your QR code. if you do not set a name, the system that will provide it will</p>',
+            focusConfirm: false,
+            preConfirm: () => {
+                return document.getElementById('swal-input1').value;
+            }
+        });
 
-
-
-    const handleCloseDownloadModal = () => {
-        setIsDownloadModalOpen(false);
+        const res = await saveQrData(qrName, qrType, qrColor, qrBgColor, qrProps, qrImageInfo, qrTextProps, appFormValues);
+        toast.success(res.data.msg);
     };
     const OptionComponent = options[selectedOptionIndex].component;
 
@@ -322,7 +326,7 @@ const CustomQr = () => {
                     {options.map((option, index) => (
                         <Button
                             variant="outlined"
-                            
+
                             onClick={() => handleOptionSelect(index)}
                             key={index}
                             sx={{
@@ -346,7 +350,7 @@ const CustomQr = () => {
                     >
                         Finish
                     </Button>
-                    {isDownloadModalOpen && (
+                    {/* {isDownloadModalOpen && (
                         <CustomDialog
                             open={isDownloadModalOpen}
                             title="Download Options"
@@ -368,8 +372,7 @@ const CustomQr = () => {
                             primaryButtonAction={handleCloseDownloadModal}
                             secondaryButtonAction={handleCloseDownloadModal}
                         />
-                    )}
-
+                    )} */}
                 </div>
                 <div className='p-4 space-y-4 rounded-md'>
                     <OptionComponent onTabSelect={handleOptionSelect} />

@@ -8,6 +8,7 @@ import { dataTypeQr } from "./qrContent/contentData";
 import { useNavigate } from "react-router-dom";
 import menu from "../../assets/imgs/QR-types/menu.png";
 import Swal from 'sweetalert2';
+import { useQr } from "../../context/QrContext";
 
 export const OptionBar = () => {
 
@@ -38,21 +39,23 @@ export const OptionBar = () => {
 export const OptionBarTwo = (props) => {
   const [activeButtonIndex, setActiveButtonIndex] = useState(null);
   const { contentName, title } = props;
+  const { setQrType } = useQr();
   const navigate = useNavigate();
-
+  
   const handleItemClick = (item) => {
     Swal.fire({
-        title: 'Confirmación',
-        text: '¿Estás seguro de que deseas salir? Los cambios no guardados se perderán.',
+        title: 'Alert',
+        text: 'Are you sure you want to change the type? The qr status will be lost.',
         icon: 'warning',
         showCancelButton: true,
         confirmButtonColor: '#3085d6',
         cancelButtonColor: '#d33',
-        confirmButtonText: 'Salir', 
-        cancelButtonText: 'Cancelar'
+        confirmButtonText: 'Confirm', 
+        cancelButtonText: 'Cancel'
     }).then((result) => {
         if (result.isConfirmed) {
             navigate(`/qr/${item.name.toLowerCase().replace(/\s+/g, '-')}`);
+            setQrType(contentName)
         }
     });
 };

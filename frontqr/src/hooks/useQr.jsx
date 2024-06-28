@@ -45,6 +45,13 @@ const useQrState = (initialQrType = 'default', initialQrProps = {}) => {
         }));
     };
 
+    const setQrType = (type) => {
+        setQrState(prevState => ({
+            ...prevState,
+            qrType: type,
+        }));
+    };
+
     const setBackgroundImage = (image) => {
         setQrState(prevState => ({
             ...prevState,
@@ -201,6 +208,7 @@ const useQrState = (initialQrType = 'default', initialQrProps = {}) => {
 
     return {
         ...qrState,
+        setQrType,
         setQrData,
         setQrText,
         setQrFontStyle,

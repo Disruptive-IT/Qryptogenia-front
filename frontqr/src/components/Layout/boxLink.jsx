@@ -1,12 +1,15 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { dataTypeQr } from './qrContent/contentData';
+import { useQr } from '../../context/QrContext';
 
 export const BoxLink = () => {
+  const { setQrType } = useQr()
   const navigate = useNavigate();
 
   const handleItemClick = (item) => {
     navigate(`/qr/${item.name.toLowerCase().replace(/\s+/g, '-')}`);
+    setQrType(item.name)
   };
 
   return (
