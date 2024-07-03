@@ -9,10 +9,10 @@ import { OptionBarTwo } from '../components/Layout/optionBar';
 import Valuesjson from '../pages/user/Valuesjson.json';
 import Modal from 'react-modal';
 import CellBox from '../components/Layout/qrContent/cellBox';
-import {useQr} from '../context/QrContext';
 
 Modal.setAppElement('#root');
 
+const initialAppFormValues = Valuesjson.appFormValues;
 const initialSocialFormValues = Valuesjson.socialFormValues;
 const initialMusicFormValues = Valuesjson.musicFormValues;
 
@@ -22,30 +22,21 @@ const AppContent = () => {
     const navigate = useNavigate();
     const location = useLocation();
 
-    const { appFormValues, setAppFormValues } = useQr();
+    const [appFormValues, setAppFormValues] = useState(initialAppFormValues);
     const [socialFormValues, setSocialFormValues] = useState(initialSocialFormValues);
     const [musicFormValues, setMusicFormValues] = useState(initialMusicFormValues);
     const [isModalOpen, setIsModalOpen] = useState(false);
 
-    console.log(appFormValues)
-    console.log(setAppFormValues)
-
     useEffect(() => {
         // Restablecer los valores de los formularios al cambiar de ruta
-        setAppFormValues(Valuesjson.appFormValues);
+        setAppFormValues(initialAppFormValues);
         setSocialFormValues(initialSocialFormValues);
         setMusicFormValues(initialMusicFormValues);
         setActiveStep(1);
     }, [setActiveStep]);
 
     useEffect(() => {
-        // Actualizar los estados locales cuando appFormValues cambie
-        setSocialFormValues(appFormValues.socialFormValues);
-        setMusicFormValues(appFormValues.musicFormValues);
-    }, [appFormValues]);
-
-    useEffect(() => {
-        setAppFormValues(Valuesjson.appFormValues);
+        setAppFormValues(initialAppFormValues);
         setSocialFormValues(initialSocialFormValues);
         setMusicFormValues(initialMusicFormValues);
     }, [location]);
@@ -86,19 +77,19 @@ const AppContent = () => {
                 </div>
                 <div className='grid grid-cols-1 lg:grid-cols-5 gap-10 w-11/12 m-auto py-10'>
                     <div className='col-span-1 lg:col-span-3 bg-white shadow-xl rounded-xl p-6'>
-                        <QrContentSwitch 
-                            contentName={name} 
-                            onFormChangeApp={setAppFormValues} 
-                            onFormChange={setSocialFormValues} 
-                            onFormChangeMusic={setMusicFormValues} 
+                        <QrContentSwitch
+                            contentName={name}
+                            onFormChangeApp={setAppFormValues}
+                            onFormChange={setSocialFormValues}
+                            onFormChangeMusic={setMusicFormValues}
                         />
                     </div>
                     <div className='col-span-1 lg:col-span-2'>
-                        <ChangeFrame 
-                            name={name} 
-                            appFormValues={appFormValues} 
-                            socialFormValues={socialFormValues} 
-                            musicFormValues={musicFormValues} 
+                        <ChangeFrame
+                            name={name}
+                            appFormValues={appFormValues}
+                            socialFormValues={socialFormValues}
+                            musicFormValues={musicFormValues}
                         />
                     </div>
                 </div>
@@ -112,12 +103,14 @@ const AppContent = () => {
                 isOpen={isModalOpen}
                 onRequestClose={closeModal}
                 contentLabel="Vista Previa del Móvil"
-                className='fixed inset-0 flex items-center justify-center p-4 mt-24'
+                className='fixed inset-0 flex items-center justify-center'
                 overlayClassName='fixed inset-0 bg-black bg-opacity-50 overflow-auto'
             >
-                <div className='bg-white p-4 rounded-lg w-full max-w-sm h-3/5'>
-                    <button onClick={closeModal} className='text-right text-red-500 mb-2'>Cerrar</button>
-                    <div className='relative' style={{ transform: 'scale(0.5)', transformOrigin: 'top center', maxHeight: 'calc(100vh - 100px)' }}>
+                {/* Contenedor del modal */}
+                <div className='absolute inset-0 flex items-center justify-center'>
+                    {/* Contenedor para el componente CellBox */}
+                    <div className='relative'>
+                        {/* Renderiza el componente CellBox */}
                         <CellBox>
                             <PhoneContentSwitch
                                 contentName={name}
@@ -126,9 +119,20 @@ const AppContent = () => {
                                 musicFormValues={musicFormValues}
                             />
                         </CellBox>
+
+                        {/* Botón de cerrar */}
+                        <button
+                            onClick={closeModal}
+                            className='absolute top-[-30px] right-[-60px] right-2 bg-red-500 text-white p-2 rounded-md shadow-md z-10'
+                        >
+                            Cerrar
+                        </button>
                     </div>
                 </div>
             </Modal>
+
+
+
         </>
     );
 };

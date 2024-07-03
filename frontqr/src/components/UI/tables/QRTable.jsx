@@ -1,8 +1,8 @@
 import React from 'react';
 import QRCodeRow from './QRCodeRow';
-import Pagination from '../../pagination/pagination'
+import Pagination from '../../UI/tables/Pagination';
 
-const QRTable = ({ data, columns, actions = [], currentPage, totalPages, onPageChange, onViewUser }) => {
+const QRTable = ({ data = [], columns, actions = [], currentPage, totalPages, onPageChange, onViewUser }) => {
     const startIndex = (currentPage - 1) * 7;
     const paginatedData = data.slice(startIndex, startIndex + 7);
 
@@ -16,16 +16,19 @@ const QRTable = ({ data, columns, actions = [], currentPage, totalPages, onPageC
                                 {column.header}
                             </th>
                         ))}
+                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            Actions
+                        </th>
                     </tr>
                 </thead>
                 <tbody className="bg-white divide-y divide-gray-200">
                     {paginatedData.map((item, index) => (
-                        <QRCodeRow 
-                            key={index} 
-                            item={item} 
-                            columns={columns} 
-                            actions={actions} 
-                            onViewUser={onViewUser}// Pasamos las acciones como prop
+                        <QRCodeRow
+                            key={index}
+                            item={item}
+                            columns={columns}
+                            actions={actions}
+                            onViewUser={onViewUser}
                         />
                     ))}
                 </tbody>
