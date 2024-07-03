@@ -9,10 +9,10 @@ import { OptionBarTwo } from '../components/Layout/optionBar';
 import Valuesjson from '../pages/user/Valuesjson.json';
 import Modal from 'react-modal';
 import CellBox from '../components/Layout/qrContent/cellBox';
-import {useQr} from '../context/QrContext';
 
 Modal.setAppElement('#root');
 
+const initialAppFormValues = Valuesjson.appFormValues;
 const initialSocialFormValues = Valuesjson.socialFormValues;
 const initialMusicFormValues = Valuesjson.musicFormValues;
 
@@ -22,30 +22,21 @@ const AppContent = () => {
     const navigate = useNavigate();
     const location = useLocation();
 
-    const { appFormValues, setAppFormValues } = useQr();
+    const [appFormValues, setAppFormValues] = useState(initialAppFormValues);
     const [socialFormValues, setSocialFormValues] = useState(initialSocialFormValues);
     const [musicFormValues, setMusicFormValues] = useState(initialMusicFormValues);
     const [isModalOpen, setIsModalOpen] = useState(false);
 
-    console.log(appFormValues)
-    console.log(setAppFormValues)
-
     useEffect(() => {
         // Restablecer los valores de los formularios al cambiar de ruta
-        setAppFormValues(Valuesjson.appFormValues);
+        setAppFormValues(initialAppFormValues);
         setSocialFormValues(initialSocialFormValues);
         setMusicFormValues(initialMusicFormValues);
         setActiveStep(1);
     }, [setActiveStep]);
 
     useEffect(() => {
-        // Actualizar los estados locales cuando appFormValues cambie
-        setSocialFormValues(appFormValues.socialFormValues);
-        setMusicFormValues(appFormValues.musicFormValues);
-    }, [appFormValues]);
-
-    useEffect(() => {
-        setAppFormValues(Valuesjson.appFormValues);
+        setAppFormValues(initialAppFormValues);
         setSocialFormValues(initialSocialFormValues);
         setMusicFormValues(initialMusicFormValues);
     }, [location]);
@@ -111,7 +102,7 @@ const AppContent = () => {
             <Modal
                 isOpen={isModalOpen}
                 onRequestClose={closeModal}
-                contentLabel="Vista Previa del Móvil"
+                contentLabel="Vista Previa del MÃ³vil"
                 className='fixed inset-0 flex items-center justify-center p-4 mt-24'
                 overlayClassName='fixed inset-0 bg-black bg-opacity-50 overflow-auto'
             >

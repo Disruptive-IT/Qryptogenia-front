@@ -44,7 +44,7 @@ const Logo = () => {
                 disabled={!includeImage}
             />
 
-            <div className='my-5 space-x-2'>
+            <div className=' space-x-2'>
                 <FormControlLabel
                     control={
                         <Checkbox

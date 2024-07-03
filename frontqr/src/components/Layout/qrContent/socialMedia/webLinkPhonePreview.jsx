@@ -1,14 +1,8 @@
-import React from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import WebLinkPhoneHeader from './webLinkPhoneHeader';
 import {SocialButton} from '../socialMedia/socialButton'
-import appstore from "../../../../assets/imgs/appstore.png";
-import googleplay from "../../../../assets/imgs/googleplay.png";
-import mesadoko from "../../../../assets/imgs/mesadoko.png";
-import logoforms from "../../../../assets/imgs/logoForms.png";
-import zenu from "../../../../assets/imgs/zenulogo.png";
-import iconapple from "../../../../../src/assets/imgs/iconapple.png"
-import icongoogleplay from "../../../../assets/imgs/icongoogleplay.png";
 import { FaApple, FaGooglePlay  } from "react-icons/fa";
+import mesadoko from "../../../../assets/imgs/mesadoko.png";
 
 const options = [
     { 
@@ -37,7 +31,6 @@ const options = [
       
     }
   ];
-  
   const WebLinkPhonePreview = ({ appFormValues }) => {
     const headerColor = appFormValues.boxColor;
     const title = appFormValues.title;
@@ -45,8 +38,35 @@ const options = [
     const descriptionColor = appFormValues.descriptionColor;
     const backgroundcolor = appFormValues.backgroundColor;
     const description = appFormValues.description;
-    const logo = appFormValues.image
-    const bordercolor = appFormValues.borderColor
+    const bordercolor = appFormValues.borderColor;
+    const [logo, setLogo] = useState(appFormValues.image || mesadoko);
+    const [showImage, setShowImage] = useState(true);
+    const initialValues = useRef(appFormValues);
+  
+    useEffect(() => {
+      const hasChanged = (current, initial) => {
+        const keysToCompare = ['title', 'description', 'backgroundColor', 'boxColor', 'titleColor', 'descriptionColor', 'selectedOptions'];
+        return keysToCompare.some(key => {
+          if (key === 'selectedOptions') {
+            return current[key].length !== initial[key].length || 
+                   current[key].some((opt, index) => opt.value !== initial[key][index].value);
+          }
+          return current[key] !== initial[key];
+        });
+      };
+  
+      if (hasChanged(appFormValues, initialValues.current)) {
+        setShowImage(false);
+      }
+  
+      if (appFormValues.image && appFormValues.image !== mesadoko) {
+        setShowImage(true);
+      }
+    }, [appFormValues]);
+  
+    useEffect(() => {
+      setLogo(appFormValues.image || mesadoko);
+    }, [appFormValues.image]);
   
     const data = Array.isArray(appFormValues.selectedOptions)
       ? appFormValues.selectedOptions.map(option => {
@@ -55,36 +75,42 @@ const options = [
             name: option.value,
             icon: originalOption ? originalOption.icon : null,
             url: option.url,
-            textTop: originalOption ? originalOption.textTop : '', // Aquí está la corrección
-          textBottom: originalOption ? originalOption.textBottom : '',
+            textTop: originalOption ? originalOption.textTop : '',
+            textBottom: originalOption ? originalOption.textBottom : '',
           };
         })
       : [];
-
-
-    
-      return (
-        <div style={{ background: backgroundcolor }} className="bg-gradient-to-b ml-1 flex flex-col h-full items-center min-w-[360px] min-h-[670px] max-w-[360px] max-h-[680px] rounded-[55px]">
-            {/* Encabezado del teléfono */}
-            <WebLinkPhoneHeader logo={logo} title={title} textColor={textColor} headerColor={headerColor} bordercolor={bordercolor} />
-            {/* Cuerpo del teléfono */}
-            <div style={{ background: backgroundcolor }} className="rounded-b-[52px] p-10 flex flex-col items-center w-full h-full">
-               <div className="w-full">
-                <p style={{ color: textColor }} className={`font-bold mb-5 mt-3 text-center relative ${title} whitespace-pre-line break-words`}>{title}</p>
-
-               </div>
-    
-               <div
-                        className="break-words overflow-y-auto max-h-[200px] custom-scrollbar text-lg leading-relaxed relative"
-                        style={{ color: descriptionColor }}>
-                        {description}
-                    </div>
-                {/* Agrega aquí el contenido del cuerpo del teléfono */}
-                <SocialButton data={data} />
-            </div>
+  
+    return (
+      <div style={{ background: backgroundcolor }} className="bg-gradient-to-b ml-1 flex flex-col h-full items-center min-w-[360px] min-h-[670px] max-w-[360px] max-h-[680px] rounded-[55px]">
+        {/* Encabezado del teléfono */}
+        <WebLinkPhoneHeader
+          logo={logo}
+          showImage={showImage}
+          title={title}
+          textColor={textColor}
+          headerColor={headerColor}
+          bordercolor={bordercolor}
+        />
+        {/* Cuerpo del teléfono */}
+        <div style={{ background: backgroundcolor }} className="rounded-b-[52px] p-10 flex flex-col items-center w-full h-full">
+          <div className="w-full">
+            <p style={{ color: textColor }} className={`font-bold mb-5 mt-3 text-center relative ${title} whitespace-pre-line break-words`}>
+              {title}
+            </p>
+          </div>
+          <div
+            className="break-all overflow-y-auto max-h-[200px] custom-scrollbar text-lg leading-relaxed relative"
+            style={{ color: descriptionColor, whiteSpace: 'pre-wrap' }}
+          >
+            {description}
+          </div>
+          <SocialButton data={data} />
         </div>
+      </div>
     );
-};
+  };
+  
 
 const globalStyles = `
   .custom-scrollbar {

@@ -6,7 +6,7 @@
     "boxColor": "rgb(216, 61, 34)",
     "titleColor": "rgb(6, 35, 254)",
     "descriptionColor": "rgb(42, 40, 40)",
-    "borderColor": "rgb(42, 40, 40)",
+    "borderColor": "rgb(250, 248, 247)",
     "image": "",
     "selectedOptions": [
       { "value": "Google Play Store", "url": "https://play.google.com" },

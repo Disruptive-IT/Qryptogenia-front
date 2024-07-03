@@ -12,10 +12,10 @@ export const AppForm = ({ onFormChangeApp }) => {
     const [description, setDescription] = useState('');
     const maxLength = 250;
     const maxTitle = 30;
-    const [backgroundColor, setBackgroundColor] = useState('#ffffff');
-    const [boxColor, setBoxColor] = useState('#ffffff');
-    const [titleColor, setTitleColor] = useState('#ffffff');
-    const [descriptionColor, setDescriptionColor] = useState('#ffffff');
+    const [backgroundColor, setBackgroundColor] = useState('linear-gradient(180deg, rgb(253, 93, 8) 0.00%,rgb(251, 164, 14) 100.00%)');
+    const [boxColor, setBoxColor] = useState('rgb(216, 61, 34)');
+    const [titleColor, setTitleColor] = useState('rgb(6, 35, 254)');
+    const [descriptionColor, setDescriptionColor] = useState('rgb(42, 40, 40)');
     const [borderColor, setBorderColor] = useState('#ffffff')
     const [showBorderColorPicker, setShowBorderColorPicker] = useState(false);
     const [showTitleColorPicker, setShowTitleColorPicker] = useState(false);
@@ -29,6 +29,20 @@ export const AppForm = ({ onFormChangeApp }) => {
     const boxColorPickerRef = useRef(null);
     const [selectedOptions, setSelectedOptions] = useState([]);
     const [image, setImage] = useState(null);
+    const [formErrors, setFormErrors] = useState({});
+
+
+
+    const validateForm = (values) => {
+        const errors = {};
+        if (!values.title) {
+          errors.title = 'Title is required';
+        }
+        if (selectedOptions.length === 0) {
+          errors.selectedOptions = 'At least one option must be selected';
+        }
+        return errors;
+      };
 
     const handleTitleChange = (e) => {
         setTitle(e.target.value);
@@ -103,8 +117,8 @@ export const AppForm = ({ onFormChangeApp }) => {
 
     const handleMultiSelectChange = (selectedOptions) => {
         const updatedOptions = selectedOptions.map(option => ({
-          ...option,
-          url: ''
+          value: option.value,
+          url: '', 
         }));
         setSelectedOptions(updatedOptions);
         onFormChangeApp((prevValues) => ({ ...prevValues, selectedOptions: updatedOptions }));
@@ -202,9 +216,16 @@ export const AppForm = ({ onFormChangeApp }) => {
         <Formik
             initialValues={initialValues}
             onSubmit={(values, actions) => {
-                // Handle form submission logic here
-                console.log(values);
-                actions.setSubmitting(false);
+                const errors = validateForm(values);
+        if (Object.keys(errors).length > 0) {
+          setFormErrors(errors);
+          actions.setSubmitting(false);
+        } else {
+          setFormErrors({});
+          // Handle form submission logic here
+          console.log(values);
+          actions.setSubmitting(false);
+        }
             }}
         >
             {({ setFieldValue }) => (
@@ -219,12 +240,16 @@ export const AppForm = ({ onFormChangeApp }) => {
                                     placeholder="Title"
                                     className="border w-full border-gray-300 rounded p-2"
                                     value={title}
-                                    onChange={handleTitleChange}
+                                    onChange={(e) => {
+                                        handleTitleChange(e);
+                                        setFieldValue('title', e.target.value);
+                                      }}
                                     maxLength={maxTitle}
                                 />
                                 <div className="text-right text-sm text-gray-900">
                                     {title.length}/{maxTitle} Characters
                                 </div>
+                                {formErrors.title && <div className="text-red-500 text-sm">{formErrors.title}</div>}
                             </div>
                             <div className="flex flex-col relative">
                                 <label htmlFor="titleColor" className="mb-2">Color:</label>
