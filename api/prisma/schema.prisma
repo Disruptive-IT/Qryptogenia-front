@@ -117,7 +117,8 @@ model Benefits {
 
 model Qr {
   id          String    @id @default(uuid())
-  qr          String
+  name_qr     String  
+  qr          String?
   state       Boolean   @default(true)
   createdAt   DateTime
   update_date DateTime?
@@ -136,7 +137,7 @@ model Qr {
 
 model QrType {
   id          String @id @default(uuid())
-  type        String 
+  type        String
   description String
   Qr          Qr[]
 }
@@ -145,7 +146,7 @@ model QrPreview {
   id               String  @id @default(uuid())
   title            String
   colorTitle       String
-  description      String   @db.VarChar(300)
+  description      String  @db.VarChar(300)
   descriptionColor String
   boxColor         String
   borderImg        String

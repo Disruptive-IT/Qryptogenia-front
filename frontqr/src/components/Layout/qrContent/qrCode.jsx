@@ -5,9 +5,10 @@ import { useQr } from '../../../context/QrContext';
 import axios from "../../../libs/axios";
 import { toast } from 'sonner';
 
-export const saveQrData = async (qrType, qrColor, qrBgColor, qrProps, qrImageInfo, qrTextProps, appFormValues) => {
+export const saveQrData = async (qrName, qrType, qrColor, qrBgColor, qrProps, qrImageInfo, qrTextProps, appFormValues) => {
     const qrData = {
         qr: {
+            qrName: qrName || '',
             data: qrProps.link || 'default qr data',
             qrType,
             qrColor,
@@ -59,7 +60,7 @@ export const saveQrData = async (qrType, qrColor, qrBgColor, qrProps, qrImageInf
     try {
         const res = await axios.post('/qr/save', { qrData });
         console.log('Server response:', res.data);
-        toast.success(res.data.msg);
+        window.location.href = 'http://localhost:5173/user/qr';
         return true;
     } catch (err) {
         const errorMessage = err.response && err.response.data && err.response.data.msg 
