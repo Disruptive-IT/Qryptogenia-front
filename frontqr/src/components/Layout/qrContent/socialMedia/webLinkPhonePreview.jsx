@@ -41,75 +41,87 @@ const options = [
     const bordercolor = appFormValues.borderColor;
     const [logo, setLogo] = useState(appFormValues.image || mesadoko);
     const [showImage, setShowImage] = useState(true);
+    const [showDescription, setShowDescription] = useState(true); // Nuevo estado para controlar la visibilidad de la descripción
     const initialValues = useRef(appFormValues);
-  
+
     useEffect(() => {
       const hasChanged = (current, initial) => {
-        const keysToCompare = ['title', 'description', 'backgroundColor', 'boxColor', 'titleColor', 'descriptionColor', 'selectedOptions'];
-        return keysToCompare.some(key => {
-          if (key === 'selectedOptions') {
-            return current[key].length !== initial[key].length || 
-                   current[key].some((opt, index) => opt.value !== initial[key][index].value);
-          }
-          return current[key] !== initial[key];
-        });
+          return Object.keys(current).some(key => {
+              if (Array.isArray(current[key])) {
+                  return current[key].some((opt, index) => opt.value !== initial[key][index].value);
+              }
+              return current[key] !== initial[key];
+          });
       };
   
-      if (hasChanged(appFormValues, initialValues.current)) {
+
+      const titleHasChanged = appFormValues.title !== initialValues.current.title;
+
+      if (hasChanged(appFormValues, initialValues.current) || titleHasChanged) {
         setShowImage(false);
+        // Si el título ha cambiado, también ocultar la descripción predeterminada
+        setShowDescription(!titleHasChanged && !!appFormValues.description);
       }
-  
+    
       if (appFormValues.image && appFormValues.image !== mesadoko) {
         setShowImage(true);
       }
-    }, [appFormValues]);
+    }, [appFormValues]); 
   
-    useEffect(() => {
+  useEffect(() => {
       setLogo(appFormValues.image || mesadoko);
-    }, [appFormValues.image]);
+  }, [appFormValues.image]);
   
+  useEffect(() => {
+      // Asegurar que la descripción se muestre si hay un valor
+      setShowDescription(!!appFormValues.description);
+  }, [appFormValues.description]);
+
     const data = Array.isArray(appFormValues.selectedOptions)
-      ? appFormValues.selectedOptions.map(option => {
-          const originalOption = options.find(opt => opt.value === option.value);
-          return {
-            name: option.value,
-            icon: originalOption ? originalOption.icon : null,
-            url: option.url,
-            textTop: originalOption ? originalOption.textTop : '',
-            textBottom: originalOption ? originalOption.textBottom : '',
-          };
-        })
-      : [];
-  
+        ? appFormValues.selectedOptions.map(option => {
+              const originalOption = options.find(opt => opt.value === option.value);
+              return {
+                  name: option.value,
+                  icon: originalOption ? originalOption.icon : null,
+                  url: option.url,
+                  textTop: originalOption ? originalOption.textTop : '',
+                  textBottom: originalOption ? originalOption.textBottom : '',
+              };
+          })
+        : [];
+
     return (
-      <div style={{ background: backgroundcolor }} className="bg-gradient-to-b ml-1 flex flex-col h-full items-center min-w-[360px] min-h-[670px] max-w-[360px] max-h-[680px] rounded-[55px]">
-        {/* Encabezado del teléfono */}
-        <WebLinkPhoneHeader
-          logo={logo}
-          showImage={showImage}
-          title={title}
-          textColor={textColor}
-          headerColor={headerColor}
-          bordercolor={bordercolor}
-        />
-        {/* Cuerpo del teléfono */}
-        <div style={{ background: backgroundcolor }} className="rounded-b-[52px] p-10 flex flex-col items-center w-full h-full">
-          <div className="w-full">
-            <p style={{ color: textColor }} className={`font-bold mb-5 mt-3 text-center relative ${title} whitespace-pre-line break-words`}>
-              {title}
-            </p>
-          </div>
-          <div
-            className="break-all overflow-y-auto max-h-[200px] custom-scrollbar text-lg leading-relaxed relative"
-            style={{ color: descriptionColor, whiteSpace: 'pre-wrap' }}
-          >
-            {description}
-          </div>
-          <SocialButton data={data} />
+        <div style={{ background: backgroundcolor }} className="bg-gradient-to-b ml-1 flex flex-col h-full items-center min-w-[360px] min-h-[670px] max-w-[360px] max-h-[680px] rounded-[55px]">
+            {/* Encabezado del teléfono */}
+            <WebLinkPhoneHeader
+                logo={logo}
+                showImage={showImage}
+                title={title}
+                textColor={textColor}
+                headerColor={headerColor}
+                bordercolor={bordercolor}
+            />
+            {/* Cuerpo del teléfono */}
+            <div style={{ background: backgroundcolor }} className="rounded-b-[52px] p-10 flex flex-col items-center w-full h-full">
+                <div className="w-full">
+                    <p style={{ color: textColor }} className={`font-bold mb-5 mt-3 text-center relative ${title} whitespace-pre-line break-words`}>
+                        {title}
+                    </p>
+                </div>
+                {/* Ajuste para mostrar o no la descripción */}
+                {showDescription && (
+                    <div
+                        className="break-all overflow-y-auto max-h-[200px] custom-scrollbar text-lg leading-relaxed relative"
+                        style={{ color: descriptionColor, whiteSpace: 'pre-wrap' }}
+                    >
+                        {description || appFormValues.description}
+                    </div>
+                )}
+                <SocialButton data={data} />
+            </div>
         </div>
-      </div>
     );
-  };
+};
   
 
 const globalStyles = `
