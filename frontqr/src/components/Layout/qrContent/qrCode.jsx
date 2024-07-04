@@ -76,13 +76,6 @@ export const saveQrData = async (qrName, qrType, qrColor, qrBgColor, qrProps, qr
 const QR = () => {
     const { qrType, qrBgColor, qrProps, qrImageInfo, qrTextProps, appFormValues } = useQr();
 
-    console.log('QR Component - qrType:', qrType);
-    console.log('QR Component - qrBgColor:', qrBgColor);
-    console.log('QR Component - qrProps:', qrProps);
-    console.log('QR Component - qrImageInfo:', qrImageInfo);
-    console.log('QR Component - qrTextProps:', qrTextProps);
-    console.log('QR Component - appFormValues:', appFormValues);
-
     const qrRef = useRef(null);
     const qrCode = useRef(null);
 

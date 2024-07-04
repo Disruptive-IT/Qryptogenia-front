@@ -10,15 +10,15 @@ import vcard from "../../../assets/imgs/QR-types/vcard.png";
 import menu from "../../../assets/imgs/QR-types/menu.png";
 
 export const contentTexts = {
-    "app-store": "Descubre cómo enlazar tu aplicación en todas las tiendas.",
-    "social-media": "Conecta con tus seguidores en todas las redes sociales.",
-    "website-url": "Enlaza a tu sitio web y hazlo accesible para todos.",
-    "pdf": "Muestra o descarga tu PDF con facilidad.",
-    "news": "Mantente al día con las últimas noticias.",
-    "music": "Enlaza tu canción en todas las aplicaciones de música.",
-    "wifi": "Conéctate a una red inalámbrica con facilidad.",
-    "curriculum": "Comparte tu currículum electrónico con facilidad.",
-    "food-menu": "Crea un menú digital para tu restaurante.",
+    "app-store": "Find out how to link your application in all stores.",
+    "social-media": "Connect with your followers on all social networks.",
+    "website-url": "Link to your web site and make it accessible to everyone.",
+    "pdf": "Display or download your PDF with ease.",
+    "news": "Keep up to date with the latest news.",
+    "music": "Link your song in all music applications.",
+    "wifi": "Connect to a wireless network with ease.",
+    "curriculum": "Share your electronic resume easily.",
+    "food-menu": "Create a digital menu for your restaurant.",
 };
 
 export const dataTypeQr = [
