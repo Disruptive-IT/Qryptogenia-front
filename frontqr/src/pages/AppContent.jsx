@@ -102,7 +102,7 @@ const AppContent = () => {
             <Modal
                 isOpen={isModalOpen}
                 onRequestClose={closeModal}
-                contentLabel="Vista Previa del MÃ³vil"
+                contentLabel="Vista Previa del Móvil"
                 className='fixed inset-0 flex items-center justify-center p-4 mt-24'
                 overlayClassName='fixed inset-0 bg-black bg-opacity-50 overflow-auto'
             >

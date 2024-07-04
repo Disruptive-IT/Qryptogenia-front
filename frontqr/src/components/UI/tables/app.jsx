@@ -1,42 +1,49 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 import QRTable from './QRTable';
 import './app.css';
-import UserTable from './userTable';
 import { FaDownload } from 'react-icons/fa';
 import { MdOutlineEdit, MdDelete, MdVisibility } from "react-icons/md";
 
-const DownloadAction = ({ item }) => (
-    <FaDownload className="text-gray-500 hover:text-gray-700 cursor-pointer mr-3" />
-);
-
-const EditAction = ({ item }) => (
-    <MdOutlineEdit className="text-gray-500 hover:text-gray-700 cursor-pointer mr-3" />
-);
-
 const App = () => {
-    const [qrCodes, setQRCodes] = useState([
-        { name: 'Essay', type: 'Website URL', scans: 540, status: 'Active', date: '10.03.2024' },
-        { name: 'QWE', type: 'Music', scans: 536, status: 'Active', date: '05.01.2024' },
-        { name: 'Finance', type: 'Wi-fi', scans: 877, status: 'Active', date: '02.01.2024' },
-        { name: 'Photos', type: 'App', scans: 1000, status: 'Inactive', date: '01.01.2024' },
-        { name: 'New QR', type: 'Website URL', scans: 120, status: 'Active', date: '12.03.2024' },
-        { name: 'Old QR', type: 'App', scans: 1500, status: 'Inactive', date: '15.01.2024' },
-        { name: 'Sample QR', type: 'Wi-fi', scans: 200, status: 'Active', date: '18.02.2024' },
-        
-    ]);
-
+    const [qrCodes, setQRCodes] = useState([]);
     const [searchQuery, setSearchQuery] = useState('');
     const [currentPage, setCurrentPage] = useState(1);
+    const [error, setError] = useState(null);
+
+    useEffect(() => {
+        const fetchQRCodes = async () => {
+            try {
+                const token = localStorage.getItem('token'); // O donde sea que almacenes tu token
+                const userId = 'e8a6aff3-3ba6-4143-8aa0-54cc06fe799e'; // Reemplaza con el ID del usuario autenticado
+
+                const response = await axios.get(`http://localhost:3000/api/auth/qrcodes?userId=${userId}`, {
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+
+                console.log('API response:', response.data); // Verifica los datos recibidos desde la API
+
+                setQRCodes(response.data);
+            } catch (error) {
+                console.error('Error fetching QR codes:', error);
+                setError('Error fetching QR codes');
+            }
+        };
+
+        fetchQRCodes();
+    }, []);
 
     const handleSearch = (event) => {
         setSearchQuery(event.target.value);
-        setCurrentPage(1); // Reset current page to 1 on new search
+        setCurrentPage(1); // Reinicia la página actual a 1 en una nueva búsqueda
     };
 
     const filteredQRCodes = qrCodes.filter(code =>
-        code.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        code.type.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        code.status.toLowerCase().includes(searchQuery.toLowerCase())
+        code.name_qr.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        code.type.toString().includes(searchQuery.toLowerCase()) ||
+        code.state.toLowerCase().includes(searchQuery.toLowerCase())
     );
 
     const totalPages = Math.ceil(filteredQRCodes.length / 7);
@@ -46,19 +53,18 @@ const App = () => {
     };
 
     const columns = [
-        { header: 'QR Code Name', accessor: 'name' },
+        { header: 'Preview', accessor: 'preview' },
+        { header: 'QR Code Name', accessor: 'name_qr' },
         { header: 'QR Code Type', accessor: 'type' },
-        { header: 'Scans', accessor: 'scans' },
-        { header: 'Status', accessor: 'status', render: (item) => (
-            <span className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${item.status === 'Active' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}`}>
-                {item.status}
+        { header: 'Status', accessor: 'state', render: (item) => (
+            <span className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${item.state === 'Active' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}`}>
+                {item.state}
             </span>
         ) },
-        { header: 'Date', accessor: 'date' },
-        { header: 'Actions', accessor: 'actions' },
+        { header: 'Date', accessor: 'createdAt' },
     ];
 
-    const tableqr = [DownloadAction, EditAction];
+    const tableqr = [FaDownload, MdOutlineEdit, MdDelete, MdVisibility];
 
     return (
         <div className="flex h-screen">
@@ -71,6 +77,7 @@ const App = () => {
                 </ul>
             </div>
             <div className="flex-grow p-6 bg-gray-100 overflow-auto">
+                {error && <div className="mb-4 text-red-500">{error}</div>}
                 <div className="mb-4">
                     <input
                         type="text"
@@ -88,7 +95,6 @@ const App = () => {
                     totalPages={totalPages} 
                     onPageChange={handlePageChange} 
                 />
-                {/* <UserTable /> */}
             </div>
         </div>
     );
