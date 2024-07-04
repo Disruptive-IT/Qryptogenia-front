@@ -159,10 +159,26 @@ const generateUniqueName = async (userId) => {
 
 export const getQrs = async (req, res) => {
   try {
-    const { userId } = req.params;
-    const qrs = await prisma.qr.findMany({ where: { userId } });
-    res.status(200).json({ qrs });
+    const { userId } = req.query;
+    console.log('userId:', userId); 
+
+    const qrs = await prisma.qr.findMany({
+      where: { userId },
+      include: {
+        QrType: {
+          select: {
+            type: true,
+            description: true,
+          },
+        },
+      },
+    });
+
+    console.log('Database response:', qrs); 
+
+    res.status(200).json({ qrCodes: qrs });
   } catch (error) {
+    console.error('Error fetching QR codes:', error); 
     res.status(400).json({ error: error.message });
   }
 };

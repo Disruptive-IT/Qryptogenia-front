@@ -70,31 +70,31 @@ router.get("/check-token", async (req, res) => {
 router.get('/qrcodes', async (req, res) => {
   const { userId } = req.query;
 
-    console.log('userId:', userId); // Agrega este log para verificar el userId
-
-    try {
-        const qrCodes = await prisma.qr.findMany({
-            where: {
-                userId: userId, // Asegúrate de que userId es un número
-            },
-            select: {
-                id: true,
-                name_qr: true,
-                qrTypeId: true,
-                state: true,
-                createdAt: true,
-                // Solo selecciona los campos que existen
-                // Si "scans" no existe en tu modelo, quítalo de aquí
-            },
-        });
-
-        console.log('qrCodes:', qrCodes); // Agrega este log para verificar los resultados
-
-        res.json(qrCodes);
-    } catch (error) {
-        console.error('Error fetching QR codes:', error);
-        res.status(500).json({ error: 'Error fetching QR codes' });
-    }
+  try {
+      const qrCodes = await prisma.qr.findMany({
+          where: {
+              userId: userId,
+          },
+          select: {
+              id: true,
+              name_qr: true,
+              qrTypeId: true,
+              state: true,
+              createdAt: true,
+              qrType: {
+                  select: {
+                    id: true,
+                      type: true,
+                      description: true,
+                  },
+              },
+          },
+      });
+      res.json(qrCodes);
+  } catch (error) {
+      console.error('Error fetching QR codes:', error);
+      res.status(500).json({ error: 'Error fetching QR codes' });
+  }
 });
 
 export default router;

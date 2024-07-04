@@ -14,8 +14,8 @@ const App = () => {
     useEffect(() => {
         const fetchQRCodes = async () => {
             try {
-                const token = localStorage.getItem('token'); // O donde sea que almacenes tu token
-                const userId = 'e8a6aff3-3ba6-4143-8aa0-54cc06fe799e'; // Reemplaza con el ID del usuario autenticado
+                const token = localStorage.getItem('token');
+                const userId = 'ec375a6b-22f7-46b5-8325-2e86880fed49';
 
                 const response = await axios.get(`http://localhost:3000/api/auth/qrcodes?userId=${userId}`, {
                     headers: {
@@ -23,7 +23,7 @@ const App = () => {
                     }
                 });
 
-                console.log('API response:', response.data); // Verifica los datos recibidos desde la API
+                console.log('API response:', response.data);
 
                 setQRCodes(response.data);
             } catch (error) {
@@ -37,13 +37,13 @@ const App = () => {
 
     const handleSearch = (event) => {
         setSearchQuery(event.target.value);
-        setCurrentPage(1); // Reinicia la página actual a 1 en una nueva búsqueda
+        setCurrentPage(1);
     };
 
     const filteredQRCodes = qrCodes.filter(code =>
         code.name_qr.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        code.type.toString().includes(searchQuery.toLowerCase()) ||
-        code.state.toLowerCase().includes(searchQuery.toLowerCase())
+        (code.qrType && code.qrType.type.toLowerCase().includes(searchQuery.toLowerCase())) ||
+        code.state.toString().toLowerCase().includes(searchQuery.toLowerCase())
     );
 
     const totalPages = Math.ceil(filteredQRCodes.length / 7);
@@ -55,10 +55,14 @@ const App = () => {
     const columns = [
         { header: 'Preview', accessor: 'preview' },
         { header: 'QR Code Name', accessor: 'name_qr' },
-        { header: 'QR Code Type', accessor: 'type' },
+        {
+            header: 'QR Code Type',
+            accessor: 'qrType.id',
+            render: (item) => item.qrType ? item.qrType.type : 'N/A'
+        },
         { header: 'Status', accessor: 'state', render: (item) => (
-            <span className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${item.state === 'Active' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}`}>
-                {item.state}
+            <span className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${item.state ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}`}>
+                {item.state ? 'Active' : 'Inactive'}
             </span>
         ) },
         { header: 'Date', accessor: 'createdAt' },
