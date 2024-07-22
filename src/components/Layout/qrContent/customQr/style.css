@@ -1,0 +1,29 @@
+.tab {
+  width: 50px;
+  background-color: #f2f2f2;
+  padding: 0.5rem;
+  border-radius: 5px;
+}
+
+.tab-span {
+  font-size: 8px;
+  margin-top: 3px;
+  background-color: white;
+  border-radius: 0.375rem;
+  padding: 0 0.1rem;
+}
+
+.moving-text {
+  position: absolute;
+  white-space: nowrap;
+  font-size: 14px;
+  background-color: rgba(
+    255,
+    255,
+    255,
+    0.7
+  ); /* Fondo semitransparente para mejor visibilidad */
+  padding: 2px 5px;
+  border-radius: 3px;
+}
+
