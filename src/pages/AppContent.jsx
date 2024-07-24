@@ -30,6 +30,10 @@ const AppContent = () => {
     const { setActiveStep } = useStepper();
     const navigate = useNavigate();
     const location = useLocation();
+    const [selectedTab, setSelectedTab] = useState(0);
+    const handleSocialFormSubmit = () => {
+        setSelectedTab(1); // Cambia al tab "Preview QRytogenia"
+    };
 
     const { 
         appFormValues, 
@@ -44,7 +48,7 @@ const AppContent = () => {
     const [valuesLoaded, setValuesLoaded] = useState(false);
     const [isModalOpen, setIsModalOpen] = useState(false);
     setCurrentContentType(contentName);
-    console.log(currentContentType)
+    console.log(selectedTab)
 
     useEffect(() => {
         const fetchQRData = async () => {
@@ -139,6 +143,10 @@ const AppContent = () => {
         setIsModalOpen(false);
     };
 
+    const handleTabChange = (newTab) => {
+        setSelectedTab(newTab);
+    };
+
     const isQrRoute = location.pathname.startsWith('/qr/');
     console.log(socialFormValues)
     return (
@@ -156,6 +164,7 @@ const AppContent = () => {
                             onFormChangeApp={setAppFormValues} 
                             onFormChange={setSocialFormValues} 
                             onFormChangeMusic={setMusicFormValues} 
+                            onSocialFormSubmit={handleSocialFormSubmit}
                         />
                     </div>
                     <div className='col-span-1 lg:col-span-2'>
@@ -165,6 +174,8 @@ const AppContent = () => {
                                 appFormValues={appFormValues} 
                                 socialFormValues={socialFormValues} 
                                 musicFormValues={musicFormValues} 
+                                selectedTab={selectedTab}
+                                onTabChange={handleTabChange}
                             />
                         )}
                     </div>

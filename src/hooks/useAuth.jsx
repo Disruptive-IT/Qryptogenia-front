@@ -300,11 +300,11 @@ export const useAuth = (navigate) => {
     /*
  * @Author : Jaider Cuartas,   @date 2024-07-15 19:34:37
  * @description : Esta función envía una solicitud GET para obtener los datos de una tienda. 
- *                Toma como parámetro el ID de la tienda
+ *                Toma como parámetro el ID de la tienda y maneja las respuestas y errores adecuadamente.
  */
     const getStoreData = async (id) => {
         try {
-            const response = await axios.get(`/store/${id}`);
+            const response = await axios.get(`http://localhost:3000/api/qr/getpreview/${id}`);
             return { success: true, data: response.data };
         } catch (error) {
             console.error('Error fetching music data:', error);

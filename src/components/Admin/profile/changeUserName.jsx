@@ -1,3 +1,10 @@
+/**
+ * @Author : Cristian Escobar,   @date 2024-07-24 08:41:29
+ * @description : Este componente permite a los usuarios cambiar su nombre de usuario, validando que la contraseña actual sea correcta y mostrando mensajes de error o éxito según el resultado de la operación.
+ * @Props : formRef: Referencia para el formulario, setModalIsOpen: Función para cerrar el modal, handleCloseModal: Función para manejar el cierre del modal.
+ * @return : Un componente Formik que maneja el formulario de cambio de información de usuario con campos para el nuevo nombre de usuario y la contraseña actual, incluyendo validaciones y manejo de errores.
+ */
+
 import React, { useState, useContext, useRef, useEffect } from "react";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import { AuthContext } from "../../../context/AuthContext";

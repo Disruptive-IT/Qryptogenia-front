@@ -16,7 +16,7 @@ export default function ScrollableInputText() {
     };
 
     const handlePositionXChange = (e, newValue) => {
-        setQrTextPositionX(Math.min(Math.max(newValue, 0), 78));
+        setQrTextPositionX(Math.min(Math.max(newValue, 0), 51));
     };
 
     const toggleRange = () => {
@@ -24,7 +24,7 @@ export default function ScrollableInputText() {
     };
 
     useEffect(() => {
-        setQrTextPositionY(isFullRangeEnabled ? 85 : 0);
+        setQrTextPositionY(isFullRangeEnabled ? 86.5 : 0);
     }, [isFullRangeEnabled]);
 
     return (

@@ -1,3 +1,11 @@
+/**
+ * @Author : Cristian Escobar,   @date 2024-07-24 08:29:16
+ * @description : Este componente permite a los usuarios cambiar su correo electrónico verificando un código enviado al correo actual y al nuevo correo. Muestra formularios dinámicos para la entrada de códigos y correos según el estado de la verificación.
+ * @Props : formRef: Referencia para el formulario, setModalIsOpen: Función para cerrar el modal, handleCloseEmail: Función para manejar el cierre del modal al completar el cambio de correo.
+ * @return : Un componente Formik que maneja el formulario de cambio de correo electrónico con campos dinámicos para la verificación del código y entrada del nuevo correo, y varios estados que gestionan el flujo del proceso de cambio de correo.
+ */
+
+
 import React, { useState, useContext, useEffect, useRef } from "react";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import { Toaster, toast } from "sonner";

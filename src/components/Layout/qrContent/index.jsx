@@ -17,7 +17,7 @@ import MusicForm from "./forms/Music";
 import { WebLinkPhone } from "./socialMedia/stylePhone";
 import WebLinkPhonePreview from "./socialMedia/webLinkPhonePreview";
 import { WebLinkPhoneMusic } from "./socialMedia/stylePhoneMusic";
-export const QrContentSwitch = ({contentName, onFormChangeApp, onFormChange, onFormChangeMusic}) => {
+export const QrContentSwitch = ({contentName, onFormChangeApp, onFormChange, onFormChangeMusic, onSocialFormSubmit}) => {
 
     let qrContent;
     switch (contentName) {
@@ -31,7 +31,7 @@ export const QrContentSwitch = ({contentName, onFormChangeApp, onFormChange, onF
         case "social media":
             qrContent = (
                 <div>
-                    <SocialForm onFormChange={onFormChange} />
+                    <SocialForm onFormChange={onFormChange} onSubmit={onSocialFormSubmit} />
                 </div>
             );
             break;
