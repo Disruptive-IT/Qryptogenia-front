@@ -3,6 +3,8 @@ import { useSearchParams } from 'react-router-dom';
 import axios from '../libs/axios';
 import { SocialLayout } from '../components/Layout/qrContent/LayoutsQr/stylePhoneSocialLayout';
 import { SocialButtonM } from '../components/Layout/qrContent/socialMedia/socialButtons';
+import CircularProgress from '@mui/material/CircularProgress';
+import Box from '@mui/material/Box';
 
 /**
  * @Author : Jobserd Julián Ocampo,   @date 2024-07-19 09:08:16
@@ -41,9 +43,9 @@ const QRScanPage = () => {
 
     if (loading) {
         return (
-            <div className='flex items-center justify-center min-h-screen'>
-                <p className='text-xl'>Cargando</p>
-            </div>
+            <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '100vh' }}>
+                <CircularProgress />
+            </Box>
         );
     }
 
@@ -55,11 +57,23 @@ const QRScanPage = () => {
         );
     }
 
+    const mapNetworkName = (value) => {
+        const formattedValue = value.toLowerCase();
+        if (formattedValue.includes('samsung galaxy store')) {
+            return 'Galaxy Store';
+        } else if (formattedValue.includes('app store')) {
+            return 'Apple Store';
+        } else if (formattedValue.includes('google play store')) {
+            return 'Google Play';
+        } else {
+            return value.split(' ')[0].charAt(0).toUpperCase() + value.split(' ')[0].slice(1).toLowerCase();
+        }
+    };
+
     const dataBtns = Array.isArray(qrData.SelectOptions) ? qrData.SelectOptions.map(option => ({
-        name: option.value.split(' ')[0].charAt(0).toUpperCase() + option.value.split(' ')[0].slice(1),
+        name: mapNetworkName(option.value),
         url: option.url
     })) : [];
-
 
     return (
         <div className='flex items-center justify-center min-h-screen'>
@@ -88,10 +102,5 @@ const QRScanPage = () => {
         </div>
     );
 };
-
-// Agregar spiner
-//? Como tomar las img
-//? Como tomar los iconos
-//! Limitar entradas 
 
 export default QRScanPage;
