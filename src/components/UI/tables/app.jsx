@@ -11,7 +11,6 @@ import { saveAs } from 'file-saver';
 import { useNavigate } from 'react-router-dom'; // Importa useNavigate
 import { useAuth } from '../../../hooks/useAuth';
 
-
 const formatDate = (isoDate) => {
   const date = new Date(isoDate);
   return date.toLocaleDateString('es-US'); 
@@ -98,7 +97,7 @@ const App = () => {
 
   
 
-  const handleDownloadClick = (imageBase64) => {
+  const handleDownloadClick = (imageBase64,name) => {
     Swal.fire({
       title: 'Select Download Format and Size',
       html: `
@@ -106,7 +105,7 @@ const App = () => {
       <label for="format-select" style="display: inline-block; width: 100px;">Format:</label>
       <select id="format-select" className="swal2-select" style="width: 200px;">
         <option value="png">PNG</option>
-        <option value="jpg">JPG</option>
+        <option value="jpeg">JPG</option>
         <option value="svg">SVG</option>
       </select>
     </div>
@@ -199,11 +198,11 @@ const App = () => {
           canvas.height = size;
           const ctx = canvas.getContext('2d');
           const img = new Image();
-          img.src = `data:image/png;base64,${imageBase64}`;
+          img.src = `data:image/${format};base64,${imageBase64}`;
           img.onload = () => {
             ctx.drawImage(img, 0, 0, size, size);
             canvas.toBlob((blob) => {
-              saveAs(blob, `qr-code.${format}`);
+              saveAs(blob, `${name}QR.${format}`);
             }, `image/${format}`);
           };
         }
@@ -290,7 +289,7 @@ const App = () => {
         <div className="flex space-x-2">
           <FaDownload
             className="cursor-pointer text-xl text-blue-500"
-            onClick={() => handleDownloadClick(item.qr_image_base64)}
+            onClick={() => handleDownloadClick(item.qr_image_base64,item.name_qr)}
           />
           <MdOutlineEdit
             className="cursor-pointer text-xl text-yellow-500"

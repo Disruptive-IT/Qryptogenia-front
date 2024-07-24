@@ -80,42 +80,48 @@ export const StoreLayout = ({ appFormValues }) => {
     : [];
 
     return (
-        <div style={{ background: backgroundcolor }} className="flex flex-col  w-full items-center justify-center rounded-[55px] max-h-[680px]">
+        <div 
+        style={{ background: backgroundcolor }} 
+        className="flex flex-col items-center justify-center w-[auto] h-[auto] rounded-[55px] p-2 box-border"
+    >
+        <div
+            style={{ background: backgroundcolor }}
+            className="bg-gradient-to-b flex flex-col items-center w-full h-full min-w-[300px] min-h-[400px] max-w-full max-h-full rounded-[60px] p-4 box-border"
+        >
+            {/* Encabezado del teléfono */}
+            <WebLinkPhoneHeader
+                logo={logo}
+                title={title}
+                textColor={textColor}
+                headerColor={headerColor}
+                bordercolor={bordercolor}
+            />
+            {/* Cuerpo del teléfono */}
             <div
                 style={{ background: backgroundcolor }}
-                className="bg-gradient-to-b flex flex-col h-full items-center min-w-[360px] min-h-[676px] max-w-[360px] max-h-[678px] rounded-[60px] "
+                className="rounded-b-[77px] flex flex-col items-center w-full h-full p-4 box-border overflow-hidden"
             >
-                {/* Encabezado del teléfono */}
-                <WebLinkPhoneHeader
-                    logo={logo}
-                    title={title}
-                    textColor={textColor}
-                    headerColor={headerColor}
-                    bordercolor={bordercolor}
-                />
-                {/* Cuerpo del teléfono */}
-                <div
-                    style={{ background: backgroundcolor }}
-                    className="rounded-b-[77px]  flex flex-col items-center w-full h-full "
-                >
-                    <div className="w-full">
-                        <p
-                            style={{ color: textColor }}
-                            className={`font-bold mb-5 mt-5 text-center ${title.length > 22 ? 'text-xl' : 'text-2xl'} whitespace-pre-line break-words`}>
-                            {title}
-                        </p>
-                    </div>
-    
-                    <div
-                        className="break-words overflow-y-auto max-h-[200px] custom-scrollbar text-lg leading-relaxed px-8 "
-                        style={{ color: descriptionColor }}>
-                        {description}
-                    </div>
-                    
-                    <SocialButton data={data} />
+                <div className="w-full">
+                    <p
+                        style={{ color: textColor }}
+                        className={`font-bold mb-5 mt-5 text-center ${title.length > 22 ? 'text-xl' : 'text-2xl'} whitespace-pre-line break-words`}
+                    >
+                        {title}
+                    </p>
                 </div>
+    
+                <div
+                    className="break-words overflow-y-auto max-h-[200px] custom-scrollbar text-lg leading-relaxed px-8 w-full"
+                    style={{ color: descriptionColor }}
+                >
+                    {description}
+                </div>
+                
+                <SocialButton data={data} />
             </div>
         </div>
+    </div>
+    
     );
 };
 
