@@ -40,7 +40,7 @@ const useQrState = (initialQrType = '', initialQrProps = {}) => {
             qrTextPositionX: 0,
             qrTextPositionY: 0,
             qrTextChip:  {},
-            qrTextChipColor: "#284B63"
+            qrTextChipColor: "Transparent"
         },
     });
 

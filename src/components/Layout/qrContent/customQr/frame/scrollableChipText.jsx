@@ -65,7 +65,7 @@ export default function ScrollableChipText() {
                             <Chip
                                 label={tabLabels[index]}
                                 style={{
-                                    backgroundColor: index === value ? qrTextProps.qrTextChipColor : 'gray',
+                                    backgroundColor: '#284B63',
                                     color: index === 0 ? 'black' : 'white',
                                     ...bubbleStyles[index % bubbleStyles.length],
                                     margin: "10px" 
