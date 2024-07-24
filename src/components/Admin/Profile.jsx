@@ -1,3 +1,10 @@
+/**
+ * @Author : Cristian Escobar,   @date 2024-07-24 08:53:25
+ * @description : Este componente UserProfileMenu proporciona un menú desplegable accesible a través de un avatar de usuario. El menú incluye opciones para navegar al perfil del usuario, ver los QR codes y cerrar sesión.
+ * @Props : No recibe props directamente, pero utiliza el contexto de autenticación para obtener la información del usuario, la imagen de perfil y la función de cierre de sesión.
+ * @return : Un componente que muestra un avatar de usuario, al hacer clic se despliega un menú con opciones para navegar al perfil, ver los QR codes y cerrar sesión.
+ */
+
 import React, { useState, useContext, useEffect } from 'react';
 import { Tooltip, IconButton, Avatar, Menu, MenuItem, Typography } from '@mui/material';
 import { AuthContext } from "../../context/AuthContext";
@@ -33,7 +40,7 @@ export default function UserProfileMenu() {
                 onClose={handleCloseUserMenu} 
             >
                 <MenuItem onClick={handleCloseUserMenu}>
-                    <RouterLink to="/admin/profile" style={{ textDecoration: 'none', color: 'inherit' }}>
+                    <RouterLink to="/user/profile" style={{ textDecoration: 'none', color: 'inherit' }}>
                         <Typography textAlign="center">Profile</Typography>
                     </RouterLink>
                 </MenuItem>

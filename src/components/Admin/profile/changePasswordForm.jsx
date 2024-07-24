@@ -1,3 +1,10 @@
+/**
+ * @Author : Cristian Escobar,   @date 2024-07-24 08:32:56
+ * @description : Este componente permite a los usuarios cambiar su contraseña, validando que la nueva contraseña coincida con la confirmación y mostrando mensajes de error o éxito según el resultado de la operación.
+ * @Props : formRef: Referencia para el formulario, setModalIsOpen: Función para cerrar el modal.
+ * @return : Un componente Formik que maneja el formulario de cambio de contraseña con campos para la contraseña actual, la nueva contraseña y la confirmación de la nueva contraseña, incluyendo validaciones y manejo de errores.
+ */
+
 import React, { useState, useContext, useRef } from "react";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import { AuthContext } from "../../../context/AuthContext";

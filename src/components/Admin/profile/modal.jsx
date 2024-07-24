@@ -1,3 +1,10 @@
+/**
+ * @Author : Cristian Escobar,   @date 2024-07-24 08:43:12
+ * @description : Este componente CustomModal utiliza el componente Modal de Material-UI para mostrar un modal personalizado. El modal acepta varios props para personalizar su contenido y acciones.
+ * @Props : open: Indica si el modal está abierto o cerrado, onClose: Función para manejar el cierre del modal, title: Título del modal, children: Contenido del modal, actions: Array de objetos que define los botones de acción en el modal, donde cada objeto puede incluir label, onClick, color y variant.
+ * @return :
+ */
+
 import Modal from '@mui/material/Modal';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';

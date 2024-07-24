@@ -1,3 +1,11 @@
+/**
+ * @Author : Cristian Escobar,   @date 2024-07-24 08:21:25
+ * @description : Componente para el formulario de redes sociales de configuración de la aplicación QR. Permite al usuario ingresar y modificar el título, descripción, colores de fondo y caja, y subir una imagen.
+ * @Props : - onFormChange: Función callback para actualizar el estado de la aplicación con los valores del formulario.
+ * @return : Retorna un formulario interactivo que permite al usuario configurar los detalles de la aplicación QR, incluyendo título, descripción, colores y carga de imagen.
+ */
+
+
 import React, { useState, useRef, useEffect } from 'react';
 import { Formik, Form, Field } from "formik";
 import Select from 'react-select';
@@ -5,7 +13,7 @@ import { SocialIcon } from 'react-social-icons'
 import { ImUpload2 } from "react-icons/im";
 import GradientColorPicker from 'react-gcolor-picker'; // Importamos el nuevo color picker
 
-export const SocialForm = ({ onFormChange }) => {
+export const SocialForm = ({ onFormChange, onSubmit }) => {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const maxLength = 250;
@@ -186,61 +194,69 @@ export const SocialForm = ({ onFormChange }) => {
 
   const fileInputRef = React.createRef();
 
-    const handleClick = () => {
-        fileInputRef.current.click();
-    };
-    
-    const handleImageChange = (e) => {
-        const file = e.target.files[0];
-        if (file) {
-            resizeImage(file, 300, 300, (resizedImage) => {
-                setImage(resizedImage);
-                // Guarda solo la parte base64 del dataURL
-                onFormChange((prevValues) => ({ ...prevValues, image: resizedImage.split(',')[1] }));
-            });
-        }
-    };
-    
-    const resizeImage = (file, maxWidth, maxHeight, callback) => {
-        const reader = new FileReader();
-    
-        reader.onload = (event) => {
-            const img = new Image();
-            img.onload = () => {
-                let width = img.width;
-                let height = img.height;
-    
-                if (width > height) {
-                    if (width > maxWidth) {
-                        height *= maxWidth / width;
-                        width = maxWidth;
-                    }
-                } else {
-                    if (height > maxHeight) {
-                        width *= maxHeight / height;
-                        height = maxHeight;
-                    }
+  const handleClick = () => {
+    fileInputRef.current.click();
+};
+
+const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+        resizeImage(file, 300, 300, (resizedImage) => {
+            setImage(resizedImage);
+            // Guarda solo la parte base64 del dataURL
+            onFormChange((prevValues) => ({ ...prevValues, image: resizedImage.split(',')[1] }));
+        });
+    }
+};
+
+const resizeImage = (file, maxWidth, maxHeight, callback) => {
+    const reader = new FileReader();
+
+    reader.onload = (event) => {
+        const img = new Image();
+        img.onload = () => {
+            let width = img.width;
+            let height = img.height;
+
+            // Resize the image
+            if (width > height) {
+                if (width > maxWidth) {
+                    height *= maxWidth / width;
+                    width = maxWidth;
                 }
-    
-                const canvas = document.createElement("canvas");
-                canvas.width = width;
-                canvas.height = height;
-                const ctx = canvas.getContext("2d");
-                ctx.drawImage(img, 0, 0, width, height);
-    
-                // Convierte el canvas a PNG
-                const dataUrl = canvas.toDataURL("image/png");
-                callback(dataUrl);
-            };
-            img.src = event.target.result;
+            } else {
+                if (height > maxHeight) {
+                    width *= maxHeight / height;
+                    height = maxHeight;
+                }
+            }
+
+            const canvas = document.createElement("canvas");
+            canvas.width = width;
+            canvas.height = height;
+            const ctx = canvas.getContext("2d");
+            ctx.drawImage(img, 0, 0, width, height);
+
+            let dataUrl;
+            if (file.type === 'image/png') {
+                // If the file is PNG, convert to PNG
+                dataUrl = canvas.toDataURL("image/png");
+            } else {
+                // If the file is not PNG, convert to JPEG with compression
+                dataUrl = canvas.toDataURL("image/jpeg", 0.7); // 0.7 is the quality level for JPEG
+            }
+            callback(dataUrl);
         };
-        reader.readAsDataURL(file);
+        img.src = event.target.result;
     };
+    reader.readAsDataURL(file);
+};
 
   const handleMultiSelectChange = (selectedOptions) => {
     const updatedOptions = selectedOptions.map(option => ({
       value: option.value,
-      url: ''
+      url: '',
+      icon: option.icon
     }));
     setSelectedOptions(updatedOptions);
     onFormChange((prevValues) => ({ ...prevValues, selectedOptions: updatedOptions }));
@@ -264,14 +280,14 @@ export const SocialForm = ({ onFormChange }) => {
           actions.setSubmitting(false);
         } else {
           setFormErrors({});
-          // Handle form submission logic here
-          console.log(values);
+          // Call the onSubmit function passed from the parent component
+          onSubmit(values);
           actions.setSubmitting(false);
         }
       }}
     >
       {({ setFieldValue, handleSubmit }) => (
-        <Form className="max-w-4xl mx-auto mt-8 relative">
+        <Form className="max-w-4xl mx-auto mt-8 relative" onSubmit={handleSubmit}>
           <h2 className="text-xl font-semibold mb-4">Social Qr</h2>
           <div className="flex flex-col md:flex-row md:items-start md:mb-4">
             <div className="flex flex-col w-full md:w-2/3 mr-6 mb-4 md:mb-0">

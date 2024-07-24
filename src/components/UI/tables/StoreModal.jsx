@@ -2,8 +2,9 @@ import React from 'react';
 import { StoreLayout } from '../../Layout/qrContent/LayoutsQr/stylePhoneStoreLayout';
 import CellBox from '../../Layout/qrContent/cellBox'; // Ajusta la ruta según corresponda
 import { MdClose } from 'react-icons/md';
+import { PhoneContentSwitch } from '../../Layout/qrContent';
 
-const StoreModal = ({ open, handleClose, storeData }) => {
+const StoreModal = ({ open, handleClose, storeData, codeType}) => {
   if (!open) return null;
 
   const handleOutsideClick = (e) => {
@@ -11,7 +12,8 @@ const StoreModal = ({ open, handleClose, storeData }) => {
       handleClose();
     }
   };
-
+  console.log(storeData)
+  const contentName = codeType.replace(/-/g, ' ');
   return (
     <div 
       id="modal-container" 
@@ -28,7 +30,11 @@ const StoreModal = ({ open, handleClose, storeData }) => {
             <MdClose size={30} />
           </button>
           {storeData ? (
-            <StoreLayout appFormValues={storeData} />
+            <PhoneContentSwitch 
+            contentName={contentName}
+            appFormValues={storeData}
+            musicFormValues={storeData}
+            socialFormValues={storeData}/>
           ) : (
             <div>Loading...</div>
           )}

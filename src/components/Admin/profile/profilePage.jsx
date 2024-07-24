@@ -1,3 +1,10 @@
+/**
+ * @Author : Cristian Escobar,   @date 2024-07-24 08:49:13
+ * @description : Este componente Profile permite al usuario ver y editar su información de perfil, incluyendo la posibilidad de cambiar su imagen de perfil y su contraseña. Utiliza varios componentes y contextos para gestionar la autenticación y el manejo de formularios.
+ * @Props : No recibe props, pero utiliza varios contextos y referencias para gestionar el estado y las acciones del usuario.
+ * @return : Un componente de perfil que muestra la información del usuario, permite cambiar la imagen de perfil y abrir un modal para cambiar la contraseña.
+ */
+
 import React, { useState, useRef, useEffect, useContext } from "react";
 import EditIcon from "@mui/icons-material/Edit";
 import Button from "@mui/material/Button";

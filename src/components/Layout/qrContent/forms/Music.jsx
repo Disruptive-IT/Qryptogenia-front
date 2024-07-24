@@ -1,3 +1,11 @@
+/**
+ * @Author : Cristian Escobar,   @date 2024-07-24 08:18:47
+ * @description : Componente para el formulario de musica de configuración de la aplicación QR. Permite al usuario ingresar y modificar el título, descripción, colores de fondo y caja, y subir una imagen.
+ * @Props : - onFormChangeMusic: Función callback para actualizar el estado de la aplicación con los valores del formulario.
+ * @return : Retorna un formulario interactivo que permite al usuario configurar los detalles de la aplicación QR, incluyendo título, descripción, colores y carga de imagen.
+ */
+
+
 import React, { useState, useRef, useEffect } from 'react';
 import { Formik, Form, Field } from "formik";
 import Select from 'react-select';
@@ -28,6 +36,8 @@ export const MusicForm = ({ onFormChangeMusic }) => {
     const [selectedOptions, setSelectedOptions] = useState([]);
     const [image, setImage] = useState(null); // Nueva parte del estado para la imagen
     const [formErrors, setFormErrors] = useState({});
+
+    console.log
 
     const validateForm = (values) => {
         const errors = {};
@@ -202,6 +212,7 @@ export const MusicForm = ({ onFormChangeMusic }) => {
                 let width = img.width;
                 let height = img.height;
     
+                // Resize the image
                 if (width > height) {
                     if (width > maxWidth) {
                         height *= maxWidth / width;
@@ -220,8 +231,14 @@ export const MusicForm = ({ onFormChangeMusic }) => {
                 const ctx = canvas.getContext("2d");
                 ctx.drawImage(img, 0, 0, width, height);
     
-                // Convierte el canvas a PNG
-                const dataUrl = canvas.toDataURL("image/png");
+                let dataUrl;
+                if (file.type === 'image/png') {
+                    // If the file is PNG, convert to PNG
+                    dataUrl = canvas.toDataURL("image/png");
+                } else {
+                    // If the file is not PNG, convert to JPEG with compression
+                    dataUrl = canvas.toDataURL("image/jpeg", 0.7); // 0.7 is the quality level for JPEG
+                }
                 callback(dataUrl);
             };
             img.src = event.target.result;
@@ -232,13 +249,15 @@ export const MusicForm = ({ onFormChangeMusic }) => {
     const handleMultiSelectChange = (selectedOptions) => {
         const updatedOptions = selectedOptions.map(option => ({
             value: option.value,
-            url: ''
+            url: '',
+            icon: option.icon
         }));
         setSelectedOptions(updatedOptions);
         onFormChangeMusic((prevValues) => ({ ...prevValues, selectedOptions: updatedOptions }));
     };
 
     const handleUrlChange = (index, value) => {
+        console.log(value)
         const updatedOptions = [...selectedOptions];
         updatedOptions[index].url = value;
         setSelectedOptions(updatedOptions);
