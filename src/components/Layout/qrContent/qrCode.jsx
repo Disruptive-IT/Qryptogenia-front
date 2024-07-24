@@ -67,16 +67,13 @@ export const saveQrData = async (qrName, data, qrType, qrColor, qrBgColor, qrPro
 
     try {
         const res = await axios.post('/qr', { qrData });
-        console.log('Server response:', res.data);
         window.location.href = 'http://localhost:5173/user/qr';
         return true;
     } catch (err) {
-        const errorMessage = err.response && err.response.data && err.response.data.msg 
-            ? err.response.data.msg 
+        const errorMessage = err.response && err.response.data && err.response.data.msg
+            ? err.response.data.msg
             : 'An unknown error occurred';
-    
-        console.error('Error from server:', errorMessage);
-    
+
         if (err.response && err.response.status === 401) {
             await Swal.fire({
                 title: 'Authentication Required',
@@ -123,110 +120,119 @@ const QR = () => {
     };
 
 
-useEffect(() => {
-    console.log("x")
-    const createOrUpdateQRCode = () => {
-        if (!qrCode.current) {
-            qrCode.current = new QRCodeStyling({
-                width: 250,
-                height: 250,
-                data: qrData || 'www.qryptogenia.com',
-                dotsOptions: {
-                    color: qrProps.dotsColor,
-                    type: qrProps.dotsType || 'rounded'
-                },
-                cornersSquareOptions: {
-                    color: qrProps.cornersSquareColor,
-                    type: qrProps.cornersSquareType || 'extra-rounded'
-                },
-                cornersDotOptions: {
-                    color: qrProps.cornersDotColor,
-                    type: qrProps.cornersDotType || 'dot'
-                },
-                backgroundOptions: {
-                    color: "transparent",
-                },
-                imageOptions: {
-                    crossOrigin: "anonymous",
-                    hideBackgroundDots: true,
-                    margin: 2,
-                    imageSize: qrImageInfo.qrImageSize
-                },
-            });
-            qrCode.current.append(qrRef.current);
-        } else {
-            qrCode.current.update({
-                data: qrData || 'www.qryptogenia.com',
-                margin: 10,
-                backgroundOptions: {
-                    color: "transparent",
-                },
-                dotsOptions: {
-                    color: qrProps.dotsColor,
-                    type: qrProps.dotsType || 'rounded'
-                },
-                cornersSquareOptions: {
-                    color: qrProps.cornersSquareColor,
-                    type: qrProps.cornersSquareType || 'extra-rounded'
-                },
-                cornersDotOptions: {
-                    color: qrProps.cornersDotColor,
-                    type: qrProps.cornersDotType || 'dot'
-                },
-                image: qrImageInfo.qrImage,
-                imageOptions: {
-                    crossOrigin: "anonymous",
-                    hideBackgroundDots: true,
-                    margin: 2,
-                    imageSize: qrImageInfo.qrImageSize
-                },
-            });
-        }
-    };
+    useEffect(() => {
+        console.log("asdasdasd", qrProps.marcoType.style)
+        const createOrUpdateQRCode = () => {
+            if (!qrCode.current) {
+                qrCode.current = new QRCodeStyling({
+                    width: 250,
+                    height: 250,
+                    data: qrData || 'www.qryptogenia.com',
+                    dotsOptions: {
+                        color: qrProps.dotsColor,
+                        type: qrProps.dotsType || 'rounded'
+                    },
+                    cornersSquareOptions: {
+                        color: qrProps.cornersSquareColor,
+                        type: qrProps.cornersSquareType || 'extra-rounded'
+                    },
+                    cornersDotOptions: {
+                        color: qrProps.cornersDotColor,
+                        type: qrProps.cornersDotType || 'dot'
+                    },
+                    backgroundOptions: {
+                        color: "transparent",
+                    },
+                    imageOptions: {
+                        crossOrigin: "anonymous",
+                        hideBackgroundDots: true,
+                        margin: 2,
+                        imageSize: qrImageInfo.qrImageSize
+                    },
+                });
+                qrCode.current.append(qrRef.current);
+            } else {
+                qrCode.current.update({
+                    data: qrData || 'www.qryptogenia.com',
+                    margin: 10,
+                    backgroundOptions: {
+                        color: "transparent",
+                    },
+                    dotsOptions: {
+                        color: qrProps.dotsColor,
+                        type: qrProps.dotsType || 'rounded'
+                    },
+                    cornersSquareOptions: {
+                        color: qrProps.cornersSquareColor,
+                        type: qrProps.cornersSquareType || 'extra-rounded'
+                    },
+                    cornersDotOptions: {
+                        color: qrProps.cornersDotColor,
+                        type: qrProps.cornersDotType || 'dot'
+                    },
+                    image: qrImageInfo.qrImage,
+                    imageOptions: {
+                        crossOrigin: "anonymous",
+                        hideBackgroundDots: true,
+                        margin: 2,
+                        imageSize: qrImageInfo.qrImageSize
+                    },
+                });
+            }
+        };
 
 
-    
-    createOrUpdateQRCode();
-    // Esperar un breve período para asegurar que el QR se haya renderizado antes de capturar
-    const timeoutId = setTimeout(() => {
-        console.log("traka")
-        generateBase64FromDiv();
-    }, 100);
-    console.log(qrBase64);
-    return () => {
-        clearTimeout(timeoutId);
-    };
-}, [qrData, qrProps, qrImageInfo, qrTextProps.qrText, qrBgColor, qrTextProps.qrTextPositionX, qrTextProps.qrTextPositionY, qrTextProps.qrTextColor, qrTextProps.qrTextSize, qrTextProps.qrTextChip, qrTextProps.qrTextChipColor, qrTextProps.qrTextFontStyle]);
+
+        createOrUpdateQRCode();
+        // Esperar un breve período para asegurar que el QR se haya renderizado antes de capturar
+        const timeoutId = setTimeout(() => {
+            console.log("traka")
+            generateBase64FromDiv();
+        }, 100);
+        console.log(qrBase64);
+        return () => {
+            clearTimeout(timeoutId);
+        };
+    }, [qrData, qrProps, qrImageInfo, qrTextProps.qrText, qrBgColor, qrTextProps.qrTextPositionX, qrTextProps.qrTextPositionY, qrTextProps.qrTextColor, qrTextProps.qrTextSize, qrTextProps.qrTextChip, qrTextProps.qrTextChipColor, qrTextProps.qrTextFontStyle]);
 
     return (
         <div className='m-auto'>
-        <div ref={mario} style={{position: "relative"}}>
-            <div className='m-auto border-4' style={{ ...qrProps.marcoType.style, backgroundColor: qrProps.marcoType.type === 'default' ? 'transparent' : qrBgColor, transition: 'all 0.5s ease', }}>
-                <div className="flex items-center justify-center w-full" ref={qrRef}></div>
-            </div>
-            {qrTextProps.qrText && (
+            <div ref={mario} style={{ position: "relative" }}>
                 <div
+                    className='m-auto'
                     style={{
-                        position: 'absolute',
-                        top: `${qrTextProps.qrTextPositionY}%`,
-                        left: `${qrTextProps.qrTextPositionX}%`,
-                        color: qrTextProps.qrTextColor,
-                        fontSize: `${qrTextProps.qrTextSize}px`,
-                        maxWidth: '200px',
-                        ...(qrTextProps.qrTextChip ? { backgroundColor: qrTextProps.qrTextChipColor } : {}),
-                        ...qrTextProps.qrTextChip,
-                        ...qrTextProps.qrTextFontStyle
+                        ...qrProps.marcoType.style,
+                        border: qrProps.marcoType.type && qrProps.marcoType.type !== 'default' ? '4px solid' : 'none',
+                        backgroundColor: qrBgColor,
+                        transition: 'all 0.5s ease',
+                        padding: "37px"
                     }}
                 >
-                    <span className='m-4 text-center' style={{
-                        whiteSpace: 'pre-wrap',
-                        overflowWrap: 'break-word',
-                    }}>
-                        {qrTextProps.qrText}
-                    </span>
+                    <div className="flex items-center justify-center w-full" ref={qrRef}></div>
                 </div>
-            )}
-        </div>
+                {qrTextProps.qrText && (
+                    <div
+                        style={{
+                            position: 'absolute',
+                            top: `${qrTextProps.qrTextPositionY}%`,
+                            left: `${qrTextProps.qrTextPositionX}%`,
+                            color: qrTextProps.qrTextColor,
+                            fontSize: `${qrTextProps.qrTextSize}px`,
+                            maxWidth: '200px',
+                            ...(qrTextProps.qrTextChip ? { backgroundColor: qrTextProps.qrTextChipColor } : {}),
+                            ...qrTextProps.qrTextChip,
+                            ...qrTextProps.qrTextFontStyle
+                        }}
+                    >
+                        <span className='m-4 text-center' style={{
+                            whiteSpace: 'pre-wrap',
+                            overflowWrap: 'break-word',
+                        }}>
+                            {qrTextProps.qrText}
+                        </span>
+                    </div>
+                )}
+            </div>
         </div>
     );
 };
