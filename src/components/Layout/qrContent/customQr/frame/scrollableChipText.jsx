@@ -65,7 +65,7 @@ export default function ScrollableChipText() {
                             <Chip
                                 label={tabLabels[index]}
                                 style={{
-                                    backgroundColor: '#284B63',
+                                    backgroundColor: 'gray',
                                     color: index === 0 ? 'black' : 'white',
                                     ...bubbleStyles[index % bubbleStyles.length],
                                     margin: "10px" 
