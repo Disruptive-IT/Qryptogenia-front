@@ -95,7 +95,10 @@ const App = () => {
     setSelectedImage(`data:image/png;base64,${imageBase64}`);
   };
 
-  
+  /*
+   * @UpdatedBy : Nicolas Barrios,   @date 2024-07-25 08:44:23
+   * @description : se agrego el nombre del qr a los props para que se descargue el QR con ese nombre
+   */
 
   const handleDownloadClick = (imageBase64,name) => {
     Swal.fire({

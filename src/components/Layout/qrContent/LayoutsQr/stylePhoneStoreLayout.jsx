@@ -82,11 +82,11 @@ export const StoreLayout = ({ appFormValues }) => {
     return (
         <div 
         style={{ background: backgroundcolor }} 
-        className="flex flex-col items-center justify-center w-[auto] h-[auto] rounded-[55px] p-2 box-border"
+        className="w-full h-full flex flex-col items-center justify-center rounded-[10%] overflow-hidden"
     >
         <div
             style={{ background: backgroundcolor }}
-            className="bg-gradient-to-b flex flex-col items-center w-full h-full min-w-[300px] min-h-[400px] max-w-full max-h-full rounded-[60px] p-4 box-border"
+            className="bg-gradient-to-b flex flex-col items-center w-full h-full min-w-[300px] min-h-[400px] max-w-full max-h-full rounded-[60px]  box-border"
         >
             {/* Encabezado del teléfono */}
             <WebLinkPhoneHeader
@@ -99,7 +99,7 @@ export const StoreLayout = ({ appFormValues }) => {
             {/* Cuerpo del teléfono */}
             <div
                 style={{ background: backgroundcolor }}
-                className="rounded-b-[77px] flex flex-col items-center w-full h-full p-4 box-border overflow-hidden"
+                className="rounded-b-[77px] flex flex-col justify-center items-center w-full h-full py-5  box-border overflow-hidden"
             >
                 <div className="w-full">
                     <p
@@ -111,7 +111,7 @@ export const StoreLayout = ({ appFormValues }) => {
                 </div>
     
                 <div
-                    className="break-words overflow-y-auto max-h-[200px] custom-scrollbar text-lg leading-relaxed px-8 w-full"
+                    className="break-words overflow-y-auto max-h-[200px] custom-scrollbar text-lg text-center leading-relaxed px-8 w-full"
                     style={{ color: descriptionColor }}
                 >
                     {description}

@@ -19,12 +19,12 @@ const StoreModal = ({ open, handleClose, storeData }) => {
       className="fixed inset-0 flex items-center justify-center z-40 bg-black bg-opacity-50"  
       onClick={handleOutsideClick}
     >
-      <div className="relative bg-transparent  rounded-[10px] p-5  max-h-[80%] mt-[5%] overflow-auto scroll-mt-[50%] custom-scrollbar">
+      <div className="relative bg-transparent  rounded-[10px] p-6  max-h-[80%] mt-[5%]  scroll-mt-[50%] custom-scrollbar transform -translate-y-20">
         <CellBox>
           <button 
             onClick={handleClose} 
             style={{ position: 'absolute', top: '0px', right: '0px' }} 
-            className=" bg-red-600 text-white mb-[2%] rounded-[20px] "
+            className=" bg-red-600 text-white mb-[1%] rounded-[20px] "
           >
             <MdClose size={30} />
           </button>

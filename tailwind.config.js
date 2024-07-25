@@ -20,6 +20,9 @@ export default {
         "my-red": "#CC2905",
         "my-black": "#353535",
       },
+      screens:{
+        'custom-max': {'max': '1340px'},
+      }
     },
   },
   variants: {},
