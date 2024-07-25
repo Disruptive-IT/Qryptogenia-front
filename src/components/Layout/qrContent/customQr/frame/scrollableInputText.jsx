@@ -1,33 +1,35 @@
 import React, { useState, useEffect } from 'react';
 import { useQr } from '../../../../../context/QrContext';
 import InputText from './StyleInput';
-import Tooltip from '@mui/material/Tooltip';
-import Box from '@mui/material/Box';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 
-// Define los estilos para las posiciones de texto
 const positionStyles = {
-    default: {},
-    topCenter: { position: 'absolute', top: '0%', left: '50%', transform: 'translate(-50%, 0)' },
-    topLeft: { position: 'absolute', top: '0%', left: '0%' },
-    topRight: { position: 'absolute', top: '0%', right: '0%' },
-    bottomCenter: { position: 'absolute', bottom: '0%', left: '50%', transform: 'translate(-50%, 0)' },
-    bottomLeft: { position: 'absolute', bottom: '0%', left: '0%' },
-    bottomRight: { position: 'absolute', bottom: '0%', right: '0%' },
+    topCenter: { position: 'absolute', top: '2%', left: '50%', transform: 'translate(-50%, 0)' },
+    topLeft: { position: 'absolute', top: '2%', left: '2%' },
+    topRight: { position: 'absolute', top: '2%', right: '2%' },
+    bottomCenter: { position: 'absolute', bottom: '2%', left: '50%', transform: 'translate(-50%, 0)' },
+    bottomLeft: { position: 'absolute', bottom: '2%', left: '2%' },
+    bottomRight: { position: 'absolute', bottom: '2%', right: '2%' },
 };
 
 export default function ScrollableInputText() {
-    const { setQrText, qrTextProps, setQrTextPositionY, setQrTextPositionX } = useQr();
-    const [value, setValue] = useState(0);
+    const { setQrText, qrTextProps, setQrTextPosition } = useQr();
+    const [value, setValue] = useState(0); 
 
-    const handleInputChange = (e, newValue) => {
-        setValue(newValue);
+    const handleInputChange = (e) => {
         setQrText(e.target.value);
     };
 
-    // Obtiene el estilo de posición basado en qrTextPosition
-    const positionStyle = positionStyles[qrTextProps.qrTextPosition] || positionStyles.default;
+    const handleTabChange = (event, newValue) => {
+        setValue(newValue);
+        const selectedPositionKey = Object.keys(positionStyles)[newValue];
+        setQrTextPosition({ key: selectedPositionKey, style: positionStyles[selectedPositionKey] });
+    };
+
+    useEffect(() => {
+        console.log("ESTADO DE POSICION ", qrTextProps.qrTextPosition);
+    }, [qrTextProps.qrTextPosition]);
 
     return (
         <>
@@ -44,7 +46,7 @@ export default function ScrollableInputText() {
             <div className='flex justify-between gap-4 pt-4'>
                 <Tabs
                     value={value}
-                    onChange={handleInputChange}
+                    onChange={handleTabChange}
                     variant="scrollable"
                     scrollButtons="auto"
                     aria-label="scrollable font tabs"
@@ -66,13 +68,9 @@ export default function ScrollableInputText() {
                             key={index}
                             sx={{ margin: "5px" }}
                             label={<span>{key}</span>}
-                            onClick={() => setQrTextProps({ ...qrTextProps, qrTextPosition: key })}
                         />
                     ))}
                 </Tabs>
-            </div>
-            <div style={{ ...positionStyle, color: qrTextProps.qrTextColor, fontSize: `${qrTextProps.qrTextSize}px`, maxWidth: '200px' }}>
-                {qrTextProps.qrText}
             </div>
         </>
     );

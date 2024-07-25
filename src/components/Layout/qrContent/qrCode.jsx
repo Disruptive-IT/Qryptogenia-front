@@ -213,18 +213,17 @@ const QR = () => {
                 {qrTextProps.qrText && (
                     <div
                         style={{
-                            position: 'absolute',
-                            top: `${qrTextProps.qrTextPositionY}%`,
-                            left: `${qrTextProps.qrTextPositionX}%`,
                             color: qrTextProps.qrTextColor,
                             fontSize: `${qrTextProps.qrTextSize}px`,
                             maxWidth: '200px',
                             ...(qrTextProps.qrTextChip ? { backgroundColor: qrTextProps.qrTextChipColor } : {}),
                             ...qrTextProps.qrTextChip,
-                            ...qrTextProps.qrTextFontStyle
+                            ...qrTextProps.qrTextFontStyle,
+                            ...qrTextProps.qrTextPosition.style
+
                         }}
                     >
-                        <span className='m-4 text-center' style={{
+                        <span className='text-center' style={{
                             whiteSpace: 'pre-wrap',
                             overflowWrap: 'break-word',
                         }}>

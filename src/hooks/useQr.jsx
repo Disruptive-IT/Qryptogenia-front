@@ -37,8 +37,7 @@ const useQrState = (initialQrType = '', initialQrProps = {}) => {
             qrTextSize: 16,
             qrTextColor: '#000000',
             qrTextFontStyle: "",
-            qrTextPositionX: 0,
-            qrTextPositionY: 0,
+            qrTextPosition: 'default',
             qrTextChip:  {},
             qrTextChipColor: "Transparent"
         },
@@ -193,12 +192,8 @@ const useQrState = (initialQrType = '', initialQrProps = {}) => {
         updateQrTextProps({ qrTextColor: color });
     };
 
-    const setQrTextPositionX = (x) => {
-        updateQrTextProps({ qrTextPositionX: x });
-    };
-
-    const setQrTextPositionY = (y) => {
-        updateQrTextProps({ qrTextPositionY: y });
+    const setQrTextPosition = (position) => {
+        updateQrTextProps({ qrTextPosition: position });
     };
 
     const setTextChip = (shape) => {
@@ -248,8 +243,7 @@ const useQrState = (initialQrType = '', initialQrProps = {}) => {
         setCornersDotColor,
         setBackgroundImage,
         setTextSize,
-        setQrTextPositionX,
-        setQrTextPositionY,
+        setQrTextPosition,
         setTextChip,
         setTextChipColor,
         setQrImage,
