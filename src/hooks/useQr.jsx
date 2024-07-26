@@ -10,7 +10,8 @@
 import { useState, useEffect } from 'react';
 
 const useQrState = (initialQrType = '', initialQrProps = {}) => {
-    const [qrState, setQrState] = useState({
+    
+    const initialState = {
         qrData: "",
         qrType: initialQrType,
         qrColor: '#000000',
@@ -20,7 +21,7 @@ const useQrState = (initialQrType = '', initialQrProps = {}) => {
             backgroundImage: null,
             logoImage: null,
             logoPosition: { background: true },
-            marcoType: 'default',
+            marcoType: 'square',
             dotsType: 'rounded',
             cornersSquareType: 'extra-rounded',
             cornersDotType: 'dot',
@@ -42,7 +43,10 @@ const useQrState = (initialQrType = '', initialQrProps = {}) => {
             qrTextChip:  {},
             qrTextChipColor: "#284B63"
         },
-    });
+    };
+    const [qrState, setQrState] = useState(initialState)
+    console.log(qrState)
+    
 
     useEffect(() => {
         const path = window.location.pathname;
@@ -54,6 +58,13 @@ const useQrState = (initialQrType = '', initialQrProps = {}) => {
             }));
         }
     }, []);
+
+    const resetQrData = () => {
+        setQrState(prevState => ({
+            ...initialState,
+            qrType: prevState.qrType,
+        }));
+    };
 
     const setQrData = (data) => {
         setQrState((prevState) => ({
@@ -254,7 +265,8 @@ const useQrState = (initialQrType = '', initialQrProps = {}) => {
         setTextChipColor,
         setQrImage,
         setQrImageSize,
-        setQrBase64
+        setQrBase64,
+        resetQrData
     };
 
 };

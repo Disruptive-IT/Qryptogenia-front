@@ -43,7 +43,8 @@ const AppContent = () => {
         socialFormValues, 
         setSocialFormValues,
         currentContentType,
-        setCurrentContentType
+        setCurrentContentType,
+        resetQrData
     } = useQr();
     const [valuesLoaded, setValuesLoaded] = useState(false);
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -131,6 +132,8 @@ const AppContent = () => {
                 section.scrollIntoView({ behavior: 'smooth' });
             }
         };
+
+        resetQrData()
 
         scrollToSection();
     }, [location]);

@@ -8,7 +8,7 @@
  */
 
 import React, { useState, useEffect, useRef } from 'react';
-import WebLinkPhoneHeader from './webLinkPhoneHeader';
+import {WebLinkPhoneHeader} from './webLinkPhoneHeader';
 import {SocialButton} from '../socialMedia/socialButton'
 import { FaApple, FaGooglePlay  } from "react-icons/fa";
 import mesadoko from "../../../../assets/imgs/mesadoko.png";

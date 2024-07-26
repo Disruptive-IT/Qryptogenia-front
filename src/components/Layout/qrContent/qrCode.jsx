@@ -126,6 +126,7 @@ const QR = () => {
 useEffect(() => {
     console.log("x")
     const createOrUpdateQRCode = () => {
+        console.log(qrProps.marcoType.type);
         if (!qrCode.current) {
             qrCode.current = new QRCodeStyling({
                 width: 250,
@@ -196,7 +197,7 @@ useEffect(() => {
     return () => {
         clearTimeout(timeoutId);
     };
-}, [qrData, qrProps, qrImageInfo, qrTextProps.qrText, qrBgColor, qrTextProps.qrTextPositionX, qrTextProps.qrTextPositionY, qrTextProps.qrTextColor, qrTextProps.qrTextSize, qrTextProps.qrTextChip, qrTextProps.qrTextChipColor, qrTextProps.qrTextFontStyle]);
+}, [qrData, qrProps, qrImageInfo, qrTextProps.qrText, qrBgColor, qrTextProps.qrTextPositionX, qrTextProps.qrTextColor, qrTextProps.qrTextSize, qrTextProps.qrTextChip, qrTextProps.qrTextChipColor, qrTextProps.qrTextFontStyle]);
 
     return (
         <div className='m-auto'>

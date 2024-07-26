@@ -3,7 +3,7 @@ import { SocialButton } from '../socialMedia/socialButtons';
 import logot from "../../../../assets/imgs/Captura.png";
 
 export const MusicLayout = ({ musicFormValues }) => {
-
+console.log(musicFormValues)
   const options = [
     {
       value: 'youtube',
@@ -61,7 +61,7 @@ export const MusicLayout = ({ musicFormValues }) => {
 >
   <div
     className="flex flex-col items-center mt-10 md:mt-28 bg-white rounded-2xl w-[90%] sm:w-[400px] md:w-[600px] min-h-[400px] max-h-[600px] p-6 shadow-lg"
-    style={{ background: musicFormValues.backgroundColor }}
+    style={{ background: musicFormValues.boxColor }}
   >
     <div
       className="relative bg-white rounded-2xl -mt-14 border-4 shadow-md p-1 transition-shadow hover:shadow-xl"

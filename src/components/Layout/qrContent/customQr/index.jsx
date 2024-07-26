@@ -335,6 +335,7 @@ const CustomQr = () => {
                 });
             } else {
                 console.log(musicFormValues)
+                console.log(qrType)
                 await saveQrData(qrName, qrData, qrType, qrColor, qrBgColor, qrProps, qrImageInfo, qrTextProps, appFormValues, socialFormValues, musicFormValues,  qrBase64, currentContentType);
             }
         } else {

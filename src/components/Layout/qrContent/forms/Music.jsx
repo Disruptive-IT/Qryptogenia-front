@@ -12,6 +12,7 @@ import Select from 'react-select';
 import { SocialIcon } from 'react-social-icons'
 import { ImUpload2 } from "react-icons/im";
 import GradientColorPicker from 'react-gcolor-picker'; // Importamos el nuevo color picker
+import { IoIosClose } from "react-icons/io";
 
 export const MusicForm = ({ onFormChangeMusic }) => {
     const [title, setTitle] = useState('');
@@ -41,14 +42,28 @@ export const MusicForm = ({ onFormChangeMusic }) => {
 
     const validateForm = (values) => {
         const errors = {};
+    
+        // Validar el título
         if (!values.title) {
-            errors.title = 'Title is required';
+          errors.title = 'Title is required';
         }
+    
+        // Validar la selección de opciones
         if (selectedOptions.length === 0) {
-            errors.selectedOptions = 'At least one option must be selected';
+          errors.selectedOptions = 'At least one option must be selected';
         }
+        console.log(selectedOptions)
+        // Validar cada campo url en selectedOptions
+        selectedOptions.forEach((option, index) => {
+          console.log(option.url)
+          if (!option.url) {
+            errors[`url_${index}`] = `${option.value} URL is required`;
+          }
+        });
+        console.log(errors)
+    
         return errors;
-    };
+      };
 
     const handleTitleChange = (e) => {
         setTitle(e.target.value);
@@ -191,7 +206,7 @@ export const MusicForm = ({ onFormChangeMusic }) => {
     const handleClick = () => {
         fileInputRef.current.click();
     };
-    
+
     const handleImageChange = (e) => {
         const file = e.target.files[0];
         if (file) {
@@ -202,16 +217,16 @@ export const MusicForm = ({ onFormChangeMusic }) => {
             });
         }
     };
-    
+
     const resizeImage = (file, maxWidth, maxHeight, callback) => {
         const reader = new FileReader();
-    
+
         reader.onload = (event) => {
             const img = new Image();
             img.onload = () => {
                 let width = img.width;
                 let height = img.height;
-    
+
                 // Resize the image
                 if (width > height) {
                     if (width > maxWidth) {
@@ -224,13 +239,13 @@ export const MusicForm = ({ onFormChangeMusic }) => {
                         height = maxHeight;
                     }
                 }
-    
+
                 const canvas = document.createElement("canvas");
                 canvas.width = width;
                 canvas.height = height;
                 const ctx = canvas.getContext("2d");
                 ctx.drawImage(img, 0, 0, width, height);
-    
+
                 let dataUrl;
                 if (file.type === 'image/png') {
                     // If the file is PNG, convert to PNG
@@ -264,6 +279,15 @@ export const MusicForm = ({ onFormChangeMusic }) => {
         onFormChangeMusic((prevValues) => ({ ...prevValues, selectedOptions: updatedOptions }));
     };
 
+    const handleRemoveImage = () => {
+        setImage(null);
+        onFormChangeMusic((prevValues) => ({
+            ...prevValues,
+            image: null // Elimina la imagen del estado global
+        }));
+    };
+
+
     return (
         <Formik
             initialValues={initialValues}
@@ -274,8 +298,8 @@ export const MusicForm = ({ onFormChangeMusic }) => {
                     actions.setSubmitting(false);
                 } else {
                     setFormErrors({});
-                    // Handle form submission logic here
-                    console.log(values);
+                    // Call the onSubmit function passed from the parent component
+                    onSubmit(values);
                     actions.setSubmitting(false);
                 }
             }}
@@ -407,7 +431,7 @@ export const MusicForm = ({ onFormChangeMusic }) => {
                                     </div>
                                 )}
                             </div>
-                            <div className="flex flex-col space-y-4 pt-4">
+                           <div className="flex flex-col space-y-4 pt-4">
                                 <label>Upload Image:</label>
                                 <input type="file" className="hidden" ref={fileInputRef} accept="image/*" onChange={handleImageChange} />
                                 <button
@@ -416,7 +440,17 @@ export const MusicForm = ({ onFormChangeMusic }) => {
                                 >
                                     <ImUpload2 size="30" />
                                 </button>
-                                {image && <img src={image} width="30" />}
+                                {image && (
+                                    <div className="relative w-12">
+                                        <img src={image} width="30" alt="Uploaded" />
+                                        <button
+                                            onClick={handleRemoveImage}
+                                            className="absolute top-0 right-0 bg-white p-0.2 rounded-full hover:bg-gray-200"
+                                        >
+                                            <IoIosClose size="15" />
+                                        </button>
+                                    </div>
+                                )}
                             </div>
                         </div>
                         <div className="w-full md:w-2/3 mt-4 md:mt-0">
@@ -499,18 +533,27 @@ export const MusicForm = ({ onFormChangeMusic }) => {
                         </div>
                     </div>
 
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div className='grid grid-cols-1 md:grid-cols-2 gap-4'>
                         {selectedOptions.map((option, index) => (
-                            <div className="flex items-center mb-4" key={option.value}>
+                            <div key={index} className="flex items-center mb-4">
                                 <label htmlFor={`input_${option.value}`} className="mb-2">{option.icon}</label>
                                 <Field
                                     type="text"
-                                    id={`input_${option.value}`}
-                                    name={`input_${option.value}`}
-                                    placeholder={`https://www.${option.value}.com`}
-                                    className="w-full md:w-80 border border-gray-300 rounded p-2 ml-2"
-                                    onChange={(e) => handleUrlChange(index, e.target.value)}
+                                    id={`url_${index}`}
+                                    name={`url_${index}`}
+                                    placeholder={`URL for ${option.value}`}
+                                    className="border w-full border-gray-300 rounded p-2"
+                                    value={option.url}
+                                    onChange={(e) => {
+                                        handleUrlChange(index, e.target.value)
+                                        const updatedOptions = [...selectedOptions];
+                                        updatedOptions[index] = { ...updatedOptions[index], url: e.target.value };
+                                        setSelectedOptions(updatedOptions);
+                                        setFieldValue('selectedOptions', updatedOptions);
+                                    }}
                                 />
+                                {/* Mostrar mensaje de error para cada URL */}
+                                {formErrors[`url_${index}`] && <div className="text-red-500 text-sm">{formErrors[`url_${index}`]}</div>}
                             </div>
                         ))}
                     </div>

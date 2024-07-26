@@ -18,7 +18,7 @@
 import React from 'react';
 import { SocialButton } from '../socialMedia/socialButton';
 import logot from "../../../../assets/imgs/Captura.png";
-import WebLinkPhoneHeader from '../socialMedia/webLinkPhoneHeader'
+import {WebLinkPhoneHeaderq} from '../socialMedia/webLinkPhoneHeader'
 import { FaApple, FaGooglePlay  } from "react-icons/fa";
 
 
@@ -30,7 +30,6 @@ export const StoreLayout = ({ appFormValues }) => {
     const backgroundcolor = appFormValues.backgroundColor;
     const description = appFormValues.description;
     const logo = appFormValues.image
-    const bordercolor = appFormValues.borderColor
 
     const options = [
         {
@@ -80,42 +79,43 @@ export const StoreLayout = ({ appFormValues }) => {
     : [];
 
     return (
-        <div style={{ background: backgroundcolor }} className="flex flex-col  w-full items-center justify-center rounded-[55px] max-h-[680px]">
-            <div
-                style={{ background: backgroundcolor }}
-                className="bg-gradient-to-b flex flex-col h-full items-center min-w-[360px] min-h-[676px] max-w-[360px] max-h-[678px] rounded-[60px] "
-            >
-                {/* Encabezado del teléfono */}
-                <WebLinkPhoneHeader
-                    logo={logo}
-                    title={title}
-                    textColor={textColor}
-                    headerColor={headerColor}
-                    bordercolor={bordercolor}
-                />
-                {/* Cuerpo del teléfono */}
-                <div
-                    style={{ background: backgroundcolor }}
-                    className="rounded-b-[77px]  flex flex-col items-center w-full h-full "
-                >
-                    <div className="w-full">
-                        <p
-                            style={{ color: textColor }}
-                            className={`font-bold mb-5 mt-5 text-center ${title.length > 22 ? 'text-xl' : 'text-2xl'} whitespace-pre-line break-words`}>
-                            {title}
-                        </p>
-                    </div>
-    
-                    <div
-                        className="break-words overflow-y-auto max-h-[200px] custom-scrollbar text-lg leading-relaxed px-8 "
-                        style={{ color: descriptionColor }}>
-                        {description}
-                    </div>
-                    
-                    <SocialButton data={data} />
-                </div>
-            </div>
-        </div>
+        <div
+  className="flex flex-col min-h-screen w-full items-center justify-center"
+  style={{ background: backgroundcolor }}
+>
+  <div
+    className="flex flex-col items-center mt-10 md:mt-28 bg-white rounded-2xl w-[90%] sm:w-[400px] md:w-[600px] min-h-[400px] max-h-[600px] p-6 shadow-lg"
+    style={{ background: headerColor }}
+  >
+    <div
+      className="relative bg-white rounded-2xl -mt-14 border-4 shadow-md p-1 transition-shadow hover:shadow-xl"
+      style={{ borderColor: appFormValues.borderColor }}
+    >
+      <img
+        className="w-36 rounded-2xl"
+        src={`data:image/png;base64,${appFormValues.image}`}
+        alt=""
+      />
+     </div>
+     <div className="mt-4 mb-2 w-[90%] text-center">
+      <h1
+        className="text-2xl mb-2 font-bold"
+        style={{ color: textColor }}
+      >
+        {title}
+      </h1>
+      <div
+        className="break-words overflow-y-auto max-h-[200px] custom-scrollbar text-lg leading-relaxed"
+        style={{ color: descriptionColor }}
+      >
+        {description}
+      </div>
+     </div>
+     </div>
+     <SocialButton data={data} />
+     </div>
+
+        
     );
 };
 
