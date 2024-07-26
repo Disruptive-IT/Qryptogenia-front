@@ -13,8 +13,9 @@ import Select from 'react-select';
 import { SocialIcon } from 'react-social-icons'
 import GradientColorPicker from 'react-gcolor-picker'; // Importamos el nuevo color picker
 import PropTypes from 'prop-types';
-import { ImUpload2 } from "react-icons/im";
+import { ImUpload2, ImCancelCircle } from "react-icons/im";
 import { FaApple, FaGooglePlay } from "react-icons/fa";
+import { IoIosClose } from "react-icons/io";
 
 export const AppForm = ({ onFormChangeApp }) => {
     const [title, setTitle] = useState('');
@@ -41,37 +42,31 @@ export const AppForm = ({ onFormChangeApp }) => {
     const [image, setImage] = useState(null);
     const [formErrors, setFormErrors] = useState({});
 
-    errors.message = 'Url Required'
     const validateForm = (values) => {
-        const errorsLocal = {};
-    
+        const errors = {};
+
         // Validar el título
         if (!values.title) {
-          errorsLocal.title = 'Title is required';
+            errors.title = 'Title is required';
         }
-    
+
         // Validar la selección de opciones
         if (selectedOptions.length === 0) {
-          errorsLocal.selectedOptions = 'At least one option must be selected';
+            errors.selectedOptions = 'At least one option must be selected';
         }
-        
         console.log(selectedOptions)
         // Validar cada campo url en selectedOptions
         selectedOptions.forEach((option, index) => {
-            console.log(index)
-            const url = option.url.trim();
-            if (!url) {
-                errors[index] = 'algo'
+            console.log(option.url)
+            if (!option.url) {
+                errors[`url_${index}`] = `${option.value} URL is required`;
             }
-            else{
-                delete errors[index]
-            }
-          });
-          console.log(errors)
-    
+        });
+        console.log(errors)
+
         return errors;
-      };
-    
+    };
+
 
     const handleTitleChange = (e) => {
         setTitle(e.target.value);
@@ -145,16 +140,11 @@ export const AppForm = ({ onFormChangeApp }) => {
     };
 
     const handleMultiSelectChange = (selectedOptions) => {
-        // Crea un mapa de las opciones actuales para facilitar la combinación
-        const existingOptionsMap = new Map(selectedOptions.map(option => [option.value, option]));
-    
-        // Combina las opciones nuevas con las existentes, manteniendo las URLs
         const updatedOptions = selectedOptions.map(option => ({
             value: option.value,
-            url: existingOptionsMap.get(option.value)?.url || '',
+            url: '',
             icon: option.icon
         }));
-    
         setSelectedOptions(updatedOptions);
         onFormChangeApp((prevValues) => ({ ...prevValues, selectedOptions: updatedOptions }));
     };
@@ -287,19 +277,33 @@ export const AppForm = ({ onFormChangeApp }) => {
         };
         reader.readAsDataURL(file);
     };
-    
 
-        return (
-            <Formik
-              initialValues={{ title: '', ...selectedOptions.reduce((acc, _, index) => ({ ...acc, [`url_${index}`]: '' }), {}) }}
-              validate={validateForm}
-              onSubmit={(values, actions) => {
-                // Maneja el envío del formulario aquí
-                console.log('Submitted values:', values);
-                actions.setSubmitting(false);
-              }}
-            >
-            {({ setFieldValue, errors, touched }) => (
+    const handleRemoveImage = () => {
+        setImage(null);
+        onFormChangeApp((prevValues) => ({
+            ...prevValues,
+            image: null // Elimina la imagen del estado global
+        }));
+    };
+
+
+    return (
+        <Formik
+            initialValues={initialValues}
+            onSubmit={(values, actions) => {
+                const errors = validateForm(values);
+                if (Object.keys(errors).length > 0) {
+                    setFormErrors(errors);
+                    actions.setSubmitting(false);
+                } else {
+                    setFormErrors({});
+                    // Call the onSubmit function passed from the parent component
+                    onSubmit(values);
+                    actions.setSubmitting(false);
+                }
+            }}
+        >
+            {({ setFieldValue, handleSubmit }) => (
                 <Form className="max-w-4xl mx-auto mt-8 relative">
                     <h2 className="text-xl font-semibold mb-4">App Qr</h2>
                     <div className="flex flex-col md:flex-row md:items-start md:mb-4">
@@ -437,7 +441,17 @@ export const AppForm = ({ onFormChangeApp }) => {
                                 >
                                     <ImUpload2 size="30" />
                                 </button>
-                                {image && <img src={image} width="30" alt='Resized' />}
+                                {image && (
+                                    <div className="relative w-12">
+                                        <img src={image} width="30" alt="Uploaded" />
+                                        <button
+                                            onClick={handleRemoveImage}
+                                            className="absolute top-0 right-0 bg-white p-0.2 rounded-full hover:bg-gray-200"
+                                        >
+                                            <IoIosClose size="15" />
+                                        </button>
+                                    </div>
+                                )}
                             </div>
                         </div>
 
@@ -519,23 +533,25 @@ export const AppForm = ({ onFormChangeApp }) => {
                     </div>
                     <div className='grid grid-cols-1 md:grid-cols-2 gap-4'>
                         {selectedOptions.map((option, index) => (
-                            <div className="flex items-center mb-4" key={option.value}>
+                            <div key={index} className="flex items-center mb-4">
                                 <label htmlFor={`input_${option.value}`} className="mb-2">{option.icon}</label>
                                 <Field
                                     type="text"
-                                    id={`input_${option.value}`}
-                                    name={`input_${option.value}`}
-                                    placeholder={`Write the URL of ${option.value}`}
-                                    className="w-full md:w-80 border border-gray-300 rounded p-2 ml-2"
+                                    id={`url_${index}`}
+                                    name={`url_${index}`}
+                                    placeholder={`URL for ${option.value}`}
+                                    className="border w-full border-gray-300 rounded p-2"
                                     value={option.url}
                                     onChange={(e) => {
-                                        setFieldValue(`url_${index}`, e.target.value);
-                                        handleUrlChange(index, e.target.value);
+                                        handleUrlChange(index, e.target.value)
+                                        const updatedOptions = [...selectedOptions];
+                                        updatedOptions[index] = { ...updatedOptions[index], url: e.target.value };
+                                        setSelectedOptions(updatedOptions);
+                                        setFieldValue('selectedOptions', updatedOptions);
                                     }}
                                 />
-                                {/* Mostrar mensaje de error para cada campo */}
-                                {errors[index] && <div className="text-red-500 text-sm">{errors.message}</div>}
-                                {console.log(errors[index])}
+                                {/* Mostrar mensaje de error para cada URL */}
+                                {formErrors[`url_${index}`] && <div className="text-red-500 text-sm">{formErrors[`url_${index}`]}</div>}
                             </div>
                         ))}
                     </div>

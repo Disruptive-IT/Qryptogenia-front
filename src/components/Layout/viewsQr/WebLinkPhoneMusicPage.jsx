@@ -10,13 +10,13 @@ export const WebLinkPhoneMusicPage = () => {
     const [musicFormValues, setMusicFormValues] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
-    const { getMusicData } = useAuth();
+    const { getStoreData } = useAuth();
 
     const fetchData = async () => {
         setLoading(true);
         console.log("Fetching data for music ID:", id);
         try {
-            const result = await getMusicData(id);
+            const result = await getStoreData(id);
             setMusicFormValues(result.data);
             console.log("Data fetched:", result.data);
         } catch (error) {
@@ -46,13 +46,13 @@ export const WebLinkPhoneSocialPage = () => {
     const [socialFormValues, setSocialFormValues] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
-    const { getSocialData } = useAuth();
+    const { getStoreData } = useAuth();
 
     const fetchData = async () => {
         setLoading(true);
         console.log("Fetching data for social ID:", id);
         try {
-            const result = await getSocialData(id);
+            const result = await getStoreData(id);
             setSocialFormValues(result.data);
             console.log("Data fetched:", result.data);
         } catch (error) {

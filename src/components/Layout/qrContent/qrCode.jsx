@@ -182,18 +182,18 @@ const QR = () => {
         };
 
 
-
-        createOrUpdateQRCode();
-        // Esperar un breve período para asegurar que el QR se haya renderizado antes de capturar
-        const timeoutId = setTimeout(() => {
-            console.log("traka")
-            generateBase64FromDiv();
-        }, 100);
-        console.log(qrBase64);
-        return () => {
-            clearTimeout(timeoutId);
-        };
-    }, [qrData, qrProps, qrImageInfo, qrTextProps.qrText, qrBgColor, qrTextProps.qrTextPositionX, qrTextProps.qrTextPositionY, qrTextProps.qrTextColor, qrTextProps.qrTextSize, qrTextProps.qrTextChip, qrTextProps.qrTextChipColor, qrTextProps.qrTextFontStyle]);
+    
+    createOrUpdateQRCode();
+    // Esperar un breve período para asegurar que el QR se haya renderizado antes de capturar
+    const timeoutId = setTimeout(() => {
+        console.log("traka")
+        generateBase64FromDiv();
+    }, 100);
+    console.log(qrBase64);
+    return () => {
+        clearTimeout(timeoutId);
+    };
+}, [qrData, qrProps, qrImageInfo, qrTextProps.qrText, qrBgColor, qrTextProps.qrTextPositionX, qrTextProps.qrTextColor, qrTextProps.qrTextSize, qrTextProps.qrTextChip, qrTextProps.qrTextChipColor, qrTextProps.qrTextFontStyle]);
 
     return (
         <div className='m-auto'>

@@ -12,6 +12,7 @@ import Select from 'react-select';
 import { SocialIcon } from 'react-social-icons'
 import { ImUpload2 } from "react-icons/im";
 import GradientColorPicker from 'react-gcolor-picker'; // Importamos el nuevo color picker
+import { IoIosClose } from "react-icons/io";
 
 export const SocialForm = ({ onFormChange, onSubmit }) => {
   const [title, setTitle] = useState('');
@@ -39,12 +40,26 @@ export const SocialForm = ({ onFormChange, onSubmit }) => {
 
   const validateForm = (values) => {
     const errors = {};
+
+    // Validar el título
     if (!values.title) {
       errors.title = 'Title is required';
     }
+
+    // Validar la selección de opciones
     if (selectedOptions.length === 0) {
       errors.selectedOptions = 'At least one option must be selected';
     }
+    console.log(selectedOptions)
+    // Validar cada campo url en selectedOptions
+    selectedOptions.forEach((option, index) => {
+      console.log(option.url)
+      if (!option.url) {
+        errors[`url_${index}`] = `${option.value} URL is required`;
+      }
+    });
+    console.log(errors)
+
     return errors;
   };
 
@@ -196,61 +211,61 @@ export const SocialForm = ({ onFormChange, onSubmit }) => {
 
   const handleClick = () => {
     fileInputRef.current.click();
-};
+  };
 
-const handleImageChange = (e) => {
+  const handleImageChange = (e) => {
     const file = e.target.files[0];
     if (file) {
-        resizeImage(file, 300, 300, (resizedImage) => {
-            setImage(resizedImage);
-            // Guarda solo la parte base64 del dataURL
-            onFormChange((prevValues) => ({ ...prevValues, image: resizedImage.split(',')[1] }));
-        });
+      resizeImage(file, 300, 300, (resizedImage) => {
+        setImage(resizedImage);
+        // Guarda solo la parte base64 del dataURL
+        onFormChange((prevValues) => ({ ...prevValues, image: resizedImage.split(',')[1] }));
+      });
     }
-};
+  };
 
-const resizeImage = (file, maxWidth, maxHeight, callback) => {
+  const resizeImage = (file, maxWidth, maxHeight, callback) => {
     const reader = new FileReader();
 
     reader.onload = (event) => {
-        const img = new Image();
-        img.onload = () => {
-            let width = img.width;
-            let height = img.height;
+      const img = new Image();
+      img.onload = () => {
+        let width = img.width;
+        let height = img.height;
 
-            // Resize the image
-            if (width > height) {
-                if (width > maxWidth) {
-                    height *= maxWidth / width;
-                    width = maxWidth;
-                }
-            } else {
-                if (height > maxHeight) {
-                    width *= maxHeight / height;
-                    height = maxHeight;
-                }
-            }
+        // Resize the image
+        if (width > height) {
+          if (width > maxWidth) {
+            height *= maxWidth / width;
+            width = maxWidth;
+          }
+        } else {
+          if (height > maxHeight) {
+            width *= maxHeight / height;
+            height = maxHeight;
+          }
+        }
 
-            const canvas = document.createElement("canvas");
-            canvas.width = width;
-            canvas.height = height;
-            const ctx = canvas.getContext("2d");
-            ctx.drawImage(img, 0, 0, width, height);
+        const canvas = document.createElement("canvas");
+        canvas.width = width;
+        canvas.height = height;
+        const ctx = canvas.getContext("2d");
+        ctx.drawImage(img, 0, 0, width, height);
 
-            let dataUrl;
-            if (file.type === 'image/png') {
-                // If the file is PNG, convert to PNG
-                dataUrl = canvas.toDataURL("image/png");
-            } else {
-                // If the file is not PNG, convert to JPEG with compression
-                dataUrl = canvas.toDataURL("image/jpeg", 0.7); // 0.7 is the quality level for JPEG
-            }
-            callback(dataUrl);
-        };
-        img.src = event.target.result;
+        let dataUrl;
+        if (file.type === 'image/png') {
+          // If the file is PNG, convert to PNG
+          dataUrl = canvas.toDataURL("image/png");
+        } else {
+          // If the file is not PNG, convert to JPEG with compression
+          dataUrl = canvas.toDataURL("image/jpeg", 0.7); // 0.7 is the quality level for JPEG
+        }
+        callback(dataUrl);
+      };
+      img.src = event.target.result;
     };
     reader.readAsDataURL(file);
-};
+  };
 
   const handleMultiSelectChange = (selectedOptions) => {
     const updatedOptions = selectedOptions.map(option => ({
@@ -269,6 +284,15 @@ const resizeImage = (file, maxWidth, maxHeight, callback) => {
     onFormChange((prevValues) => ({ ...prevValues, selectedOptions: updatedOptions }));
   };
 
+  const handleRemoveImage = () => {
+    setImage(null);
+    onFormChange((prevValues) => ({
+      ...prevValues,
+      image: null // Elimina la imagen del estado global
+    }));
+  };
+
+
 
   return (
     <Formik
@@ -286,7 +310,7 @@ const resizeImage = (file, maxWidth, maxHeight, callback) => {
         }
       }}
     >
-      {({ setFieldValue, handleSubmit }) => (
+      {({ setFieldValue, handleSubmit, errors }) => (
         <Form className="max-w-4xl mx-auto mt-8 relative" onSubmit={handleSubmit}>
           <h2 className="text-xl font-semibold mb-4">Social Qr</h2>
           <div className="flex flex-col md:flex-row md:items-start md:mb-4">
@@ -422,7 +446,17 @@ const resizeImage = (file, maxWidth, maxHeight, callback) => {
                 >
                   <ImUpload2 size="30" />
                 </button>
-                {image && <img src={image} width="30" />}
+                {image && (
+                  <div className="relative w-12">
+                    <img src={image} width="30" alt="Uploaded" />
+                    <button
+                      onClick={handleRemoveImage}
+                      className="absolute top-0 right-0 bg-white p-0.2 rounded-full hover:bg-gray-200"
+                    >
+                      <IoIosClose size="15" />
+                    </button>
+                  </div>
+                )}
               </div>
             </div>
             <div className="w-full md:w-2/3 mt-4 md:mt-0">
@@ -504,29 +538,38 @@ const resizeImage = (file, maxWidth, maxHeight, callback) => {
               )}
             </div>
           </div>
+
           <div className='grid grid-cols-1 md:grid-cols-2 gap-4'>
-          {selectedOptions.map((option, index) => (
-            <div className="flex items-center mb-4" key={option.value}>
-              <label htmlFor={`input_${option.value}`} className="mb-2">{option.icon}</label>
-              <Field
-                type="text"
-                id={`input_${option.value}`}
-                name={`input_${option.value}`}
-                placeholder={`https://www.${option.value}.com`}
-                className="w-80 border border-gray-300 rounded p-2 ml-2"
-                onChange={(e) => handleUrlChange(index, e.target.value)}
-              />
-            </div>
-          ))}
+            {selectedOptions.map((option, index) => (
+              <div key={index} className="flex items-center mb-4">
+                <label htmlFor={`input_${option.value}`} className="mb-2">{option.icon}</label>
+                <Field
+                  type="text"
+                  id={`url_${index}`}
+                  name={`url_${index}`}
+                  placeholder={`URL for ${option.value}`}
+                  className="border w-full border-gray-300 rounded p-2"
+                  value={option.url}
+                  onChange={(e) => {
+                    handleUrlChange(index, e.target.value)
+                    const updatedOptions = [...selectedOptions];
+                    updatedOptions[index] = { ...updatedOptions[index], url: e.target.value };
+                    setSelectedOptions(updatedOptions);
+                    setFieldValue('selectedOptions', updatedOptions);
+                  }}
+                />
+                {/* Mostrar mensaje de error para cada URL */}
+                {formErrors[`url_${index}`] && <div className="text-red-500 text-sm">{formErrors[`url_${index}`]}</div>}
+              </div>
+            ))}
           </div>
 
-          <div className="flex items-center mb-4">
+          <div className="flex items-center mb-4 mt-4">
             <button type="submit" className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600">Submit</button>
           </div>
         </Form>
       )}
     </Formik>
-
   );
 };
 
