@@ -1,0 +1,52 @@
+.corner-borders {
+    position: relative;
+  }
+  
+  .corner-borders::before,
+  .corner-borders::after,
+  .corner-borders div::before,
+  .corner-borders div::after {
+    content: "";
+    position: absolute;
+    width: 10px; /* Ajusta el tamaño del borde de la esquina */
+    height: 10px;
+    border: 2px solid black; /* Ajusta el grosor y el color del borde */
+    opacity: 0; /* Inicialmente invisible */
+    transition: opacity 1s; /* Transición de opacidad */
+  }
+  
+  .corner-borders::before {
+    top: 0;
+    left: 0;
+    border-right: none;
+    border-bottom: none;
+  }
+  
+  .corner-borders::after {
+    top: 0;
+    right: 0;
+    border-left: none;
+    border-bottom: none;
+  }
+  
+  .corner-borders div::before {
+    bottom: 0;
+    left: 0;
+    border-top: none;
+    border-right: none;
+  }
+  
+  .corner-borders div::after {
+    bottom: 0;
+    right: 0;
+    border-top: none;
+    border-left: none;
+  }
+  
+  /* Clase para mostrar los bordes */
+  .show-borders::before,
+  .show-borders::after,
+  .show-borders div::before,
+  .show-borders div::after {
+    opacity: 1;
+  }

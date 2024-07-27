@@ -22,6 +22,7 @@ export default {
       },
       screens:{
         'custom-max': {'max': '1340px'},
+        'custom-min': {'min': '400px'},
       }
     },
   },

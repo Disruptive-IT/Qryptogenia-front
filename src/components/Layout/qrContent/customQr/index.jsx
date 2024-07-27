@@ -14,7 +14,7 @@ import Scrollcornersqueare from './design/scrollcornersquare';
 import Scrollcornerdot from './design/scrollcornerdot';
 import ScrollableMarcogQrs from './design/scrollableMarcoQrs';
 import Frame from './frame';
-import Logo from './logo';
+import Logo from './logo'; 
 import QR, { saveQrData } from '../qrCode';
 import '../../../../../src/assets/style/index.css'
 import '../../styles/qrCode.css'
@@ -29,6 +29,7 @@ import { SlFrame } from "react-icons/sl";
 import CustomDialog from '../../../UI/modals/Modal';
 import Swal from 'sweetalert2';
 import { toast } from 'sonner';
+import { motion } from 'framer-motion';
 
 const Design = ({ onTabSelect }) => {
     const [tabValue, setTabValue] = useState(0);
@@ -301,7 +302,7 @@ const CustomQr = () => {
         const { value: qrName, isConfirmed } = await Swal.fire({
             title: 'Save QR Code',
             html: `
-                <input id="swal-input1" className="swal2-input" placeholder="Enter QR code name...">
+                <input id="swal-input1" className="swal2-input" style="padding:2%; font-size-2em" placeholder="Enter QR code name...">
                 <div style="margin: 2em 0;">
                     <p style="font-size: 1em; color: #888; margin-top: 10px;">Please enter a name for your QR code. If you do not set a name, the system will provide one for you.</p>
                     <p style="font-size: 0.8em; margin: 10px 0 0 0;">Click "Save" to finalize the creation of your QR code.</p>
@@ -317,7 +318,9 @@ const CustomQr = () => {
                 return input;
             },
             showCancelButton: true,
+            confirmButtonColor:'#007bff',
             confirmButtonText: 'Save',
+            cancelButtonColor:"#d33",
             cancelButtonText: 'Cancel',
             customClass: {
                 actions: 'swal2-actions-no-margin'

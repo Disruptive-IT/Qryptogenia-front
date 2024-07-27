@@ -14,8 +14,8 @@ export const WebLinkPhoneMusic = ({ musicFormValues }) => {
       const keysToCompare = ['title', 'description', 'backgroundColor', 'boxColor', 'titleColor', 'descriptionColor', 'selectedOptions'];
       return keysToCompare.some(key => {
         if (key === 'selectedOptions') {
-          return current[key].length !== initial[key].length || 
-                 current[key].some((opt, index) => opt.value !== initial[key][index].value);
+          return current[key].length !== initial[key].length ||
+            current[key].some((opt, index) => opt.value !== initial[key][index].value);
         }
         return current[key] !== initial[key];
       });
@@ -84,35 +84,32 @@ export const WebLinkPhoneMusic = ({ musicFormValues }) => {
     })
     : [];
 
-    console.log(musicFormValues.backgroundColor)
+  console.log(musicFormValues.backgroundColor)
 
   return (
-    <div className='ml-2 flex flex-col h-full items-center rounded-t-[52px] rounded-b-[50px] w-full p-5' style={{ background: musicFormValues.backgroundColor, minHeight: '670px', maxHeight: '670px', minWidth: '350px', maxWidth: '350px' }}>
-      <div className='flex flex-col items-center mt-28 w-[97%] bg-white rounded-2xl' style={{ background: musicFormValues.boxColor }}>
-        {showImage && (
-          <div className='relative bg-white rounded-2xl -mt-14 border-4 shadow-lg' style={{ borderColor: musicFormValues.borderColor }}>
-            <img className='w-36 rounded-2xl' src={musicFormValues.image ? `data:image/png;base64,${musicFormValues.image}` : logot} alt="" />
-          </div>
-        )}
-        <div className="mt-4 mb-2 w-[90%] text-center">
-          <h1
-            className="text-2xl mb-2 font-bold"
-            style={{ color: musicFormValues.titleColor }}
-          >
-            {musicFormValues.title}
-          </h1>
-          <div
-            className="break-words overflow-y-auto max-h-[200px] custom-scrollbar text-lg leading-relaxed relative"
-            style={{ color: musicFormValues.descriptionColor }}
-          >
-            {musicFormValues.description}
-          </div>
+    <div className='relative flex flex-col w-[100%] h-[100%] items-center rounded-t-[52px] rounded-b-[50px]  p-4 overflow-y-auto custom-scrollbarphone' style={{ background: musicFormValues.backgroundColor, minHeight: '670px', maxHeight: '670px', minWidth: '350px', maxWidth: '350px'}}>
+        <div className='flex flex-col items-center mt-28 w-[97%] bg-white rounded-2xl' style={{ background: musicFormValues.boxColor }}>
+            {showImage && (
+                <div className='relative mt-[-5%] top-[-17%] mb-1%  bg-white rounded-2xl border-4 shadow-lg' style={{ borderColor: musicFormValues.borderColor }}>
+                    <img className='w-36  rounded-2xl' src={musicFormValues.image ? `data:image/png;base64,${musicFormValues.image}` : logot} alt="" />
+                </div>
+            )}
+            <div className="mt-[1%] mb-2 w-[90%] text-center">
+                <div className='break-words overflow-y-auto' style={{ color: musicFormValues.titleColor, fontSize: '20px' }}>
+                    {musicFormValues.title}
+                </div>
+                <div
+                    className="break-words overflow-y-auto max-h-[200px] mt-5 custom-scrollbar text-lg leading-relaxed relative"
+                    style={{ color: musicFormValues.descriptionColor }}
+                >
+                    {musicFormValues.description}
+                </div>
+            </div>
         </div>
-      </div>
 
-      <SocialButton data={data} />
+        <SocialButton data={data} />
     </div>
-  )
+);
 }
 
 const globalStyles = `
@@ -139,6 +136,15 @@ const globalStyles = `
   .custom-scrollbar::-webkit-scrollbar-thumb:hover {
     background-color: rgba(0, 0, 0, 0.7); /* Color del pulgar al pasar el ratón */
   }
+
+  .custom-scrollbarphone::-webkit-scrollbar {
+  width: 0px;
+  }
+
+  /* Para Firefox */
+  .custom-scrollbarphone {
+  scrollbar-width: none; /* Oculta la barra de desplazamiento */
+}
 `;
 
 // Insertar los estilos globales
