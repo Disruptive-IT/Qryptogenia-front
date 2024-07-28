@@ -8,17 +8,16 @@ import { ColorPicker } from '../colorPicker';
 import useQrState from '../../../../../hooks/useQr';
 
 const bubbleStyles = [
-    { borderRadius: '0', padding: '0', backgroundColor: "transparent"},
-    { borderRadius: '50%', padding: '8px 12px' },
-    { borderRadius: '25% 75% / 75% 25%', padding: '6px 14px' },
-    { borderRadius: '30% 70% / 70% 30%', padding: '7px 13px' },
-    { borderRadius: '40% 60% / 60% 40%', padding: '9px 11px' },
-    { borderRadius: '100% 0% / 0% 100%', padding: '10px 15px' },
-    { borderRadius: '50% 50% 0 0 / 50% 50% 0 0', padding: '12px 18px' },
-    { borderRadius: '0 0 50% 50% / 0 0 50% 50%', padding: '14px 16px' },
-    { borderRadius: '50% 0 0 50% / 50% 0 0 50%', padding: '15px 17px' },
-    { borderRadius: '0 50% 50% 0 / 0 50% 50% 0', padding: '16px 18px' },
-    { borderRadius: '20% 80% 30% 70% / 60% 40% 60% 40%', padding: '17px 19px' },
+    { borderRadius: '0', padding: '0', backgroundColor: "transparent" },
+    { borderRadius: '10%', padding: '5px 12px' },
+    { borderRadius: '25% 75% / 75% 25%', padding: '5px 12px' },
+    { borderRadius: '40% 60% / 60% 40%', padding: '2px 15px' },
+    { borderRadius: '50% 10% / 10% 50%', padding: '2px 8px' },
+    { borderRadius: '50% 50% 0 0 / 50% 50% 0 0', padding: '2px 8px' },
+    { borderRadius: '0 0 50% 50% / 0 0 50% 50%', padding: '2px 8px' },
+    { borderRadius: '50% 0 0 50% / 50% 0 0 50%', padding: '3px 10px' },
+    { borderRadius: '0 50% 50% 0 / 0 50% 50% 0', padding: '3px 10px' },
+    { borderRadius: '20% 80% 30% 70% / 60% 40% 60% 40%', padding: '5px 10px' },
 ];
 
 export default function ScrollableChipText() {
@@ -35,7 +34,7 @@ export default function ScrollableChipText() {
         setTextChipColor(color);
     };
 
-    const tabLabels = ['Default', 'Stay positive', 'Work hard', 'Make it happen', 'Focus on goal', 'Believe in yourself', 'Keep moving', 'Never give up', 'Stay strong', 'Be humble', 'Embrace change'];
+    const tabLabels = ['Default', 'Stay positive', 'Work hard', 'Focus on goal', 'Believe in yourself', 'Keep moving', 'Never give up', 'Stay strong', 'Be humble', 'Embrace change'];
 
     return (
         <Box sx={{ width: 'auto', bgcolor: 'background.paper', marginTop: "10px" }}>

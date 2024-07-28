@@ -34,7 +34,7 @@ export default function ScrollableInputText() {
     return (
         <>
             <div className="flex space-x-4 items-center mt-6">
-                <InputText label="Write the text" variant="filled" inputProps={{ maxLength: 20 }} fullWidth onChange={handleInputChange} />
+                <InputText label="Write the text" variant="filled" inputProps={{ maxLength: 10 }} fullWidth onChange={handleInputChange} />
             </div>
             <div className='flex flex-col gap-4'>
                 <span className='text-xs text-gray-500'>*The text has a limit of 10 characters</span>

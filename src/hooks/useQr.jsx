@@ -35,17 +35,22 @@ const useQrState = (initialQrType = '', initialQrProps = {}) => {
         },
         qrTextProps: {
             qrText: '',
-            qrTextSize: 16,
             qrTextColor: '#000000',
-            qrTextFontStyle: "",
-            qrTextPosition: 'default',
-            qrTextChip:  {},
-            qrTextChipColor: "Transparent"
+            qrTextFontStyle: { fontFamily: 'Arial, sans-serif', fontWeight: 'bold', textAlign: 'center' },
+            qrTextPosition: {
+                key: 'topCenter',
+                style: {
+                    position: 'absolute',
+                    top: '2%',
+                    left: '50%',
+                    transform: 'translate(-50%, 0)',
+                },
+            },
+            qrTextChip: { borderRadius: '0', padding: '0', backgroundColor: "transparent" },
+            qrTextChipColor: "#284B63"
         },
     };
     const [qrState, setQrState] = useState(initialState)
-    console.log(qrState)
-    
 
     useEffect(() => {
         const path = window.location.pathname;
@@ -195,10 +200,6 @@ const useQrState = (initialQrType = '', initialQrProps = {}) => {
         updateQrTextProps({ qrTextFontStyle: style });
     };
 
-    const setTextSize = (size) => {
-        updateQrTextProps({ qrTextSize: size });
-    };
-
     const setTextColor = (color) => {
         updateQrTextProps({ qrTextColor: color });
     };
@@ -253,7 +254,6 @@ const useQrState = (initialQrType = '', initialQrProps = {}) => {
         setCornersSquareColor,
         setCornersDotColor,
         setBackgroundImage,
-        setTextSize,
         setQrTextPosition,
         setTextChip,
         setTextChipColor,

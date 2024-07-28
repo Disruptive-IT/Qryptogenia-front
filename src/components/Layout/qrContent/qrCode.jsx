@@ -214,7 +214,7 @@ const QR = () => {
                     <div
                         style={{
                             color: qrTextProps.qrTextColor,
-                            fontSize: `${qrTextProps.qrTextSize}px`,
+                            fontSize: "16px",
                             maxWidth: '200px',
                             ...(qrTextProps.qrTextChip ? { backgroundColor: qrTextProps.qrTextChipColor } : {}),
                             ...qrTextProps.qrTextChip,
@@ -223,10 +223,7 @@ const QR = () => {
 
                         }}
                     >
-                        <span className='text-center' style={{
-                            whiteSpace: 'pre-wrap',
-                            overflowWrap: 'break-word',
-                        }}>
+                        <span className='text-center'>
                             {qrTextProps.qrText}
                         </span>
                     </div>

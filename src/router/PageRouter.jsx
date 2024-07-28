@@ -22,6 +22,7 @@ import { useAuthContext } from "../context/AuthContext";
 import WebLinkPhoneStorePage from "../components/Layout/viewsQr/webLinkPhoneStorePage"
 import {WebLinkPhoneMusicPage, WebLinkPhoneSocialPage} from "../components/Layout/viewsQr/WebLinkPhoneMusicPage";
 import QRScanPage from "../pages/QRScanPage";
+import ShowAlert from "../components/alerts/alert_template";
 
 export const PageRouter = () => {
     const { isLoading } = useLoader();
@@ -61,6 +62,9 @@ export const PageRouter = () => {
                         <Route path="users" element={<UserTable />} />
                     </Route>
                 </Route>
+
+                {/*pruebaa*/}
+                <Route path="/alert_membresy" element={<ShowAlert />} />
 
                 {/* User Routes */}
                 <Route path="/user" element={<ProtectedRouteClient />}>
