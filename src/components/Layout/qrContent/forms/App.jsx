@@ -16,6 +16,9 @@ import PropTypes from 'prop-types';
 import { ImUpload2, ImCancelCircle } from "react-icons/im";
 import { FaApple, FaGooglePlay } from "react-icons/fa";
 import { IoIosClose } from "react-icons/io";
+import apple from "../../../../../src/assets/imgs/apple.png";
+import huawei from "../../../../../src/assets/imgs/huawei.png";
+import microsoft from "../../../../../src/assets/imgs/microsoft.png";
 
 export const AppForm = ({ onFormChangeApp }) => {
     const [title, setTitle] = useState('');
@@ -59,7 +62,7 @@ export const AppForm = ({ onFormChangeApp }) => {
         selectedOptions.forEach((option, index) => {
             console.log(option.url)
             if (!option.url) {
-                errors[`url_${index}`] = `${option.value} URL is required`;
+                errors[`url_${index}`] = `URL is required`;
             }
         });
         console.log(errors)
@@ -208,13 +211,30 @@ export const AppForm = ({ onFormChangeApp }) => {
             </svg>
         },
         {
-            value: 'App Store', label: (
+            value: 'Apple', label: (
                 <div style={{ display: 'flex', alignItems: 'center' }}>
-                    <FaApple size={20} style={{ marginRight: '10px' }} />
-                    <span>App store</span>
+                    <img src={apple} style={{ width: '25px', height: '25px'}}/>
+                    <span>App Store</span>
+                </div>
+            ), icon: <img src={apple} style={{width: '40px', height: '40px', marginRight: '5px'}}/>
+        },
+        {
+            value: 'huawei', label: (
+                <div style={{ display: 'flex', alignItems: 'center'}}>
+                    <img src={huawei} style={{ width: '20px', height: '20px', marginRight: '5px'}}/>
+                    <span>Huawei App Gallery</span>
 
                 </div>
-            ), icon: <FaApple size={40} />
+            ), icon: <img src={huawei} style={{width: '34px', height: '34px', marginRight: '5px', marginTop: '8px'}}/>
+        },
+        {
+            value: 'microsoft', label: (
+                <div style={{ display: 'flex', alignItems: 'center'}}>
+                    <img src={microsoft} style={{ width: '20px', height: '20px', marginRight: '5px'}}/>
+                    <span>Microsoft Store</span>
+
+                </div>
+            ), icon: <img src={microsoft} style={{width: '40px', height: '40px', marginRight: '5px'}}/>
         }
     ];
 

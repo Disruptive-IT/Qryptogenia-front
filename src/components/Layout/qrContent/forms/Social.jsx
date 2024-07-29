@@ -55,7 +55,7 @@ export const SocialForm = ({ onFormChange, onSubmit }) => {
     selectedOptions.forEach((option, index) => {
       console.log(option.url)
       if (!option.url) {
-        errors[`url_${index}`] = `${option.value} URL is required`;
+        errors[`url_${index}`] = `URL is required`;
       }
     });
     console.log(errors)

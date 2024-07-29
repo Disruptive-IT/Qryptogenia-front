@@ -10,7 +10,7 @@
     "imgBoxBackground": "",
     "selectedOptions": [
       { "value": "Google Play Store", "url": "https://play.google.com" },
-      { "value": "App Store", "url": "https://apple.com" }
+      { "value": "Apple", "url": "https://apple.com" }
     ]
   },
   "socialFormValues": {
