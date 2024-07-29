@@ -96,14 +96,14 @@ const LoginForm = () => {
       <section className="w-full mt-24 flex flex-col justify-center items-center ">
         <Form className="flex flex-col flex-nowrap border-2 border-white rounded-xl w-[calc(100%-20px)] md:w-[700px] p-5 shadow-2xl bg-gray-200">
               <h1 className="text-[30px] font-bold tex-center">
-                <span className="text-dark-blue">Sing</span>-in
+                <span className="text-dark-blue">Sing</span>-In
               </h1>
         <div className='border-t-2 border-gray-300 mb-2'></div>
           <div className="flex flex-nowrap">
 
             <div className="flex flex-col gap-2 justify-center items-center w-full tansition-all duration-500">
              
-              <span className="fullWidth text-center text-gray-400">Enter your details to access</span>
+              <span className="w-full text-center text-gray-400">Enter your details to access</span>
 
               <div className="flex flex-col h-14 w-full sm:w-[90%]  ">{/*  //?box input User */}
                 <div className="flex w-full  ">
