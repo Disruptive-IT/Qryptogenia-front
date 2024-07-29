@@ -93,10 +93,10 @@ const LoginForm = () => {
       validationSchema={SchemaLoginValidate}
       onSubmit={handleSubmit}
     >
-      <section className="w-full mt-24 flex flex-col justify-center items-center">
+      <section className="w-full mt-24 flex flex-col justify-center items-center ">
         <Form className="flex flex-col flex-nowrap border-2 border-white rounded-xl w-[calc(100%-20px)] md:w-[700px] p-5 shadow-2xl bg-gray-200">
               <h1 className="text-[30px] font-bold tex-center">
-                <span className="text-dark-blue">QR</span>yptogenia
+                <span className="text-dark-blue">Sing</span>-in
               </h1>
         <div className='border-t-2 border-gray-300 mb-2'></div>
           <div className="flex flex-nowrap">
@@ -187,7 +187,7 @@ const LoginForm = () => {
             
           </div>
         
-          <AuthSwitcher text="Ir al Registro" to="/register" />
+          <AuthSwitcher text="Sing Up" to="/register" />
 
         </Form>
       </section>
