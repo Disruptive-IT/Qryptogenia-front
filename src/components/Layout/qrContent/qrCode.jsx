@@ -36,10 +36,8 @@ export const saveQrData = async (qrName, data, qrType, qrColor, qrBgColor, qrPro
         },
         qrText: {
             text: qrTextProps.qrText,
-            positionX: qrTextProps.qrTextPositionX,
-            positionY: qrTextProps.qrTextPositionY,
+            position: qrTextProps.qrTextPosition,
             colorText: qrTextProps.qrTextColor,
-            fontSize: qrTextProps.qrTextSize
         },
         qrTextFont: {
             fontFamily: qrTextProps.qrTextFontStyle || 'Arial, sans-serif'
@@ -193,7 +191,7 @@ const QR = () => {
     return () => {
         clearTimeout(timeoutId);
     };
-}, [qrData, qrProps, qrImageInfo, qrTextProps.qrText, qrBgColor, qrTextProps.qrTextPositionX, qrTextProps.qrTextColor, qrTextProps.qrTextSize, qrTextProps.qrTextChip, qrTextProps.qrTextChipColor, qrTextProps.qrTextFontStyle]);
+}, [qrData, qrProps, qrImageInfo, qrTextProps.qrText, qrBgColor, qrTextProps.qrTextPosition, qrTextProps.qrTextColor, qrTextProps.qrTextSize, qrTextProps.qrTextChip, qrTextProps.qrTextChipColor, qrTextProps.qrTextFontStyle]);
 
     return (
         <div className='m-auto'>
