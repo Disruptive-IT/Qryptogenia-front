@@ -1,6 +1,7 @@
 import React from 'react';
 import { SocialButton } from '../socialMedia/socialButtons';
 import logot from "../../../../assets/imgs/Captura.png";
+import apple from "../../../../assets/imgs/applew.png";
 
 export const MusicLayout = ({ musicFormValues }) => {
 console.log(musicFormValues)
@@ -88,6 +89,7 @@ console.log(musicFormValues)
       </div>
     </div>
   </div>
+  
   <SocialButton data={data} />
 </div>
   );
