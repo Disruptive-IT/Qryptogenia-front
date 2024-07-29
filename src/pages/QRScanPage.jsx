@@ -79,8 +79,8 @@ const QRScanPage = () => {
                     <div className="mt-4 mb-2 w-[90%] text-center">
                         {loading ? (
                             <>
-                                <Skeleton variant="text" width="80%" height={40} />
-                                <Skeleton variant="text" width="90%" height={100} />
+                                <Skeleton variant="text" width="80%" height={40} center/>
+                                <Skeleton variant="text" width="90%" height={100} center />
                             </>
                         ) : (
                             <>
@@ -95,7 +95,7 @@ const QRScanPage = () => {
                     </div>
                 </div>
                 {loading ? (
-                    <Skeleton variant="rectangular" width={210} height={118} />
+                    <Skeleton variant="rectangular" width={400} height={50} />
                 ) : (
                     <SocialButtonM data={dataBtns} />
                 )}
