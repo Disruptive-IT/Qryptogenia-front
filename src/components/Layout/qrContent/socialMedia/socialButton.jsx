@@ -8,6 +8,10 @@ import play from "../../../../../src/assets/imgs/play.png"
 import galaxy from "../../../../../src/assets/imgs/galaxy.png"
 import microsoft from "../../../../../src/assets/imgs/microsoft.png"
 import microsoftw from "../../../../../src/assets/imgs/microsoftw.png"
+/*
+ * @UpdatedBy : Daniel Salazar,   @date 2024-07-25 11:28:17
+ * @description : correcion estilos en div padre
+ */
 
 export const SocialButton = ({ data, botonColor}) => {
   const [fontColor, setfontColor] = useState('#ffffff');
