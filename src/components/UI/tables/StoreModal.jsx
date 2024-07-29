@@ -16,18 +16,16 @@ const StoreModal = ({ open, handleClose, storeData }) => {
   return (
 <div 
   id="modal-container" 
-  className="fixed inset-0 flex items-center justify-center z-40 bg-black bg-opacity-50 overflow-auto"
+  className="fixed  inset-0 flex items-center justify-center z-40 bg-black bg-opacity-50 overflow-auto"
   onClick={handleOutsideClick}
 >
   <div 
-    className="relative bg-transparent m-4 max-w-[100%] max-h-[90%] min-w-[200px] min-h-[400px] rounded-lg overflow-hiiden flex flex-col items-center"
+    className="relative h-[94vh] bg-transparent max-w-[98vw] max-h-[100vh] min-w-[150px] min-h-[400px] rounded-lg flex flex-col items-center mx-3"
   >
     <button 
       onClick={handleClose} 
-      className="absolute top-0 right-0 bg-white text-red-600 rounded-full p-2 m-[-6%] hover:bg-red-600 hover:text-white"
-    >
-      <MdClose size={20} />
-    </button>
+      className="absolute top-0 text-white  rounded-[10px] text-[20px] tracking-wider text- m-[-8%] hover:underline"
+    >cerrar</button>
     <CellBox className="w-full h-full overflow-auto">
       {storeData ? (
         <StoreLayout appFormValues={storeData} />

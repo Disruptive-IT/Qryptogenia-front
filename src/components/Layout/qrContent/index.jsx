@@ -9,6 +9,10 @@
  * @Return : Retorna la vista previa correspondiente según el nombre de contenido.
  */
 
+/*
+ * @UpdatedBy : Nicolas Barrios,   @date 2024-07-29 16:59:26
+ * @description : se borraron archivos de previwes cleular para social y apps dejando solo el esqueleto del de musica para todos
+ */
 
 import AppForm from "./forms/App";
 import { PdfUploadComponent, LinkInput } from "./forms/Pdf";
@@ -97,21 +101,21 @@ switch (contentName) {
     case "app store":                                                       
     phoneContent = (
             <div>
-                <WebLinkPhonePreview appFormValues={appFormValues}/>
+                <WebLinkPhoneMusic FormValues={appFormValues}/>
             </div>
         );
         break;
     case "social media":
         phoneContent = (
             <div>
-                <WebLinkPhone socialFormValues={socialFormValues}/>
+                <WebLinkPhoneMusic FormValues={socialFormValues}/>
             </div>
         );
         break;
         case "website url":
             phoneContent = (
                 <div>
-                    <WebLinkPhonePreview appFormValues={appFormValues}/>
+                    <WebLinkPhoneMusic FormValues={appFormValues}/>
                 </div>
             );
             break;
@@ -134,7 +138,7 @@ switch (contentName) {
         case "music":
             phoneContent = (
                 <div>
-                    <WebLinkPhoneMusic musicFormValues={musicFormValues}/>
+                    <WebLinkPhoneMusic FormValues={musicFormValues}/>
                 </div>
             );
             break;
