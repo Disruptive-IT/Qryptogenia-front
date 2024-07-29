@@ -10,6 +10,13 @@ import { Navigate } from 'react-router-dom';
 import { AuthContext } from "../../context/AuthContext";
 import { IoIosMail } from "react-icons/io";
 
+/**
+ * @Author : Daniel Salazar,   @date 2024-07-29 12:21:16
+ * @description :
+ * @Props :null
+ * @return :component <ForgotPassForm />
+ */
+
 
 export const ForgotPassForm = () => {
   const [backendError, setBackendError] = useState(null);
