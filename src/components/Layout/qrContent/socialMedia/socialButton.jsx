@@ -2,6 +2,11 @@ import React from 'react';
 import { FaApple } from "react-icons/fa";
 import { SocialIcon } from 'react-social-icons'
 
+/*
+ * @UpdatedBy : Daniel Salazar,   @date 2024-07-25 11:28:17
+ * @description : correcion estilos en div padre
+ */
+
 export const SocialButton = ({ data }) => {
     return (
       <div className="flex gap-3 justify-center flex-wrap w-full mt-20 mb-5">
