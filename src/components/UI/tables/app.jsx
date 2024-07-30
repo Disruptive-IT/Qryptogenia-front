@@ -316,40 +316,40 @@ const App = () => {
 
   return (
     <div className="flex h-screen overflow-hidden">
-      <div className="w-64 bg-gray-800 text-white flex flex-col p-6">
-        <h2 className="text-xl font-semibold mb-6">QR codes</h2>
-        <ul className="flex-grow">
-          <li className="mb-4 cursor-pointer hover:text-teal-400">My QR Codes</li>
-          <li className="mb-4 cursor-pointer hover:text-teal-400">Analytics</li>
-          <li className="cursor-pointer hover:text-teal-400">Settings</li>
-        </ul>
-      </div>
-      <div className="flex-grow p-6 bg-gray-100 overflow-auto">
-        {error && <div className="mb-4 text-red-500">{error}</div>}
-        <div className="mb-4">
-          <input
-            type="text"
-            className="p-2 border border-gray-300 rounded w-full"
-            placeholder="Search QR codes..."
-            value={searchQuery}
-            onChange={handleSearch}
-          />
-        </div>
-        <QRTable
-          data={filteredQRCodes}
-          columns={columns}
-          currentPage={currentPage}
-          totalPages={totalPages}
-          onPageChange={handlePageChange}
-        />
-      </div>
-      <StoreModal open={modalOpen} handleClose={handleCloseModal} storeData={storeData} codeType={codeType}/>
-      <DetailModal
-        isOpen={isDetailModalOpen}
-        data={selectedQRCode}
-        onClose={handleDetailModalClose}
+  <div className="w-full sm:w-64 bg-gray-800 text-white flex flex-col p-6">
+    <h2 className="text-xl font-semibold mb-6">QR codes</h2>
+    <ul className="flex-grow">
+      <li className="mb-4 cursor-pointer hover:text-teal-400">My QR Codes</li>
+      <li className="mb-4 cursor-pointer hover:text-teal-400">Analytics</li>
+      <li className="cursor-pointer hover:text-teal-400">Settings</li>
+    </ul>
+  </div>
+  <div className="flex-grow p-6 bg-gray-100 overflow-auto">
+    {error && <div className="mb-4 text-red-500">{error}</div>}
+    <div className="mb-4">
+      <input
+        type="text"
+        className="p-2 border border-gray-300 rounded w-full"
+        placeholder="Search QR codes..."
+        value={searchQuery}
+        onChange={handleSearch}
       />
     </div>
+    <QRTable
+      data={filteredQRCodes}
+      columns={columns}
+      currentPage={currentPage}
+      totalPages={totalPages}
+      onPageChange={handlePageChange}
+    />
+  </div>
+  <StoreModal open={modalOpen} handleClose={handleCloseModal} storeData={storeData} codeType={codeType} />
+  <DetailModal
+    isOpen={isDetailModalOpen}
+    data={selectedQRCode}
+    onClose={handleDetailModalClose}
+  />
+</div>
   );
 };
 

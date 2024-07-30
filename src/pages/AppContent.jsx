@@ -168,6 +168,7 @@ const AppContent = () => {
                             onFormChange={setSocialFormValues}
                             onFormChangeMusic={setMusicFormValues}
                             onSocialFormSubmit={handleSocialFormSubmit}
+                            location={location}
                         />
                     </div>
                     <div className='col-span-1 lg:col-span-2'>
@@ -192,28 +193,64 @@ const AppContent = () => {
             </button>
 
             <Modal
-    isOpen={isModalOpen}
-    onRequestClose={closeModal}
-    contentLabel="Vista Previa del Móvil"
-    className="fixed inset-0 flex items-center justify-center p-4 bg-transparent"
-    overlayClassName="fixed inset-0 bg-black bg-opacity-50 overflow-auto"
->
-    <div className="bg-transparent p-0 rounded-lg border-none shadow-none flex justify-center items-center w-full h-full">
-        <div className="relative flex justify-center items-start" style={{ maxHeight: 'calc(100vh - 40px)', maxWidth: 'calc(100vw - 40px)' }}>
-            <button onClick={closeModal} className="absolute top-4 right-4 text-red-500 z-10">Cerrar</button>
-            <div className="relative" style={{ transform: 'scale(0.9)', transformOrigin: 'top center', marginTop: '40px' }}>
-                <CellBox>
-                    <PhoneContentSwitch
-                        contentName={name}
-                        appFormValues={appFormValues}
-                        socialFormValues={socialFormValues}
-                        musicFormValues={musicFormValues}
-                    />
-                </CellBox>
-            </div>
-        </div>
-    </div>
-</Modal>
+                isOpen={isModalOpen}
+                onRequestClose={closeModal}
+                contentLabel="Vista Previa del Móvil"
+                className="fixed inset-0 flex items-center justify-center p-4 bg-transparent"
+                overlayClassName="fixed inset-0 bg-black bg-opacity-50 overflow-auto"
+            >
+                <div className="bg-transparent p-0 rounded-lg border-none shadow-none flex justify-center items-center w-full h-full">
+                    <div className="relative flex justify-center items-start" style={{ maxHeight: 'calc(100vh - 40px)', maxWidth: 'calc(100vw - 40px)' }}>
+                        <button onClick={closeModal} className="absolute top-4 right-4 text-red-500 z-10">Cerrar</button>
+                        <div className="relative scale-wrapper" style={{ marginTop: '40px' }}>
+                            <CellBox>
+                                <PhoneContentSwitch
+                                    contentName={name}
+                                    appFormValues={appFormValues}
+                                    socialFormValues={socialFormValues}
+                                    musicFormValues={musicFormValues}
+                                />
+                            </CellBox>
+                        </div>
+                    </div>
+                </div>
+            </Modal>
+            <style jsx>{`
+        .scale-wrapper {
+          transform: scale(0.9);
+          transform-origin: top center;
+        }
+
+        @media (max-width: 1200px) {
+          .scale-wrapper {
+            transform: scale(0.9);
+          }
+        }
+
+        @media (max-width: 992px) {
+          .scale-wrapper {
+            transform: scale(0.9);
+          }
+        }
+
+        @media (max-width: 768px) {
+          .scale-wrapper {
+            transform: scale(0.8);
+          }
+        }
+
+        @media (max-width: 576px) {
+          .scale-wrapper {
+            transform: scale(0.7);
+          }
+        }
+
+        @media (max-width: 360px) {
+          .scale-wrapper {
+            transform: scale(0.6);
+          }
+        }
+      `}</style>
         </>
     );
 };
