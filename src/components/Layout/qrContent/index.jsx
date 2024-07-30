@@ -9,13 +9,15 @@
  * @Return : Retorna la vista previa correspondiente según el nombre de contenido.
  */
 
+/*
+ * @UpdatedBy : Nicolas Barrios,   @date 2024-07-29 16:59:26
+ * @description : se borraron archivos de previwes cleular para social y apps dejando solo el esqueleto del de musica para todos
+ */
 
 import AppForm from "./forms/App";
 import { PdfUploadComponent, LinkInput } from "./forms/Pdf";
 import SocialForm from "./forms/Social";
 import MusicForm from "./forms/Music";
-import { WebLinkPhone } from "./socialMedia/stylePhone";
-import WebLinkPhonePreview from "./socialMedia/webLinkPhonePreview";
 import { WebLinkPhoneMusic } from "./socialMedia/stylePhoneMusic";
 export const QrContentSwitch = ({contentName, onFormChangeApp, onFormChange, onFormChangeMusic, onSocialFormSubmit}) => {
 
@@ -97,44 +99,42 @@ switch (contentName) {
     case "app store":                                                       
     phoneContent = (
             <div>
-                <WebLinkPhonePreview appFormValues={appFormValues}/>
+                <WebLinkPhoneMusic FormValues={appFormValues}/>
             </div>
         );
         break;
     case "social media":
         phoneContent = (
             <div>
-                <WebLinkPhone socialFormValues={socialFormValues}/>
+                <WebLinkPhoneMusic FormValues={socialFormValues}/>
             </div>
         );
         break;
         case "website url":
             phoneContent = (
                 <div>
-                    <WebLinkPhonePreview appFormValues={appFormValues}/>
+                    <WebLinkPhoneMusic FormValues={appFormValues}/>
                 </div>
             );
             break;
         case "pdf":
             phoneContent = (
                 <div>
-                    <WebLinkPhone title={"HOLA MUNDO"}
-                        textColor={"blue"} />
+                    <h1>PDF</h1>
                 </div>
             );
             break;
         case "news":
             phoneContent = (
                 <div>
-                    <WebLinkPhone title={"HOLA MUNDO"}
-                        textColor={"blue"} />
+                    <h1>NOTICIAS</h1>
                 </div>
             );
             break;
         case "music":
             phoneContent = (
                 <div>
-                    <WebLinkPhoneMusic musicFormValues={musicFormValues}/>
+                    <WebLinkPhoneMusic FormValues={musicFormValues}/>
                 </div>
             );
             break;

@@ -16,32 +16,28 @@ const StoreModal = ({ open, handleClose, storeData, codeType}) => {
   console.log(storeData)
   const contentName = codeType.replace(/-/g, ' ');
   return (
-    <div 
-      id="modal-container" 
-      className="fixed inset-0 flex items-center justify-center z-40 bg-black bg-opacity-50"  
-      onClick={handleOutsideClick}
-    >
-      <div className="relative bg-transparent  rounded-[10px] p-6  max-h-[80%] mt-[5%]  scroll-mt-[50%] custom-scrollbar transform -translate-y-20">
-        <CellBox>
-          <button 
-            onClick={handleClose} 
-            style={{ position: 'absolute', top: '0px', right: '0px' }} 
-            className=" bg-red-600 text-white mb-[1%] rounded-[20px] "
-          >
-            <MdClose size={30} />
-          </button>
-          {storeData ? (
-            <PhoneContentSwitch 
-            contentName={contentName}
-            appFormValues={storeData}
-            musicFormValues={storeData}
-            socialFormValues={storeData}/>
-          ) : (
-            <div>Loading...</div>
-          )}
-        </CellBox>
-      </div>
-    </div>
+<div 
+  id="modal-container" 
+  className="fixed  inset-0 flex items-center justify-center z-40 bg-black bg-opacity-50 overflow-auto"
+  onClick={handleOutsideClick}
+>
+  <div 
+    className="relative h-[94vh] bg-transparent max-w-[98vw] max-h-[100vh] min-w-[150px] min-h-[400px] rounded-lg flex flex-col items-center mx-3"
+  >
+    <button 
+      onClick={handleClose} 
+      className="absolute top-0 text-white  rounded-[10px] text-[20px] tracking-wider text- m-[-8%] hover:underline"
+    >cerrar</button>
+    <CellBox className="w-full h-full overflow-auto">
+      {storeData ? (
+        <StoreLayout appFormValues={storeData} />
+      ) : (
+        <div>Loading...</div>
+      )}
+    </CellBox>
+  </div>
+</div>
+
   );
 };
 
