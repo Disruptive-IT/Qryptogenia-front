@@ -7,7 +7,7 @@ function LayoutHome() {
     const location = useLocation();
 
     return (
-        <div className="flex flex-col min-h-screen relative ">
+        <div className="flex flex-col min-h-screen relative bg-slate-200">
             <Navbar />
             {location.pathname !== '/login' && location.pathname !== '/register'  && location.pathname !== '/forgotPassword'  && (
                 <div className='mt-32'>
