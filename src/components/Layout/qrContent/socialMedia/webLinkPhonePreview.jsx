@@ -8,56 +8,56 @@
  */
 
 import React, { useState, useEffect, useRef } from 'react';
-import {WebLinkPhoneHeader} from './webLinkPhoneHeader';
-import {SocialButton} from '../socialMedia/socialButton'
-import { FaApple, FaGooglePlay  } from "react-icons/fa";
+import { WebLinkPhoneHeader } from './webLinkPhoneHeader';
+import { SocialButton } from '../socialMedia/socialButton'
+import { FaApple, FaGooglePlay } from "react-icons/fa";
 import mesadoko from "../../../../assets/imgs/mesadoko.png";
 
 const options = [
-    { 
-      textTop: "", 
-      textBottom: "Galaxy Store",
-      value: 'Samsung Galaxy Store',
-      icon: 'galaxy',
-      iconw: 'galaxy'
-    },
-    {
-      
-      value: 'Google Play Store',
-      textTop: "GET IT ON",
-      textBottom: "Google Play",
+  {
+    textTop: "",
+    textBottom: "Galaxy Store",
+    value: 'Samsung Galaxy Store',
+    icon: 'galaxy',
+    iconw: 'galaxy'
+  },
+  {
 
-      icon: 'play',
-      iconw: 'play'
-    },
-    {
-      textTop: "Download on the", 
-      textBottom: "App Store",
-      value: 'Apple',
-      icon: 'apple',
-      iconw: 'applew'
-      
-    },
-    {
-      textTop: "Download on the", 
-      textBottom: "App Store",
-      value: 'huawei',
-      icon: 'huawei',
-      iconw: 'huawei'
-      
-    },
-    {
-      textTop: "Download on the", 
-      textBottom: "Microsoft Store",
-      value: 'microsoft',
-      icon: 'microsoft',
-      iconw: 'microsoftw'
-      
-    }
-  ];
-  const WebLinkPhonePreview = ({ appFormValues }) => {
-    console.log(appFormValues)
-    const headerColor = appFormValues.boxColor;
+    value: 'Google Play Store',
+    textTop: "GET IT ON",
+    textBottom: "Google Play",
+
+    icon: 'play',
+    iconw: 'play'
+  },
+  {
+    textTop: "Download on the",
+    textBottom: "App Store",
+    value: 'Apple',
+    icon: 'apple',
+    iconw: 'applew'
+
+  },
+  {
+    textTop: "Download on the",
+    textBottom: "App Store",
+    value: 'huawei',
+    icon: 'huawei',
+    iconw: 'huawei'
+
+  },
+  {
+    textTop: "Download on the",
+    textBottom: "Microsoft Store",
+    value: 'microsoft',
+    icon: 'microsoft',
+    iconw: 'microsoftw'
+
+  }
+];
+const WebLinkPhonePreview = ({ appFormValues }) => {
+  console.log(appFormValues);
+  const headerColor = appFormValues.boxColor;
   const title = appFormValues.title;
   const textColor = appFormValues.titleColor;
   const descriptionColor = appFormValues.descriptionColor;
@@ -82,46 +82,49 @@ const options = [
 
     // Considera el color oscuro si la luminancia es menor a 0.5
     return luminance < 0.5;
-};
+  };
 
-const extractColorFromGradient = (gradient, percentageFromBottom) => {
-  const colors = gradient.match(/rgb\(\d+, \d+, \d+\)/g);
-  const stops = gradient.match(/(\d+(\.\d+)?)%/g);
+  const extractColorFromGradient = (gradient, percentageFromBottom) => {
+    const colors = gradient.match(/rgb\(\d+, \d+, \d+\)/g);
+    const stops = gradient.match(/(\d+(\.\d+)?)%/g);
 
-  const percentage = 100 - percentageFromBottom;
+    const percentage = 100 - percentageFromBottom;
 
-  let color1 = colors[0];
-  let color2 = colors[1];
-  let stop1 = parseFloat(stops[0]);
-  let stop2 = parseFloat(stops[1]);
+    let color1 = colors[0];
+    let color2 = colors[1];
+    let stop1 = parseFloat(stops[0]);
+    let stop2 = parseFloat(stops[1]);
 
-  if (percentage <= stop1) return color1;
-  if (percentage >= stop2) return color2;
+    if (percentage <= stop1) return color1;
+    if (percentage >= stop2) return color2;
 
-  const ratio = (percentage - stop1) / (stop2 - stop1);
-  const [r1, g1, b1] = color1.match(/\d+/g).map(Number);
-  const [r2, g2, b2] = color2.match(/\d+/g).map(Number);
+    const ratio = (percentage - stop1) / (stop2 - stop1);
+    const [r1, g1, b1] = color1.match(/\d+/g).map(Number);
+    const [r2, g2, b2] = color2.match(/\d+/g).map(Number);
 
-  const r = Math.round(r1 + (r2 - r1) * ratio);
-  const g = Math.round(g1 + (g2 - g1) * ratio);
-  const b = Math.round(b1 + (b2 - b1) * ratio);
+    const r = Math.round(r1 + (r2 - r1) * ratio);
+    const g = Math.round(g1 + (g2 - g1) * ratio);
+    const b = Math.round(b1 + (b2 - b1) * ratio);
 
-  return `rgb(${r}, ${g}, ${b})`;
-};
+    return `rgb(${r}, ${g}, ${b})`;
+  };
 
-useEffect(() => {
-  const gradient = appFormValues?.backgroundColor;
-  if (gradient && gradient.startsWith('linear-gradient')) {
-      // Extrae el color en el 30% desde abajo hacia arriba
-      const colorAt30FromBottom = extractColorFromGradient(gradient, 30);
-      // Actualiza el estado basado en si el color es oscuro
-      setIsDark(isDarkColor(colorAt30FromBottom) ? '#ffffff' : '#000000');
-      
-  }
-  
-}, [appFormValues.backgroundColor]);
+  useEffect(() => {
+    const backgroundColor = appFormValues?.backgroundColor;
+    if (backgroundColor) {
+      if (backgroundColor.startsWith('linear-gradient')) {
+        // Extrae el color en el 30% desde abajo hacia arriba
+        const colorAt30FromBottom = extractColorFromGradient(backgroundColor, 30);
+        // Actualiza el estado basado en si el color es oscuro
+        setIsDark(isDarkColor(colorAt30FromBottom) ? '#ffffff' : '#000000');
+      } else {
+        // Si es un color sólido, usa la misma función para verificar si es oscuro
+        setIsDark(isDarkColor(backgroundColor) ? '#ffffff' : '#000000');
+      }
+    }
+  }, [appFormValues.backgroundColor]);
 
-console.log(isDark);
+  console.log(isDark);
 
   useEffect(() => {
     const hasChanged = (current, initial) => {
@@ -154,16 +157,16 @@ console.log(isDark);
 
   const data = Array.isArray(appFormValues.selectedOptions)
     ? appFormValues.selectedOptions.map(option => {
-        const originalOption = options.find(opt => opt.value === option.value);
-        return {
-          name: option.value,
-          icon: originalOption ? originalOption.icon : null,
-          iconw: originalOption ? originalOption.iconw : null,
-          url: option.url,
-          textTop: originalOption ? originalOption.textTop : '',
-          textBottom: originalOption ? originalOption.textBottom : '',
-        };
-      })
+      const originalOption = options.find(opt => opt.value === option.value);
+      return {
+        name: option.value,
+        icon: originalOption ? originalOption.icon : null,
+        iconw: originalOption ? originalOption.iconw : null,
+        url: option.url,
+        textTop: originalOption ? originalOption.textTop : '',
+        textBottom: originalOption ? originalOption.textBottom : '',
+      };
+    })
     : [];
 
   return (
@@ -198,7 +201,7 @@ console.log(isDark);
 };
 
 
-  
+
 
 const globalStyles = `
   .custom-scrollbar {

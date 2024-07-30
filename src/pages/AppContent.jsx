@@ -17,7 +17,7 @@ import Modal from 'react-modal';
 import CellBox from '../components/Layout/qrContent/cellBox';
 import axios from 'axios';
 import { OptionBarTwo } from '../components/Layout/optionBar';
-import {useQr} from '../context/QrContext';
+import { useQr } from '../context/QrContext';
 
 Modal.setAppElement('#root');
 
@@ -35,12 +35,12 @@ const AppContent = () => {
         setSelectedTab(1); // Cambia al tab "Preview QRytogenia"
     };
 
-    const { 
-        appFormValues, 
-        setAppFormValues, 
-        musicFormValues, 
-        setMusicFormValues, 
-        socialFormValues, 
+    const {
+        appFormValues,
+        setAppFormValues,
+        musicFormValues,
+        setMusicFormValues,
+        socialFormValues,
         setSocialFormValues,
         currentContentType,
         setCurrentContentType,
@@ -57,24 +57,24 @@ const AppContent = () => {
                 try {
                     const response = await axios.get(`http://localhost:3000/api/qr/getpreview/${id}`, {
                         withCredentials: true,
-                      });
-                      const { title, colorTitle, description, descriptionColor, boxColor, borderImg, image, backgroundColor, selectedOptions } = response.data;
-                      console.log(response.data)
-            
-                      // Actualiza los estados basados en los datos recibidos
-                      setAppFormValues({
-                          title,
-                          colorTitle,
-                          description,
-                          descriptionColor,
-                          boxColor,
-                          borderImg,
-                          image,
-                          backgroundColor,
-                          selectedOptions
-                      });
-          
-                      setSocialFormValues(
+                    });
+                    const { title, colorTitle, description, descriptionColor, boxColor, borderImg, image, backgroundColor, selectedOptions } = response.data;
+                    console.log(response.data)
+
+                    // Actualiza los estados basados en los datos recibidos
+                    setAppFormValues({
+                        title,
+                        colorTitle,
+                        description,
+                        descriptionColor,
+                        boxColor,
+                        borderImg,
+                        image,
+                        backgroundColor,
+                        selectedOptions
+                    });
+
+                    setSocialFormValues(
                         {
                             title,
                             colorTitle,
@@ -86,8 +86,8 @@ const AppContent = () => {
                             backgroundColor,
                             selectedOptions
                         }
-                      );
-                      setMusicFormValues(
+                    );
+                    setMusicFormValues(
                         {
                             title,
                             colorTitle,
@@ -99,9 +99,9 @@ const AppContent = () => {
                             backgroundColor,
                             selectedOptions
                         }
-                      );
-                      console.log(musicFormValues)
-                      setValuesLoaded(true); // Indicar que los valores se han cargado
+                    );
+                    console.log(musicFormValues)
+                    setValuesLoaded(true); // Indicar que los valores se han cargado
                 } catch (error) {
                     console.error('Error fetching QR data:', error);
                 }
@@ -114,7 +114,7 @@ const AppContent = () => {
             }
             setActiveStep(1);
         };
-        
+
         fetchQRData();
     }, [location, id, setActiveStep, setAppFormValues, setSocialFormValues, setMusicFormValues]);
 
@@ -151,10 +151,10 @@ const AppContent = () => {
     };
 
     const isQrRoute = location.pathname.startsWith('/qr/');
-    console.log(socialFormValues)
+    console.log(name)
     return (
         <>
-            {isQrRoute && <OptionBarTwo contentName={contentName} name={name}/>}
+            {isQrRoute && <OptionBarTwo contentName={contentName} name={name} />}
             <section id='qr-content'>
                 <div className='text-center'>
                     <h1>{name}</h1>
@@ -162,23 +162,25 @@ const AppContent = () => {
                 </div>
                 <div className='grid grid-cols-1 lg:grid-cols-5 gap-10 w-11/12 m-auto py-10'>
                     <div className='col-span-1 lg:col-span-3 bg-white shadow-xl rounded-xl p-6'>
-                        <QrContentSwitch 
-                            contentName={name} 
-                            onFormChangeApp={setAppFormValues} 
-                            onFormChange={setSocialFormValues} 
-                            onFormChangeMusic={setMusicFormValues} 
+                        <QrContentSwitch
+                            contentName={name}
+                            onFormChangeApp={setAppFormValues}
+                            onFormChange={setSocialFormValues}
+                            onFormChangeMusic={setMusicFormValues}
                             onSocialFormSubmit={handleSocialFormSubmit}
                         />
                     </div>
                     <div className='col-span-1 lg:col-span-2'>
                         {valuesLoaded && (
-                            <ChangeFrame 
-                                name={name} 
-                                appFormValues={appFormValues} 
-                                socialFormValues={socialFormValues} 
-                                musicFormValues={musicFormValues} 
+                            <ChangeFrame
+                                name={name}
+                                appFormValues={appFormValues}
+                                socialFormValues={socialFormValues}
+                                musicFormValues={musicFormValues}
                                 selectedTab={selectedTab}
                                 onTabChange={handleTabChange}
+                                location={location}
+                                qrId={id}
                             />
                         )}
                     </div>
@@ -190,26 +192,28 @@ const AppContent = () => {
             </button>
 
             <Modal
-                isOpen={isModalOpen}
-                onRequestClose={closeModal}
-                contentLabel="Vista Previa del Móvil"
-                className='fixed inset-0 flex items-center justify-center p-4 mt-24'
-                overlayClassName='fixed inset-0 bg-black bg-opacity-50 overflow-auto'
-            >
-                <div className='bg-white p-4 rounded-lg w-full max-w-sm h-3/5'>
-                    <button onClick={closeModal} className='text-right text-red-500 mb-2'>Cerrar</button>
-                    <div className='relative' style={{ transform: 'scale(0.5)', transformOrigin: 'top center', maxHeight: 'calc(100vh - 100px)' }}>
-                        <CellBox>
-                            <PhoneContentSwitch
-                                contentName={name}
-                                appFormValues={appFormValues}
-                                socialFormValues={socialFormValues}
-                                musicFormValues={musicFormValues}
-                            />
-                        </CellBox>
-                    </div>
-                </div>
-            </Modal>
+    isOpen={isModalOpen}
+    onRequestClose={closeModal}
+    contentLabel="Vista Previa del Móvil"
+    className="fixed inset-0 flex items-center justify-center p-4 bg-transparent"
+    overlayClassName="fixed inset-0 bg-black bg-opacity-50 overflow-auto"
+>
+    <div className="bg-transparent p-0 rounded-lg border-none shadow-none flex justify-center items-center w-full h-full">
+        <div className="relative flex justify-center items-start" style={{ maxHeight: 'calc(100vh - 40px)', maxWidth: 'calc(100vw - 40px)' }}>
+            <button onClick={closeModal} className="absolute top-4 right-4 text-red-500 z-10">Cerrar</button>
+            <div className="relative" style={{ transform: 'scale(0.9)', transformOrigin: 'top center', marginTop: '40px' }}>
+                <CellBox>
+                    <PhoneContentSwitch
+                        contentName={name}
+                        appFormValues={appFormValues}
+                        socialFormValues={socialFormValues}
+                        musicFormValues={musicFormValues}
+                    />
+                </CellBox>
+            </div>
+        </div>
+    </div>
+</Modal>
         </>
     );
 };
