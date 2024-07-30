@@ -6,14 +6,16 @@ import axios from "../../../libs/axios";
 import { toast } from 'sonner';
 import Swal from 'sweetalert2';
 import { toPng } from 'html-to-image';
+import { useLocation } from 'react-router-dom';
 
-export const saveQrData = async (qrName, data, qrType, qrColor, qrBgColor, qrProps, qrImageInfo, qrTextProps, appFormValues, socialFormValues, musicFormValues, qrBase64, currentContentType) => {
+export const saveQrData = async (qrName, data, qrType, qrColor, qrBgColor, qrProps, qrImageInfo, qrTextProps, appFormValues, socialFormValues, musicFormValues, qrBase64, currentContentType, location, qrId) => {
     const removeIconFromSelectOptions = (options) => {
         return options.map(option => {
             const { icon, ...rest } = option; // Desestructura para eliminar `icon`
             return rest; // Devuelve el objeto sin `icon`
         });
     };
+    console.log(qrType);
 
     const qrData = {
         qr: {
@@ -63,8 +65,14 @@ export const saveQrData = async (qrName, data, qrType, qrColor, qrBgColor, qrPro
         qrBase64: qrBase64 // Asegúrate de que qrBase64 esté pasando correctamente
     };
 
+    const isEditRoute = location.pathname.startsWith('/edit')
+
     try {
-        const res = await axios.post('/qr', { qrData });
+        const res = await axios({
+            method: isEditRoute ? 'patch' : 'post',
+            url: isEditRoute ? `/qr/edit/${qrId}` : '/qr',
+            data: {qrData}
+        })
         window.location.href = 'http://localhost:5173/user/qr';
         return true;
     } catch (err) {

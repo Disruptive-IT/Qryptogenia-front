@@ -68,7 +68,7 @@ const fabGreenStyle = {
 
 
 
-export default function ChangeFrame({ name, appFormValues, socialFormValues, musicFormValues }) {
+export default function ChangeFrame({ name, appFormValues, socialFormValues, musicFormValues, location, qrId }) {
     const { contentName } = useParams();
     const theme = useTheme();
     const isSmallScreen = useMediaQuery(theme.breakpoints.down(1023)); // Detecta si la pantalla es pequeña
@@ -172,7 +172,10 @@ export default function ChangeFrame({ name, appFormValues, socialFormValues, mus
                 <TabPanel value={value} index={1} dir={theme.direction} className="w-full flex justify-center">
                     <div className="w-[500px] px-5 relative">
                         <h2 className="text-center text-2xl font-bold mb-8">Preview QRytogenia</h2>
-                        <CustomQr />
+                        <CustomQr 
+                        location={location}
+                        qrId={qrId}
+                        />
                     </div>
                 </TabPanel>
             </Box>

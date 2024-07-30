@@ -22,7 +22,7 @@ const options = [
     { name: 'Logo', component: Logo },
 ];
 
-const CustomQr = () => {
+const CustomQr = ({location, qrId}) => {
     const [selectedOptionIndex, setSelectedOptionIndex] = useState(0);
     const { qrType, qrData, qrColor, qrBgColor, qrProps, qrImageInfo, qrTextProps, appFormValues, socialFormValues, musicFormValues, qrBase64, currentContentType} = useQr();
     console.log(musicFormValues)
@@ -69,7 +69,7 @@ const CustomQr = () => {
             } else {
                 console.log(musicFormValues)
                 console.log(qrType)
-                await saveQrData(qrName, qrData, qrType, qrColor, qrBgColor, qrProps, qrImageInfo, qrTextProps, appFormValues, socialFormValues, musicFormValues,  qrBase64, currentContentType);
+                await saveQrData(qrName, qrData, qrType, qrColor, qrBgColor, qrProps, qrImageInfo, qrTextProps, appFormValues, socialFormValues, musicFormValues,  qrBase64, currentContentType, location, qrId);
             }
         } else {
             toast.info('QR code saving was cancelled.');
