@@ -18,8 +18,6 @@ import AppForm from "./forms/App";
 import { PdfUploadComponent, LinkInput } from "./forms/Pdf";
 import SocialForm from "./forms/Social";
 import MusicForm from "./forms/Music";
-import { WebLinkPhone } from "./socialMedia/stylePhone";
-import WebLinkPhonePreview from "./socialMedia/webLinkPhonePreview";
 import { WebLinkPhoneMusic } from "./socialMedia/stylePhoneMusic";
 export const QrContentSwitch = ({contentName, onFormChangeApp, onFormChange, onFormChangeMusic}) => {
 
