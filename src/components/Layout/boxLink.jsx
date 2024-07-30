@@ -2,6 +2,8 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { dataTypeQr } from './qrContent/contentData';
 import { useQr } from '../../context/QrContext';
+import {animate, easeIn, motion} from 'framer-motion'
+import { Scale } from 'lucide-react';
 
 export const BoxLink = () => {
   const { setQrType } = useQr()
@@ -14,9 +16,12 @@ export const BoxLink = () => {
   };
 
   return (
-    <div className="flex flex-wrap justify-center gap-3">
+    <div  className="flex flex-wrap justify-center gap-3">
       {dataTypeQr.map((item, index) => (
-        <button
+        <motion.button
+          animate={{initial:0}}
+          whileHover={{y:-5,transition:2,scale:1}}
+          whileTap={{scale:0.8,transition:3}}
           onClick={() => handleItemClick(item)}
           className="w-[300px] h-[100px] bg-slate-300 flex items-center p-3 justify-center gap-3 rounded-lg text-black hover:bg-teal-800 hover:border-spacing-48 hover:text-neutral-100"
         >
@@ -25,7 +30,7 @@ export const BoxLink = () => {
             <p className="font-bold">{item.name}</p>
             <span>{item.description}</span>
           </div>
-        </button>
+        </motion.button>
       ))}
     </div>
   );
