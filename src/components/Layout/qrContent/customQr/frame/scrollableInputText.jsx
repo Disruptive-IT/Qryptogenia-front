@@ -1,70 +1,76 @@
 import React, { useState, useEffect } from 'react';
 import { useQr } from '../../../../../context/QrContext';
-import Slider from '@mui/material/Slider';
-import Switch from '@mui/material/Switch';
 import InputText from './StyleInput';
-import { FaQuestionCircle } from 'react-icons/fa';
-import Tooltip from '@mui/material/Tooltip';
-import Box from '@mui/material/Box';
+import Tabs from '@mui/material/Tabs';
+import Tab from '@mui/material/Tab';
+
+const positionStyles = {
+    topCenter: { position: 'absolute', top: '2%', left: '50%', transform: 'translate(-50%, 0)' },
+    topLeft: { position: 'absolute', top: '2%', left: '2%' },
+    topRight: { position: 'absolute', top: '2%', right: '2%' },
+    bottomCenter: { position: 'absolute', bottom: '2%', left: '50%', transform: 'translate(-50%, 0)' },
+    bottomLeft: { position: 'absolute', bottom: '2%', left: '2%' },
+    bottomRight: { position: 'absolute', bottom: '2%', right: '2%' },
+};
 
 export default function ScrollableInputText() {
-    const { setQrText, qrTextProps, setQrTextPositionY, setQrTextPositionX } = useQr();
-    const [isFullRangeEnabled, setIsFullRangeEnabled] = useState(true);
+    const { setQrText, qrTextProps, setQrTextPosition } = useQr();
+    const [value, setValue] = useState(0); 
 
     const handleInputChange = (e) => {
         setQrText(e.target.value);
     };
 
-    const handlePositionXChange = (e, newValue) => {
-        setQrTextPositionX(Math.min(Math.max(newValue, 0), 78));
-    };
-
-    const toggleRange = () => {
-        setIsFullRangeEnabled(!isFullRangeEnabled);
+    const handleTabChange = (event, newValue) => {
+        setValue(newValue);
+        const selectedPositionKey = Object.keys(positionStyles)[newValue];
+        setQrTextPosition({ key: selectedPositionKey, style: positionStyles[selectedPositionKey] });
     };
 
     useEffect(() => {
-        setQrTextPositionY(isFullRangeEnabled ? 85 : 0);
-    }, [isFullRangeEnabled]);
+        console.log("ESTADO DE POSICION ", qrTextProps.qrTextPosition);
+    }, [qrTextProps.qrTextPosition]);
 
     return (
         <>
             <div className="flex space-x-4 items-center mt-6">
-                <InputText label="Write the text" variant="filled" inputProps={{ maxLength: 20 }} fullWidth onChange={handleInputChange} />
+                <InputText label="Write the text" variant="filled" inputProps={{ maxLength: 10 }} fullWidth onChange={handleInputChange} />
             </div>
             <div className='flex flex-col gap-4'>
                 <span className='text-xs text-gray-500'>*The text has a limit of 10 characters</span>
                 <hr />
-                <Tooltip title={<Box component="div" sx={{ whiteSpace: 'pre-wrap' }}>
-                    X: Moves the text horizontally, right or left.<br />
-                    Y: Moves the text vertically, up or down.
-                </Box>}>
-                    <span className='flex justify-center items-center gap-2 font-semibold cursor-pointer'>
-                        Position Text <FaQuestionCircle />
-                    </span>
-                </Tooltip>
+                <span className='flex justify-center items-center gap-2 font-semibold cursor-pointer'>
+                    Position Text
+                </span>
             </div>
             <div className='flex justify-between gap-4 pt-4'>
-                <div className='flex gap-4 items-center'>
-                    <span>X:</span>
-                    <Slider
-                        size="small"
-                        defaultValue={0}
-                        aria-label="PositioningX"
-                        valueLabelDisplay="on"
-                        color="secondary"
-                        min={0}
-                        max={100}
-                        step={1}
-                        sx={{ width: "120px" }}
-                        onChange={(event, newValue) => handlePositionXChange(event, newValue)}
-                    />
-                </div>
-                <div className='flex gap-4 items-center'>
-                    <span>Y:</span>
-                    <Switch id="fullRangeToggle" onChange={toggleRange} color="secondary" />
-                    <label htmlFor="fullRangeToggle" className="ml-2">{isFullRangeEnabled ? 'Bottom' : 'Top'}</label>
-                </div>
+                <Tabs
+                    value={value}
+                    onChange={handleTabChange}
+                    variant="scrollable"
+                    scrollButtons="auto"
+                    aria-label="scrollable font tabs"
+                    sx={{
+                        '&.MuiTabs-scrollButtons': {
+                            width: '20px',
+                            color: '#284B63',
+                        },
+                    }}
+                    TabIndicatorProps={{
+                        style: {
+                            backgroundColor: "",
+                            height: '4px'
+                        }
+                    }}
+                >
+                    {Object.keys(positionStyles).map((key, index) => (
+                        <Tab
+                            key={index}
+                            sx={{ margin: "5px" }}
+                            label={<span>{key}</span>}
+                        />
+                    ))}
+                </Tabs>
             </div>
         </>
     );

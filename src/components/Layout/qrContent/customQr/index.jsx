@@ -1,35 +1,13 @@
-/*
- * @Author : Jaider cuartas, @Fecha 2024-07-15
- * @Descripción : Componente para la personalización del diseño del código QR. Permite seleccionar diferentes estilos para el marco, 
- * los puntos, las esquinas cuadradas y las esquinas redondas del código QR.
- * @Props :
- *   - onTabSelect: Función callback para manejar el cambio de pestaña en la interfaz.
- * @Retorna : Retorna una interfaz interactiva que facilita la personalización visual del código QR, incluyendo marco, puntos, esquinas cuadradas y esquinas redondas.
- */
-
-import { useState, useRef, useEffect } from 'react';
+import { useState } from 'react';
 import Button from '@mui/material/Button';
-import ScrollableDesingQrs from './design/scrollableDesingQrs';
-import Scrollcornersqueare from './design/scrollcornersquare';
-import Scrollcornerdot from './design/scrollcornerdot';
-import ScrollableMarcogQrs from './design/scrollableMarcoQrs';
 import Frame from './frame';
-import Logo from './logo'; 
+import Logo from './logo';
 import QR, { saveQrData } from '../qrCode';
 import '../../../../../src/assets/style/index.css'
 import '../../styles/qrCode.css'
 import { useQr } from '../../../../context/QrContext';
-import { Tabs, Tab } from '@mui/material';
-import GradientColorPicker from 'react-gcolor-picker';
-import Accordion from './design/accordion';
-import { Fa1 } from "react-icons/fa6";
-import { MdQrCodeScanner, MdOutlineQrCode, MdOutlineQrCode2 } from "react-icons/md";
-import { IoQrCodeOutline } from "react-icons/io5";
-import { SlFrame } from "react-icons/sl";
-import CustomDialog from '../../../UI/modals/Modal';
 import Swal from 'sweetalert2';
 import { toast } from 'sonner';
-import { motion } from 'framer-motion';
 
 const Design = ({ onTabSelect }) => {
     const [tabValue, setTabValue] = useState(0);
@@ -302,7 +280,7 @@ const CustomQr = () => {
         const { value: qrName, isConfirmed } = await Swal.fire({
             title: 'Save QR Code',
             html: `
-                <input id="swal-input1" className="swal2-input" style="padding:2%; font-size-2em" placeholder="Enter QR code name...">
+                <input id="swal-input1" className="swal2-input" placeholder="Enter QR code name...">
                 <div style="margin: 2em 0;">
                     <p style="font-size: 1em; color: #888; margin-top: 10px;">Please enter a name for your QR code. If you do not set a name, the system will provide one for you.</p>
                     <p style="font-size: 0.8em; margin: 10px 0 0 0;">Click "Save" to finalize the creation of your QR code.</p>
@@ -338,6 +316,7 @@ const CustomQr = () => {
                 });
             } else {
                 console.log(musicFormValues)
+                console.log(qrType)
                 await saveQrData(qrName, qrData, qrType, qrColor, qrBgColor, qrProps, qrImageInfo, qrTextProps, appFormValues, socialFormValues, musicFormValues,  qrBase64, currentContentType);
             }
         } else {
@@ -358,7 +337,7 @@ const CustomQr = () => {
 
     return (
         <div className='w-full rounded-md flex flex-col justify-between pb-4 font-sans'>
-            <div className={`flex relative mb-4 py-8 max-h-[400px] ${qrTextProps.qrText ? 'bg-gray-100 min-h-[380px]' : ''}`}>
+            <div className={`flex relative mb-4 py-8 max-h-[400px] ${qrTextProps.qrText ? 'min-h-[380px]' : ''}`}>
                 <QR />
             </div>
             <div className='flex flex-col h-[400px] w-full px-8'>

@@ -1,3 +1,10 @@
+/**
+ * @Author : Cristian Escobar,   @date 2024-07-24 08:51:56
+ * @description : Este componente UserInfo muestra y permite editar la información de usuario, específicamente el nombre de usuario y el correo electrónico. Utiliza modales personalizados para editar estos campos y actualiza la información del usuario después de los cambios.
+ * @Props : No recibe props, pero utiliza varios contextos y referencias para gestionar el estado y las acciones del usuario.
+ * @return : Un componente que muestra el nombre de usuario y el correo electrónico, permitiendo editarlos mediante modales personalizados.
+ */
+
 import React, { useContext, useState, useRef, useEffect } from "react";
 import { AuthContext } from "../../../context/AuthContext";
 import EditIcon from "@mui/icons-material/Edit";

@@ -13,7 +13,7 @@ import { useAuth } from '../../../hooks/useAuth';
 
 const formatDate = (isoDate) => {
   const date = new Date(isoDate);
-  return date.toLocaleDateString('es-US'); 
+  return date.toLocaleDateString('es-US');
 };
 
 const App = () => {
@@ -26,6 +26,7 @@ const App = () => {
   const [selectedImage, setSelectedImage] = useState(null);
   const [modalOpen, setModalOpen] = useState(false);
   const [storeData, setStoreData] = useState(null);
+  const [codeType, setCodeType] = useState(null);
   const { getStoreData } = useAuth();
   const navigate = useNavigate(); // Usa useNavigate
 
@@ -61,7 +62,7 @@ const App = () => {
     const confirmationText = newState
       ? 'Are you sure you want to activate this QR code?'
       : 'Are you sure you want to deactivate this QR code?';
-  
+
     Swal.fire({
       title: 'Confirmation',
       text: confirmationText,
@@ -78,9 +79,9 @@ const App = () => {
           const response = await axios.patch(`http://localhost:3000/api/qr/patchqrs/${item.id}`, {
             state: newState
           }, {
-            withCredentials: true, 
+            withCredentials: true,
           });
-  
+
           console.log('API response:', response.data);
           setQRCodes(qrCodes.map(qr => qr.id === item.id ? { ...qr, state: newState } : qr));
         } catch (error) {
@@ -106,7 +107,7 @@ const App = () => {
       html: `
         <div style="margin-bottom: 10px;">
       <label for="format-select" style="display: inline-block; width: 100px;">Format:</label>
-      <select id="format-select" className="swal2-select" style="width: 200px;">
+      <select id="format-select" class="swal2-select" style="width: 200px;">
         <option value="png">PNG</option>
         <option value="jpeg">JPG</option>
         <option value="svg">SVG</option>
@@ -114,7 +115,7 @@ const App = () => {
     </div>
     <div>
       <label for="size-select" style="display: inline-block; width: 100px;">Size:</label>
-      <select id="size-select" className="swal2-select" style="width: 200px;">
+      <select id="size-select" class="swal2-select" style="width: 200px;">
         <option value="250">250x250</option>
         <option value="500">500x500</option>
         <option value="1000">1000x1000</option>
@@ -165,10 +166,10 @@ const App = () => {
           Swal.fire({
             title: 'SVG Preview',
             html: `
-              <pre className="max-h-80 overflow-auto p-4 bg-gray-100 text-xs whitespace-pre-wrap">
+              <pre class="max-h-80 overflow-auto p-4 bg-gray-100 text-xs whitespace-pre-wrap">
                 <code>${escapeHtml(svgCode)}</code>
               </pre>
-              <button id="copy-svg" className="max-h-80 overflow-auto p-4 bg-gray-100 text-xs whitespace-pre-wrap">t-2 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-700">
+              <button id="copy-svg" class="mt-2 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-700">
                 Copy SVG
               </button>
             `,
@@ -213,11 +214,13 @@ const App = () => {
     });
   };
 
-  const handleOpenModal = async (id) => {
+  const handleOpenModal = async (id, codeType) => {
     const result = await getStoreData(id);
     if (result.success) {
-        setStoreData(result.data);
-        setModalOpen(true);
+      setStoreData(result.data);
+      console.log(result.data);
+      setModalOpen(true);
+      setCodeType(codeType)
     }
   };
 
@@ -236,7 +239,7 @@ const App = () => {
     setIsDetailModalOpen(true);
   };
 
-  
+
 
   const filteredQRCodes = qrCodes.filter(code =>
     code.name_qr.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -252,38 +255,42 @@ const App = () => {
 
   const handleActionClick = (action, item) => {
     if (action === 'view') {
-        handleDetailModalOpen(item);
+      handleDetailModalOpen(item);
     } else if (action === 'edit') {
-        navigate(`/edit/${item.qrType ? item.qrType.type : 'N/A'}/${item.id}`);
+      navigate(`/edit/${item.qrType ? item.qrType.type : 'N/A'}/${item.id}`);
     }
     console.log(`Action: ${action} on item:`, item);
   };
 
 
   const columns = [
-    { header: 'Preview', accessor: 'preview', render: (item) => (
-      <img
-        src={`data:image/png;base64,${item.qr_image_base64}`}
-        alt="QR Code Preview"
-        className="w-16 h-16 object-contain cursor-pointer"
-        onClick={() => handleActionClick('view', item)}
-      />
-    ) },
+    {
+      header: 'Preview', accessor: 'preview', render: (item) => (
+        <img
+          src={`data:image/png;base64,${item.qr_image_base64}`}
+          alt="QR Code Preview"
+          className="w-16 h-16 object-contain cursor-pointer"
+          onClick={() => handleActionClick('view', item)}
+        />
+      )
+    },
     { header: 'QR Code Name', accessor: 'name_qr' },
     {
       header: 'QR Code Type',
       accessor: 'qrType.id',
       render: (item) => item.qrType ? item.qrType.type : 'N/A'
     },
-    { header: 'Status', accessor: 'state', render: (item) => (
-      <span
-        className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${item.state ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'} w-20 text-center justify-center items-center`}
-        onClick={() => handleStateClick(item)}
-        style={{ cursor: 'pointer' }}
-      >
-        {item.state ? 'Active' : 'Inactive'}
-      </span>
-    ) },
+    {
+      header: 'Status', accessor: 'state', render: (item) => (
+        <span
+          className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${item.state ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'} w-20 text-center justify-center items-center`}
+          onClick={() => handleStateClick(item)}
+          style={{ cursor: 'pointer' }}
+        >
+          {item.state ? 'Active' : 'Inactive'}
+        </span>
+      )
+    },
     { header: 'Date', accessor: 'createdAt' },
     {
       header: 'Actions',
@@ -300,7 +307,7 @@ const App = () => {
           />
           <MdVisibility
             className="cursor-pointer text-xl"
-            onClick={() => handleOpenModal(1)} // Abre el modal de vista previa con el ID correcto
+            onClick={() => handleOpenModal(item.id, item.qrType ? item.qrType.type : 'N/A')} // Pasa el ID y el tipo de código
           />
         </div>
       )
@@ -328,16 +335,16 @@ const App = () => {
             onChange={handleSearch}
           />
         </div>
-        <QRTable 
-          data={filteredQRCodes} 
-          columns={columns} 
-          currentPage={currentPage} 
-          totalPages={totalPages} 
-          onPageChange={handlePageChange} 
+        <QRTable
+          data={filteredQRCodes}
+          columns={columns}
+          currentPage={currentPage}
+          totalPages={totalPages}
+          onPageChange={handlePageChange}
         />
       </div>
-      <StoreModal open={modalOpen} handleClose={handleCloseModal} storeData={storeData} />
-      <DetailModal 
+      <StoreModal open={modalOpen} handleClose={handleCloseModal} storeData={storeData} codeType={codeType}/>
+      <DetailModal
         isOpen={isDetailModalOpen}
         data={selectedQRCode}
         onClose={handleDetailModalClose}

@@ -91,6 +91,11 @@ export default function ChangeFrame({ name, appFormValues, socialFormValues, mus
         }
     }, [isSmallScreen, isSpecialContent]);
 
+    React.useEffect(() => {
+        // Esta función se ejecutará cada vez que cambie la prop `name`
+        setValue((isSmallScreen || isSpecialContent) ? 1 : 0);
+    }, [name, isSmallScreen, isSpecialContent]);
+
     const handleChange = (event, newValue) => {
         setValue(newValue);
     };

@@ -7,7 +7,7 @@ import { ColorPicker } from '../colorPicker';
 import Slider from '@mui/material/Slider';
 
 export default function ScrollableFontText() {
-    const { setQrFontStyle, setTextColor, setTextSize, qrTextProps } = useQr();
+    const { setQrFontStyle, setTextColor, qrTextProps } = useQr();
     const [value, setValue] = useState(0);
 
     const fontStyles = [
@@ -30,10 +30,6 @@ export default function ScrollableFontText() {
 
     const handleColorChange = (color) => {
         setTextColor(color);
-    };
-
-    const handleFontSizeChange = (e, newValue) => {
-        setTextSize(newValue);
     };
 
     return (
@@ -70,20 +66,6 @@ export default function ScrollableFontText() {
                         <span>{qrTextProps.qrTextColor}</span>
                     </div>
                 </div>
-                <div className='flex gap-4 items-center'>
-                    <span className="mb-2">Font Size:</span>
-                    <Slider
-                        size="small"
-                        defaultValue={0}
-                        aria-label="fontSize"
-                        valueLabelDisplay="on"
-                        color="secondary"
-                        min={16}
-                        max={25}
-                        step={1}
-                        sx={{ width: "120px" }}
-                        onChange={(event, newValue) => handleFontSizeChange(event, newValue)}
-                    /></div>
             </div>
         </Box>
     );

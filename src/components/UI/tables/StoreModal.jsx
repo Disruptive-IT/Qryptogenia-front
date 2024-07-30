@@ -3,8 +3,9 @@ import { StoreLayout } from '../../Layout/qrContent/LayoutsQr/stylePhoneStoreLay
 import CellBox from '../../Layout/qrContent/cellBox'; // Ajusta la ruta según corresponda
 import { MdClose } from 'react-icons/md';
 import './scroll.css'
+import { PhoneContentSwitch } from '../../Layout/qrContent';
 
-const StoreModal = ({ open, handleClose, storeData }) => {
+const StoreModal = ({ open, handleClose, storeData, codeType}) => {
   if (!open) return null;
 
   const handleOutsideClick = (e) => {
@@ -12,7 +13,8 @@ const StoreModal = ({ open, handleClose, storeData }) => {
       handleClose();
     }
   };
-
+  console.log(storeData)
+  const contentName = codeType.replace(/-/g, ' ');
   return (
 <div 
   id="modal-container" 

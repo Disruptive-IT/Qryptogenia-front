@@ -10,7 +10,8 @@
 import { useState, useEffect } from 'react';
 
 const useQrState = (initialQrType = '', initialQrProps = {}) => {
-    const [qrState, setQrState] = useState({
+    
+    const initialState = {
         qrData: "",
         qrType: initialQrType,
         qrColor: '#000000',
@@ -20,7 +21,7 @@ const useQrState = (initialQrType = '', initialQrProps = {}) => {
             backgroundImage: null,
             logoImage: null,
             logoPosition: { background: true },
-            marcoType: 'default',
+            marcoType: 'square',
             dotsType: 'rounded',
             cornersSquareType: 'extra-rounded',
             cornersDotType: 'dot',
@@ -34,15 +35,22 @@ const useQrState = (initialQrType = '', initialQrProps = {}) => {
         },
         qrTextProps: {
             qrText: '',
-            qrTextSize: 16,
             qrTextColor: '#000000',
-            qrTextFontStyle: "",
-            qrTextPositionX: 0,
-            qrTextPositionY: 0,
-            qrTextChip:  {},
+            qrTextFontStyle: { fontFamily: 'Arial, sans-serif', fontWeight: 'bold', textAlign: 'center' },
+            qrTextPosition: {
+                key: 'topCenter',
+                style: {
+                    position: 'absolute',
+                    top: '2%',
+                    left: '50%',
+                    transform: 'translate(-50%, 0)',
+                },
+            },
+            qrTextChip: { borderRadius: '0', padding: '0', backgroundColor: "transparent" },
             qrTextChipColor: "#284B63"
         },
-    });
+    };
+    const [qrState, setQrState] = useState(initialState)
 
     useEffect(() => {
         const path = window.location.pathname;
@@ -54,6 +62,13 @@ const useQrState = (initialQrType = '', initialQrProps = {}) => {
             }));
         }
     }, []);
+
+    const resetQrData = () => {
+        setQrState(prevState => ({
+            ...initialState,
+            qrType: prevState.qrType,
+        }));
+    };
 
     const setQrData = (data) => {
         setQrState((prevState) => ({
@@ -185,20 +200,12 @@ const useQrState = (initialQrType = '', initialQrProps = {}) => {
         updateQrTextProps({ qrTextFontStyle: style });
     };
 
-    const setTextSize = (size) => {
-        updateQrTextProps({ qrTextSize: size });
-    };
-
     const setTextColor = (color) => {
         updateQrTextProps({ qrTextColor: color });
     };
 
-    const setQrTextPositionX = (x) => {
-        updateQrTextProps({ qrTextPositionX: x });
-    };
-
-    const setQrTextPositionY = (y) => {
-        updateQrTextProps({ qrTextPositionY: y });
+    const setQrTextPosition = (position) => {
+        updateQrTextProps({ qrTextPosition: position });
     };
 
     const setTextChip = (shape) => {
@@ -247,14 +254,13 @@ const useQrState = (initialQrType = '', initialQrProps = {}) => {
         setCornersSquareColor,
         setCornersDotColor,
         setBackgroundImage,
-        setTextSize,
-        setQrTextPositionX,
-        setQrTextPositionY,
+        setQrTextPosition,
         setTextChip,
         setTextChipColor,
         setQrImage,
         setQrImageSize,
-        setQrBase64
+        setQrBase64,
+        resetQrData
     };
 
 };

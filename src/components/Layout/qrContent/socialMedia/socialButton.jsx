@@ -9,7 +9,7 @@ import { SocialIcon } from 'react-social-icons'
 
 export const SocialButton = ({ data }) => {
     return (
-      <div className="grid grid-flow-row gap-7 justify-center w-full mt-10 pb-7 relative">
+      <div className="flex gap-3 justify-center flex-wrap w-full mt-20 mb-5">
         {data && data.map((social, index) => (
           <a
             key={index}

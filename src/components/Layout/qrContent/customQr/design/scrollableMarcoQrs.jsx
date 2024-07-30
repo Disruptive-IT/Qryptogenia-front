@@ -25,12 +25,12 @@ import { TbLetterX } from "react-icons/tb";
 import { MdOutlineCancel } from "react-icons/md";
 
 const qrStyles = [
-    { id: 1, type: 'default', icon: TbLetterX, style: { borderColor: 'transparent', border: 0 }, shape: 'none', backgroundType: 'pattern' },
-    { id: 2, type: 'circle', icon: MdOutlineQrCode2, style: { borderRadius: '50%', borderColor: '#000000', padding: '50px' }, shape: 'circle', backgroundType: 'pattern' },
-    { id: 3, type: 'square', icon: MdOutlineQrCode2, style: { borderRadius: '0', borderColor: '#000000' }, shape: 'square', backgroundType: 'pattern' },
-    { id: 4, type: 'rounded', icon: MdOutlineQrCode2, style: { borderRadius: '15px', borderColor: '#000000' }, shape: 'rounded', backgroundType: 'pattern' },
-    { id: 5, type: 'hexagon', icon: MdOutlineQrCode2, style: { clipPath: 'polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 24%)', borderColor: '#000000 ', padding: '50px' }, shape: 'hexagon', backgroundType: 'pattern', },
-    { id: 6, type: 'octagon', icon: MdOutlineQrCode2, style: { clipPath: 'polygon(30% 0%, 70% 0%, 100% 30%, 100% 70%, 70% 100%, 30% 100%, 0% 70%, 0% 30%)', borderColor: '#000000', padding: '40px' }, shape: 'octagon', backgroundType: 'pattern', },
+    { id: 1, type: 'default', icon: TbLetterX, style: { borderColor: 'transparent', border: 0, padding: '37px'}, shape: 'none', backgroundType: 'pattern' },
+    { id: 2, type: 'circle', icon: MdOutlineQrCode2, style: { borderRadius: '50%', borderColor: '#000000', padding: '35px' }, shape: 'circle', backgroundType: 'pattern' },
+    { id: 3, type: 'square', icon: MdOutlineQrCode2, style: { borderRadius: '0', borderColor: '#000000', padding:'25px' }, shape: 'square', backgroundType: 'pattern' },
+    { id: 4, type: 'rounded', icon: MdOutlineQrCode2, style: { borderRadius: '15px', borderColor: '#000000', padding:'25px' }, shape: 'rounded', backgroundType: 'pattern' },
+    { id: 5, type: 'hexagon', icon: MdOutlineQrCode2, style: { clipPath: 'polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 24%)', borderColor: '#000000 ', padding: '35px' }, shape: 'hexagon', backgroundType: 'pattern', },
+    { id: 6, type: 'octagon', icon: MdOutlineQrCode2, style: { clipPath: 'polygon(30% 0%, 70% 0%, 100% 30%, 100% 70%, 70% 100%, 30% 100%, 0% 70%, 0% 30%)', borderColor: '#000000', padding: '35px' }, shape: 'octagon', backgroundType: 'pattern', },
 ];
 
 const getShapeStyle = (shape) => {
