@@ -23,7 +23,7 @@ function Navbar() {
                     <ul className="space-x-4 list-none text-sm text-black items-center inline-flex justify-center text-left gap-3">
                         <CustomLink to="/" isActive={isActive('/home')}>Home</CustomLink>
                         <CustomLink to="#" isActive={isActive('/about')}>About us</CustomLink>
-                        <CustomLink to="#" isActive={isActive('/plans')}>Plans</CustomLink>
+                        <CustomLink to="/pricings" isActive={isActive('/pricings')}>Plans</CustomLink>
                         <CustomLink to="#" isActive={isActive('/faq')}>FAQ</CustomLink>
                         <li className="shrink-0">
                             <Link to="/login" className="py-2 w-auto px-4 border-2 border-dark-blue h-8 rounded-full bg-black/5 hover:bg-transparent text-dark-blue duration-200">CUENTA</Link>

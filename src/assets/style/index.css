@@ -108,3 +108,8 @@ body {
 ::-webkit-scrollbar-button {
   display: none;
 }
+
+/*animacion input saveQR */
+.swal2-input{
+  background-color: #3c6e71;
+}

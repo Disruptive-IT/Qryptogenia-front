@@ -1,5 +1,5 @@
-import React from 'react';
-import cell from "../../../assets/imgs/Celular.png";
+import React from 'react'
+import cell from "../../../assets/imgs/Celular.png"
 
 const CellBox = ({children}) => {
     return (

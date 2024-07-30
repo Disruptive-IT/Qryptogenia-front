@@ -23,6 +23,7 @@ import WebLinkPhoneStorePage from "../components/Layout/viewsQr/webLinkPhoneStor
 import {WebLinkPhoneMusicPage, WebLinkPhoneSocialPage} from "../components/Layout/viewsQr/WebLinkPhoneMusicPage";
 import QRScanPage from "../pages/QRScanPage";
 import ShowAlert from "../components/alerts/alert_template";
+import { PlansPricings } from "../pages/Plans&pricings";
 
 export const PageRouter = () => {
     const { isLoading } = useLoader();
@@ -34,6 +35,7 @@ export const PageRouter = () => {
                 {/* Home Routes */}
                 <Route path="/" element={<LayoutHome />}>
                     <Route index element={<HomePage />} />
+                    <Route path="pricings" element={<PlansPricings />} />
                     <Route path="login" element={user ? <Navigate to="/user/home" replace /> : <LoginForm />} />
                     <Route path="register" element={user ? <Navigate to="/user/home" replace /> : <RegisterForm />} />
                     <Route path="recoverPassword" element={user ? <Navigate to="/user/home" replace /> : <RecoverPassForm />} />

@@ -9,10 +9,19 @@ import { useNavigate } from "react-router-dom";
 import menu from "../../assets/imgs/QR-types/menu.png";
 import Swal from 'sweetalert2';
 import { useQr } from "../../context/QrContext";
+import './styles/qr-animation.css'
+import { motion } from "framer-motion";
 
 /*
  * @UpdatedBy : Nicolas Barrios,   @date 2024-07-25 11:51:05
  * @description : estilos corregidos del div del celular del home                                                     
+ */
+
+/*
+ * @Author : Nicolas Barrios,   @date 2024-07-25 19:25:40
+ * @description : se agrego motion para estilos y animaciones, se hizo animacion del qr scaneado
+ * @Props : ninguna
+ * @return :
  */
 
 export const OptionBar = () => {
@@ -30,7 +39,25 @@ export const OptionBar = () => {
             <p className="mt-3 p-3 text-sm">
               Enjoy all the services that Qryptogenia can offer you, don't wait any longer
             </p>
-            <img src={QR} alt="" className="w-14" />
+            <div 
+            className={`relative p-2 w-[40%] bg-transparent rounded-[10%] my-[1%]`}
+            >
+              <motion.img 
+              src={QR} 
+              alt="" 
+              className="w-full"
+              initial={{ opacity: 0 }}
+              animate={{
+                opacity: 1,
+                scale: [1, 0.8, 0.7, 1]
+              }}
+              transition={{
+                duration: 3,
+                times: [0.3, 0.4, 0.5, 0.6],
+                repeat: Infinity,
+                repeatDelay:2
+              }} />
+            </div>
           </div>
         </div>
       </div>

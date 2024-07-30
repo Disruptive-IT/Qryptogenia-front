@@ -9,4 +9,23 @@
   .cont-custom-qr::-webkit-scrollbar-thumb {
     background: #888;
   }
+
+  /*fondo celular */
+  .border-container{
+    position: relative;
+    background: url('../../../assets/imgs/Celular.png') no-repeat center center;
+    background-size:contain;
+    border: none;
+    border-radius: 55px;
+    overflow: hidden;
+  }
   
+  .inner-content {
+    position: absolute; /* Coloca el contenido dentro del contenedor */
+    top: 4px; /* Ajusta según el padding del marco de la imagen */
+    left: 20px; /* Ajusta según el padding del marco de la imagen */
+    right: 20px; /* Ajusta según el padding del marco de la imagen */
+    bottom: 4px; /* Ajusta según el padding del marco de la imagen */
+    border-radius: inherit; /* Hereda el borde redondeado */
+    overflow: auto; /* Permite el desplazamiento interno */
+}
