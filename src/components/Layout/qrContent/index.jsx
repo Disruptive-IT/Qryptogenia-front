@@ -93,27 +93,27 @@ export const QrContentSwitch = ({contentName, onFormChangeApp, onFormChange, onF
 
 
 export const PhoneContentSwitch = ({contentName, appFormValues, socialFormValues, musicFormValues}) => {
-
+console.log(contentName);
 let phoneContent;
 switch (contentName) {
     case "app store":                                                       
     phoneContent = (
             <div>
-                <WebLinkPhoneMusic FormValues={appFormValues}/>
+                <WebLinkPhoneMusic FormValues={appFormValues} contentName={contentName}/>
             </div>
         );
         break;
     case "social media":
         phoneContent = (
             <div>
-                <WebLinkPhoneMusic FormValues={socialFormValues}/>
+                <WebLinkPhoneMusic FormValues={socialFormValues} contentName={contentName}/>
             </div>
         );
         break;
         case "website url":
             phoneContent = (
                 <div>
-                    <WebLinkPhoneMusic FormValues={appFormValues}/>
+                    <WebLinkPhoneMusic FormValues={appFormValues} />
                 </div>
             );
             break;
@@ -134,7 +134,7 @@ switch (contentName) {
         case "music":
             phoneContent = (
                 <div>
-                    <WebLinkPhoneMusic FormValues={musicFormValues}/>
+                    <WebLinkPhoneMusic FormValues={musicFormValues} contentName={contentName}/>
                 </div>
             );
             break;

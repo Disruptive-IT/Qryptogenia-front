@@ -67,9 +67,12 @@ export const SocialButton = ({ data, botonColor}) => {
     );
   };
 
-  
+  const capitalizeFirstLetter = (string) => {
+    if (typeof string !== 'string') return '';
+    return string.charAt(0).toUpperCase() + string.slice(1);
+  };
 
-  export const SocialButtonM = ({ data }) => {
+  export const SocialButtonS = ({ data }) => {
     console.log(data)
     return (
       <div className='flex gap-3 justify-center flex-wrap w-full mt-20 mb-5'>
@@ -85,6 +88,7 @@ export const SocialButton = ({ data, botonColor}) => {
           >
             <SocialIcon network={social.name.toLowerCase()} style={{ width: 30, height: 30 }} />
             {/* Mostrar el nombre del botón solo en pantallas grandes */}
+            <span>{capitalizeFirstLetter(social.name)}</span>
           </a>
   
         ))}

@@ -1,5 +1,5 @@
 import React from 'react';
-import { SocialButton } from '../socialMedia/socialButtons';
+import { SocialButtonM } from '../socialMedia/socialButtons';
 import logot from "../../../../assets/imgs/Captura.png";
 import apple from "../../../../assets/imgs/applew.png";
 
@@ -90,7 +90,7 @@ console.log(musicFormValues)
     </div>
   </div>
   
-  <SocialButton data={data} />
+  <SocialButtonM data={data} />
 </div>
   );
 }
