@@ -120,16 +120,14 @@ switch (contentName) {
         case "pdf":
             phoneContent = (
                 <div>
-                    <WebLinkPhone title={"HOLA MUNDO"}
-                        textColor={"blue"} />
+                    <h1>PDF</h1>
                 </div>
             );
             break;
         case "news":
             phoneContent = (
                 <div>
-                    <WebLinkPhone title={"HOLA MUNDO"}
-                        textColor={"blue"} />
+                    <h1>NOTICIAS</h1>
                 </div>
             );
             break;
