@@ -40,7 +40,7 @@ export const SocialButton = ({ data }) => {
 
 export const SocialButtonM = ({ data }) => {
   return (
-    <div className='flex gap-3 justify-center flex-wrap w-full mt-5 mb-5'>
+    <div className='flex gap-3 justify-center flex-wrap w-full mb-5'>
       {data && data.map((social, index) => (
         <a target="_blank" rel="noopener noreferrer" href={social.url} key={index} type="button" className="relative bg-gray-100 p-2 min-w-32 h-12 rounded-lg flex gap-2 items-center justify-center" style={{ cursor: "pointer", verticalAlign: 'middle' }}>
           {social.name === 'Apple Store' && <FaApple style={{ width: 30, height: 30, verticalAlign: 'middle' }} />}
