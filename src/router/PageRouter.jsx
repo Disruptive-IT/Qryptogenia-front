@@ -20,7 +20,7 @@ import AppContent from "../pages/AppContent";
 import App from "../components/UI/tables/app";
 import { useAuthContext } from "../context/AuthContext";
 import WebLinkPhoneStorePage from "../components/Layout/viewsQr/webLinkPhoneStorePage"
-import {WebLinkPhoneMusicPage, WebLinkPhoneSocialPage} from "../components/Layout/viewsQr/WebLinkPhoneMusicPage";
+import { WebLinkPhoneMusicPage, WebLinkPhoneSocialPage } from "../components/Layout/viewsQr/WebLinkPhoneMusicPage";
 import QRScanPage from "../pages/QRScanPage";
 import ShowAlert from "../components/alerts/alert_template";
 import { PlansPricings } from "../pages/Plans&pricings";
@@ -33,14 +33,13 @@ export const PageRouter = () => {
         <>
             <Routes>
                 {/* Home Routes */}
-                <Route path="/" element={<LayoutHome />}>
-                    <Route index element={<HomePage />} />
-                    <Route path="pricings" element={<PlansPricings />} />
+                <Route path="/" element={user ? <LayoutUser /> : <LayoutHome />}>
+                    <Route index element={user ? <HomePage /> : <HomePage />} />
+                    <Route path="pricings" element={user ? <PlansPricings /> : <PlansPricings />} />
                     <Route path="login" element={user ? <Navigate to="/user/home" replace /> : <LoginForm />} />
                     <Route path="register" element={user ? <Navigate to="/user/home" replace /> : <RegisterForm />} />
                     <Route path="recoverPassword" element={user ? <Navigate to="/user/home" replace /> : <RecoverPassForm />} />
                     <Route path="forgotPassword" element={user ? <Navigate to="/user/home" replace /> : <ForgotPassForm />} />
-                    
                 </Route>
 
                 <Route path="/qr/:contentName" element={user ? <LayoutUser /> : <LayoutHome />}>
@@ -51,11 +50,11 @@ export const PageRouter = () => {
                     <Route index element={<AppContent />} />
                 </Route>
 
-                <Route path="music/:id" element={<WebLinkPhoneMusicPage/>} />
-                <Route path="social/:id" element={<WebLinkPhoneSocialPage/>} />
-                <Route path="store/:id" element={<WebLinkPhoneStorePage/>} />
-                <Route path="qr/scan" element={<QRScanPage />} /> 
-                
+                <Route path="music/:id" element={<WebLinkPhoneMusicPage />} />
+                <Route path="social/:id" element={<WebLinkPhoneSocialPage />} />
+                <Route path="store/:id" element={<WebLinkPhoneStorePage />} />
+                <Route path="qr/scan" element={<QRScanPage />} />
+
                 {/* Admin Routes */}
                 <Route path="/admin" element={<ProtectedRouteAdmin />}>
                     <Route element={<LayoutAdmin />}>
@@ -74,7 +73,7 @@ export const PageRouter = () => {
                         <Route index element={<HomePage />} />
                         <Route path="home" element={<HomePage />} />
                         <Route path="profile" element={<Profile />} />
-                        <Route path="qr" element={<App />} />      
+                        <Route path="qr" element={<App />} />
                     </Route>
                 </Route>
 

@@ -73,7 +73,7 @@ const Profile = () => {
     ];
 
     return (
-        <div className="bg-white flex justify-center items-center mt-16 lg:mt-32 mx-4 lg:mx-20 rounded-3xl">
+        <div className="bg-white flex justify-center items-center mt-10 mx-4 lg:mx-20 rounded-3xl">
             <div className="flex flex-col lg:flex-row lg:w-11/12 mx-2 lg:mx-8 my-8 lg:my-16 rounded-3xl bg-MyBlack lg:min-h-[30vh] sm:min-h-[40vh]">
                 <div className="border-solid lg:border-MyGray lg:border-r flex flex-col lg:w-4/12 justify-center items-center">
                     <a className="mt-0 text-xl p-2">{user?.info?.rol === 'CLIENT' ? 'User Settings' : 'Admin Settings'}</a>

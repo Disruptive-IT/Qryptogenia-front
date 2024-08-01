@@ -6,51 +6,95 @@
  */
 
 import React, { useState, useContext, useEffect } from 'react';
-import { Tooltip, IconButton, Avatar, Menu, MenuItem, Typography } from '@mui/material';
+import { Divider, Tooltip, IconButton, Avatar, ListItemIcon, Menu, MenuItem, Typography } from '@mui/material';
 import { AuthContext } from "../../context/AuthContext";
 import { Link as RouterLink } from 'react-router-dom';
+import QrCode from '@mui/icons-material/QrCode';
+import Logout from '@mui/icons-material/Logout';
 
 export default function UserProfileMenu() {
     let { user, logoutUser, profileImage } = useContext(AuthContext)
-    const [anchorElUser, setAnchorElUser] = React.useState(null);
+    const [anchorEl, setAnchorEl] = React.useState(null);
+    const open = Boolean(anchorEl);
 
-    const handleOpenUserMenu = (event) => {
-        setAnchorElUser(event.currentTarget);
+    const handleOpen = (event) => {
+        setAnchorEl(event.currentTarget);
     };
-
-    const handleCloseUserMenu = () => {
-        setAnchorElUser(null);
+    const handleClose = () => {
+        setAnchorEl(null);
     };
 
     return (
         <>
-            <Tooltip title="Abrir Perfil">
-                <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                    <Avatar alt={profileImage} src={profileImage} sx={{width: '30px', height: '30px'}} />
+            <Tooltip title="Account settings">
+                <IconButton
+                    onClick={handleOpen}
+                    size="small"
+                    sx={{ ml: 2 }}
+                    aria-controls={open ? 'account-menu' : undefined}
+                    aria-haspopup="true"
+                    aria-expanded={open ? 'true' : undefined}
+                >
+                    <Avatar alt={profileImage} src={profileImage} sx={{ width: '30px', height: '30px' }}>M</Avatar>
                 </IconButton>
             </Tooltip>
             <Menu
-                id="menu-appbar"
-                anchorEl={anchorElUser}
-                anchorOrigin={{
-                    vertical: 'bottom',
-                    horizontal: 'left',
+                anchorEl={anchorEl}
+                id="account-menu"
+                open={open}
+                onClose={handleClose}
+                onClick={handleClose}
+                PaperProps={{
+                    elevation: 0,
+                    sx: {
+                        overflow: 'visible',
+                        filter: 'drop-shadow(0px 2px 8px rgba(0,0,0,0.32))',
+                        mt: 1.5,
+                        '& .MuiAvatar-root': {
+                            width: 32,
+                            height: 32,
+                            ml: -0.5,
+                            mr: 1,
+                        },
+                        '&::before': {
+                            content: '""',
+                            display: 'block',
+                            position: 'absolute',
+                            top: 0,
+                            right: 14,
+                            width: 10,
+                            height: 10,
+                            bgcolor: 'background.paper',
+                            transform: 'translateY(-50%) rotate(45deg)',
+                            zIndex: 0,
+                        },
+                    },
                 }}
-                open={Boolean(anchorElUser)}
-                onClose={handleCloseUserMenu} 
+                transformOrigin={{ horizontal: 'right', vertical: 'top' }}
+                anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
             >
-                <MenuItem onClick={handleCloseUserMenu}>
-                    <RouterLink to="/user/profile" style={{ textDecoration: 'none', color: 'inherit' }}>
+                <MenuItem onClick={handleClose}>
+                    <Avatar />
+                    <RouterLink to="/user/profile" style={{ textDecoration: 'none', color: 'inherit', margin: '0 10px' }}>
                         <Typography textAlign="center">Profile</Typography>
                     </RouterLink>
                 </MenuItem>
-                <MenuItem onClick={handleCloseUserMenu}>
-                    <RouterLink to="/user/qr" style={{ textDecoration: 'none', color: 'inherit' }}>
-                        <Typography textAlign="center">Qr's</Typography>
-                    </RouterLink>
-                </MenuItem>
-                <MenuItem onClick={handleCloseUserMenu}>
-                        <Typography textAlign="center" onClick={logoutUser}>Logout</Typography>
+                <Divider />
+                {user && user.rol !== 'ADMIN' && (
+                    <MenuItem onClick={handleClose}>
+                        <ListItemIcon>
+                            <QrCode fontSize="small" />
+                        </ListItemIcon>
+                        <RouterLink to="/user/qr" style={{ textDecoration: 'none', color: 'inherit', margin: '0 10px' }}>
+                            <Typography textAlign="center">Qr's</Typography>
+                        </RouterLink>
+                    </MenuItem>
+                )}
+                <MenuItem onClick={handleClose}>
+                    <ListItemIcon>
+                        <Logout fontSize="small" />
+                    </ListItemIcon>
+                    <Typography textAlign="center" onClick={logoutUser} style={{ margin: '0 10px' }}>Logout</Typography>
                 </MenuItem>
             </Menu>
         </>

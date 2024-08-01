@@ -10,7 +10,7 @@ function LayoutHome() {
         <div className="flex flex-col min-h-screen relative bg-slate-200">
             <Navbar />
             {location.pathname !== '/login' && location.pathname !== '/register'  && location.pathname !== '/forgotPassword' && location.pathname !== '/pricings'  && (
-                <div className='mt-32'>
+                <div className='mt-10'>
                     <StepperQr />
                 </div>
             )}
