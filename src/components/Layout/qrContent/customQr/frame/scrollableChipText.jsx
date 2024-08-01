@@ -7,6 +7,12 @@ import useQrState from '../../../../../hooks/useQr';
 import GradientColorPicker from 'react-gcolor-picker';
 import { useEffect, useRef, useState } from 'react';
 
+/**
+ * @Author : Jobserd Julián Ocampo,   @date 2024-08-01 14:10:49
+ * @description : Componente de la seccion frame o texto. El contenido es dedicado a establecer las burbujas para el texto y su color
+ * @return : Retorna los tabs para seleccion de las formas o burbujas y su color picker
+**/
+
 const bubbleStyles = [
     { borderRadius: '0', padding: '0', backgroundColor: "transparent" },
     { borderRadius: '10%', padding: '5px 12px' },

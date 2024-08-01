@@ -1,8 +1,13 @@
 import React, { useState } from 'react';
 import { useQr } from '../../../../../context/QrContext';
 import { Checkbox, FormControlLabel, Button, TextField, FormGroup, FormControl, FormLabel } from '@mui/material';
-import { ColorPicker } from '../colorPicker';
 import Slider from '@mui/material/Slider';
+
+/**
+ * @Author : Jobserd Julián Ocampo,   @date 2024-08-01 14:15:15
+ * @description : Seccion para establecer el logo del qr
+ * @return : Contenido: check para incluir el logo o no en el qr, input para subir el logo
+**/
 
 const Logo = () => {
     const { setQrImage, setQrImageSize, qrImageInfo } = useQr();

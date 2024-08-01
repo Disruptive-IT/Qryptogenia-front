@@ -22,7 +22,6 @@ import frame1 from '../../../../../assets/imgs/frame1.png';
 import qrframe from '../../../../../assets/imgs/qrframe.png';
 import pattern1 from '../../../../../assets/imgs/patter1.avif';
 import pattern2 from '../../../../../assets/imgs/patter1.avif';
-import { ColorPicker } from '../colorPicker';
 import { useQr } from '../../../../../context/QrContext';
 import { MdOutlineQrCode, MdOutlineQrCode2 } from "react-icons/md";
 import { TbLetterX } from "react-icons/tb";

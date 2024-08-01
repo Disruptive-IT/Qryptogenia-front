@@ -5,6 +5,12 @@ import Box from '@mui/material/Box';
 import { useQr } from '../../../../../context/QrContext';
 import GradientColorPicker from 'react-gcolor-picker';
 
+/**
+ * @Author : Jobserd Julián Ocampo,   @date 2024-08-01 14:07:02
+ * @description : Componente de la seccion frame o texto. El contenido es dedicado a las fuentes
+ * @return : Retorna los tabs para seleccion de fuentes y color picker
+**/
+
 export default function ScrollableFontText() {
     const { setQrFontStyle, setTextColor, qrTextProps } = useQr();
     const [isTextColorPickerOpen, setTextColorPickerOpen] = useState(false);

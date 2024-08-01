@@ -170,7 +170,7 @@ export default function ChangeFrame({ name, appFormValues, socialFormValues, mus
                     </TabPanel>
                 )}
                 <TabPanel value={value} index={1} dir={theme.direction} className="w-full flex justify-center">
-                    <div className="w-[500px] px-5 relative">
+                    <div className="w-[420px] max-w-[500px] px-5 relative">
                         <h2 className="text-center text-2xl font-bold mb-8">Preview QRytogenia</h2>
                         <CustomQr 
                         location={location}

@@ -1,6 +1,11 @@
 import TextField from '@mui/material/TextField';
 import { styled } from '@mui/material/styles';
 
+/**
+ * @Author : Jobserd Julián Ocampo,   @date 2024-08-01 14:09:44
+ * @description : Estilos del input del texto de la seccion de frame
+**/
+
 const InputText = styled(TextField)({
   '& .MuiFilledInput-root': {
     backgroundColor: '#f2f2f2',
