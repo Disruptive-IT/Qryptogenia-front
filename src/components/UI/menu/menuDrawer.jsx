@@ -9,11 +9,14 @@ import HomeIcon from '@mui/icons-material/Home';
 import InfoIcon from '@mui/icons-material/Info';
 import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
 import HelpIcon from '@mui/icons-material/Help';
+import UserProfileMenu from '../../Admin/Profile';
+import { useAuthContext } from '../../../context/AuthContext';
 
 function MenuDrawer(props) {
     const [open, setOpen] = useState(false);
     const [windowWidth, setWindowWidth] = useState(window.innerWidth);
     const location = useLocation();
+    const { user } = useAuthContext();
 
     const isActive = (path) => location.pathname === path;
 
@@ -67,10 +70,12 @@ function MenuDrawer(props) {
                             <HelpIcon sx={{ mr: 1 }} />
                             FAQ
                         </ListItem>
-                        <ListItem>
-                            <Link to="/login" className="auth-link border-2 border-dark-blue h-8 rounded-md bg-black/5 hover:bg-transparent text-dark-blue duration-200">Sign In</Link>
-                            <Link to="/register" className="auth-link border-2 border-dark-blue h-8 rounded-md bg-black/5 hover:bg-transparent text-dark-blue duration-200">Sign Up</Link>
-                        </ListItem>
+                        { !user || (user && user.rol != "CLIENT") ? (
+                            <ListItem>
+                                <Link to="/login" className="auth-link border-2 border-dark-blue h-8 rounded-md bg-black/5 hover:bg-transparent text-dark-blue duration-200">Sign In</Link>
+                                <Link to="/register" className="auth-link border-2 border-dark-blue h-8 rounded-md bg-black/5 hover:bg-transparent text-dark-blue duration-200">Sign Up</Link>
+                            </ListItem>
+                        ) : null}
                     </List>
                 </nav>
             </div>

@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import GradientColorPicker from 'react-gcolor-picker';
 
-export const ColorPicker = ({ setColor, initialColor = '#ffffff', position }) => {
+export const ColorPicker = ({ setColor, initialColor = '#ffffff' }) => {
     const [selectColor, setSelectColor] = useState(initialColor);
     const [showColorPicker, setShowColorPicker] = useState(false);
     const colorPickerRef = useRef(null);
@@ -35,7 +35,7 @@ export const ColorPicker = ({ setColor, initialColor = '#ffffff', position }) =>
                 style={{ background: selectColor }}
                 onClick={ShowColorPicker}
             ></div>
-            <div ref={colorPickerRef} className={`absolute ${position} w-[30px]`}>
+            <div ref={colorPickerRef} className={`w-[30px]`}>
                 {showColorPicker && (<GradientColorPicker
                     enableAlpha={true}
                     disableHueSlider={false}

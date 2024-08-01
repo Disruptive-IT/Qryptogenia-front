@@ -1,14 +1,15 @@
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import Box from '@mui/material/Box';
 import { useQr } from '../../../../../context/QrContext';
-import { ColorPicker } from '../colorPicker';
-import Slider from '@mui/material/Slider';
+import GradientColorPicker from 'react-gcolor-picker';
 
 export default function ScrollableFontText() {
     const { setQrFontStyle, setTextColor, qrTextProps } = useQr();
+    const [isTextColorPickerOpen, setTextColorPickerOpen] = useState(false);
     const [value, setValue] = useState(0);
+    const pickerRef = useRef(null);
 
     const fontStyles = [
         { fontFamily: 'Arial, sans-serif', fontWeight: 'bold', textAlign: 'center' },
@@ -31,6 +32,21 @@ export default function ScrollableFontText() {
     const handleColorChange = (color) => {
         setTextColor(color);
     };
+
+    const handleClickOutside = (event) => {
+        if (pickerRef.current && !pickerRef.current.contains(event.target)) {
+            setTextColorPickerOpen(false);
+        }
+    };
+
+    useEffect(() => {
+        // Add event listener for clicks outside of the picker
+        document.addEventListener('mousedown', handleClickOutside);
+        return () => {
+            // Cleanup the event listener
+            document.removeEventListener('mousedown', handleClickOutside);
+        };
+    }, []);
 
     return (
         <Box sx={{ width: 'auto', bgcolor: 'background.paper', marginTop: "10px" }}>
@@ -60,11 +76,24 @@ export default function ScrollableFontText() {
             </Tabs>
             <div className='relative space-y-4 p-4'>
                 <div className='flex gap-4 items-center'>
-                    <span className="mb-2">Text color: </span>
-                    <div className="flex items-center p-3 gap-2 w-auto bg-white border border-gray-300 rounded shadow-md" >
-                        <ColorPicker setColor={handleColorChange} initialColor={qrTextProps.qrTextColor} position={"top-[-380px] left-[100px]"} />
-                        <span>{qrTextProps.qrTextColor}</span>
+                    <div className="flex items-center border border-gray-300 rounded p-2 ml-3 mt-5 mb-1">
+                        <div
+                            className="w-10 h-10 border border-gray-300 rounded cursor-pointer"
+                            style={{ background: qrTextProps.qrTextColor }}
+                            onClick={() => setTextColorPickerOpen(!isTextColorPickerOpen)}
+                        ></div>
+                        <span className='mx-4'>{qrTextProps.qrTextColor}</span>
                     </div>
+                    {isTextColorPickerOpen && (
+                        <div className="absolute z-50 flex flex-col items-center p-3 bg-white border border-gray-300 rounded shadow-md" ref={pickerRef}>
+                            <GradientColorPicker
+                                enableAlpha={true}
+                                disableHueSlider={false}
+                                presetColors={[]}
+                                onChange={(color) => handleColorChange(color)}
+                            />
+                        </div>
+                    )}
                 </div>
             </div>
         </Box>

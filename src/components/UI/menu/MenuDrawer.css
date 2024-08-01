@@ -19,7 +19,6 @@
 }
 
 .drawer-header {
-    position: relative;
     text-align: center;
 }
 
@@ -65,9 +64,7 @@
 }
 
 .drawer-toggle {
-    position: fixed;
-    top: 15px;
-    right: 15px;
+    position: relative;
     width: 45px;
     height: 45px;
     background-color: #284B63;

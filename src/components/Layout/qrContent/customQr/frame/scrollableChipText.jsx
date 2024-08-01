@@ -1,11 +1,11 @@
-import * as React from 'react';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import Box from '@mui/material/Box';
 import Chip from '@mui/material/Chip';
 import { useQr } from '../../../../../context/QrContext';
-import { ColorPicker } from '../colorPicker';
 import useQrState from '../../../../../hooks/useQr';
+import GradientColorPicker from 'react-gcolor-picker';
+import { useEffect, useRef, useState } from 'react';
 
 const bubbleStyles = [
     { borderRadius: '0', padding: '0', backgroundColor: "transparent" },
@@ -21,18 +21,35 @@ const bubbleStyles = [
 ];
 
 export default function ScrollableChipText() {
-    const [value, setValue] = React.useState(0);
+    const [value, setValue] = useState(0);
+    const [isBubbleColorPickerOpen, setBubbleColorPickerOpen] = useState(false)
     const { setTextChip } = useQr();
     const { setTextChipColor, qrTextProps } = useQr();
+    const pickerRef = useRef(null);
 
     const handleChange = (event, newValue) => {
-        setTextChip(bubbleStyles[newValue])
         setValue(newValue);
+        setTextChip(bubbleStyles[newValue])
     };
 
     const handleColorChange = (color) => {
         setTextChipColor(color);
     };
+
+    const handleClickOutside = (event) => {
+        if (pickerRef.current && !pickerRef.current.contains(event.target)) {
+            setBubbleColorPickerOpen(false);
+        }
+    };
+
+    useEffect(() => {
+        // Add event listener for clicks outside of the picker
+        document.addEventListener('mousedown', handleClickOutside);
+        return () => {
+            // Cleanup the event listener
+            document.removeEventListener('mousedown', handleClickOutside);
+        };
+    }, []);
 
     const tabLabels = ['Default', 'Stay positive', 'Work hard', 'Focus on goal', 'Believe in yourself', 'Keep moving', 'Never give up', 'Stay strong', 'Be humble', 'Embrace change'];
 
@@ -67,7 +84,7 @@ export default function ScrollableChipText() {
                                     backgroundColor: 'gray',
                                     color: index === 0 ? 'black' : 'white',
                                     ...bubbleStyles[index % bubbleStyles.length],
-                                    margin: "10px" 
+                                    margin: "10px"
                                 }}
                             />
                         }
@@ -75,11 +92,24 @@ export default function ScrollableChipText() {
                 ))}
             </Tabs>
             <div className='pl-4 flex items-center gap-4'>
-                <p className='mt-4'>Color Bubble</p>
-                <div className="flex items-center p-3 mt-4 gap-2 w-2/3 bg-white border border-gray-300 rounded shadow-md" >
-                    <ColorPicker setColor={handleColorChange} initialColor={qrTextProps.qrTextChipColor} position={"top-[-380px] left-[100px]"} />
-                    <span>{qrTextProps.qrTextChipColor}</span>
+                <div className="flex items-center border border-gray-300 rounded p-2 ml-3 mt-5 mb-1">
+                    <div
+                        className="w-10 h-10 border border-gray-300 rounded cursor-pointer"
+                        style={{ background: qrTextProps.qrTextChipColor }}
+                        onClick={() => setBubbleColorPickerOpen(!isBubbleColorPickerOpen)}
+                    ></div>
+                    <span className='mx-4'>{qrTextProps.qrTextChipColor}</span>
                 </div>
+                {isBubbleColorPickerOpen && (
+                    <div className="absolute z-50 flex flex-col items-center p-3 bg-white border border-gray-300 rounded shadow-md" ref={pickerRef}>
+                        <GradientColorPicker
+                            enableAlpha={true}
+                            disableHueSlider={false}
+                            presetColors={[]}
+                            onChange={(color) => handleColorChange(color)}
+                        />
+                    </div>
+                )}
             </div>
         </Box>
     );
