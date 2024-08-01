@@ -1,4 +1,5 @@
 import React from 'react';
+import { motion } from 'framer-motion';
 
 const QRTable = ({ data, columns, currentPage, totalPages, onPageChange }) => {
   const itemsPerPage = 7;
@@ -22,7 +23,7 @@ const QRTable = ({ data, columns, currentPage, totalPages, onPageChange }) => {
     </thead>
     <tbody>
       {paginatedData.map((item) => (
-        <tr key={item.id}>
+        <motion.tr key={item.id} whileHover={{backgroundColor:'#D5DBDB'}}>
           {columns.map((column) => (
             <td
               key={column.header}
@@ -31,7 +32,7 @@ const QRTable = ({ data, columns, currentPage, totalPages, onPageChange }) => {
               {column.render ? column.render(item) : item[column.accessor]}
             </td>
           ))}
-        </tr>
+        </motion.tr>
       ))}
     </tbody>
   </table>

@@ -10,6 +10,7 @@ import Swal from 'sweetalert2';
 import { saveAs } from 'file-saver';
 import { useNavigate } from 'react-router-dom'; // Importa useNavigate
 import { useAuth } from '../../../hooks/useAuth';
+import { motion } from 'framer-motion';
 
 const formatDate = (isoDate) => {
   const date = new Date(isoDate);
@@ -297,18 +298,30 @@ const App = () => {
       accessor: 'actions',
       render: (item) => (
         <div className="flex space-x-2">
-          <FaDownload
+          <motion.div  
+            whileHover={{scale:"1.2"}}
+          >
+          <FaDownload         
             className="cursor-pointer text-xl text-blue-500"
             onClick={() => handleDownloadClick(item.qr_image_base64,item.name_qr)}
           />
+          </motion.div>
+          <motion.div 
+            whileHover={{scale:"1.2"}}
+          >
           <MdOutlineEdit
             className="cursor-pointer text-xl text-yellow-500"
             onClick={() => handleActionClick('edit', item)}
           />
+          </motion.div>
+          <motion.div  
+            whileHover={{scale:"1.2"}}
+          >
           <MdVisibility
             className="cursor-pointer text-xl"
             onClick={() => handleOpenModal(item.id, item.qrType ? item.qrType.type : 'N/A')} // Pasa el ID y el tipo de código
           />
+          </motion.div>
         </div>
       )
     }
