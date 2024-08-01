@@ -1,156 +1,86 @@
-import * as React from 'react';
+import React, { useState, useEffect } from 'react';
+import { Link, useLocation } from 'react-router-dom';
 import PropTypes from 'prop-types';
-import { Global } from '@emotion/react';
-import { styled } from '@mui/material/styles';
-import CssBaseline from '@mui/material/CssBaseline';
-import { grey } from '@mui/material/colors';
-import Button from '@mui/material/Button';
-import Box from '@mui/material/Box';
-import Typography from '@mui/material/Typography';
-import SwipeableDrawer from '@mui/material/SwipeableDrawer';
+import './MenuDrawer.css'; // Asegúrate de crear este archivo CSS
+import { Drawer, IconButton, List, ListItem, Typography, Divider } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
 import CloseIcon from '@mui/icons-material/Close';
-import List from '@mui/material/List';
-import ListItem from '@mui/material/ListItem';
-import ListItemText from '@mui/material/ListItemText';
-import CustomLink from '../../../components/Layout/CustomLink';
-import UseSwitchesCustom from '../../../components/UI/theme/SwitchesTheme';
-import { Link, useLocation } from 'react-router-dom';
-
-const drawerBleeding = 56;
-
-const Root = styled('div')(({ theme }) => ({
-    height: '100%',
-    backgroundColor:
-        theme.palette.mode === 'light' ? grey[100] : theme.palette.background.default,
-}));
-
-const StyledBox = styled('div')(({ theme }) => ({
-    backgroundColor: theme.palette.mode === 'light' ? '#fff' : grey[800],
-}));
-
-const Puller = styled('div')(({ theme }) => ({
-    width: 30,
-    height: 6,
-    backgroundColor: theme.palette.mode === 'light' ? grey[300] : grey[900],
-    borderRadius: 3,
-    position: 'absolute',
-    top: 8,
-    left: 'calc(50% - 15px)',
-}));
+import HomeIcon from '@mui/icons-material/Home';
+import InfoIcon from '@mui/icons-material/Info';
+import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
+import HelpIcon from '@mui/icons-material/Help';
 
 function MenuDrawer(props) {
-    const { window } = props;
-    const [open, setOpen] = React.useState(false);
+    const [open, setOpen] = useState(false);
+    const [windowWidth, setWindowWidth] = useState(window.innerWidth);
     const location = useLocation();
 
-    const isActive = (path) => {
-        return location.pathname === path;
-    };
+    const isActive = (path) => location.pathname === path;
 
     const toggleDrawer = (newOpen) => () => {
         setOpen(newOpen);
     };
 
-    const container = window !== undefined ? () => window().document.body : undefined;
+    const handleResize = () => {
+        setWindowWidth(window.innerWidth);
+    };
 
-    React.useEffect(() => {
+    useEffect(() => {
+        window.addEventListener('resize', handleResize);
+        return () => {
+            window.removeEventListener('resize', handleResize);
+        };
+    }, []);
+
+    useEffect(() => {
+        if (windowWidth >= 768) {
+            setOpen(false);
+        }
+    }, [windowWidth]);
+
+    useEffect(() => {
         setOpen(false);
     }, [location]);
 
     return (
-        <Root sx={{
-            '@media (min-width:768px)': {
-                display: 'none',
-            }
-        }}>
-            <CssBaseline />
-            <Global
-                styles={{
-                    '.MuiDrawer-root >.MuiPaper-root': {
-                        height: `calc(50% - ${drawerBleeding}px)`,
-                        overflow: 'visible',
-                    },
-                }}
-            />
-            <Box sx={{
-                position: 'absolute',
-                top: 15,
-                right: 15,
-                zIndex: 99,
-                borderRadius: '100%',
-                width: 45,
-                height: 45,
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                backgroundColor: '#284B63',
-            }}>
-                <Button
-                    onClick={toggleDrawer(!open)}
-                    sx={{ color: 'white' }}>
-                    {open ? <CloseIcon /> : <MenuIcon />}
-                </Button>
-            </Box>
-            <SwipeableDrawer
-                container={container}
-                anchor="bottom"
-                open={open}
-                onClose={toggleDrawer(false)}
-                onOpen={toggleDrawer(true)}
-                swipeAreaWidth={drawerBleeding}
-                disableSwipeToOpen={false}
-                ModalProps={{
-                    keepMounted: true,
-                    style: { zIndex: 90 },
-                }}
-                sx={{
-                    '@media (min-width:768px)': {
-                        display: 'none',
-                    }
-                }}
-            >
-                <StyledBox
-                    sx={{
-                        position: 'absolute',
-                        top: -drawerBleeding,
-                        borderTopLeftRadius: 8,
-                        borderTopRightRadius: 8,
-                        visibility: 'visible',
-                        right: 0,
-                        left: 0,
-                        textAlign: 'center',
-                    }}
-                >
-                    <Puller />
-                    <Typography sx={{ p: 2, color: "#3c6e71", fontWeight: "bold" }}>Menú</Typography>
-                </StyledBox>
-                <StyledBox
-                    sx={{
-                        px: 2,
-                        pb: 2,
-                    }}
-                >
+        <div className="root">
+            <div className={`drawer ${open ? 'open' : ''}`}>
+                <div className="drawer-header">
+                    <div className="puller"></div>
+                    <h2 className='text-xl'><span className='text-dark-blue ml-2 font-bold'>Qry</span>ptogenia</h2>
+                </div>
+                <nav>
                     <List>
-                        <ListItem button>
-                            <CustomLink to="/" isActive={isActive('/home')}>Home</CustomLink>
+                        <ListItem button component={Link} to="/" className={isActive('/') ? 'active' : ''}>
+                            <HomeIcon sx={{ mr: 1 }} />
+                            Home
                         </ListItem>
-                        <ListItem button>
-                            <CustomLink to="#" isActive={isActive('/about')}>About us</CustomLink>
+                        <ListItem button component={Link} to="/about" className={isActive('/about') ? 'active' : ''}>
+                            <InfoIcon sx={{ mr: 1 }} />
+                            About us
                         </ListItem>
-                        <ListItem button>
-                            <CustomLink to="#" isActive={isActive('/plans')}>Plans</CustomLink>
+                        <ListItem button component={Link} to="/pricings" className={isActive('/pricings') ? 'active' : ''}>
+                            <AttachMoneyIcon sx={{ mr: 1 }} />
+                            Plans
                         </ListItem>
-                        <ListItem button>
-                            <CustomLink to="#" isActive={isActive('/faq')}>FAQ</CustomLink>
+                        <ListItem button component={Link} to="/faq" className={isActive('/faq') ? 'active' : ''}>
+                            <HelpIcon sx={{ mr: 1 }} />
+                            FAQ
                         </ListItem>
                         <ListItem>
-                            <Link to="/login" className="py-1 w-full mx-auto text-center px-4 border-2 border-dark-blue h-8 rounded-md bg-black/5 hover:bg-transparent text-dark-blue duration-200">CUENTA</Link>
+                            <Link to="/login" className="auth-link border-2 border-dark-blue h-8 rounded-md bg-black/5 hover:bg-transparent text-dark-blue duration-200">Sign In</Link>
+                            <Link to="/register" className="auth-link border-2 border-dark-blue h-8 rounded-md bg-black/5 hover:bg-transparent text-dark-blue duration-200">Sign Up</Link>
                         </ListItem>
                     </List>
-                </StyledBox>
-            </SwipeableDrawer>
-        </Root>
+                </nav>
+            </div>
+            <div
+                className={`drawer-toggle ${windowWidth < 768 ? '' : 'hide'}`}
+                onClick={toggleDrawer(!open)}
+            >
+                {open ? <CloseIcon /> : <MenuIcon />}
+            </div>
+        </div>
     );
 }
 
