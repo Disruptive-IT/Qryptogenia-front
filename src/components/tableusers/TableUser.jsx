@@ -103,8 +103,8 @@ const UserTable = () => {
     <div className="flex-grow p-12 bg-gray-100 overflow-auto">
       <div className="mb-4">
         <SearchBar 
-          // searchQuery={searchQuery} 
-          // handleSearch={handleSearch} 
+          searchQuery={searchQuery} 
+          handleSearch={handleSearch} 
           placeholder="Search users..." 
         />
       </div>
