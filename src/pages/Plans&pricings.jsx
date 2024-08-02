@@ -65,7 +65,7 @@ export const PlansPricings = () => {
 
 
   return (
-    <div className='flex flex-col items-center justify-center w-full h-full gap-4 rounded-lg p-5 pt-20 text-center'>
+    <div className='flex flex-col items-center justify-center w-full h-full gap-4 rounded-lg p-5 pt-10 text-center'>
       <h1 className="text-2xl font-bold">PLANS & PRICINGS</h1>
       <span className='font-bold text-slate-500'>Find the Plan that Best Suits Your Needs</span>
       <PricingsCards data={data} />

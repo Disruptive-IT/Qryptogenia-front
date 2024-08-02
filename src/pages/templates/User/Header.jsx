@@ -3,27 +3,31 @@ import { Link } from 'react-router-dom';
 import { AuthContext } from "../../../context/AuthContext";
 import UserProfileMenu from '../../../components/Admin/Profile';
 import { useAuthContext } from '../../../context/AuthContext';
+import CustomLink from '../../../components/Layout/CustomLink';
+import MenuDrawer from '../../../components/UI/menu/menuDrawer';
+import logo from "../../../../public/Logo.png";
 
 function Navbar() {
-    let {logoutUser } = useContext(AuthContext)
     const { user } = useAuthContext();
 
+    const isActive = (path) => {
+        return location.pathname === path;
+    };
     return (
         <nav className="bg-white p-4">
-            <div className="container mx-auto flex items-center justify-between">
-                <div className="font-bold text-xl">
-                    QRyptogenia
-                </div>
-                <div className="hidden md:flex space-x-4">
-                    {user ? (
-                <Link to="/user/home" className="font-bold">Home</Link>
-            ) : (
-                <Link to="/" className="font-bold">Home</Link>
-            )}
-                </div>
-                <div className="hidden md:flex items-center space-x-4">
-                    <UserProfileMenu/>
-                    <p onClick={logoutUser} className='text-blue-500 px-4 py-2 rounded-md' role='button'>Logout</p>
+            <div className="flex items-center justify-between">
+                <Link to="/" className="text-black hover:text-black/70 items-center inline-flex font-bold text-2xl" title="Inicio">
+                    <img className='w-[60px]' src={logo} alt="Qryptogenia" />
+                    <span className='text-dark-blue ml-2'>Qry</span>ptogenia
+                </Link>
+                <ul className="md:flex hidden space-x-6 list-none text-sm text-black items-center justify-center ">
+                    <CustomLink to="/user/home" isActive={isActive('/user/home')}>Home</CustomLink>
+                    <CustomLink to="#" isActive={isActive('/about')}>About us</CustomLink>
+                    <CustomLink to="/pricings" isActive={isActive('/pricings')}>My Plans</CustomLink>
+                </ul>
+                <div className="flex gap-4 items-center">
+                    <UserProfileMenu />
+                    <MenuDrawer />
                 </div>
             </div>
         </nav>

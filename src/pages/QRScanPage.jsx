@@ -78,10 +78,10 @@ const QRScanPage = () => {
                     </div>
                     <div className="mt-4 mb-2 w-[90%] text-center">
                         {loading ? (
-                            <>
-                                <Skeleton variant="text" width="80%" height={40} center/>
+                            <div className='flex flex-col justify-center items-center'>
+                                <Skeleton variant="text" width="80%" height={40} center />
                                 <Skeleton variant="text" width="90%" height={100} center />
-                            </>
+                            </div>
                         ) : (
                             <>
                                 <h1 className="text-2xl mb-2 font-bold" style={{ color: qrData.colorTitle }}>
@@ -94,11 +94,13 @@ const QRScanPage = () => {
                         )}
                     </div>
                 </div>
-                {loading ? (
-                    <Skeleton variant="rectangular" width={400} height={50} />
-                ) : (
-                    <SocialButtonM data={dataBtns} />
-                )}
+                <div className="mt-5">
+                    {loading ? (
+                        <Skeleton variant="rectangular" width={400} height={50} />
+                    ) : (
+                        <SocialButtonM data={dataBtns} />
+                    )}
+                </div>
             </div>
         </div>
     );

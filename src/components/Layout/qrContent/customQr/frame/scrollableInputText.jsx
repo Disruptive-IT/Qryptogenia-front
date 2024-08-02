@@ -4,6 +4,12 @@ import InputText from './StyleInput';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 
+/**
+ * @Author : Jobserd Julián Ocampo,   @date 2024-08-01 14:08:20
+ * @description : Componente de la seccion frame o texto. El contenido es dedicado a establecer el texto y su posicion
+ * @return : Retorna el input para escritura del usuario y los tabs para seleccion de la posicion del texto
+**/
+
 const positionStyles = {
     topCenter: { position: 'absolute', top: '2%', left: '50%', transform: 'translate(-50%, 0)' },
     topLeft: { position: 'absolute', top: '2%', left: '2%' },

@@ -118,7 +118,7 @@ const CustomQr = ({location, qrId}) => {
                         Finish
                     </Button>
                 </div>
-                <div className='p-4 space-y-4 rounded-md'>
+                <div className='pt-5'>
                     <OptionComponent onTabSelect={handleOptionSelect} />
                 </div>
             </div>
