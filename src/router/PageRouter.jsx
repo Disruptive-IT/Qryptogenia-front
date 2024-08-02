@@ -18,6 +18,7 @@ import { useLoader } from '../context/LoaderContext';
 import Loader from '../components/UI/loader/Loader';
 import AppContent from "../pages/AppContent";
 import App from "../components/UI/tables/app";
+import Discounts from "../components/tableDiscounts/dataDiscounts";
 import { useAuthContext } from "../context/AuthContext";
 import WebLinkPhoneStorePage from "../components/Layout/viewsQr/webLinkPhoneStorePage"
 import {WebLinkPhoneMusicPage, WebLinkPhoneSocialPage} from "../components/Layout/viewsQr/WebLinkPhoneMusicPage";
@@ -62,6 +63,7 @@ export const PageRouter = () => {
                         <Route path="dashboard" element={<Dashboard />} />
                         <Route path="profile" element={<Profile />} />
                         <Route path="users" element={<UserTable />} />
+                        <Route path="discounts" element={<Discounts />} />
                     </Route>
                 </Route>
 

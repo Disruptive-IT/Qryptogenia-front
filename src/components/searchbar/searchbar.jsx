@@ -6,8 +6,8 @@ const SearchBar = ({ searchQuery, handleSearch, placeholder }) => {
             type="text"
             className="p-2 border border-gray-300 rounded w-full mb-4"
             placeholder={placeholder}
-            value={searchQuery}
-            onChange={handleSearch}
+            // value={searchQuery}
+            // onChange={handleSearch}
         />
     );
 };
