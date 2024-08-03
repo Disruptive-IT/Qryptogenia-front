@@ -156,9 +156,9 @@ const AppContent = () => {
         <>
             {isQrRoute && <OptionBarTwo contentName={contentName} name={name} />}
             <section id='qr-content'>
-                <div className='text-center'>
-                    <h1>{name}</h1>
-                    <p>{content}</p>
+                <div className='pl-14 flex flex-col gap-1'>
+                    <h1 className='font-bold text-dark-blue text-3xl'>{name.toUpperCase()}</h1>
+                    <p className='text-sm text-slate-400'>{content}</p>
                 </div>
                 <div className='grid grid-cols-1 lg:grid-cols-5 gap-10 w-11/12 m-auto py-10'>
                     <div className='col-span-1 lg:col-span-3 bg-white shadow-xl rounded-xl p-6'>
@@ -189,7 +189,7 @@ const AppContent = () => {
             </section>
 
             <button onClick={openModal} className='block lg:hidden px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 fixed bottom-16 right-4 z-50'>
-                Ver Vista Previa
+                Show Preview
             </button>
 
             <Modal
