@@ -325,7 +325,6 @@ export const AppForm = ({ onFormChangeApp }) => {
         >
             {({ setFieldValue, handleSubmit }) => (
                 <Form className="max-w-4xl mx-auto mt-8 relative">
-                    <h2 className="text-xl font-semibold mb-4">App Qr</h2>
                     <div className="flex flex-col md:flex-row md:items-start md:mb-4">
                         <div className="flex flex-col w-full md:w-2/3 mr-6 mb-4 md:mb-0">
                             <label htmlFor="title" className="mb-2">Title:</label>
@@ -553,8 +552,9 @@ export const AppForm = ({ onFormChangeApp }) => {
                     </div>
                     <div className='grid grid-cols-1 md:grid-cols-2 gap-4'>
                         {selectedOptions.map((option, index) => (
-                            <div key={index} className="flex items-center mb-4">
-                                <label htmlFor={`input_${option.value}`} className="mb-2">{option.icon}</label>
+                            <div key={index} className="flex items-center flex-col mb-1">
+                                <div className='flex items-center'>
+                                <label htmlFor={`input_${option.value}`} className="mx-1">{option.icon}</label>
                                 <Field
                                     type="text"
                                     id={`url_${index}`}
@@ -570,13 +570,14 @@ export const AppForm = ({ onFormChangeApp }) => {
                                         setFieldValue('selectedOptions', updatedOptions);
                                     }}
                                 />
+                                </div>
                                 {/* Mostrar mensaje de error para cada URL */}
-                                {formErrors[`url_${index}`] && <div className="text-red-500 text-sm">{formErrors[`url_${index}`]}</div>}
+                                {formErrors[`url_${index}`] && <div className="text-red-500 text-[13px]">{formErrors[`url_${index}`]}</div>}
                             </div>
                         ))}
                     </div>
 
-                    <div className="flex items-center mb-4">
+                    <div className="flex items-center mt-6 mb-4">
                         <button type="submit" className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600">Submit</button>
                     </div>
                 </Form>

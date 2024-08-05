@@ -38,9 +38,9 @@ function Discounts() {
         <div className="overflow-x-auto">
             <div className="flex-grow p-12 bg-gray-100 overflow-auto">
                 <div className="mb-4">
-                    {/* <SearchBar
+                    <SearchBar
                         placeholder={"enter a discount"}
-                    /> */}
+                    />
                 </div>
                 <table className="min-w-full bg-white">
                     <thead>
