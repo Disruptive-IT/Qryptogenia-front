@@ -14,6 +14,11 @@ import { ImUpload2 } from "react-icons/im";
 import GradientColorPicker from 'react-gcolor-picker'; // Importamos el nuevo color picker
 import { IoIosClose } from "react-icons/io";
 
+/*
+ * @UpdatedBy : Nicolas Barrios,   @date 2024-08-05 11:17:09
+ * @description : se arreglaron estilos del formulario mensaje url required acomodados correctamente
+ */
+
 export const SocialForm = ({ onFormChange, onSubmit }) => {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');

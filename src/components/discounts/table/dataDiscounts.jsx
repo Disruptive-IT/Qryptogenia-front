@@ -1,6 +1,7 @@
 import React from "react";
-import SearchBar from "../searchbar/searchbar";
+import SearchBar from "../../searchbar/searchbar";
 import { motion } from "framer-motion";
+import DiscountModal from "../form/modalDiscount";
 
 function Discounts() {
     const columns = [
@@ -42,6 +43,9 @@ function Discounts() {
                         placeholder={"enter a discount"}
                     />
                 </div>
+                <div className="">
+                <DiscountModal/>
+            </div>
                 <table className="min-w-full bg-white">
                     <thead>
                         <tr>

@@ -18,13 +18,14 @@ import { useLoader } from '../context/LoaderContext';
 import Loader from '../components/UI/loader/Loader';
 import AppContent from "../pages/AppContent";
 import App from "../components/UI/tables/app";
-import Discounts from "../components/tableDiscounts/dataDiscounts";
+import Discounts from "../components/discounts/table/dataDiscounts";
 import { useAuthContext } from "../context/AuthContext";
 import WebLinkPhoneStorePage from "../components/Layout/viewsQr/webLinkPhoneStorePage"
 import { WebLinkPhoneMusicPage, WebLinkPhoneSocialPage } from "../components/Layout/viewsQr/WebLinkPhoneMusicPage";
 import QRScanPage from "../pages/QRScanPage";
 import ShowAlert from "../components/alerts/alert_template";
 import { PlansPricings } from "../pages/Plans&pricings";
+import DiscountModal from "../components/discounts/form/modalDiscount";
 
 export const PageRouter = () => {
     const { isLoading } = useLoader();
@@ -63,6 +64,7 @@ export const PageRouter = () => {
                         <Route path="profile" element={<Profile />} />
                         <Route path="users" element={<UserTable />} />
                         <Route path="discounts" element={<Discounts />} />
+                        <Route path="modal" element={<DiscountModal />}></Route>
                     </Route>
                 </Route>
 
