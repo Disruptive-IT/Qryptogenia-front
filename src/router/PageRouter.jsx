@@ -25,7 +25,6 @@ import { WebLinkPhoneMusicPage, WebLinkPhoneSocialPage } from "../components/Lay
 import QRScanPage from "../pages/QRScanPage";
 import ShowAlert from "../components/alerts/alert_template";
 import { PlansPricings } from "../pages/Plans&pricings";
-import DiscountModal from "../components/discounts/form/modalDiscount";
 
 export const PageRouter = () => {
     const { isLoading } = useLoader();
@@ -64,7 +63,6 @@ export const PageRouter = () => {
                         <Route path="profile" element={<Profile />} />
                         <Route path="users" element={<UserTable />} />
                         <Route path="discounts" element={<Discounts />} />
-                        <Route path="modal" element={<DiscountModal />}></Route>
                     </Route>
                 </Route>
 

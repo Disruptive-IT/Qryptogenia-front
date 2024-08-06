@@ -550,33 +550,39 @@ export const AppForm = ({ onFormChangeApp }) => {
                             />
                         </div>
                     </div>
-                    <div className='grid grid-cols-1 md:grid-cols-2 gap-4'>
-                        {selectedOptions.map((option, index) => (
-                            <div key={index} className="flex items-center flex-col mb-1">
-                                <div className='flex items-center'>
-                                <label htmlFor={`input_${option.value}`} className="mx-1">{option.icon}</label>
-                                <Field
-                                    type="text"
-                                    id={`url_${index}`}
-                                    name={`url_${index}`}
-                                    placeholder={`URL for ${option.value}`}
-                                    className="border w-full border-gray-300 rounded p-2"
-                                    value={option.url}
-                                    onChange={(e) => {
-                                        handleUrlChange(index, e.target.value)
-                                        const updatedOptions = [...selectedOptions];
-                                        updatedOptions[index] = { ...updatedOptions[index], url: e.target.value };
-                                        setSelectedOptions(updatedOptions);
-                                        setFieldValue('selectedOptions', updatedOptions);
-                                    }}
-                                />
-                                </div>
-                                {/* Mostrar mensaje de error para cada URL */}
-                                {formErrors[`url_${index}`] && <div className="text-red-500 text-[13px]">{formErrors[`url_${index}`]}</div>}
-                            </div>
-                        ))}
-                    </div>
+    <div className='grid grid-cols-1 md:grid-cols-2 gap-4'>
+    {selectedOptions.map((option, index) => (
+        <div key={index} className="grid gap-3 mb-3">
+    <div className="grid grid-cols-[auto_1fr] gap-3 items-center">
+        <label htmlFor={`url_${index}`} className="mx-3">{option.icon}</label>
+        <Field
+            type="text"
+            id={`url_${index}`}
+            name={`url_${index}`}
+            placeholder={`URL for ${option.value}`}
+            className="border border-gray-300 rounded p-2 w-full"
+            value={option.url}
+            onChange={(e) => {
+                handleUrlChange(index, e.target.value)
+                const updatedOptions = [...selectedOptions];
+                updatedOptions[index] = { ...updatedOptions[index], url: e.target.value };
+                setSelectedOptions(updatedOptions);
+                setFieldValue('selectedOptions', updatedOptions);
+            }}
+        />
+    </div>
+    <div className="relative flex justify-center items-center">
+        {/* Mostrar mensaje de error para cada URL */}
+        {formErrors[`url_${index}`] && (
+            <div className="absolute text-red-500 text-xs">
+                {formErrors[`url_${index}`]}
+            </div>
+        )}
+    </div>
+</div>
 
+    ))}
+</div>
                     <div className="flex items-center mt-6 mb-4">
                         <button type="submit" className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600">Submit</button>
                     </div>

@@ -548,15 +548,15 @@ export const SocialForm = ({ onFormChange, onSubmit }) => {
 
           <div className='grid grid-cols-1 md:grid-cols-2 gap-4'>
             {selectedOptions.map((option, index) => (
-              <div key={index} className="flex items-center mb-1">
-                <div className='flex items-center'>
-                <label htmlFor={`input_${option.value}`} className="mx-1">{option.icon}</label>
+              <div key={index} className="grid gap-3 mb-3">
+                <div className='grid grid-cols-[auto_1fr] gap-3 items-center'>
+                <label htmlFor={`input_${option.value}`} className="mx-3">{option.icon}</label>
                 <Field
                   type="text"
                   id={`url_${index}`}
                   name={`url_${index}`}
                   placeholder={`URL for ${option.value}`}
-                  className="border w-full border-gray-300 rounded p-2"
+                  className="border border-gray-300 rounded p-2 w-full"
                   value={option.url}
                   onChange={(e) => {
                     handleUrlChange(index, e.target.value)
@@ -567,8 +567,14 @@ export const SocialForm = ({ onFormChange, onSubmit }) => {
                   }}
                 />
                 </div>
-                {/* Mostrar mensaje de error para cada URL */}
-                {formErrors[`url_${index}`] && <div className="text-red-500 text-[13px]">{formErrors[`url_${index}`]}</div>}
+                <div className="relative flex justify-center items-center">
+        {/* Mostrar mensaje de error para cada URL */}
+        {formErrors[`url_${index}`] && (
+            <div className="absolute text-red-500 text-xs">
+                {formErrors[`url_${index}`]}
+            </div>
+        )}
+    </div>
               </div>
             ))}
           </div>

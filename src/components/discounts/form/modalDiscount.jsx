@@ -4,6 +4,13 @@ import { Modal, Backdrop, Box, Fade } from "@mui/material";
 import CreateDiscount from "./formDiscount";
 import {Formik} from 'formik'
 
+/*
+ * @Author : Nicolas Barrios,   @date 2024-08-05 18:45:58
+ * @description : creacionn de modal que abre formulario de creacion de descuentos
+ * @Props :
+ * @return :
+ */
+
 function DiscountModal() {
     const [modal, setModal] = useState(false);
 
@@ -22,14 +29,14 @@ function DiscountModal() {
         top: "10%",
         left: "30%",
         width: "40%",
-        bgcolor: "#dcdcdc",
+        bgcolor: "#trasnparent",
         border: "2px solid #transparent",
         p:1,
         borderRadius: "10px"
     };
 
     return (
-        <div className="w-[12%] h-auto p-1 my-[2%] bg-transparent">
+        <div className="w-full h-auto p-1 my-[2%] mx-4">
             <motion.button
                 className="text-[13px] text-white font-bold hover:cursor-pointer p-2 bg-[#007bff] rounded-[8px]"
                 whileHover={{ backgroundColor: "#2783e4" }}
@@ -50,10 +57,9 @@ function DiscountModal() {
                 }}
             >
                 <Box sx={style}>
-                    <div className="p-2 text-red-600 bg-transparent text-[20px] relative top-0 text-center left-0 w-auto h-auto">
-                        <h1 onClick={handleClose} className="hover:cursor-pointer font-medium hover:underline">CERRAR</h1>
-                    </div>
-                    <CreateDiscount />
+                    <CreateDiscount 
+                        event={handleClose}
+                    />
                 </Box>
             </Modal>
         </div>
