@@ -13,7 +13,7 @@ const HomePage = () => {
     return (
         <>
             <div className='mt-7'>
-                <h1 className="text-center font-bold text-2xl ">Select your <strong className="text-sky-700">QR</strong>yptogenia</h1>
+                <h1 className="text-center font-bold text-2xl text-slate-700">Select your <strong className="text-dark-blue">QR</strong>yptogenia</h1>
                 <OptionBar />
             </div>
         </>

@@ -49,7 +49,7 @@ export const useAuth = (navigate) => {
             if (user.rol === "ADMIN") {
                 navigate("/admin/dashboard");
             } else {
-                navigate("/user/home");
+                navigate("/");
             }
             return { success: true };
         } catch (err) {

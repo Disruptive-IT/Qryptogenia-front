@@ -10,6 +10,12 @@ import { LuTextCursorInput } from "react-icons/lu";
 import { FaFont } from "react-icons/fa";
 import { MdBubbleChart } from "react-icons/md";
 
+/**
+ * @Author : Jobserd Julián Ocampo,   @date 2024-08-01 14:12:28
+ * @description : Contenido principal de la seccion de frame
+ * @return : Retorna los tabs con las opciones del frame o texto: InputText(contiene el input y su posicion), Fuente(contiene las fuentes del texto y su color), Burbujas(contiene las formas o burbujas del texto y su color)
+**/
+
 function InputText() {
     return <ScrollableInputText />;
 }

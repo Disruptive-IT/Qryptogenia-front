@@ -94,7 +94,7 @@ const RegisterForm = () => {
           validationSchema={SchemaRegisterValidate}
           onSubmit={handleSubmit}
         >
-          <section className="w-full mt-24 flex flex-col justify-center items-center ">
+          <section className="w-full  flex flex-col justify-center items-center ">
             <Form className="flex flex-col flex-nowrap border-2 border-white rounded-xl w-[calc(100%-20px)] md:w-[700px] p-5 shadow-2xl bg-gray-200">
               <h1 className="authTittle mb-4">
                 <span className="text-[#284B63]">Sing</span>-Up
