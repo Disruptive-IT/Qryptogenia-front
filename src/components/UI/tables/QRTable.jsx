@@ -48,7 +48,7 @@ const QRTable = ({ data, columns, currentPage, totalPages, onPageChange }) => {
     </span>
     <button
       onClick={() => onPageChange(currentPage + 1)}
-      disabled={currentPage === totalPages}
+      disabled={1 >= totalPages || currentPage === totalPages}
       className="px-4 py-2 mt-2 sm:mt-0 sm:ml-2 bg-blue-500 text-white rounded disabled:bg-gray-300"
     >
       Next

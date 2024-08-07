@@ -305,10 +305,12 @@ const App = () => {
             className="cursor-pointer text-xl text-yellow-500"
             onClick={() => handleActionClick('edit', item)}
           />
+          {item.qrType && item.qrType.type !== 'website-url' && (
           <MdVisibility
             className="cursor-pointer text-xl"
-            onClick={() => handleOpenModal(item.id, item.qrType ? item.qrType.type : 'N/A')} // Pasa el ID y el tipo de código
+            onClick={() => handleOpenModal(item.id, item.qrType ? item.qrType.type : 'N/A')}
           />
+        )}
         </div>
       )
     }

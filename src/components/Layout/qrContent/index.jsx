@@ -19,14 +19,14 @@ import { PdfUploadComponent, LinkInput } from "./forms/Pdf";
 import SocialForm from "./forms/Social";
 import MusicForm from "./forms/Music";
 import { WebLinkPhoneMusic } from "./socialMedia/stylePhoneMusic";
-export const QrContentSwitch = ({contentName, onFormChangeApp, onFormChange, onFormChangeMusic, onSocialFormSubmit}) => {
+export const QrContentSwitch = ({contentName, onFormChangeApp, onFormChange, onFormChangeMusic, onSocialFormSubmit, location, appFormValues}) => {
 
     let qrContent;
     switch (contentName) {
         case "app store":
             qrContent = (
                 <div>
-                    <AppForm onFormChangeApp={onFormChangeApp}/>
+                    <AppForm onFormChangeApp={onFormChangeApp} location={location} appFormValues={appFormValues}/>
                 </div>
             );
             break;

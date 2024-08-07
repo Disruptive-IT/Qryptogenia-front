@@ -44,12 +44,26 @@ const AppContent = () => {
         setSocialFormValues,
         currentContentType,
         setCurrentContentType,
-        resetQrData
+        resetQrData,
+        setQrBgColor,
+        setMarcoType,
+        setDotsType,
+        setCornersSquareType,
+        setCornersDotType,
+        setQrText,
+        setTextColor,
+        setQrTextPosition,
+        setTextChip,
+        qrTextProps,
+        setQrFontStyle,
+        setTextChipColor,
+        setQrImage
     } = useQr();
     const [valuesLoaded, setValuesLoaded] = useState(false);
     const [isModalOpen, setIsModalOpen] = useState(false);
     setCurrentContentType(contentName);
     console.log(selectedTab)
+    console.log(qrTextProps);
 
     useEffect(() => {
         const fetchQRData = async () => {
@@ -58,11 +72,48 @@ const AppContent = () => {
                     const response = await axios.get(`http://localhost:3000/api/qr/getpreview/${id}`, {
                         withCredentials: true,
                     });
-                    const { title, colorTitle, description, descriptionColor, boxColor, borderImg, image, backgroundColor, selectedOptions } = response.data;
-                    console.log(response.data)
-
-                    // Actualiza los estados basados en los datos recibidos
-                    setAppFormValues({
+    
+                    const {
+                        title, colorTitle, description, descriptionColor, boxColor, borderImg, image, backgroundColor, selectedOptions, frame, frameColor, dots, cornerSquare, cornerDot, text, colorText, position, qrTextBubble = {}, qrTextFont = {}, logo
+                    } = response.data;
+    
+                    const setMarcoTypes = (frame) => {
+                        let marcoData;
+    
+                        if (frame === 'circle') {
+                            marcoData = { id: 2, type: 'circle', icon: 'MdOutlineQrCode2', style: { borderRadius: '50%', borderColor: '#000000', padding: '35px' }, shape: 'circle', backgroundType: 'pattern' };
+                        } else if (frame === 'square') {
+                            marcoData = { id: 3, type: 'square', icon: 'MdOutlineQrCode2', style: { borderRadius: '0', borderColor: '#000000', padding: '25px' }, shape: 'square', backgroundType: 'pattern' };
+                        } else if (frame === 'rounded') {
+                            marcoData = { id: 4, type: 'rounded', icon: 'MdOutlineQrCode2', style: { borderRadius: '15px', borderColor: '#000000', padding: '25px' }, shape: 'rounded', backgroundType: 'pattern' };
+                        } else if (frame === 'hexagon') {
+                            marcoData = { id: 5, type: 'hexagon', icon: 'MdOutlineQrCode2', style: { clipPath: 'polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 24%)', borderColor: '#000000 ', padding: '35px' }, shape: 'hexagon', backgroundType: 'pattern' };
+                        } else if (frame === 'octagon') {
+                            marcoData = { id: 6, type: 'octagon', icon: 'MdOutlineQrCode2', style: { clipPath: 'polygon(30% 0%, 70% 0%, 100% 30%, 100% 70%, 70% 100%, 30% 100%, 0% 70%, 0% 30%)', borderColor: '#000000', padding: '35px' }, shape: 'octagon', backgroundType: 'pattern' };
+                        } else {
+                            marcoData = { id: 1, type: 'default', icon: 'TbLetterX', style: { borderColor: 'transparent', border: 0, padding: '37px' }, shape: 'none', backgroundType: 'pattern' };
+                        }
+    
+                        // Aquí envías el marcoData a la función que corresponda
+                        setMarcoType(marcoData);
+                    };
+    
+                    setMarcoTypes(frame);
+    
+                    // Verifica si las propiedades no son undefined antes de actualizar los estados
+                    if (colorText !== undefined) setTextColor(colorText);
+                    if (text !== undefined) setQrText(text);
+                    if (position !== undefined) setQrTextPosition(position);
+                    if (qrTextBubble.burbble !== undefined) setTextChip(qrTextBubble.burbble);
+                    if (qrTextBubble.color !== undefined) setTextChipColor(qrTextBubble.color);
+                    if (cornerDot !== undefined) setCornersDotType(cornerDot);
+                    if (cornerSquare !== undefined) setCornersSquareType(cornerSquare);
+                    if (dots !== undefined) setDotsType(dots);
+                    if (frameColor !== undefined) setQrBgColor(frameColor);
+                    if (qrTextFont.fontFamily !== undefined) setQrFontStyle(qrTextFont.fontFamily);
+                    if (logo !== undefined) setQrImage(logo);
+    
+                    const appValues = {
                         title,
                         colorTitle,
                         description,
@@ -71,36 +122,16 @@ const AppContent = () => {
                         borderImg,
                         image,
                         backgroundColor,
-                        selectedOptions
-                    });
-
-                    setSocialFormValues(
-                        {
-                            title,
-                            colorTitle,
-                            description,
-                            descriptionColor,
-                            boxColor,
-                            borderImg,
-                            image,
-                            backgroundColor,
-                            selectedOptions
-                        }
-                    );
-                    setMusicFormValues(
-                        {
-                            title,
-                            colorTitle,
-                            description,
-                            descriptionColor,
-                            boxColor,
-                            borderImg,
-                            image,
-                            backgroundColor,
-                            selectedOptions
-                        }
-                    );
-                    console.log(musicFormValues)
+                        selectedOptions,
+                    };
+    
+                    // Actualiza los valores del formulario solo si no son undefined
+                    if (Object.values(appValues).every(value => value !== undefined)) {
+                        setAppFormValues(appValues);
+                        setSocialFormValues(appValues);
+                        setMusicFormValues(appValues);
+                    }
+    
                     setValuesLoaded(true); // Indicar que los valores se han cargado
                 } catch (error) {
                     console.error('Error fetching QR data:', error);
@@ -114,7 +145,7 @@ const AppContent = () => {
             }
             setActiveStep(1);
         };
-
+    
         fetchQRData();
     }, [location, id, setActiveStep, setAppFormValues, setSocialFormValues, setMusicFormValues]);
 
@@ -169,6 +200,7 @@ const AppContent = () => {
                             onFormChangeMusic={setMusicFormValues}
                             onSocialFormSubmit={handleSocialFormSubmit}
                             location={location}
+                            appFormValues={appFormValues}
                         />
                     </div>
                     <div className='col-span-1 lg:col-span-2'>

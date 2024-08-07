@@ -24,6 +24,7 @@ import {WebLinkPhoneMusicPage, WebLinkPhoneSocialPage} from "../components/Layou
 import QRScanPage from "../pages/QRScanPage";
 import ShowAlert from "../components/alerts/alert_template";
 import { PlansPricings } from "../pages/Plans&pricings";
+import QRCodeList from "../components/UI/tables/memberTable";
 
 export const PageRouter = () => {
     const { isLoading } = useLoader();
@@ -62,6 +63,7 @@ export const PageRouter = () => {
                         <Route path="dashboard" element={<Dashboard />} />
                         <Route path="profile" element={<Profile />} />
                         <Route path="users" element={<UserTable />} />
+                        <Route path="membership" element={<QRCodeList />}/>
                     </Route>
                 </Route>
 

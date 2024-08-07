@@ -85,6 +85,7 @@ const Design = () => {
     };
 
     const handleStyleMarco = (type) => {
+        console.log(type);
         setMarcoType(type);
     };
 
