@@ -6,10 +6,9 @@ import { MdCreate, MdVisibility, MdDelete } from "react-icons/md";
 import Swal from "sweetalert2";
 
 function Discounts() {
-    // Define currentDate and formattedDate first
     const currentDate = new Date();
     const formattedDate = currentDate.toLocaleDateString();
-
+    
     const actions = [
         {
             name: "ver",
@@ -35,7 +34,7 @@ function Discounts() {
             current_quality: null,
             state: true,
             update_date: null,
-            limit_date: new Date(currentDate.setFullYear(currentDate.getFullYear() + 1)).toLocaleDateString(),
+            limit_date: new Date(new Date().setFullYear(currentDate.getFullYear() + 1)).toLocaleDateString(),
             actions: actions
         },
         {
@@ -47,7 +46,7 @@ function Discounts() {
             current_quality: null,
             state: true,
             update_date: null,
-            limit_date: new Date(currentDate.setFullYear(currentDate.getFullYear() + 1)).toLocaleDateString(),
+            limit_date: new Date(new Date().setFullYear(currentDate.getFullYear() + 1)).toLocaleDateString(),
             actions: actions
         }
     ]);
@@ -64,24 +63,21 @@ function Discounts() {
         { header: "actions" }
     ];
 
-    // Handle state change with SweetAlert
     const HandleState = async (id) => {
         const result = await Swal.fire({
             title: "<strong>STATE ALERT</strong>",
             icon: "question",
             html: `<h1>Are you sure to change the current discount state</h1>`,
             showConfirmButton: true,
-            showCancelButton: true
+            confirmButtonColor:"#007bff",
+            showCancelButton: true,
+            cancelButtonColor:"#dc2626"
         });
-        if (result.isConfirmed) {
-            const idRegister=id
-            const updatedData = data.map((item) => 
-                item.id === idRegister
-                    ? { ...item, state: !item.state }
-                    : item
-            );
 
-            setData(updatedData);
+        if (result.isConfirmed) {
+            setData(data.map(item => 
+                item.id === id ? { ...item, state: !item.state } : item
+            ));
         }
     };
 
@@ -89,9 +85,9 @@ function Discounts() {
         <div className="overflow-x-auto">
             <div className="flex-grow p-12 overflow-auto">
                 <div className="w-full mb-4 flex flex-row flex-wrap justify-start">
-                <div className="">
-                    <DiscountModal />
-                </div>
+                    <div>
+                        <DiscountModal />
+                    </div>
                     <SearchBar placeholder={"enter a discount"} />
                 </div>
                 <table className="min-w-full bg-white">
@@ -119,25 +115,23 @@ function Discounts() {
                                 <td className="py-2 px-4">{row.create_date}</td>
                                 <td className="py-2 px-4">{row.use_quality}</td>
                                 <td className="py-2 px-4">{row.current_quality}</td>
-                                <td onClick={()=>HandleState(row.id)} className="py-2 px-4 hover:cursor-pointer">
-                                    {row.state ? (
-                                        <span className="bg-green-500 p-1 rounded-[10px] text-black">activo</span>
-                                    ) : (
-                                        <span className="bg-red-500 rounded-[10px] p-1 text-black">inactivo</span>
-                                    )}
+                                <td onClick={() => HandleState(row.id)} className="py-2 px-4 hover:cursor-pointer">
+                                    <span className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${row.state ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'} w-20 text-center`}>
+                                        {row.state ? "activo" : "inactivo"}
+                                    </span>
                                 </td>
                                 <td className="py-2 px-4">{row.update_date}</td>
                                 <td className="py-2 px-4">{row.limit_date}</td>
                                 <td className="py-2 px-4">
-                                    <div className="flex space-x-3 justify-start">
-                                        {row.actions.map((item, index) => (
+                                    <div className="flex space-x-3">
+                                        {row.actions.map((action) => (
                                             <motion.span
-                                                key={index}
+                                                key={action.name}
                                                 whileHover={{ translateY: "-2px", cursor: "pointer" }}
                                                 whileTap={{ scale: "0.9" }}
-                                                id={item.name}
+                                                id={action.name}
                                             >
-                                                {item.icon}
+                                                {action.icon}
                                             </motion.span>
                                         ))}
                                     </div>

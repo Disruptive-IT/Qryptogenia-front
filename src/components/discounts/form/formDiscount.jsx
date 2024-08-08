@@ -50,7 +50,7 @@ const CreateDiscount = ({ event }) => {
 
     return (
         <form
-            className="bg-slate-100 my-3 mx-auto p-6 max-w-md rounded-lg shadow-md"
+            className="relative bg-slate-100 my-3 mx-auto p-6 max-w-md rounded-lg shadow-md"
             onSubmit={formik.handleSubmit}
         >
             <div className="mb-6">
@@ -121,7 +121,7 @@ const CreateDiscount = ({ event }) => {
                 ) : null}
             </div>
 
-            <div className="flex justify-around">
+            <div className="flex justify-around flex-wrap">
                 <motion.button
                     whileTap={{ scale: "0.9", transition: ".2s" }}
                     type="submit"
