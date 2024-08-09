@@ -9,6 +9,9 @@ export default {
   ],
   theme: {
     extend: {
+      fontFamily: {
+        custom: ['rubik'],
+      },
       gridTemplateColumns: {
         sidebar: "300px auto",
         "sidebar-collapsed": "64px auto",

@@ -1,5 +1,4 @@
 import { useState, useEffect, useContext } from 'react';
-import '../components/auth/auth.css';
 import { OptionBar } from '../components/Layout/optionBar';
 import { useStepper } from '../context/StepperContext';
 
