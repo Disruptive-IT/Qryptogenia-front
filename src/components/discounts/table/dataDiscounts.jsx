@@ -69,7 +69,7 @@ function Discounts() {
             icon: "question",
             html: `<h1>Are you sure to change the current discount state</h1>`,
             showConfirmButton: true,
-            confirmButtonColor:"#007bff",
+            confirmButtonColor:"#284B63",
             showCancelButton: true,
             cancelButtonColor:"#dc2626"
         });
@@ -115,9 +115,9 @@ function Discounts() {
                                 <td className="py-2 px-4">{row.create_date}</td>
                                 <td className="py-2 px-4">{row.use_quality}</td>
                                 <td className="py-2 px-4">{row.current_quality}</td>
-                                <td onClick={() => HandleState(row.id)} className="py-2 px-4 hover:cursor-pointer">
-                                    <span className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${row.state ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'} w-20 text-center`}>
-                                        {row.state ? "activo" : "inactivo"}
+                                <td onClick={() => HandleState(row.id)} className="py-2 hover:cursor-pointer">
+                                    <span className={`px-5 inline-flex text-xs leading-5 font-semibold rounded-full ${row.state ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'} w-20 text-center`}>
+                                        {row.state ? "Active" : "Inactive"}
                                     </span>
                                 </td>
                                 <td className="py-2 px-4">{row.update_date}</td>

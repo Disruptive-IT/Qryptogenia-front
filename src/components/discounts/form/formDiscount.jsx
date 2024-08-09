@@ -49,7 +49,8 @@ const CreateDiscount = ({ event }) => {
     });
 
     return (
-        <form
+        <div>
+            <form
             className="relative bg-slate-100 my-3 mx-auto p-6 max-w-md rounded-lg shadow-md"
             onSubmit={formik.handleSubmit}
         >
@@ -121,23 +122,25 @@ const CreateDiscount = ({ event }) => {
                 ) : null}
             </div>
 
-            <div className="flex justify-around flex-wrap">
+            <div className="flex justify-end flex-wrap">
                 <motion.button
                     whileTap={{ scale: "0.9", transition: ".2s" }}
                     type="submit"
-                    className="px-6 py-2 bg-[#007bff] text-white text-sm font-semibold rounded-lg"
+                    className="px-6 py-2 mx-3 my-2 bg-light-blue hover:bg-dark-blue text-white text-sm font-semibold rounded-lg"
                 >
                     Submit
                 </motion.button>
                 <motion.button
                     whileTap={{ scale: "0.9", transition: ".2s" }}
+                    type="button"
                     onClick={event}
-                    className="px-6 py-2 bg-red-600 hover:bg-red-500 text-white text-sm font-semibold rounded-lg"
+                    className="px-6 py-2 my-2 bg-my-red hover:bg-red-500 text-white text-sm font-semibold rounded-lg"
                 >
                     Cancel
                 </motion.button>
             </div>
         </form>
+        </div>
     );
 };
 
