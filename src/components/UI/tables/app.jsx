@@ -33,7 +33,7 @@ const App = () => {
   useEffect(() => {
     const fetchQRCodes = async () => {
       try {
-        const response = await axios.get(`http://localhost:3000/api/qr/getqrs`, {
+        const response = await axios.get(`http://localhost:3000/api/qr/`, {
           withCredentials: true,
         });
 

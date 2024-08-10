@@ -119,7 +119,7 @@ const CustomQr = ({ location, qrId }) => {
                 variant="contained"
                 color="primary"
                 onClick={Dowload}
-                className='absolute bottom-0 w-full'
+                className='absolute bottom-0 left-8 w-4/5 md:left-0 md:w-full'
             >
                 Create my qr
             </Button>
