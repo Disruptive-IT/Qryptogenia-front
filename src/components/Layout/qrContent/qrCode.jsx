@@ -66,7 +66,7 @@ export const saveQrData = async (
             cornerDotColor: qrProps.cornersDotColor
         },
         qrLogo: {
-            logo: qrImageInfo.qrImage || 'null',
+            logo:  qrImageInfo.includeImage ? qrImageInfo.qrImage : null || null,
         },
         qrBase64: qrBase64 || ''
     };
@@ -156,7 +156,7 @@ const QR = () => {
                     backgroundOptions: {
                         color: "transparent",
                     },
-                    image: qrImageInfo.qrImage,
+                    image: qrImageInfo.includeImage ? qrImageInfo.qrImage : null,
                     imageOptions: {
                         crossOrigin: "anonymous",
                         hideBackgroundDots: true,
@@ -184,7 +184,7 @@ const QR = () => {
                         color: qrProps.cornersDotColor,
                         type: qrProps.cornersDotType || 'dot'
                     },
-                    image: qrImageInfo.qrImage,
+                    image: qrImageInfo.includeImage ? qrImageInfo.qrImage : null,
                     imageOptions: {
                         crossOrigin: "anonymous",
                         hideBackgroundDots: true,

@@ -22,9 +22,6 @@ const Logo = () => {
     const handleIncludeImageChange = (event) => {
         const isChecked = event.target.checked;
         setIncludeImage(isChecked);
-        if (!isChecked) {
-            setQrImage(null);
-        }
     };
 
     return (
