@@ -8,13 +8,16 @@ import Swal from 'sweetalert2';
 import { toPng } from 'html-to-image';
 import { useLocation } from 'react-router-dom';
 
-export const saveQrData = async (qrName, data, qrType, qrColor, qrBgColor, qrProps, qrImageInfo, qrTextProps, appFormValues, socialFormValues, musicFormValues, qrBase64, currentContentType, location, qrId) => {
+export const saveQrData = async (
+    qrName, data, qrType, qrColor, qrBgColor, qrProps, qrImageInfo, qrTextProps, appFormValues, socialFormValues, musicFormValues, qrBase64, currentContentType, location, qrId
+) => {
     const removeIconFromSelectOptions = (options) => {
         return options.map(option => {
-            const { icon, ...rest } = option; // Desestructura para eliminar `icon`
-            return rest; // Devuelve el objeto sin `icon`
+            const { url, ...rest } = option; 
+            return rest; 
         });
     };
+
     console.log(qrType);
 
     const qrData = {
@@ -37,16 +40,20 @@ export const saveQrData = async (qrName, data, qrType, qrColor, qrBgColor, qrPro
             SelectOptions: currentContentType === 'social-media' ? removeIconFromSelectOptions(socialFormValues.selectedOptions) : currentContentType === 'music' ? removeIconFromSelectOptions(musicFormValues.selectedOptions) : removeIconFromSelectOptions(appFormValues.selectedOptions),
         },
         qrText: {
-            text: qrTextProps.qrText,
-            position: qrTextProps.qrTextPosition,
-            colorText: qrTextProps.qrTextColor,
+            text: qrTextProps.qrText || '', 
+            position: qrTextProps.qrTextPosition || {}, 
+            colorText: qrTextProps.qrTextColor || '#000000'
         },
         qrTextFont: {
             fontFamily: qrTextProps.qrTextFontStyle || 'Arial, sans-serif'
         },
         qrTextBubble: {
-            burbble: qrTextProps.qrTextChip || {},
-            color: qrTextProps.qrTextChipColor
+            bubble: qrTextProps.qrTextChip || { 
+                borderRadius: '5px',
+                padding: '5px',
+                backgroundColor: '#FFFFFF'
+            },
+            color: qrTextProps.qrTextChipColor || '#000000'
         },
         qrDesign: {
             frame: qrProps.marcoType.shape || 'default',
@@ -60,18 +67,18 @@ export const saveQrData = async (qrName, data, qrType, qrColor, qrBgColor, qrPro
         },
         qrLogo: {
             logo: qrImageInfo.qrImage || 'null',
-            size: qrImageInfo.qrImageSize.toString()
         },
-        qrBase64: qrBase64 // Asegúrate de que qrBase64 esté pasando correctamente
+        qrBase64: qrBase64 || ''
     };
 
     const isEditRoute = location.pathname.startsWith('/edit')
 
     try {
+        console.log(qrData)
         const res = await axios({
             method: isEditRoute ? 'patch' : 'post',
             url: isEditRoute ? `/qr/edit/${qrId}` : '/qr',
-            data: {qrData}
+            data: qrData
         })
         window.location.href = 'http://localhost:5173/user/qr';
         return true;
@@ -100,6 +107,7 @@ export const saveQrData = async (qrName, data, qrType, qrColor, qrBgColor, qrPro
     }
 };
 
+
 const QR = () => {
     const { qrType, qrData, qrBgColor, qrProps, qrImageInfo, qrTextProps, appFormValues, musicFormValues, socialFormValues, qrBase64, setQrBase64 } = useQr();
     const qrRef = useRef(null);
@@ -127,7 +135,6 @@ const QR = () => {
 
 
     useEffect(() => {
-        console.log("asdasdasd", qrProps.marcoType.style)
         const createOrUpdateQRCode = () => {
             if (!qrCode.current) {
                 qrCode.current = new QRCodeStyling({
@@ -149,11 +156,12 @@ const QR = () => {
                     backgroundOptions: {
                         color: "transparent",
                     },
+                    image: qrImageInfo.qrImage,
                     imageOptions: {
                         crossOrigin: "anonymous",
                         hideBackgroundDots: true,
                         margin: 2,
-                        imageSize: qrImageInfo.qrImageSize
+                        imageSize: '0.5'
                     },
                 });
                 qrCode.current.append(qrRef.current);
@@ -181,7 +189,7 @@ const QR = () => {
                         crossOrigin: "anonymous",
                         hideBackgroundDots: true,
                         margin: 2,
-                        imageSize: qrImageInfo.qrImageSize
+                        imageSize: '0.5'
                     },
                 });
             }

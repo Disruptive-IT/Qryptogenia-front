@@ -16,9 +16,9 @@ const options = [
     { name: 'Logo', component: Logo },
 ];
 
-const CustomQr = ({location, qrId}) => {
+const CustomQr = ({ location, qrId }) => {
     const [selectedOptionIndex, setSelectedOptionIndex] = useState(0);
-    const { qrType, qrData, qrColor, qrBgColor, qrProps, qrImageInfo, qrTextProps, appFormValues, socialFormValues, musicFormValues, qrBase64, currentContentType} = useQr();
+    const { qrType, qrData, qrColor, qrBgColor, qrProps, qrImageInfo, qrTextProps, appFormValues, socialFormValues, musicFormValues, qrBase64, currentContentType } = useQr();
     console.log(musicFormValues)
     const handleOptionSelect = (index) => {
         setSelectedOptionIndex(index);
@@ -44,9 +44,9 @@ const CustomQr = ({location, qrId}) => {
                 return input;
             },
             showCancelButton: true,
-            confirmButtonColor:'#007bff',
+            confirmButtonColor: '#007bff',
             confirmButtonText: 'Save',
-            cancelButtonColor:"#d33",
+            cancelButtonColor: "#d33",
             cancelButtonText: 'Cancel',
             customClass: {
                 actions: 'swal2-actions-no-margin'
@@ -65,7 +65,7 @@ const CustomQr = ({location, qrId}) => {
             } else {
                 console.log(musicFormValues)
                 console.log(qrType)
-                await saveQrData(qrName, qrData, qrType, qrColor, qrBgColor, qrProps, qrImageInfo, qrTextProps, appFormValues, socialFormValues, musicFormValues,  qrBase64, currentContentType, location, qrId);
+                await saveQrData(qrName, qrData, qrType, qrColor, qrBgColor, qrProps, qrImageInfo, qrTextProps, appFormValues, socialFormValues, musicFormValues, qrBase64, currentContentType, location, qrId);
             }
         } else {
             toast.info('QR code saving was cancelled.');
@@ -110,18 +110,19 @@ const CustomQr = ({location, qrId}) => {
                             {option.name}
                         </Button>
                     ))}
-                    <Button
-                        variant="contained"
-                        color="primary"
-                        onClick={Dowload}
-                    >
-                        Finish
-                    </Button>
                 </div>
                 <div className='pt-5'>
                     <OptionComponent onTabSelect={handleOptionSelect} />
                 </div>
             </div>
+            <Button
+                variant="contained"
+                color="primary"
+                onClick={Dowload}
+                className='absolute bottom-0 left-8 w-4/5 md:left-0 md:w-full'
+            >
+                Create my qr
+            </Button>
         </div>
     );
 }
