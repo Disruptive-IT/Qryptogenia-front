@@ -14,15 +14,15 @@ import { ImUpload2 } from "react-icons/im";
 import GradientColorPicker from 'react-gcolor-picker'; // Importamos el nuevo color picker
 import { IoIosClose } from "react-icons/io";
 
-export const MusicForm = ({ onFormChangeMusic }) => {
+export const MusicForm = ({ onFormChangeMusic, location, musicFormValues }) => {
     const [title, setTitle] = useState('');
     const [description, setDescription] = useState('');
     const maxLength = 250;
     const maxTitle = 30;
-    const [borderColor, setBorderColor] = useState('#ffffff')
+    const [borderImg, setBorderColor] = useState('#ffffff')
     const [backgroundColor, setBackgroundColor] = useState('linear-gradient(180deg, rgb(0, 0, 0) 0.00%,rgb(50, 152, 153) 100.00%)')
     const [boxColor, setBoxColor] = useState('linear-gradient(180deg, rgb(0, 0, 0) 0.00%,rgb(50, 152, 153) 100.00%)')
-    const [titleColor, setTitleColor] = useState('#820e0e');
+    const [colorTitle, setTitleColor] = useState('#820e0e');
     const [descriptionColor, setDescriptionColor] = useState('#ffffff');
     const [showTitleColorPicker, setShowTitleColorPicker] = useState(false);
     const [showBorderColorPicker, setShowBorderColorPicker] = useState(false);
@@ -38,46 +38,54 @@ export const MusicForm = ({ onFormChangeMusic }) => {
     const [image, setImage] = useState(null); // Nueva parte del estado para la imagen
     const [formErrors, setFormErrors] = useState({});
 
-    console.log
+    const isEditRoute = location.pathname.startsWith('/edit')
 
     const validateForm = (values) => {
         const errors = {};
-    
+
         // Validar el título
         if (!values.title) {
-          errors.title = 'Title is required';
+            errors.title = 'Title is required';
         }
-    
+
         // Validar la selección de opciones
         if (selectedOptions.length === 0) {
-          errors.selectedOptions = 'At least one option must be selected';
+            errors.selectedOptions = 'At least one option must be selected';
         }
         console.log(selectedOptions)
         // Validar cada campo url en selectedOptions
         selectedOptions.forEach((option, index) => {
-          console.log(option.url)
-          if (!option.url) {
-            errors[`url_${index}`] = `URL is required`;
-          }
+            console.log(option.url)
+            if (!option.url) {
+                errors[`url_${index}`] = `URL is required`;
+            }
         });
         console.log(errors)
-    
+
         return errors;
-      };
+    };
 
     const handleTitleChange = (e) => {
         setTitle(e.target.value);
         onFormChangeMusic((prevValues) => ({ ...prevValues, title: e.target.value }));
+        const value = e.target.value;
+        if (value.length <= maxTitle) {
+            setTitle(value);
+        }
     };
 
     const handleDescriptionChange = (e) => {
         setDescription(e.target.value);
         onFormChangeMusic((prevValues) => ({ ...prevValues, description: e.target.value }));
+        const value = e.target.value;
+        if (value.length <= maxLength) {
+            setDescription(value);
+        }
     };
 
     const handleBorderColorChange = (newHexCoor) => {
         setBorderColor(newHexCoor);
-        onFormChangeMusic((prevValues) => ({ ...prevValues, borderColor: newHexCoor }));
+        onFormChangeMusic((prevValues) => ({ ...prevValues, borderImg: newHexCoor }));
     };
 
     const handleBackgroundColorChange = (newHexColor) => {
@@ -92,7 +100,7 @@ export const MusicForm = ({ onFormChangeMusic }) => {
 
     const handleTitleColorChange = (newHexColor) => {
         setTitleColor(newHexColor);
-        onFormChangeMusic((prevValues) => ({ ...prevValues, titleColor: newHexColor }));
+        onFormChangeMusic((prevValues) => ({ ...prevValues, colorTitle: newHexColor }));
     };
 
     const handleDescriptionColorChange = (newHexColor) => {
@@ -130,6 +138,22 @@ export const MusicForm = ({ onFormChangeMusic }) => {
         }
     };
 
+    const handleMultiSelectChange = (selectedOptions) => {
+        const updatedOptions = selectedOptions.map(option => ({
+            value: option.value,
+            url: option.url || ''
+        }));
+        setSelectedOptions(updatedOptions);
+        onFormChangeMusic((prevValues) => ({ ...prevValues, selectedOptions: updatedOptions }));
+    };
+
+    const handleUrlChange = (index, value) => {
+        const updatedOptions = [...selectedOptions];
+        updatedOptions[index].url = value;
+        setSelectedOptions(updatedOptions);
+        onFormChangeMusic((prevValues) => ({ ...prevValues, selectedOptions: updatedOptions }));
+    };
+
     useEffect(() => {
         document.addEventListener('mousedown', handleTitleClickOutside);
         document.addEventListener('mousedown', handleBorderClickOutside);
@@ -145,9 +169,30 @@ export const MusicForm = ({ onFormChangeMusic }) => {
         };
     }, []);
 
+    useEffect(() => {
+        if (isEditRoute && musicFormValues) {
+            setTitle(musicFormValues.title || '');
+            setDescription(musicFormValues.description || '');
+            setTitleColor(musicFormValues.colorTitle || '');
+            setDescriptionColor(musicFormValues.descriptionColor || '');
+            setBackgroundColor(musicFormValues.backgroundColor || '');
+            setBoxColor(musicFormValues.boxColor || '');
+            setBorderColor(musicFormValues.borderImg || '');
+            setSelectedOptions(musicFormValues.selectedOptions || []);
+            setImage(musicFormValues.image || null);
+        }
+    }, [isEditRoute, musicFormValues]);
+
     const initialValues = {
-        title: '',
-        description: '',
+        title: isEditRoute && musicFormValues ? musicFormValues.title : '',
+        description: isEditRoute && musicFormValues ? musicFormValues.description : '',
+        colorTitle: isEditRoute && musicFormValues ? musicFormValues.colorTitle : '',
+        descriptionColor: isEditRoute && musicFormValues ? musicFormValues.descriptionColor : '',
+        backgroundColor: isEditRoute && musicFormValues ? musicFormValues.backgroundColor : '',
+        boxColor: isEditRoute && musicFormValues ? musicFormValues.boxColor : '',
+        borderImg: isEditRoute && musicFormValues ? musicFormValues.borderImg : '',
+        selectedOptions: isEditRoute && musicFormValues ? musicFormValues.selectedOptions : [],
+        image: isEditRoute && musicFormValues ? musicFormValues.image : null,
     };
 
     const options = [
@@ -261,23 +306,19 @@ export const MusicForm = ({ onFormChangeMusic }) => {
         reader.readAsDataURL(file);
     };
 
-    const handleMultiSelectChange = (selectedOptions) => {
-        const updatedOptions = selectedOptions.map(option => ({
-            value: option.value,
-            url: '',
-            icon: option.icon
-        }));
-        setSelectedOptions(updatedOptions);
-        onFormChangeMusic((prevValues) => ({ ...prevValues, selectedOptions: updatedOptions }));
-    };
+    const [updatedSelectedOptions, setUpdatedSelectedOptions] = useState([]);
 
-    const handleUrlChange = (index, value) => {
-        console.log(value)
-        const updatedOptions = [...selectedOptions];
-        updatedOptions[index].url = value;
-        setSelectedOptions(updatedOptions);
-        onFormChangeMusic((prevValues) => ({ ...prevValues, selectedOptions: updatedOptions }));
-    };
+    useEffect(() => {
+        // Actualiza el estado de las opciones seleccionadas con los íconos correspondientes
+        const updatedOptions = selectedOptions.map((option) => {
+            const fullOption = options.find((opt) => opt.value === option.value);
+            return {
+                ...option,
+                icon: fullOption ? fullOption.icon : '',
+            };
+        });
+        setUpdatedSelectedOptions(updatedOptions);
+    }, [selectedOptions]);
 
     const handleRemoveImage = () => {
         setImage(null);
@@ -285,6 +326,10 @@ export const MusicForm = ({ onFormChangeMusic }) => {
             ...prevValues,
             image: null // Elimina la imagen del estado global
         }));
+    };
+
+    const isOptionSelected = (option) => {
+        return selectedOptions.some(selected => selected.value === option.value);
     };
 
 
@@ -328,11 +373,11 @@ export const MusicForm = ({ onFormChangeMusic }) => {
                             {formErrors.title && <div className="text-red-500 text-sm">{formErrors.title}</div>}
                         </div>
                         <div className="flex flex-col relative">
-                            <label htmlFor="titleColor" className="mb-2">Color:</label>
+                            <label htmlFor="colorTitle" className="mb-2">Color:</label>
                             <div className="flex items-center">
                                 <div
                                     className="w-20 md:w-10 h-10 border border-gray-300 rounded cursor-pointer"
-                                    style={{ background: titleColor }}
+                                    style={{ background: colorTitle }}
                                     onClick={() => setShowTitleColorPicker(!showTitleColorPicker)}
                                 ></div>
                                 {showTitleColorPicker && (
@@ -347,7 +392,7 @@ export const MusicForm = ({ onFormChangeMusic }) => {
                                             disableAlphaInput={false}
                                             presetColors={[]}
                                             gradient={true}
-                                            color={titleColor}
+                                            color={colorTitle}
                                             onChange={handleTitleColorChange}
                                         />
                                     </div>
@@ -431,7 +476,7 @@ export const MusicForm = ({ onFormChangeMusic }) => {
                                     </div>
                                 )}
                             </div>
-                           <div className="flex flex-col space-y-4 pt-4">
+                            <div className="flex flex-col space-y-4 pt-4">
                                 <label>Upload Image:</label>
                                 <input type="file" className="hidden" ref={fileInputRef} accept="image/*" onChange={handleImageChange} />
                                 <button
@@ -487,7 +532,7 @@ export const MusicForm = ({ onFormChangeMusic }) => {
                                 <div className="flex items-center relative">
                                     <div
                                         className="w-20 md:w-16 h-10 border border-gray-300 rounded cursor-pointer"
-                                        style={{ background: borderColor }}
+                                        style={{ background: borderImg }}
                                         onClick={() => setShowBorderColorPicker(!showBorderColorPicker)}
                                     ></div>
                                     {showBorderColorPicker && (
@@ -502,7 +547,7 @@ export const MusicForm = ({ onFormChangeMusic }) => {
                                                 disableAlphaInput={false}
                                                 presetColors={[]}
                                                 gradient={true}
-                                                color={borderColor}
+                                                color={borderImg}
                                                 onChange={handleBorderColorChange}
                                                 style={{ width: "calc(100% + 2rem)" }} // Ajuste del ancho
                                             />
@@ -522,10 +567,18 @@ export const MusicForm = ({ onFormChangeMusic }) => {
                                 isMulti
                                 className="basic-multi-select w-full"
                                 classNamePrefix="select"
+                                value={updatedSelectedOptions}
                                 onChange={(selected) => {
                                     handleMultiSelectChange(selected);
                                     setFieldValue('selectedOptions', selected);
                                 }}
+                                getOptionLabel={(option) => (
+                                    <div className="flex items-center">
+                                        {isOptionSelected(option) && <span className="mr-2">{option.icon}</span>}
+                                        {option.label}
+                                    </div>
+                                )}
+                                getOptionValue={(option) => option.value}
                             />
                             {formErrors.selectedOptions && (
                                 <div className="text-red-500 text-sm">{formErrors.selectedOptions}</div>
@@ -534,7 +587,7 @@ export const MusicForm = ({ onFormChangeMusic }) => {
                     </div>
 
                     <div className='grid grid-cols-1 md:grid-cols-2 gap-4'>
-                        {selectedOptions.map((option, index) => (
+                        {updatedSelectedOptions.map((option, index) => (
                             <div key={index} className="flex items-center mb-4">
                                 <label htmlFor={`input_${option.value}`} className="mb-2">{option.icon}</label>
                                 <Field
@@ -544,13 +597,7 @@ export const MusicForm = ({ onFormChangeMusic }) => {
                                     placeholder={`URL for ${option.value}`}
                                     className="border w-full border-gray-300 rounded p-2"
                                     value={option.url}
-                                    onChange={(e) => {
-                                        handleUrlChange(index, e.target.value)
-                                        const updatedOptions = [...selectedOptions];
-                                        updatedOptions[index] = { ...updatedOptions[index], url: e.target.value };
-                                        setSelectedOptions(updatedOptions);
-                                        setFieldValue('selectedOptions', updatedOptions);
-                                    }}
+                                    onChange={(e) => handleUrlChange(index, e.target.value)}
                                 />
                                 {/* Mostrar mensaje de error para cada URL */}
                                 {formErrors[`url_${index}`] && <div className="text-red-500 text-sm">{formErrors[`url_${index}`]}</div>}

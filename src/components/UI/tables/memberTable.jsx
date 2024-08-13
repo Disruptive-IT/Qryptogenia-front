@@ -1,21 +1,32 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Swal from 'sweetalert2';
 import { FaCheck, FaTimes } from 'react-icons/fa';
 import { MdOutlineEdit, MdVisibility } from "react-icons/md";
 import { Modal } from '@mui/material';
+import axios from 'axios';
 
 const QRCodeList = () => {
-  const [data, setData] = useState([
-    { id: 1, type_membership: 'Free', price: 'Free', active_qrs: 2, scan_qrs: 100, premium_support: false, unlimited_static: false, state: true },
-    { id: 2, type_membership: 'Basic', price: '$9.99', active_qrs: 5, scan_qrs: 10000, premium_support: false, unlimited_static: false, state: true },
-    { id: 3, type_membership: 'Advanced', price: '$20.99', active_qrs: 50, scan_qrs: 'unlimited', premium_support: false, unlimited_static: true, state: true },
-    { id: 4, type_membership: 'Professional', price: '$45.99', active_qrs: 250, scan_qrs: 'unlimited', premium_support: true, unlimited_static: true, state: true }
-    // Agrega más objetos según sea necesario
-  ]);
-
+  const [data, setData] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [viewModalOpen, setViewModalOpen] = useState(false); // Nuevo estado para la vista previa
   const [editItem, setEditItem] = useState(null);
+  const [viewItem, setViewItem] = useState(null); // Nuevo estado para los datos de la vista previa
   const [formValues, setFormValues] = useState({});
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get('http://localhost:3000/api/admin/memberships', {
+          withCredentials: true,
+        });
+        setData(response.data);
+        console.log(response.data);
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+    };
+    fetchData();
+  }, []);
 
   const openModal = (item) => {
     setEditItem(item);
@@ -29,6 +40,16 @@ const QRCodeList = () => {
     setFormValues({});
   };
 
+  const openViewModal = (item) => {
+    setViewItem(item);
+    setViewModalOpen(true);
+  };
+
+  const closeViewModal = () => {
+    setViewModalOpen(false);
+    setViewItem(null);
+  };
+
   const handleInputChange = (e) => {
     const { name, value, type, checked } = e.target;
     setFormValues(prev => ({
@@ -37,32 +58,40 @@ const QRCodeList = () => {
     }));
   };
 
-  const handleSubmit = (e) => {
+  const updatedData = {
+    type_membership: formValues.type_membership,
+    price: parseFloat(formValues.price),
+    active_qrs: parseInt(formValues.active_qrs),
+    scan_qrs: formValues.scan_qrs,
+    premium_support: Boolean(formValues.premium_support),
+    unlimited_static: Boolean(formValues.unlimited_static)
+  };
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    setData(data.map(d => d.id === editItem.id ? { ...d, ...formValues } : d));
-    closeModal();
+    try {
+      const id = editItem.id;
+      await axios.patch(`http://localhost:3000/api/admin/editmemberships/${id}`, updatedData, {
+        withCredentials: true,
+      });
+      setData(data.map(d => d.id === editItem.id ? { ...d, ...formValues } : d));
+      closeModal();
+    } catch (error) {
+      console.error('Error al actualizar los datos:', error);
+      Swal.fire({
+        title: '¡Error!',
+        text: 'No se pudo actualizar el ítem',
+        icon: 'error',
+        confirmButtonText: 'OK'
+      });
+    }
   };
 
   const handleActionClick = (action, item) => {
     if (action === 'edit') {
       openModal(item);
-    }
-    // Implementar otras acciones si es necesario
-  };
-
-
-  const toggleFeature = async (item, feature) => {
-    const newStatus = !item[feature];
-    const result = await Swal.fire({
-      title: `Are you sure you want to ${newStatus ? 'enable' : 'disable'} ${feature.replace('_', ' ')}?`,
-      icon: 'question',
-      showCancelButton: true,
-      confirmButtonText: 'Yes',
-      cancelButtonText: 'No',
-    });
-
-    if (result.isConfirmed) {
-      setData(data.map(d => d.id === item.id ? { ...d, [feature]: newStatus } : d));
+    } else if (action === 'view') {
+      openViewModal(item);
     }
   };
 
@@ -71,12 +100,12 @@ const QRCodeList = () => {
     { header: 'Price', accessor: 'price' },
     { header: 'Active QRs', accessor: 'active_qrs' },
     { header: 'Scan QRs', accessor: 'scan_qrs' },
+    { header: 'Discount', accessor: 'discount' },
     {
       header: 'Premium Support',
       accessor: 'premium_support',
       render: (item) => (
         <button
-          onClick={() => toggleFeature(item, 'premium_support')}
           className={`p-2 rounded-full ${item.premium_support ? 'bg-green-500 text-white' : 'bg-red-500 text-white'}`}
         >
           {item.premium_support ? <FaCheck /> : <FaTimes />}
@@ -88,7 +117,6 @@ const QRCodeList = () => {
       accessor: 'unlimited_static',
       render: (item) => (
         <button
-          onClick={() => toggleFeature(item, 'unlimited_static')}
           className={`p-2 rounded-full ${item.unlimited_static ? 'bg-green-500 text-white' : 'bg-red-500 text-white'}`}
         >
           {item.unlimited_static ? <FaCheck /> : <FaTimes />}
@@ -106,7 +134,7 @@ const QRCodeList = () => {
           />
           <MdVisibility
             className="cursor-pointer text-xl"
-            onClick={() => handleOpenModal(item.id, item.qrType ? item.qrType.type : 'N/A')}
+            onClick={() => handleActionClick('view', item)}
           />
         </div>
       )
@@ -145,6 +173,8 @@ const QRCodeList = () => {
           </tbody>
         </table>
       </div>
+      
+      {/* Modal de edición */}
       <Modal open={isModalOpen} onClose={closeModal} aria-labelledby="modal-title" aria-describedby="modal-description">
         <div className="modal-content p-6 bg-white rounded-lg shadow-lg mx-auto mt-10 max-w-lg">
           <h2 id="modal-title" className="text-2xl font-bold mb-4">Edit Item</h2>
@@ -215,22 +245,32 @@ const QRCodeList = () => {
                 className="h-4 w-4"
               />
             </div>
-            <div className="flex justify-end space-x-2 mt-4">
-              <button
-                type="submit"
-                className="px-4 py-2 bg-light-blue text-white rounded-md hover:bg-dark-blue"
-              >
-                Save
-              </button>
-              <button
-                type="button"
-                onClick={closeModal}
-                className="px-4 py-2 bg-my-red text-white rounded-md hover:bg-gray-600"
-              >
-                Cancel
-              </button>
+            <div className="flex justify-end space-x-4">
+              <button type="button" onClick={closeModal} className="bg-gray-300 p-2 rounded-md">Cancel</button>
+              <button type="submit" className="bg-blue-500 text-white p-2 rounded-md">Save</button>
             </div>
           </form>
+        </div>
+      </Modal>
+
+      {/* Modal de vista previa */}
+      <Modal open={viewModalOpen} onClose={closeViewModal} aria-labelledby="view-modal-title" aria-describedby="view-modal-description">
+        <div className="modal-content p-6 bg-white rounded-lg shadow-lg mx-auto mt-10 max-w-lg">
+          <h2 id="view-modal-title" className="text-2xl font-bold mb-4">View Item</h2>
+          {viewItem && (
+            <div className="space-y-4">
+              <p><strong>Type Membership:</strong> {viewItem.type_membership}</p>
+              <p><strong>Price:</strong> {viewItem.price}</p>
+              <p><strong>Active QRs:</strong> {viewItem.active_qrs}</p>
+              <p><strong>Scan QRs:</strong> {viewItem.scan_qrs}</p>
+              <p><strong>Discount:</strong> {viewItem.discount}</p>
+              <p><strong>Premium Support:</strong> {viewItem.premium_support ? 'Yes' : 'No'}</p>
+              <p><strong>Unlimited Static:</strong> {viewItem.unlimited_static ? 'Yes' : 'No'}</p>
+            </div>
+          )}
+          <div className="flex justify-end space-x-4 mt-4">
+            <button type="button" onClick={closeViewModal} className="bg-gray-300 p-2 rounded-md">Close</button>
+          </div>
         </div>
       </Modal>
     </div>

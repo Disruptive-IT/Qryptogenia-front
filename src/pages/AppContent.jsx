@@ -124,6 +124,8 @@ const AppContent = () => {
                         backgroundColor,
                         selectedOptions,
                     };
+                    console.log(appFormValues);
+                    
     
                     // Actualiza los valores del formulario solo si no son undefined
                     if (Object.values(appValues).every(value => value !== undefined)) {
@@ -201,6 +203,8 @@ const AppContent = () => {
                             onSocialFormSubmit={handleSocialFormSubmit}
                             location={location}
                             appFormValues={appFormValues}
+                            socialFormValues={socialFormValues}
+                            musicFormValues={musicFormValues}
                         />
                     </div>
                     <div className='col-span-1 lg:col-span-2'>

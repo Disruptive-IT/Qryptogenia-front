@@ -15,7 +15,7 @@ export const saveQrData = async (qrName, data, qrType, qrColor, qrBgColor, qrPro
             return rest; // Devuelve el objeto sin `icon`
         });
     };
-    console.log(qrType);
+    console.log(appFormValues);
 
     const qrData = {
         qr: {
@@ -27,11 +27,11 @@ export const saveQrData = async (qrName, data, qrType, qrColor, qrBgColor, qrPro
         },
         qrPreview: {
             title: currentContentType === 'social-media' ? socialFormValues.title : currentContentType === 'music' ? musicFormValues.title : appFormValues.title,
-            colorTitle: currentContentType === 'social-media' ? socialFormValues.titleColor : currentContentType === 'music' ? musicFormValues.titleColor : appFormValues.colorTitle,
+            colorTitle: currentContentType === 'social-media' ? socialFormValues.colorTitle : currentContentType === 'music' ? musicFormValues.colorTitle : appFormValues.colorTitle,
             description: currentContentType === 'social-media' ? socialFormValues.description : currentContentType === 'music' ? musicFormValues.description : appFormValues.description,
             descriptionColor: currentContentType === 'social-media' ? socialFormValues.descriptionColor : currentContentType === 'music' ? musicFormValues.descriptionColor : appFormValues.descriptionColor,
             boxColor: currentContentType === 'social-media' ? socialFormValues.boxColor : currentContentType === 'music' ? musicFormValues.boxColor : appFormValues.boxColor,
-            borderImg: currentContentType === 'social-media' ? socialFormValues.borderColor : currentContentType === 'music' ? musicFormValues.borderColor : appFormValues.borderImg,
+            borderImg: currentContentType === 'social-media' ? socialFormValues.borderImg : currentContentType === 'music' ? musicFormValues.borderImg : appFormValues.borderImg,
             imgBoxBackgroud: currentContentType === 'social-media' ? socialFormValues.image : currentContentType === 'music' ? musicFormValues.image : appFormValues.image,
             backgroudColor: currentContentType === 'social-media' ? socialFormValues.backgroundColor : currentContentType === 'music' ? musicFormValues.backgroundColor : appFormValues.backgroundColor,
             SelectOptions: currentContentType === 'social-media' ? removeIconFromSelectOptions(socialFormValues.selectedOptions) : currentContentType === 'music' ? removeIconFromSelectOptions(musicFormValues.selectedOptions) : removeIconFromSelectOptions(appFormValues.selectedOptions),

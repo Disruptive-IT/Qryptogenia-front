@@ -14,15 +14,15 @@ import { ImUpload2 } from "react-icons/im";
 import GradientColorPicker from 'react-gcolor-picker'; // Importamos el nuevo color picker
 import { IoIosClose } from "react-icons/io";
 
-export const SocialForm = ({ onFormChange, onSubmit }) => {
+export const SocialForm = ({ onFormChange, location, socialFormValues }) => {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const maxLength = 250;
   const maxTitle = 30;
-  const [borderColor, setBorderColor] = useState('#ffffff')
+  const [borderImg, setBorderColor] = useState('#ffffff')
   const [backgroundColor, setBackgroundColor] = useState('#E7473C')
   const [boxColor, setBoxColor] = useState('#F0F0F0')
-  const [titleColor, setTitleColor] = useState('#820e0e');
+  const [colorTitle, setTitleColor] = useState('#820e0e');
   const [descriptionColor, setDescriptionColor] = useState('#E7473C');
   const [showTitleColorPicker, setShowTitleColorPicker] = useState(false);
   const [showBorderColorPicker, setShowBorderColorPicker] = useState(false);
@@ -37,6 +37,8 @@ export const SocialForm = ({ onFormChange, onSubmit }) => {
   const [selectedOptions, setSelectedOptions] = useState([]);
   const [image, setImage] = useState(null); // Nueva parte del estado para la imagen
   const [formErrors, setFormErrors] = useState({});
+
+  const isEditRoute = location.pathname.startsWith('/edit')
 
   const validateForm = (values) => {
     const errors = {};
@@ -66,16 +68,25 @@ export const SocialForm = ({ onFormChange, onSubmit }) => {
   const handleTitleChange = (e) => {
     setTitle(e.target.value);
     onFormChange((prevValues) => ({ ...prevValues, title: e.target.value }));
+    const value = e.target.value;
+    if (value.length <= maxTitle) {
+      setTitle(value);
+    }
+
   };
 
   const handleDescriptionChange = (e) => {
     setDescription(e.target.value);
     onFormChange((prevValues) => ({ ...prevValues, description: e.target.value }));
+    const value = e.target.value;
+    if (value.length <= maxLength) {
+      setDescription(value);
+    }
   };
 
   const handleBorderColorChange = (newHexCoor) => {
     setBorderColor(newHexCoor);
-    onFormChange((prevValues) => ({ ...prevValues, borderColor: newHexCoor }));
+    onFormChange((prevValues) => ({ ...prevValues, borderImg: newHexCoor }));
   };
 
   const handleBackgroundColorChange = (newHexColor) => {
@@ -90,7 +101,7 @@ export const SocialForm = ({ onFormChange, onSubmit }) => {
 
   const handleTitleColorChange = (newHexColor) => {
     setTitleColor(newHexColor);
-    onFormChange((prevValues) => ({ ...prevValues, titleColor: newHexColor }));
+    onFormChange((prevValues) => ({ ...prevValues, colorTitle: newHexColor }));
   };
 
   const handleDescriptionColorChange = (newHexColor) => {
@@ -128,6 +139,22 @@ export const SocialForm = ({ onFormChange, onSubmit }) => {
     }
   };
 
+  const handleMultiSelectChange = (selectedOptions) => {
+    const updatedOptions = selectedOptions.map(option => ({
+      value: option.value,
+      url: option.url || ''
+    }));
+    setSelectedOptions(updatedOptions);
+    onFormChange((prevValues) => ({ ...prevValues, selectedOptions: updatedOptions }));
+  };
+
+  const handleUrlChange = (index, value) => {
+    const updatedOptions = [...selectedOptions];
+    updatedOptions[index].url = value;
+    setSelectedOptions(updatedOptions);
+    onFormChange((prevValues) => ({ ...prevValues, selectedOptions: updatedOptions }));
+  };
+
   useEffect(() => {
     document.addEventListener('mousedown', handleTitleClickOutside);
     document.addEventListener('mousedown', handleBorderClickOutside);
@@ -143,9 +170,30 @@ export const SocialForm = ({ onFormChange, onSubmit }) => {
     };
   }, []);
 
+  useEffect(() => {
+    if (isEditRoute && socialFormValues) {
+      setTitle(socialFormValues.title || '');
+      setDescription(socialFormValues.description || '');
+      setTitleColor(socialFormValues.colorTitle || '');
+      setDescriptionColor(socialFormValues.descriptionColor || '');
+      setBackgroundColor(socialFormValues.backgroundColor || '');
+      setBoxColor(socialFormValues.boxColor || '');
+      setBorderColor(socialFormValues.borderImg || '');
+      setSelectedOptions(socialFormValues.selectedOptions || []);
+      setImage(socialFormValues.image || null);
+    }
+  }, [isEditRoute, socialFormValues]);
+
   const initialValues = {
-    title: '',
-    description: '',
+    title: isEditRoute && socialFormValues ? socialFormValues.title : '',
+    description: isEditRoute && socialFormValues ? socialFormValues.description : '',
+    colorTitle: isEditRoute && socialFormValues ? socialFormValues.colorTitle : '',
+    descriptionColor: isEditRoute && socialFormValues ? socialFormValues.descriptionColor : '',
+    backgroundColor: isEditRoute && socialFormValues ? socialFormValues.backgroundColor : '',
+    boxColor: isEditRoute && socialFormValues ? socialFormValues.boxColor : '',
+    borderImg: isEditRoute && socialFormValues ? socialFormValues.borderImg : '',
+    selectedOptions: isEditRoute && socialFormValues ? socialFormValues.selectedOptions : [],
+    image: isEditRoute && socialFormValues ? socialFormValues.image : null,
   };
 
   const options = [
@@ -267,22 +315,20 @@ export const SocialForm = ({ onFormChange, onSubmit }) => {
     reader.readAsDataURL(file);
   };
 
-  const handleMultiSelectChange = (selectedOptions) => {
-    const updatedOptions = selectedOptions.map(option => ({
-      value: option.value,
-      url: '',
-      icon: option.icon
-    }));
-    setSelectedOptions(updatedOptions);
-    onFormChange((prevValues) => ({ ...prevValues, selectedOptions: updatedOptions }));
-  };
+  const [updatedSelectedOptions, setUpdatedSelectedOptions] = useState([]);
 
-  const handleUrlChange = (index, value) => {
-    const updatedOptions = [...selectedOptions];
-    updatedOptions[index].url = value;
-    setSelectedOptions(updatedOptions);
-    onFormChange((prevValues) => ({ ...prevValues, selectedOptions: updatedOptions }));
-  };
+  useEffect(() => {
+    // Actualiza el estado de las opciones seleccionadas con los íconos correspondientes
+    const updatedOptions = selectedOptions.map((option) => {
+      const fullOption = options.find((opt) => opt.value === option.value);
+      return {
+        ...option,
+        icon: fullOption ? fullOption.icon : '',
+      };
+    });
+    setUpdatedSelectedOptions(updatedOptions);
+  }, [selectedOptions]);
+
 
   const handleRemoveImage = () => {
     setImage(null);
@@ -290,6 +336,11 @@ export const SocialForm = ({ onFormChange, onSubmit }) => {
       ...prevValues,
       image: null // Elimina la imagen del estado global
     }));
+  };
+
+
+  const isOptionSelected = (option) => {
+    return selectedOptions.some(selected => selected.value === option.value);
   };
 
 
@@ -310,7 +361,7 @@ export const SocialForm = ({ onFormChange, onSubmit }) => {
         }
       }}
     >
-      {({ setFieldValue, handleSubmit, errors }) => (
+      {({ setFieldValue, handleSubmit }) => (
         <Form className="max-w-4xl mx-auto mt-8 relative" onSubmit={handleSubmit}>
           <h2 className="text-xl font-semibold mb-4">Social Qr</h2>
           <div className="flex flex-col md:flex-row md:items-start md:mb-4">
@@ -338,7 +389,7 @@ export const SocialForm = ({ onFormChange, onSubmit }) => {
               <div className="flex items-center">
                 <div
                   className="w-20 md:w-10 h-10 border border-gray-300 rounded cursor-pointer"
-                  style={{ background: titleColor }}
+                  style={{ background: colorTitle }}
                   onClick={() => setShowTitleColorPicker(!showTitleColorPicker)}
                 ></div>
                 {showTitleColorPicker && (
@@ -353,7 +404,7 @@ export const SocialForm = ({ onFormChange, onSubmit }) => {
                       disableAlphaInput={false}
                       presetColors={[]}
                       gradient={true}
-                      color={titleColor}
+                      color={colorTitle}
                       onChange={handleTitleColorChange}
                     />
                   </div>
@@ -493,7 +544,7 @@ export const SocialForm = ({ onFormChange, onSubmit }) => {
                 <div className="flex items-center relative">
                   <div
                     className="w-20 md:w-16 h-10 border border-gray-300 rounded cursor-pointer"
-                    style={{ background: borderColor }}
+                    style={{ background: borderImg }}
                     onClick={() => setShowBorderColorPicker(!showBorderColorPicker)}
                   ></div>
                   {showBorderColorPicker && (
@@ -508,7 +559,7 @@ export const SocialForm = ({ onFormChange, onSubmit }) => {
                         disableAlphaInput={false}
                         presetColors={[]}
                         gradient={true}
-                        color={borderColor}
+                        color={borderImg}
                         onChange={handleBorderColorChange}
                         style={{ width: "calc(100% + 2rem)" }} // Ajuste del ancho
                       />
@@ -528,10 +579,18 @@ export const SocialForm = ({ onFormChange, onSubmit }) => {
                 isMulti
                 className="basic-multi-select w-full"
                 classNamePrefix="select"
+                value={updatedSelectedOptions}
                 onChange={(selected) => {
                   handleMultiSelectChange(selected);
                   setFieldValue('selectedOptions', selected);
                 }}
+                getOptionLabel={(option) => (
+                  <div className="flex items-center">
+                    {isOptionSelected(option) && <span className="mr-2">{option.icon}</span>}
+                    {option.label}
+                  </div>
+                )}
+                getOptionValue={(option) => option.value}
               />
               {formErrors.selectedOptions && (
                 <div className="text-red-500 text-sm">{formErrors.selectedOptions}</div>
@@ -540,7 +599,7 @@ export const SocialForm = ({ onFormChange, onSubmit }) => {
           </div>
 
           <div className='grid grid-cols-1 md:grid-cols-2 gap-4'>
-            {selectedOptions.map((option, index) => (
+            {updatedSelectedOptions.map((option, index) => (
               <div key={index} className="flex items-center mb-4">
                 <label htmlFor={`input_${option.value}`} className="mb-2">{option.icon}</label>
                 <Field
@@ -550,13 +609,7 @@ export const SocialForm = ({ onFormChange, onSubmit }) => {
                   placeholder={`URL for ${option.value}`}
                   className="border w-full border-gray-300 rounded p-2"
                   value={option.url}
-                  onChange={(e) => {
-                    handleUrlChange(index, e.target.value)
-                    const updatedOptions = [...selectedOptions];
-                    updatedOptions[index] = { ...updatedOptions[index], url: e.target.value };
-                    setSelectedOptions(updatedOptions);
-                    setFieldValue('selectedOptions', updatedOptions);
-                  }}
+                  onChange={(e) => handleUrlChange(index, e.target.value)}
                 />
                 {/* Mostrar mensaje de error para cada URL */}
                 {formErrors[`url_${index}`] && <div className="text-red-500 text-sm">{formErrors[`url_${index}`]}</div>}

@@ -19,7 +19,7 @@ import { PdfUploadComponent, LinkInput } from "./forms/Pdf";
 import SocialForm from "./forms/Social";
 import MusicForm from "./forms/Music";
 import { WebLinkPhoneMusic } from "./socialMedia/stylePhoneMusic";
-export const QrContentSwitch = ({contentName, onFormChangeApp, onFormChange, onFormChangeMusic, onSocialFormSubmit, location, appFormValues}) => {
+export const QrContentSwitch = ({contentName, onFormChangeApp, onFormChange, onFormChangeMusic, onSocialFormSubmit, location, appFormValues, musicFormValues, socialFormValues}) => {
 
     let qrContent;
     switch (contentName) {
@@ -33,7 +33,7 @@ export const QrContentSwitch = ({contentName, onFormChangeApp, onFormChange, onF
         case "social media":
             qrContent = (
                 <div>
-                    <SocialForm onFormChange={onFormChange} onSubmit={onSocialFormSubmit} />
+                    <SocialForm onFormChange={onFormChange} onSubmit={onSocialFormSubmit} location={location} socialFormValues={socialFormValues} />
                 </div>
             );
             break;
@@ -61,7 +61,7 @@ export const QrContentSwitch = ({contentName, onFormChangeApp, onFormChange, onF
         case "music":
             qrContent = (
                 <div>
-                    <MusicForm onFormChangeMusic={onFormChangeMusic}/>
+                    <MusicForm onFormChangeMusic={onFormChangeMusic} location={location} musicFormValues={musicFormValues}/>
                 </div>
             );
             break;

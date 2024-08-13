@@ -28,11 +28,16 @@ const CustomQr = ({location, qrId}) => {
         const { value: qrName, isConfirmed } = await Swal.fire({
             title: 'Save QR Code',
             html: `
-                <input id="swal-input1" className="swal2-input" placeholder="Enter QR code name...">
-                <div style="margin: 2em 0;">
-                    <p style="font-size: 1em; color: #888; margin-top: 10px;">Please enter a name for your QR code. If you do not set a name, the system will provide one for you.</p>
-                    <p style="font-size: 0.8em; margin: 10px 0 0 0;">Click "Save" to finalize the creation of your QR code.</p>
-                </div>
+                <input 
+            id="swal-input1" 
+            class="swal2-input" 
+            placeholder="Enter QR code name..."
+            style="width: 60%; padding: 10px; border: 1px solid #ccc; border-radius: 6px; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);"
+        >
+        <div style="margin: 2em 0;">
+            <p style="font-size: 1em; color: #888; margin-top: 10px;">Please enter a name for your QR code. If you do not set a name, the system will provide one for you.</p>
+            <p style="font-size: 0.8em; margin: 10px 0 0 0;">Click "Save" to finalize the creation of your QR code.</p>
+        </div>
             `,
             focusConfirm: false,
             preConfirm: () => {

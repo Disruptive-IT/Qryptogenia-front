@@ -41,7 +41,7 @@ export const SocialButton = ({ data }) => {
 
 export const SocialButtonM = ({ data, botonColor }) => {
   return (
-    <div className='flex gap-3 justify-center flex-wrap w-full mb-5'>
+    <div className='flex gap-3 justify-center mt-8 flex-wrap w-full mb-5'>
       {data && data.map((social, index) => (
         <a target="_blank" rel="noopener noreferrer" href={social.url} key={index} type="button" className="relative p-2 min-w-16 h-16 rounded-lg flex gap-2 items-center" style={{ cursor: "pointer", verticalAlign: 'middle'}}>
             {botonColor === '#000000' ? social.icon : social.iconw}
