@@ -1,5 +1,11 @@
 import * as Yup from "yup";
 
+/**
+ * @Author : Jobserd Julián Ocampo, @date 2024-08-13 09:48:10
+ * @description : Definición de esquemas de validación utilizando Yup para diferentes operaciones: login, registro, validación de PIN, y cambio de contraseña. 
+ * @Props : None
+ * @return : Yup validation schemas
+**/
 
 export const SchemaLoginValidate = Yup.object().shape({
   email: Yup.string().email('Invalid email').required('Email is required'),
