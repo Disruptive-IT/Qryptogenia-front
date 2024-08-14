@@ -1,39 +1,73 @@
+import React, { useState, useEffect } from "react";
 import { useFormik } from "formik";
-import { motion } from "framer-motion";
-import './formStyle.css'
-import instance from "../../../libs/axios";
 import Swal from "sweetalert2";
-import { useEffect, useState } from "react";
+import instance from "../../../libs/axios";
+import { motion } from "framer-motion";
 
-/*
- * @Author : Nicolas Barrios,   @date 2024-08-05 18:45:26
- * @description : formulario de crear descuento
- * @Props :
- * @return : 
- */
+const UpdateDiscount = ({ event, id, reload }) => {
+    const [discountData, setDiscountData] = useState(null);
+    const [isDataLoaded, setIsDataLoaded] = useState(false);
+    const [isUpdate,setIsUpdate]=useState(false);
 
-const CreateDiscount = ({event, efect}) => {
-
-    const [isAdd,setIsAdd]=useState(false);
-
-    const handleIsAdd=(bool)=>{
-        setIsAdd(bool);
-        console.log(isAdd);
+    const handleIsUpdate=(value)=>{
+        setIsUpdate(value);
+        console.log(value);
     }
 
-    const handlePostDiscount = async (data,evento) => {
+    const formik = useFormik({
+        initialValues: {
+            discount: "",
+            description: "",
+            limit_date: new Date().toISOString().split('T')[0],
+            use_quantity: 0
+        },
+        validate: (values) => {
+            const errors = {};
+
+            if (!values.discount) {
+                errors.discount = "Required discount value";
+            }
+
+            if (!values.description) {
+                errors.description = "Required";
+            }
+
+            if (values.limit_date === new Date().toISOString().split('T')[0]) {
+                errors.limit_date = "The limit date cannot be the current one, please change the date";
+            }
+
+            if (values.use_quantity <= 0) {
+                errors.use_quantity = "Quantity must be greater than zero";
+            }
+
+            return errors;
+        },
+        onSubmit: async (values, { setSubmitting, setStatus }) => {
+            try {
+                await handlePutDiscount(values, id, event);
+                setStatus({ success: true });
+            } catch (error) {
+                setStatus({ success: false, message: 'Error al enviar los datos' });
+                console.error(error);
+            } finally {
+                setSubmitting(false);
+            }
+        },
+    });
+
+    const handlePutDiscount = async (data, id, evento) => {
         try {
-            const response = await instance.post("/admin/addDiscount", data);
+            const response = await instance.put(`/admin/putDiscount/${id}`, data);
             if (response.status === 200) {
-                console.log("Discount added successfully");
+                console.log("Discount updated successfully");
                 if (typeof evento === 'function') {
                     await evento();
                 }
-                handleIsAdd(true);
+                handleIsUpdate(true);
                 await Swal.fire({
                     icon: 'success',
                     title: 'Success',
-                    text: 'Discount added successfully!',
+                    text: 'Discount updated successfully!',
                     confirmButtonColor:"#3C6E71"
                 });
             }
@@ -43,65 +77,65 @@ const CreateDiscount = ({event, efect}) => {
                 icon: 'error',
                 title: 'Error',
                 text: 'Error to send data'
-            })
-            ;
+            });
         }
-    }
-
-    const initialValues = {
-        discount: "",
-        description: "",
-        limit_date: new Date().toISOString().split('T')[0],
-        use_quantity: 0
     };
 
-    const validate = (values) => {
-        const errors = {};
-
-        if (!values.discount) {
-            errors.discount = "Required discount value";
-        }
-
-        if (!values.description) {
-            errors.description = "Required";
-        }
-
-        if (values.limit_date === new Date().toISOString().split('T')[0]) {
-            errors.limit_date = "The limit date cannot be the current one, please change the date";
-        }
-
-        if (values.use_quantity <= 0) {
-            errors.use_quantity = "Quantity must be greater than zero";
-        }
-
-        return errors;
-    };
-    
-    const formik = useFormik({
-        initialValues,
-        validate,
-        onSubmit: async (values, { setSubmitting}) => {
-            try {
-                await handlePostDiscount(values,event);
-            } catch (error) {
-                setStatus(false);
-                console.error(error);
-            } finally {
-                setSubmitting(false);
+    const recoverData = async (id) => {
+        try {
+            const getDiscount = await instance.get(`/admin/getDiscount/${id}`);
+            if (getDiscount.status === 200) {
+                setDiscountData(getDiscount.data);
+                console.log(getDiscount.data);
             }
-        },
-    });
+        } catch (error) {
+            console.error("error: ", error.message);
+        }
+    };
 
     useEffect(() => {
-        const handleEffect=async()=>{
-            await efect();
-            handleIsAdd(false);
+        if (id) {
+            recoverData(id);
         }
+    }, [id]);
 
-        handleEffect();
-    },[isAdd]);
+    //esta funcion configura la zona horaria para limit date
+    const adjustDateToLocal = (dateString) => {
+        const date = new Date(dateString);
+        date.setMinutes(date.getMinutes() - date.getTimezoneOffset());
+        return date.toISOString().split('T')[0];
+    };
+    
+    //este efecto establece los valores inciales del formik para actualizar el registro
+    useEffect(() => {
+        if (discountData) {
+            const formattedDate = discountData.limit_date 
+                ? adjustDateToLocal(discountData.limit_date) 
+                : new Date().toISOString().split('T')[0];
+            
+            formik.setValues({
+                discount: discountData.discount || "",
+                description: discountData.description || "",
+                limit_date: formattedDate,
+                use_quantity: discountData.use_quantity || 0
+            });
+            setIsDataLoaded(true);
+        }
+    }, [discountData]);
     
 
+    useEffect(() => {
+        const handleUpdateEffect = async () => {
+            await reload();
+            handleIsUpdate(false);
+        };
+
+        handleUpdateEffect();
+    }, [isUpdate]);
+
+    if (!isDataLoaded) {
+        return <div>Loading...</div>;
+    }
 
     return (
         <div>
@@ -161,7 +195,7 @@ const CreateDiscount = ({event, efect}) => {
                 </div>
 
                 <div className="mb-6">
-                    <label className="block text-sm font-semibold mb-2" htmlFor="user_quantity">
+                    <label className="block text-sm font-semibold mb-2" htmlFor="use_quantity">
                         Quantity
                     </label>
                     <input
@@ -173,7 +207,7 @@ const CreateDiscount = ({event, efect}) => {
                         value={formik.values.use_quantity}
                     />
                     {formik.errors.use_quantity ? (
-                        <div className="text-red-500 text-xs mt-1">{formik.errors.user_quantity}</div>
+                        <div className="text-red-500 text-xs mt-1">{formik.errors.use_quantity}</div>
                     ) : null}
                 </div>
 
@@ -199,4 +233,6 @@ const CreateDiscount = ({event, efect}) => {
     );
 };
 
-export default CreateDiscount;
+export default UpdateDiscount;
+
+
