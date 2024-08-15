@@ -8,19 +8,21 @@ import axios from 'axios';
 const QRCodeList = () => {
   const [data, setData] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [viewModalOpen, setViewModalOpen] = useState(false); // Nuevo estado para la vista previa
+  const [viewModalOpen, setViewModalOpen] = useState(false);
   const [editItem, setEditItem] = useState(null);
-  const [viewItem, setViewItem] = useState(null); // Nuevo estado para los datos de la vista previa
+  const [viewItem, setViewItem] = useState(null);
   const [formValues, setFormValues] = useState({});
+  const [selectedDiscounts, setSelectedDiscounts] = useState([]);
+  const [discounts, setDiscounts] = useState([]);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get('http://localhost:3000/api/admin/memberships', {
+        const response = await axios.get('http://localhost:3000/api/memberships', {
           withCredentials: true,
         });
-        setData(response.data);
-        console.log(response.data);
+        setData(response.data.memberships);
+        setDiscounts(response.data.discounts);
       } catch (error) {
         console.error('Error fetching data:', error);
       }
@@ -31,6 +33,7 @@ const QRCodeList = () => {
   const openModal = (item) => {
     setEditItem(item);
     setFormValues(item);
+    setSelectedDiscounts(item.discounts || []); // Inicializa con descuentos existentes
     setIsModalOpen(true);
   };
 
@@ -38,6 +41,7 @@ const QRCodeList = () => {
     setIsModalOpen(false);
     setEditItem(null);
     setFormValues({});
+    setSelectedDiscounts([]);
   };
 
   const openViewModal = (item) => {
@@ -58,23 +62,24 @@ const QRCodeList = () => {
     }));
   };
 
-  const updatedData = {
-    type_membership: formValues.type_membership,
-    price: parseFloat(formValues.price),
-    active_qrs: parseInt(formValues.active_qrs),
-    scan_qrs: formValues.scan_qrs,
-    premium_support: Boolean(formValues.premium_support),
-    unlimited_static: Boolean(formValues.unlimited_static)
+  const handleDiscountChange = (event) => {
+    const { options } = event.target;
+    const selectedValues = Array.from(options).filter(option => option.selected).map(option => option.value);
+    setSelectedDiscounts(selectedValues);
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
       const id = editItem.id;
+      const updatedData = {
+        ...formValues,
+        discounts: selectedDiscounts // Incluye los descuentos seleccionados
+      };
       await axios.patch(`http://localhost:3000/api/admin/editmemberships/${id}`, updatedData, {
         withCredentials: true,
       });
-      setData(data.map(d => d.id === editItem.id ? { ...d, ...formValues } : d));
+      setData(data.map(d => d.id === editItem.id ? { ...d, ...updatedData } : d));
       closeModal();
     } catch (error) {
       console.error('Error al actualizar los datos:', error);
@@ -100,7 +105,18 @@ const QRCodeList = () => {
     { header: 'Price', accessor: 'price' },
     { header: 'Active QRs', accessor: 'active_qrs' },
     { header: 'Scan QRs', accessor: 'scan_qrs' },
-    { header: 'Discount', accessor: 'discount' },
+    { header: 'Discount', accessor: 'discount',
+      render: (item) => {
+        if (!item.discounts || item.discounts.length === 0) {
+          return 'No Discounts'; // Mensaje alternativo si no hay descuentos
+        }
+        const discountNames = item.discounts.map(discountId => {
+          const discount = discounts.find(d => d.id === discountId);
+          return discount ? discount.discount : 'N/A'; // 'N/A' si no se encuentra el descuento
+        });
+        return discountNames.join(', '); // Une los nombres de los descuentos con coma
+      }
+    },
     {
       header: 'Premium Support',
       accessor: 'premium_support',
@@ -173,7 +189,7 @@ const QRCodeList = () => {
           </tbody>
         </table>
       </div>
-      
+
       {/* Modal de edición */}
       <Modal open={isModalOpen} onClose={closeModal} aria-labelledby="modal-title" aria-describedby="modal-description">
         <div className="modal-content p-6 bg-white rounded-lg shadow-lg mx-auto mt-10 max-w-lg">
@@ -191,10 +207,28 @@ const QRCodeList = () => {
               />
             </div>
             <div className="flex flex-col">
+              <label className="text-sm font-medium mb-1" htmlFor="discounts">Discounts:</label>
+              <select
+                id="discounts"
+                name="discounts"
+                multiple
+                value={selectedDiscounts}
+                onChange={handleDiscountChange}
+                className="p-2 border border-gray-300 rounded-md"
+              >
+                {discounts.map(discount => (
+                  <option key={discount.id} value={discount.id}>
+                    {discount.discount}
+                  </option>
+                ))}
+              </select>
+            </div>
+            <div className="flex flex-col">
               <label className="text-sm font-medium mb-1" htmlFor="price">Price:</label>
               <input
                 id="price"
-                type="text"
+                type="number"
+                step="0.01"
                 name="price"
                 value={formValues.price || ''}
                 onChange={handleInputChange}
@@ -216,38 +250,27 @@ const QRCodeList = () => {
               <label className="text-sm font-medium mb-1" htmlFor="scan_qrs">Scan QRs:</label>
               <input
                 id="scan_qrs"
-                type="text"
+                type="number"
                 name="scan_qrs"
                 value={formValues.scan_qrs || ''}
                 onChange={handleInputChange}
                 className="p-2 border border-gray-300 rounded-md"
               />
             </div>
-            <div className="flex items-center space-x-2">
-              <label className="text-sm font-medium" htmlFor="premium_support">Premium Support:</label>
-              <input
-                id="premium_support"
-                type="checkbox"
-                name="premium_support"
-                checked={formValues.premium_support || false}
-                onChange={e => setFormValues(prev => ({ ...prev, premium_support: e.target.checked }))}
-                className="h-4 w-4"
-              />
-            </div>
-            <div className="flex items-center space-x-2">
-              <label className="text-sm font-medium" htmlFor="unlimited_static">Unlimited Static:</label>
-              <input
-                id="unlimited_static"
-                type="checkbox"
-                name="unlimited_static"
-                checked={formValues.unlimited_static || false}
-                onChange={e => setFormValues(prev => ({ ...prev, unlimited_static: e.target.checked }))}
-                className="h-4 w-4"
-              />
-            </div>
-            <div className="flex justify-end space-x-4">
-              <button type="button" onClick={closeModal} className="bg-gray-300 p-2 rounded-md">Cancel</button>
-              <button type="submit" className="bg-blue-500 text-white p-2 rounded-md">Save</button>
+            <div className="flex justify-end mt-4">
+              <button
+                type="button"
+                onClick={closeModal}
+                className="px-4 py-2 mr-2 border border-gray-300 rounded-md bg-gray-200"
+              >
+                Cancel
+              </button>
+              <button
+                type="submit"
+                className="px-4 py-2 border border-gray-300 rounded-md bg-blue-500 text-white"
+              >
+                Save
+              </button>
             </div>
           </form>
         </div>
@@ -259,17 +282,43 @@ const QRCodeList = () => {
           <h2 id="view-modal-title" className="text-2xl font-bold mb-4">View Item</h2>
           {viewItem && (
             <div className="space-y-4">
-              <p><strong>Type Membership:</strong> {viewItem.type_membership}</p>
-              <p><strong>Price:</strong> {viewItem.price}</p>
-              <p><strong>Active QRs:</strong> {viewItem.active_qrs}</p>
-              <p><strong>Scan QRs:</strong> {viewItem.scan_qrs}</p>
-              <p><strong>Discount:</strong> {viewItem.discount}</p>
-              <p><strong>Premium Support:</strong> {viewItem.premium_support ? 'Yes' : 'No'}</p>
-              <p><strong>Unlimited Static:</strong> {viewItem.unlimited_static ? 'Yes' : 'No'}</p>
+              <div className="flex flex-col">
+                <span className="text-sm font-medium">Type Membership:</span>
+                <span>{viewItem.type_membership}</span>
+              </div>
+              <div className="flex flex-col">
+                <span className="text-sm font-medium">Price:</span>
+                <span>{viewItem.price}</span>
+              </div>
+              <div className="flex flex-col">
+                <span className="text-sm font-medium">Active QRs:</span>
+                <span>{viewItem.active_qrs}</span>
+              </div>
+              <div className="flex flex-col">
+                <span className="text-sm font-medium">Scan QRs:</span>
+                <span>{viewItem.scan_qrs}</span>
+              </div>
+              <div className="flex flex-col">
+                <span className="text-sm font-medium">Discounts:</span>
+                {viewItem.discounts && viewItem.discounts.length > 0 ? (
+                  viewItem.discounts.map(discountId => {
+                    const discount = discounts.find(d => d.id === discountId);
+                    return discount ? <span key={discount.id}>{discount.discount}</span> : null;
+                  })
+                ) : (
+                  <span>No Discounts</span>
+                )}
+              </div>
             </div>
           )}
-          <div className="flex justify-end space-x-4 mt-4">
-            <button type="button" onClick={closeViewModal} className="bg-gray-300 p-2 rounded-md">Close</button>
+          <div className="flex justify-end mt-4">
+            <button
+              type="button"
+              onClick={closeViewModal}
+              className="px-4 py-2 border border-gray-300 rounded-md bg-gray-200"
+            >
+              Close
+            </button>
           </div>
         </div>
       </Modal>

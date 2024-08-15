@@ -328,6 +328,7 @@ export const AppForm = ({ onFormChangeApp, location, appFormValues }) => {
             return {
                 ...option,
                 icon: fullOption ? fullOption.icon : '',
+                label: fullOption ? fullOption.label : ''
             };
         });
         setUpdatedSelectedOptions(updatedOptions);
@@ -579,7 +580,7 @@ export const AppForm = ({ onFormChangeApp, location, appFormValues }) => {
                                 isMulti
                                 className="basic-multi-select w-full"
                                 classNamePrefix="select"
-                                value={updatedSelectedOptions}
+                                value={updatedSelectedOptions.map(({ icon, ...rest }) => rest)}
                                 onChange={(selected) => {
                                     handleMultiSelectChange(selected);
                                     setFieldValue('selectedOptions', selected);

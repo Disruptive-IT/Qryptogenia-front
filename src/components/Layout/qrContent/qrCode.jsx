@@ -78,7 +78,7 @@ export const saveQrData = async (
         const res = await axios({
             method: isEditRoute ? 'patch' : 'post',
             url: isEditRoute ? `/qr/edit/${qrId}` : '/qr',
-            data: qrData
+            data: isEditRoute ? {qrData} : qrData
         })
         window.location.href = 'http://localhost:5173/user/qr';
         return true;

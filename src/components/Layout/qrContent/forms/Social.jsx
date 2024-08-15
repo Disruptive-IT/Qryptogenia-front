@@ -324,6 +324,7 @@ export const SocialForm = ({ onFormChange, location, socialFormValues }) => {
       return {
         ...option,
         icon: fullOption ? fullOption.icon : '',
+        label: fullOption ? fullOption.label : ''
       };
     });
     setUpdatedSelectedOptions(updatedOptions);
@@ -579,7 +580,7 @@ export const SocialForm = ({ onFormChange, location, socialFormValues }) => {
                 isMulti
                 className="basic-multi-select w-full"
                 classNamePrefix="select"
-                value={updatedSelectedOptions}
+                value={updatedSelectedOptions.map(({ icon, ...rest }) => rest)}
                 onChange={(selected) => {
                   handleMultiSelectChange(selected);
                   setFieldValue('selectedOptions', selected);

@@ -12,56 +12,44 @@ import React from 'react';
 import { PricingsCards } from '../components/Layout/pricingsCards';
 import { IoClose } from "react-icons/io5";
 import { FaCheck } from "react-icons/fa";
+import { useState, useEffect } from 'react';
+import axios from 'axios';
 
 
 export const PlansPricings = () => {
 
-    const data=[
-        {
-            id:1,
-            name:"FREE",
-            pricings:"$0.00",
-            pricingsMonthly: "$0.00",
-            ActivateQrs: "2",
-            scansXqr: "10",
-            sopport:<IoClose className='text-red-500 text-2xl' />,
-            staticQrs: <IoClose className='text-red-500 text-2xl' />
+  const [data, setData] = useState([]);
 
-        },
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get('http://localhost:3000/api/memberships', {
+          withCredentials: true,
+        });
 
-        {
-            id:2,
-            name:"BASIC",
-            pricings:"$9.99",
-            pricingsMonthly: "$11.99",
-            ActivateQrs: "5",
-            scansXqr: "10000",
-            sopport:<IoClose className='text-red-500 text-2xl' />,
-            staticQrs: <IoClose className='text-red-500 text-2xl' />
-        },
-        {
-            id:3,
-            name:"ADVANCED",
-            pricings:"$20.99",
-            pricingsMonthly: "$24.99",
-            ActivateQrs: "50",
-            scansXqr: "Unlimited",
-            sopport:<IoClose className='text-red-500 text-2xl' />,
-            staticQrs: <FaCheck className='text-green-500 text-2xl' />
-        },
-        {
-            id:4,
-            name:"PROFESIONAL",
-            pricings:"$45.99",
-            pricingsMonthly: "$49.99",
-            ActivateQrs: "250",    
-            scansXqr: "Unlimited",
-            sopport:<FaCheck className='text-green-500 text-2xl' />,
-            staticQrs: <FaCheck className='text-green-500 text-2xl' />
+        // Transformar los datos para coincidir con el formato requerido
+        const transformedData = response.data.map(item => {
+          const price = parseFloat(item.price);
+          return {
+            id: item.id,
+            name: item.type_membership,
+            pricings: !isNaN(price) ? `$${price.toFixed(2)}` : 'N/A',
+            pricingsMonthly: !isNaN(price) ? `$${(price * 1.2).toFixed(2)}` : 'N/A', // Ejemplo de cálculo para mensual
+            ActivateQrs: item.active_qrs,
+            scansXqr: item.scan_qrs || "Unlimited",
+            sopport: item.premium_support ? <FaCheck className='text-green-500 text-2xl' /> : <IoClose className='text-red-500 text-2xl' />,
+            staticQrs: item.unlimited_static ? <FaCheck className='text-green-500 text-2xl' /> : <IoClose className='text-red-500 text-2xl' />
+          };
+        });
 
-        }
-    ]
+        setData(transformedData);
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+    };
 
+    fetchData();
+  }, []);
 
 
   return (

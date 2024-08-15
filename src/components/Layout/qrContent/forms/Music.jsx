@@ -315,6 +315,7 @@ export const MusicForm = ({ onFormChangeMusic, location, musicFormValues }) => {
             return {
                 ...option,
                 icon: fullOption ? fullOption.icon : '',
+                label: fullOption ? fullOption.label : ''
             };
         });
         setUpdatedSelectedOptions(updatedOptions);
@@ -567,7 +568,7 @@ export const MusicForm = ({ onFormChangeMusic, location, musicFormValues }) => {
                                 isMulti
                                 className="basic-multi-select w-full"
                                 classNamePrefix="select"
-                                value={updatedSelectedOptions}
+                                value={updatedSelectedOptions.map(({ icon, ...rest }) => rest)}
                                 onChange={(selected) => {
                                     handleMultiSelectChange(selected);
                                     setFieldValue('selectedOptions', selected);
