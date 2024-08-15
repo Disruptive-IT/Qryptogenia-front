@@ -25,9 +25,11 @@ function Navbar() {
                     <CustomLink to="#" isActive={isActive('/about')}>About us</CustomLink>
                     <CustomLink to="/pricings" isActive={isActive('/pricings')}>My Plans</CustomLink>
                 </ul>
-                <div className="flex gap-4 items-center">
-                    <UserProfileMenu />
+                <div className="block md:hidden">
                     <MenuDrawer />
+                </div>
+                <div className='hidden md:block'>
+                    <UserProfileMenu />
                 </div>
             </div>
         </nav>
