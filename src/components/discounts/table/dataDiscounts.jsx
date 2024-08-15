@@ -83,7 +83,7 @@ function Discounts() {
           setIsDeleted(true);
           toast.success("Discount was deleted successfully", {
             position: "bottom-right",
-            duration: 5000,
+            duration: 3000,
           });
         } else if (deleteResponse.status === 400) {
           toast.error("Error: The record is currently associated with a membership.");
