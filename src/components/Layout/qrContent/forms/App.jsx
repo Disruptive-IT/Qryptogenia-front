@@ -598,10 +598,10 @@ export const AppForm = ({ onFormChangeApp, location, appFormValues }) => {
                         </div>
                     </div>
     <div className='grid grid-cols-1 md:grid-cols-2 gap-4'>
-    {selectedOptions.map((option, index) => (
+    {updatedSelectedOptions.map((option, index) => (
         <div key={index} className="grid gap-3 mb-3">
     <div className="grid grid-cols-[auto_1fr] gap-3 items-center">
-        <label htmlFor={`url_${index}`} className="mx-3">{option.icon}</label>
+    <label htmlFor={`input_${option.value}`} className="mb-2">{option.icon}</label>
         <Field
             type="text"
             id={`url_${index}`}
@@ -609,13 +609,7 @@ export const AppForm = ({ onFormChangeApp, location, appFormValues }) => {
             placeholder={`URL for ${option.value}`}
             className="border border-gray-300 rounded p-2 w-full"
             value={option.url}
-            onChange={(e) => {
-                handleUrlChange(index, e.target.value)
-                const updatedOptions = [...selectedOptions];
-                updatedOptions[index] = { ...updatedOptions[index], url: e.target.value };
-                setSelectedOptions(updatedOptions);
-                setFieldValue('selectedOptions', updatedOptions);
-            }}
+            onChange={(e) => handleUrlChange(index, e.target.value)}
         />
     </div>
     <div className="relative flex justify-center items-center">

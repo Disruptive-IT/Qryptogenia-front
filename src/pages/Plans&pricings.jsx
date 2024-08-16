@@ -19,6 +19,7 @@ import axios from 'axios';
 export const PlansPricings = () => {
 
   const [data, setData] = useState([]);
+  const [discounts, setDiscounts] = useState([]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -26,15 +27,41 @@ export const PlansPricings = () => {
         const response = await axios.get('http://localhost:3000/api/memberships', {
           withCredentials: true,
         });
+        console.log(response);
 
+        const fetchedDiscounts = response.data.discounts || []; // Asegurarse de obtener los descuentos
+        setDiscounts(fetchedDiscounts);
+        
         // Transformar los datos para coincidir con el formato requerido
-        const transformedData = response.data.map(item => {
+        const transformedData = response.data.memberships.map(item => {
           const price = parseFloat(item.price);
+          let finalDiscount = 0;
+          if (item.discounts && item.discounts.length > 0) {
+            // Mapear los IDs de descuentos a los valores reales
+            const applicableDiscounts = item.discounts.map(discountId => {
+              const discount = fetchedDiscounts.find(d => d.id === discountId);
+              if (discount) {
+                // Quitar el símbolo '%' y convertir a número
+                const discountValue = parseFloat(discount.discount.replace('%', ''));
+                return !isNaN(discountValue) ? discountValue : 0;
+              }
+              return 0;
+            });
+
+            // Aplicar la lógica de descuento deseada, por ejemplo, utilizar el mayor descuento
+            finalDiscount = Math.max(...applicableDiscounts);
+          }
+          // Calcular precio con descuento si existe
+          const discountedPrice = !isNaN(price) && finalDiscount > 0
+            ? price * (1 - finalDiscount / 100)
+            : price;
+            console.log(finalDiscount);
+            
           return {
             id: item.id,
             name: item.type_membership,
-            pricings: !isNaN(price) ? `$${price.toFixed(2)}` : 'N/A',
-            pricingsMonthly: !isNaN(price) ? `$${(price * 1.2).toFixed(2)}` : 'N/A', // Ejemplo de cálculo para mensual
+            pricings: !isNaN(discountedPrice) ? `$${discountedPrice.toFixed(2)}` : 'N/A',
+            pricingsMonthly: !isNaN(price) ? `$${price.toFixed(2)}` : 'N/A', // Ejemplo de cálculo para mensual
             ActivateQrs: item.active_qrs,
             scansXqr: item.scan_qrs || "Unlimited",
             sopport: item.premium_support ? <FaCheck className='text-green-500 text-2xl' /> : <IoClose className='text-red-500 text-2xl' />,

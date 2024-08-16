@@ -112,7 +112,7 @@ const QRCodeList = () => {
         }
         const discountNames = item.discounts.map(discountId => {
           const discount = discounts.find(d => d.id === discountId);
-          return discount ? discount.discount : 'N/A'; // 'N/A' si no se encuentra el descuento
+          return discount ? ` ${discount.description}${'-'}${discount.discount}` : 'N/A'; // 'N/A' si no se encuentra el descuento
         });
         return discountNames.join(', '); // Une los nombres de los descuentos con coma
       }
@@ -155,6 +155,7 @@ const QRCodeList = () => {
         </div>
       )
     }
+    
   ];
 
   return (
@@ -211,14 +212,13 @@ const QRCodeList = () => {
               <select
                 id="discounts"
                 name="discounts"
-                multiple
                 value={selectedDiscounts}
                 onChange={handleDiscountChange}
                 className="p-2 border border-gray-300 rounded-md"
               >
                 {discounts.map(discount => (
                   <option key={discount.id} value={discount.id}>
-                    {discount.discount}
+                    {discount.description}{'-'}{discount.discount}
                   </option>
                 ))}
               </select>
