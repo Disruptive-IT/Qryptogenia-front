@@ -3,7 +3,7 @@ import cell from "../../../assets/imgs/Celular.png"
 
 const CellBox = ({children}) => {
     return (
-        <div className='relative min-w-[360px] min-h-[680px] max-w-[360px] max-h-[680px] rounded-[55px]'>
+        <div className='relative min-w-[360px] min-h-[680px] max-w-[360px] max-h-[680px] rounded-[55px] scale-[0.9ss]'>
             <div className='absolute inset-0 w-full h-full flex flex-col items-center overflow-hidden rounded-[55px] z-10'>
                 <div className='relative w-full h-full flex flex-col items-center overflow-y-auto scroll-my-1'>
                     {children}

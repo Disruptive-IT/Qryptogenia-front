@@ -364,9 +364,11 @@ export const SocialForm = ({ onFormChange, location, socialFormValues }) => {
     >
       {({ setFieldValue, handleSubmit }) => (
         <Form className="max-w-4xl mx-auto mt-8 relative" onSubmit={handleSubmit}>
-          <h2 className="text-xl font-semibold mb-4">Social Qr</h2>
           <div className="flex flex-col md:flex-row md:items-start md:mb-4">
             <div className="flex flex-col w-full md:w-2/3 mr-6 mb-4 md:mb-0">
+            <div>
+
+            </div>
               <label htmlFor="title" className="mb-2">Title:</label>
               <Field
                 type="text"
@@ -600,25 +602,39 @@ export const SocialForm = ({ onFormChange, location, socialFormValues }) => {
           </div>
 
           <div className='grid grid-cols-1 md:grid-cols-2 gap-4'>
-            {updatedSelectedOptions.map((option, index) => (
-              <div key={index} className="flex items-center mb-4">
-                <label htmlFor={`input_${option.value}`} className="mb-2">{option.icon}</label>
+            {selectedOptions.map((option, index) => (
+              <div key={index} className="grid gap-3 mb-3">
+                <div className='grid grid-cols-[auto_1fr] gap-3 items-center'>
+                <label htmlFor={`input_${option.value}`} className="mx-3">{option.icon}</label>
                 <Field
                   type="text"
                   id={`url_${index}`}
                   name={`url_${index}`}
                   placeholder={`URL for ${option.value}`}
-                  className="border w-full border-gray-300 rounded p-2"
+                  className="border border-gray-300 rounded p-2 w-full"
                   value={option.url}
-                  onChange={(e) => handleUrlChange(index, e.target.value)}
+                  onChange={(e) => {
+                    handleUrlChange(index, e.target.value)
+                    const updatedOptions = [...selectedOptions];
+                    updatedOptions[index] = { ...updatedOptions[index], url: e.target.value };
+                    setSelectedOptions(updatedOptions);
+                    setFieldValue('selectedOptions', updatedOptions);
+                  }}
                 />
-                {/* Mostrar mensaje de error para cada URL */}
-                {formErrors[`url_${index}`] && <div className="text-red-500 text-sm">{formErrors[`url_${index}`]}</div>}
+                </div>
+                <div className="relative flex justify-center items-center">
+        {/* Mostrar mensaje de error para cada URL */}
+        {formErrors[`url_${index}`] && (
+            <div className="absolute text-red-500 text-xs">
+                {formErrors[`url_${index}`]}
+            </div>
+        )}
+    </div>
               </div>
             ))}
           </div>
 
-          <div className="flex items-center mb-4 mt-4">
+          <div className="flex items-center mb-4 mt-6">
             <button type="submit" className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600">Submit</button>
           </div>
         </Form>

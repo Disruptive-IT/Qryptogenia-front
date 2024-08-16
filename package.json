@@ -21,6 +21,7 @@
     "file-saver": "^2.0.5",
     "formik": "^2.4.6",
     "framer-motion": "^11.3.17",
+    "frontqr": "file:",
     "html-react-parser": "^5.1.10",
     "html-to-image": "^1.11.11",
     "jwt-decode": "^4.0.0",

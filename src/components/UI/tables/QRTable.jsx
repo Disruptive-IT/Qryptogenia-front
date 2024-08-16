@@ -1,4 +1,5 @@
 import React from 'react';
+import { motion } from 'framer-motion';
 import Paginator from './paginator.jsx'; // Asegúrate de ajustar la ruta según tu estructura de archivos
 
 const QRTable = ({ data, columns, currentPage, totalPages, onPageChange }) => {
@@ -8,40 +9,40 @@ const QRTable = ({ data, columns, currentPage, totalPages, onPageChange }) => {
 
   return (
     <div className="overflow-x-auto">
-      <table className="min-w-full bg-white">
-        <thead>
-          <tr>
-            {columns.map((column) => (
-              <th
-                key={column.header}
-                className="py-2 px-4 border-b border-gray-300 text-left text-xs sm:text-sm leading-4 font-medium text-gray-600 tracking-wider"
-              >
-                {column.header}
-              </th>
-            ))}
-          </tr>
-        </thead>
-        <tbody>
-          {paginatedData.map((item) => (
-            <tr key={item.id}>
-              {columns.map((column) => (
-                <td
-                  key={column.header}
-                  className="py-2 px-4 border-b border-gray-300 text-xs sm:text-sm leading-5 text-gray-700"
-                >
-                  {column.render ? column.render(item) : item[column.accessor]}
-                </td>
-              ))}
-            </tr>
+  <table className="min-w-full bg-white">
+    <thead>
+      <tr>
+        {columns.map((column) => (
+          <th
+            key={column.header}
+            className="py-2 px-4 border-b border-gray-300 text-left text-xs sm:text-sm leading-4 font-medium text-gray-600 tracking-wider"
+          >
+            {column.header}
+          </th>
+        ))}
+      </tr>
+    </thead>
+    <tbody>
+      {paginatedData.map((item) => (
+        <motion.tr key={item.id} whileHover={{backgroundColor:'#D5DBDB'}}>
+          {columns.map((column) => (
+            <td
+              key={column.header}
+              className="py-2 px-4 border-b border-gray-300 text-xs sm:text-sm leading-5 text-gray-700"
+            >
+              {column.render ? column.render(item) : item[column.accessor]}
+            </td>
           ))}
-        </tbody>
-      </table>
-      <Paginator
+        </motion.tr>
+      ))}
+    </tbody>
+  </table>
+  <Paginator
         currentPage={currentPage}
         totalPages={totalPages}
         onPageChange={onPageChange}
       />
-    </div>
+</div>
   );
 };
 
