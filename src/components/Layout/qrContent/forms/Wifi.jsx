@@ -80,6 +80,11 @@ function FormWifi() {
                 alert(JSON.stringify(values, null, 2));
                 resetForm();
                 setSubmitting(false);
+                setInitialValues({
+                    ssid: "",
+                    security_type: "",
+                    password: ""
+                })
             }, 400);
         }
     });
@@ -92,7 +97,7 @@ function FormWifi() {
                 </button>
             </div>
             <form className="max-w-4xl mx-auto mt-8 relative" onSubmit={formik.handleSubmit}>
-                <div className="flex flex-col w-full md:w-2/3 mr-6 mb-6 md:mb-0">
+                <div className="flex flex-col w-full md:w-2/3 mr-6 mb-[10px] md:mb-0">
                     <label htmlFor="ssid" className="mb-3">SSID o Nombre de la Red</label>
                     <input
                         type="text"
@@ -101,13 +106,13 @@ function FormWifi() {
                         onChange={formik.handleChange}
                         onBlur={formik.handleBlur}
                         value={formik.values.ssid}
-                        className="border w-full border-gray-300 rounded p-2 mb-9"
+                        className="border w-full border-gray-300 rounded p-2 mb-4"
                     />
                     {formik.touched.ssid && formik.errors.ssid ? (
-                        <div className="text-red-500 text-sm">{formik.errors.ssid}</div>
+                        <div className="relative text-red-500 text-sm">{formik.errors.ssid}</div>
                     ) : null}
                 </div>
-                <div className="flex flex-col w-full md:w-2/3 mr-6 mb-4 md:mb-0">
+                <div className="flex flex-col w-full md:w-2/3 mr-6 mb-[10px] md:mb-0">
                     <label htmlFor="security_type" className="mb-3">Tipo de Seguridad</label>
                     <select
                         name="security_type"
@@ -115,7 +120,7 @@ function FormWifi() {
                         onChange={formik.handleChange}
                         onBlur={formik.handleBlur}
                         value={formik.values.security_type}
-                        className="border w-full border-gray-300 rounded p-2 mb-9"
+                        className="border w-full border-gray-300 rounded p-2 mb-4"
                     >
                         <option value="">Selecciona</option>
                         {securityOptions.map(option => (
@@ -125,10 +130,10 @@ function FormWifi() {
                         ))}
                     </select>
                     {formik.touched.security_type && formik.errors.security_type ? (
-                        <div className="text-red-500 text-sm">{formik.errors.security_type}</div>
+                        <div className="relative text-red-500 text-sm">{formik.errors.security_type}</div>
                     ) : null}
                 </div>
-                <div className="flex flex-col w-full md:w-2/3 mr-6 mb-4 md:mb-0">
+                <div className="flex flex-col w-full md:w-2/3 mr-6 mb-[10px] md:mb-0">
                     <label htmlFor="password" className="mb-3">Contraseña</label>
                     <input
                         type="password"
@@ -137,10 +142,10 @@ function FormWifi() {
                         onChange={formik.handleChange}
                         onBlur={formik.handleBlur}
                         value={formik.values.password}
-                        className="border w-full border-gray-300 rounded p-2 mb-9"
+                        className="border w-full border-gray-300 rounded p-2 mb-4"
                     />
                     {formik.touched.password && formik.errors.password ? (
-                        <div className="text-red-500 text-sm">{formik.errors.password}</div>
+                        <div className="relative text-red-500 text-sm">{formik.errors.password}</div>
                     ) : null}
                 </div>
                 <button type="submit" className="px-4 py-2  bg-blue-500 text-white rounded hover:bg-blue-600" disabled={formik.isSubmitting}>

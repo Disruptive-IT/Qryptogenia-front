@@ -72,7 +72,7 @@ export default function ChangeFrame({ name, appFormValues, socialFormValues, mus
     const { contentName } = useParams();
     const theme = useTheme();
     const isSmallScreen = useMediaQuery(theme.breakpoints.down(1023)); // Detecta si la pantalla es pequeña
-    const isSpecialContent = ['pdf', 'website-url'].includes(contentName.toLowerCase()); // Verifica si contentName es "pdf" o "url"
+    const isSpecialContent = ['pdf', 'website-url','wifi'].includes(contentName.toLowerCase()); // Verifica si contentName es "pdf" o "url"
     const [value, setValue] = React.useState((isSmallScreen || isSpecialContent) ? 1 : 0); // Inicializa en el tab de "QR" si la pantalla es pequeña o el contentName es especial
     const [isTabClickable, setIsTabClickable] = React.useState(true);
 
