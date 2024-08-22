@@ -12,56 +12,71 @@ import React from 'react';
 import { PricingsCards } from '../components/Layout/pricingsCards';
 import { IoClose } from "react-icons/io5";
 import { FaCheck } from "react-icons/fa";
+import { useState, useEffect } from 'react';
+import axios from 'axios';
 
 
 export const PlansPricings = () => {
 
-    const data=[
-        {
-            id:1,
-            name:"FREE",
-            pricings:"$0.00",
-            pricingsMonthly: "$0.00",
-            ActivateQrs: "2",
-            scansXqr: "10",
-            sopport:<IoClose className='text-red-500 text-2xl' />,
-            staticQrs: <IoClose className='text-red-500 text-2xl' />
+  const [data, setData] = useState([]);
+  const [discounts, setDiscounts] = useState([]);
 
-        },
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get('http://localhost:3000/api/memberships', {
+          withCredentials: true,
+        });
+        console.log(response);
 
-        {
-            id:2,
-            name:"BASIC",
-            pricings:"$9.99",
-            pricingsMonthly: "$11.99",
-            ActivateQrs: "5",
-            scansXqr: "10000",
-            sopport:<IoClose className='text-red-500 text-2xl' />,
-            staticQrs: <IoClose className='text-red-500 text-2xl' />
-        },
-        {
-            id:3,
-            name:"ADVANCED",
-            pricings:"$20.99",
-            pricingsMonthly: "$24.99",
-            ActivateQrs: "50",
-            scansXqr: "Unlimited",
-            sopport:<IoClose className='text-red-500 text-2xl' />,
-            staticQrs: <FaCheck className='text-green-500 text-2xl' />
-        },
-        {
-            id:4,
-            name:"PROFESIONAL",
-            pricings:"$45.99",
-            pricingsMonthly: "$49.99",
-            ActivateQrs: "250",    
-            scansXqr: "Unlimited",
-            sopport:<FaCheck className='text-green-500 text-2xl' />,
-            staticQrs: <FaCheck className='text-green-500 text-2xl' />
+        const fetchedDiscounts = response.data.discounts || []; // Asegurarse de obtener los descuentos
+        setDiscounts(fetchedDiscounts);
+        
+        // Transformar los datos para coincidir con el formato requerido
+        const transformedData = response.data.memberships.map(item => {
+          const price = parseFloat(item.price);
+          let finalDiscount = 0;
+          if (item.discounts && item.discounts.length > 0) {
+            // Mapear los IDs de descuentos a los valores reales
+            const applicableDiscounts = item.discounts.map(discountId => {
+              const discount = fetchedDiscounts.find(d => d.id === discountId);
+              if (discount) {
+                // Quitar el símbolo '%' y convertir a número
+                const discountValue = parseFloat(discount.discount.replace('%', ''));
+                return !isNaN(discountValue) ? discountValue : 0;
+              }
+              return 0;
+            });
 
-        }
-    ]
+            // Aplicar la lógica de descuento deseada, por ejemplo, utilizar el mayor descuento
+            finalDiscount = Math.max(...applicableDiscounts);
+          }
+          // Calcular precio con descuento si existe
+          const discountedPrice = !isNaN(price) && finalDiscount > 0
+            ? price * (1 - finalDiscount / 100)
+            : price;
+            console.log(finalDiscount);
+            
+          return {
+            id: item.id,
+            name: item.type_membership,
+            pricings: !isNaN(discountedPrice) ? `$${discountedPrice.toFixed(2)}` : 'N/A',
+            pricingsMonthly: !isNaN(price) ? `$${price.toFixed(2)}` : 'N/A', // Ejemplo de cálculo para mensual
+            ActivateQrs: item.active_qrs,
+            scansXqr: item.scan_qrs || "Unlimited",
+            sopport: item.premium_support ? <FaCheck className='text-green-500 text-2xl' /> : <IoClose className='text-red-500 text-2xl' />,
+            staticQrs: item.unlimited_static ? <FaCheck className='text-green-500 text-2xl' /> : <IoClose className='text-red-500 text-2xl' />
+          };
+        });
 
+        setData(transformedData);
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+    };
+
+    fetchData();
+  }, []);
 
 
   return (

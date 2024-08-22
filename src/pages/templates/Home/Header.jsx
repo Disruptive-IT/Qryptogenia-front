@@ -15,12 +15,13 @@ function Navbar() {
 
     return (
         <header className="relative md:top-4 inset-x-0 z-50">
-            <div className="relative h-20 flex w-full p-3 mx-auto bg-white md:rounded-full items-center justify-between md:shadow lg:w-4/5 px-8">
-                <Link to="/" className="text-black hover:text-black/70 items-center inline-flex font-bold ml-2 text-2xl" title="Inicio">
+            <div className="relative h-20 flex w-full p-3 mx-auto bg-white md:rounded-lg items-center justify-between shadow-lg lg:w-[94%] ">
+                <Link to="/" className="text-black hover:text-black/70 items-center inline-flex font-bold ml-2 text-2xl w-2/6" title="Inicio">
                     <img className='w-[60px]' src={logo} alt="Qryptogenia" />
-                    <span className='text-dark-blue ml-2'>Qry</span>ptogenia
+                    <span className='text-dark-blue ml-2 font-bold'>QR</span>yptogenia
                 </Link>
-                <nav className="md:flex hidden">
+
+                <nav className="md:flex hidden w-2/6 justify-center">
                     <ul className="space-x-4 list-none text-sm text-black items-center inline-flex justify-center text-left gap-3">
                         <CustomLink to="/" isActive={isActive('/home')}>Home</CustomLink>
                         <CustomLink to="#" isActive={isActive('/about')}>About us</CustomLink>
@@ -28,12 +29,13 @@ function Navbar() {
                         <CustomLink to="#" isActive={isActive('/faq')}>FAQ</CustomLink>
                     </ul>
                 </nav>
-                <ul className='md:flex hidden space-x-4'>
-                    <li className="shrink-0">
-                        <Link to="/login" className="py-2 w-auto px-4 border-2 border-dark-blue h-8 rounded-full bg-black/5 hover:bg-transparent text-dark-blue duration-200">Sign In</Link>
+
+                <ul className='md:flex hidden gap-4 w-2/6 justify-end pr-5'>
+                    <li className="transition-all duration-300 hover:scale-105 hover:ease-linear">
+                        <Link to="/login" className="font-sans font-bold  text-light-blue focus:text-lg focus:text-dark-blue">Sign In</Link>
                     </li>
-                    <li className="shrink-0">
-                        <Link to="/register" className="py-2 w-auto px-4 border-2 border-dark-blue h-8 rounded-full bg-black/5 hover:bg-transparent text-dark-blue duration-200">Sign Up</Link>
+                    <li className="transition-all duration-200 hover:scale-105 hover:ease-linear ">
+                        <Link to="/register" className=" font-bold font-sans  text-light-blue focus:text-lg focus:text-dark-blue">Sign Up</Link>
                     </li>
                 </ul>
                 <MenuDrawer />

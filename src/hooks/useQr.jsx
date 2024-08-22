@@ -10,7 +10,7 @@
 import { useState, useEffect } from 'react';
 
 const useQrState = (initialQrType = '', initialQrProps = {}) => {
-    
+
     const initialState = {
         qrData: "",
         qrType: initialQrType,
@@ -30,8 +30,8 @@ const useQrState = (initialQrType = '', initialQrProps = {}) => {
             cornersDotColor: '#000000'
         },
         qrImageInfo: {
+            includeImage: false,
             qrImage: null,
-            qrImageSize: 0.5
         },
         qrTextProps: {
             qrText: '',
@@ -228,8 +228,8 @@ const useQrState = (initialQrType = '', initialQrProps = {}) => {
         }));
     };
 
-    const setQrImageSize = (size) => {
-        updateQrImageInfo({ qrImageSize: size });
+    const setIncludeImage = (check) => {
+        updateQrImageInfo({ includeImage: check });
     };
 
     const setQrImage = (image) => {
@@ -258,9 +258,9 @@ const useQrState = (initialQrType = '', initialQrProps = {}) => {
         setTextChip,
         setTextChipColor,
         setQrImage,
-        setQrImageSize,
         setQrBase64,
-        resetQrData
+        resetQrData,
+        setIncludeImage,
     };
 
 };

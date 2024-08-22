@@ -16,9 +16,9 @@ const options = [
     { name: 'Logo', component: Logo },
 ];
 
-const CustomQr = ({location, qrId}) => {
+const CustomQr = ({ location, qrId }) => {
     const [selectedOptionIndex, setSelectedOptionIndex] = useState(0);
-    const { qrType, qrData, qrColor, qrBgColor, qrProps, qrImageInfo, qrTextProps, appFormValues, socialFormValues, musicFormValues, qrBase64, currentContentType} = useQr();
+    const { qrType, qrData, qrColor, qrBgColor, qrProps, qrImageInfo, qrTextProps, appFormValues, socialFormValues, musicFormValues, qrBase64, currentContentType } = useQr();
     console.log(musicFormValues)
     const handleOptionSelect = (index) => {
         setSelectedOptionIndex(index);
@@ -28,11 +28,16 @@ const CustomQr = ({location, qrId}) => {
         const { value: qrName, isConfirmed } = await Swal.fire({
             title: 'Save QR Code',
             html: `
-                <input id="swal-input1" className="swal2-input" placeholder="Enter QR code name...">
-                <div style="margin: 2em 0;">
-                    <p style="font-size: 1em; color: #888; margin-top: 10px;">Please enter a name for your QR code. If you do not set a name, the system will provide one for you.</p>
-                    <p style="font-size: 0.8em; margin: 10px 0 0 0;">Click "Save" to finalize the creation of your QR code.</p>
-                </div>
+                <input 
+            id="swal-input1" 
+            class="swal2-input" 
+            placeholder="Enter QR code name..."
+            style="width: 60%; padding: 10px; border: 1px solid #ccc; border-radius: 6px; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);"
+        >
+        <div style="margin: 2em 0;">
+            <p style="font-size: 1em; color: #888; margin-top: 10px;">Please enter a name for your QR code. If you do not set a name, the system will provide one for you.</p>
+            <p style="font-size: 0.8em; margin: 10px 0 0 0;">Click "Save" to finalize the creation of your QR code.</p>
+        </div>
             `,
             focusConfirm: false,
             preConfirm: () => {
@@ -44,9 +49,9 @@ const CustomQr = ({location, qrId}) => {
                 return input;
             },
             showCancelButton: true,
-            confirmButtonColor:'#007bff',
+            confirmButtonColor: '#007bff',
             confirmButtonText: 'Save',
-            cancelButtonColor:"#d33",
+            cancelButtonColor: "#d33",
             cancelButtonText: 'Cancel',
             customClass: {
                 actions: 'swal2-actions-no-margin'
@@ -65,7 +70,7 @@ const CustomQr = ({location, qrId}) => {
             } else {
                 console.log(musicFormValues)
                 console.log(qrType)
-                await saveQrData(qrName, qrData, qrType, qrColor, qrBgColor, qrProps, qrImageInfo, qrTextProps, appFormValues, socialFormValues, musicFormValues,  qrBase64, currentContentType, location, qrId);
+                await saveQrData(qrName, qrData, qrType, qrColor, qrBgColor, qrProps, qrImageInfo, qrTextProps, appFormValues, socialFormValues, musicFormValues, qrBase64, currentContentType, location, qrId);
             }
         } else {
             toast.info('QR code saving was cancelled.');
@@ -110,18 +115,19 @@ const CustomQr = ({location, qrId}) => {
                             {option.name}
                         </Button>
                     ))}
-                    <Button
-                        variant="contained"
-                        color="primary"
-                        onClick={Dowload}
-                    >
-                        Finish
-                    </Button>
                 </div>
                 <div className='pt-5'>
                     <OptionComponent onTabSelect={handleOptionSelect} />
                 </div>
             </div>
+            <Button
+                variant="contained"
+                color="primary"
+                onClick={Dowload}
+                className='absolute bottom-0 left-8 w-4/5 md:left-0 md:w-full'
+            >
+                Create my qr
+            </Button>
         </div>
     );
 }
