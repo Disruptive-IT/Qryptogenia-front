@@ -116,9 +116,9 @@ const menuItems = [
         path: "/admin/qrs"
     },
     {
-        title: "Planes",
+        title: "Memberships",
         icon: <Orbit />,
-        path: "/admin/planes"
+        path: "/admin/membership"
     },
     {
         title: "Descuentos",

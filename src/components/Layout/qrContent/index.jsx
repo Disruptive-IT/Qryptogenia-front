@@ -27,14 +27,14 @@ export const QrContentSwitch = ({contentName, onFormChangeApp, onFormChange, onF
         case "app store":
             qrContent = (
                 <div>
-                    <AppForm onFormChangeApp={onFormChangeApp}/>
+                    <AppForm onFormChangeApp={onFormChangeApp} location={location} appFormValues={appFormValues}/>
                 </div>
             );
             break;
         case "social media":
             qrContent = (
                 <div>
-                    <SocialForm onFormChange={onFormChange} onSubmit={onSocialFormSubmit} />
+                    <SocialForm onFormChange={onFormChange} onSubmit={onSocialFormSubmit} location={location} socialFormValues={socialFormValues} />
                 </div>
             );
             break;
@@ -62,7 +62,7 @@ export const QrContentSwitch = ({contentName, onFormChangeApp, onFormChange, onF
         case "music":
             qrContent = (
                 <div>
-                    <MusicForm onFormChangeMusic={onFormChangeMusic}/>
+                    <MusicForm onFormChangeMusic={onFormChangeMusic} location={location} musicFormValues={musicFormValues}/>
                 </div>
             );
             break;

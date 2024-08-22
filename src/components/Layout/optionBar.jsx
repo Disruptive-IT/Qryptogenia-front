@@ -12,12 +12,12 @@ import { useQr } from "../../context/QrContext";
 import './styles/qr-animation.css'
 import { motion } from "framer-motion";
 
-/*
+/**
  * @UpdatedBy : Nicolas Barrios,   @date 2024-07-25 11:51:05
  * @description : estilos corregidos del div del celular del home                                                     
  */
 
-/*
+/**
  * @Author : Nicolas Barrios,   @date 2024-07-25 19:25:40
  * @description : se agrego motion para estilos y animaciones, se hizo animacion del qr scaneado
  * @Props : ninguna
@@ -28,7 +28,7 @@ export const OptionBar = () => {
 
   return (
     <div className="w-screen px-10">
-      <div className="flex items-center md:p-2 lg:p-10">
+      <div className="flex items-start  md:p-2 lg:p-10">
         <BoxLink />
         <div className="w-full hidden lg:block gap-4 sm:min-h-[490px] md:h-[490px] lg:max-h-[690px] lg:max-w-60  cellPhone custom-max:ml-6">
           <div className=" flex flex-col h-full gap-4 text-center  items-center jutify-center">

@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { SocialIcon } from 'react-social-icons';
 import { FaApple  } from "react-icons/fa";
+import { useState } from 'react';
 
 const SamsungIcon = () => (
   <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="30" height="30" style={{ verticalAlign: 'middle' }} viewBox="0 0 48 48">
@@ -38,18 +39,12 @@ export const SocialButton = ({ data }) => {
   );
 };
 
-export const SocialButtonM = ({ data }) => {
+export const SocialButtonM = ({ data, botonColor }) => {
   return (
-    <div className='flex gap-3 justify-center flex-wrap w-full mb-5'>
+    <div className='flex gap-3 justify-center mt-8 flex-wrap w-full mb-5'>
       {data && data.map((social, index) => (
-        <a target="_blank" rel="noopener noreferrer" href={social.url} key={index} type="button" className="relative bg-gray-100 p-2 min-w-32 h-12 rounded-lg flex gap-2 items-center justify-center" style={{ cursor: "pointer", verticalAlign: 'middle' }}>
-          {social.name === 'Apple Store' && <FaApple style={{ width: 30, height: 30, verticalAlign: 'middle' }} />}
-          {social.name === 'Google Play' && <GooglePlayIcon size={40} style={{ verticalAlign: 'middle' }} />}
-          {social.name === 'Galaxy Store' && <SamsungIcon style={{ verticalAlign: 'middle' }} />}
-          {social.name !== 'Apple Store' && social.name !== 'Google Play' && social.name !== 'Galaxy Store' && (
-            <SocialIcon network={social.name.toLowerCase()} style={{ width: 30, height: 30, verticalAlign: 'middle' }} />
-          )}
-          <span className={`font-bold`}>{social.name}</span>
+        <a target="_blank" rel="noopener noreferrer" href={social.url} key={index} type="button" className="relative p-2 min-w-16 h-16 rounded-lg flex gap-2 items-center" style={{ cursor: "pointer", verticalAlign: 'middle'}}>
+            {botonColor === '#000000' ? social.icon : social.iconw}
         </a>
       ))}
     </div>

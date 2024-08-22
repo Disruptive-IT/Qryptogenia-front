@@ -133,7 +133,7 @@ export default function ChangeFrame({ name, appFormValues, socialFormValues, mus
 
     return (
         <section className="relative w-full h-full bg-white shadow-xl rounded-xl">
-            <Box className="flex justify-center items-center flex-col w-full h-full">
+            <Box className="flex items-center flex-col w-full h-full">
                 <AppBar position="static" sx={{ background: "transparent", textAlign: "center", borderRadius: "20px 20px 0 0", boxShadow: "0 0 10px 0 #ccc" }} >
                     <Tabs
                         value={value}

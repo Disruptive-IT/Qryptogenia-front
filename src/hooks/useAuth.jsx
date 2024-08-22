@@ -2,6 +2,18 @@ import axios from "../libs/axios";
 import { useEffect, useState } from "react";
 import { toast } from 'sonner';
 import { useLoader } from '../context/LoaderContext';
+/**
+ * @Author : Jobserd Julián Ocampo, @date 2024-08-13 09:48:10
+ * @description : Este archivo define un hook personalizado `useAuth` para manejar la autenticación y las operaciones relacionadas con los usuarios, como iniciar sesión, registrarse, cambiar contraseñas y obtener datos del perfil. Incluye varias funciones para interactuar con el backend mediante solicitudes HTTP utilizando `axios`. 
+ * @Props : 
+ * @return : Un objeto con funciones relacionadas con la autenticación y la gestión de usuarios.
+ * 
+ * @nota : Este archivo `useAuth` contiene una mezcla de responsabilidades y algunas funciones no pertenecen al contexto de autenticación. 
+ * Para mejorar la implementación:
+ * - Separar Funcionalidades: Dividir las funciones en varios archivos según su propósito. Por ejemplo, crea un archivo separado para funciones relacionadas con el perfil del usuario, como changeProfilePicture, getProfileImageUrl, y changeUsername.
+ * - Organización del Código: Mueve las funciones `recoverPassword`, `forgotPassword`, y `getStoreData` a un archivo o módulo correspondiente que maneje la recuperación de contraseñas y la obtención de datos de tienda.
+ * - Refactorización de Código: Mejorar la lógica del código y realizar refactorizaciones para mejorar la legibilidad y eficiencia del código.
+**/
 
 export const useAuth = (navigate) => {
     const [user, setUser] = useState(null);

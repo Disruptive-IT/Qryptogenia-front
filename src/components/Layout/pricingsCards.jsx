@@ -8,10 +8,19 @@
 
 import React from 'react';
 
-export const PricingsCards = ({data}) => {
+export const PricingsCards = ({ data }) => {
+    // Ordenar los datos según el valor numérico de item.pricings en orden ascendente
+    const sortedData = [...data].sort((a, b) => {
+      // Extraer los valores numéricos de las cadenas de texto (eliminar '$' y convertir a número)
+      const priceA = parseFloat(a.pricings.replace('$', ''));
+      const priceB = parseFloat(b.pricings.replace('$', ''));
+  
+      // Orden ascendente
+      return priceA - priceB;
+    });
   return (
     <div className='flex w-full gap-4 justify-center items-center flex-wrap'>
-        {data.map((item, index) => (
+        {sortedData.map((item, index) => (
             <div key={index} className='w-full sm:w-[300px] md:w-[300px] lg:w-[300px] xl:w-[300px]'>
                 <div className='flex justify-center'>
                     {item.name=="ADVANCED" ? <div className='h-8 bg-light-blue rounded-t-lg w-[90%] text-white flex items-center justify-center cursor-default'><span>MOST POPULAR</span></div> :<div className='h-10'></div>}

@@ -34,7 +34,7 @@ const App = () => {
   useEffect(() => {
     const fetchQRCodes = async () => {
       try {
-        const response = await axios.get(`http://localhost:3000/api/qr/getqrs`, {
+        const response = await axios.get(`http://localhost:3000/api/qr/`, {
           withCredentials: true,
         });
 
@@ -313,14 +313,17 @@ const App = () => {
             className="cursor-pointer text-xl text-yellow-500"
             onClick={() => handleActionClick('edit', item)}
           />
+          
           </motion.div>
           <motion.div  
             whileHover={{scale:"1.2"}}
           >
+          {item.qrType && item.qrType.type !== 'website-url' && (
           <MdVisibility
             className="cursor-pointer text-xl"
-            onClick={() => handleOpenModal(item.id, item.qrType ? item.qrType.type : 'N/A')} // Pasa el ID y el tipo de código
+            onClick={() => handleOpenModal(item.id, item.qrType ? item.qrType.type : 'N/A')}
           />
+        )}
           </motion.div>
         </div>
       )

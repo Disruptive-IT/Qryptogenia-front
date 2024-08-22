@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useQr } from '../../../../../context/QrContext';
-import InputText from './StyleInput';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
+import AnimatedInput from './animatedInput';
 
 /**
  * @Author : Jobserd Julián Ocampo,   @date 2024-08-01 14:08:20
@@ -21,7 +21,7 @@ const positionStyles = {
 
 export default function ScrollableInputText() {
     const { setQrText, qrTextProps, setQrTextPosition } = useQr();
-    const [value, setValue] = useState(0); 
+    const [value, setValue] = useState(0);
 
     const handleInputChange = (e) => {
         setQrText(e.target.value);
@@ -33,14 +33,16 @@ export default function ScrollableInputText() {
         setQrTextPosition({ key: selectedPositionKey, style: positionStyles[selectedPositionKey] });
     };
 
-    useEffect(() => {
-        console.log("ESTADO DE POSICION ", qrTextProps.qrTextPosition);
-    }, [qrTextProps.qrTextPosition]);
-
     return (
         <>
             <div className="flex space-x-4 items-center mt-6">
-                <InputText label="Write the text" variant="filled" inputProps={{ maxLength: 10 }} fullWidth onChange={handleInputChange} />
+                <AnimatedInput
+                    id="inputField"
+                    maxLength="10"
+                    onChange={handleInputChange}
+                    label="Write the text"
+                    value={qrTextProps.qrText}
+                />
             </div>
             <div className='flex flex-col gap-4'>
                 <span className='text-xs text-gray-500'>*The text has a limit of 10 characters</span>

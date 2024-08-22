@@ -25,7 +25,7 @@ const QRScanPage = () => {
             setQrData(res.data.QrPreview);
             setLoading(false);
         } catch (err) {
-            setError(err.response?.data?.msg || 'Error de verificación de QR');
+            setError(err.response?.data?.message || 'Error de verificación de QR');
             setLoading(false);
         }
     };
