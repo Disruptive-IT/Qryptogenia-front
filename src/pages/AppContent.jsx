@@ -11,14 +11,14 @@ import { PhoneContentSwitch, QrContentSwitch } from '../components/Layout/qrCont
 import NotFoundPage from './NotFoundPage';
 import { useStepper } from '../context/StepperContext';
 import ChangeFrame from '../components/Layout/qrContent/changeFrame';
-import { contentTexts } from '../components/Layout/qrContent/contentData';
+import { UseContentTexts} from '../components/Layout/qrContent/contentData';
 import Valuesjson from '../pages/user/Valuesjson.json';
 import Modal from 'react-modal';
 import CellBox from '../components/Layout/qrContent/cellBox';
 import axios from 'axios';
 import { OptionBarTwo } from '../components/Layout/optionBar';
 import { useQr } from '../context/QrContext';
-
+import { useTranslation } from 'react-i18next';
 Modal.setAppElement('#root');
 
 const initialAppFormValues = Valuesjson.appFormValues;
@@ -34,6 +34,8 @@ const AppContent = () => {
     const handleSocialFormSubmit = () => {
         setSelectedTab(1); // Cambia al tab "Preview QRytogenia"
     };
+    const { t } = useTranslation();
+    const contentTexts = UseContentTexts();
 
     const {
         appFormValues,
@@ -225,7 +227,7 @@ const AppContent = () => {
             </section>
 
             <button onClick={openModal} className='block lg:hidden px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 fixed bottom-16 right-4 z-50'>
-                Show Preview
+                {t("Show Preview")}
             </button>
 
             <Modal

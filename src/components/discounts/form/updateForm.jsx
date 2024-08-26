@@ -3,12 +3,13 @@ import { useFormik } from "formik";
 import Swal from "sweetalert2";
 import instance from "../../../libs/axios";
 import { motion } from "framer-motion";
+import { useTranslation } from "react-i18next";
 
 const UpdateDiscount = ({ event, id, reload }) => {
     const [discountData, setDiscountData] = useState(null);
     const [isDataLoaded, setIsDataLoaded] = useState(false);
     const [isUpdate,setIsUpdate]=useState(false);
-
+    const { t } = useTranslation();
     const handleIsUpdate=(value)=>{
         setIsUpdate(value);
         console.log(value);
@@ -145,7 +146,7 @@ const UpdateDiscount = ({ event, id, reload }) => {
             >
                 <div className="mb-6">
                     <label className="block text-sm font-semibold mb-2" htmlFor="discount">
-                        Discount
+                        {t("Discount")}
                     </label>
                     <input
                         className="w-full p-3 text-sm text-gray-800 border border-cyan-900 rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500"
@@ -162,7 +163,7 @@ const UpdateDiscount = ({ event, id, reload }) => {
 
                 <div className="mb-6">
                     <label className="block text-sm font-semibold mb-2" htmlFor="description">
-                        Description
+                    {t("Description")}
                     </label>
                     <input
                         className="w-full p-3 text-sm text-gray-800 border border-cyan-900 rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500"
@@ -179,7 +180,7 @@ const UpdateDiscount = ({ event, id, reload }) => {
 
                 <div className="mb-6">
                     <label className="block text-sm font-semibold mb-2" htmlFor="limit_date">
-                        Limit Date
+                    {t("Limit Date")}
                     </label>
                     <input
                         className="w-full p-3 text-sm text-gray-800 border border-cyan-900 rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500"
@@ -196,7 +197,7 @@ const UpdateDiscount = ({ event, id, reload }) => {
 
                 <div className="mb-6">
                     <label className="block text-sm font-semibold mb-2" htmlFor="use_quantity">
-                        Quantity
+                    {t("Quantity")}
                     </label>
                     <input
                         className="w-full p-3 text-sm text-gray-800 border border-cyan-900 rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500"

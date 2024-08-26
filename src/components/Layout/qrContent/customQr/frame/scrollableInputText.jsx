@@ -3,28 +3,30 @@ import { useQr } from '../../../../../context/QrContext';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import AnimatedInput from './animatedInput';
-
+import { useTranslation } from 'react-i18next';
 /**
  * @Author : Jobserd Julián Ocampo,   @date 2024-08-01 14:08:20
  * @description : Componente de la seccion frame o texto. El contenido es dedicado a establecer el texto y su posicion
  * @return : Retorna el input para escritura del usuario y los tabs para seleccion de la posicion del texto
 **/
 
-const positionStyles = {
-    topCenter: { position: 'absolute', top: '2%', left: '50%', transform: 'translate(-50%, 0)' },
-    topLeft: { position: 'absolute', top: '2%', left: '2%' },
-    topRight: { position: 'absolute', top: '2%', right: '2%' },
-    bottomCenter: { position: 'absolute', bottom: '2%', left: '50%', transform: 'translate(-50%, 0)' },
-    bottomLeft: { position: 'absolute', bottom: '2%', left: '2%' },
-    bottomRight: { position: 'absolute', bottom: '2%', right: '2%' },
-};
+
 
 export default function ScrollableInputText() {
     const { setQrText, qrTextProps, setQrTextPosition } = useQr();
     const [value, setValue] = useState(0);
-
+    const { t } = useTranslation();
     const handleInputChange = (e) => {
         setQrText(e.target.value);
+    };
+
+    const positionStyles = {
+        [t("TOPCENTER")]: { position: 'absolute', top: '2%', left: '50%', transform: 'translate(-50%, 0)' },
+        [t("TOPLEFT")]: { position: 'absolute', top: '2%', left: '2%' },
+        [t("TOPRIGHT")]: { position: 'absolute', top: '2%', right: '2%' },
+        [t("BOTTOMCENTER")]: { position: 'absolute', bottom: '2%', left: '50%', transform: 'translate(-50%, 0)' },
+        [t("BOTTOMLEFT")]: { position: 'absolute', bottom: '2%', left: '2%' },
+        [t("BOTTOMRIGHT")]: { position: 'absolute', bottom: '2%', right: '2%' },
     };
 
     const handleTabChange = (event, newValue) => {
@@ -40,15 +42,15 @@ export default function ScrollableInputText() {
                     id="inputField"
                     maxLength="10"
                     onChange={handleInputChange}
-                    label="Write the text"
+                    label={t("Write the text")}
                     value={qrTextProps.qrText}
                 />
             </div>
             <div className='flex flex-col gap-4'>
-                <span className='text-xs text-gray-500'>*The text has a limit of 10 characters</span>
+                <span className='text-xs text-gray-500'>{t("The text has a limit of 10 characters")}</span>
                 <hr />
                 <span className='flex justify-center items-center gap-2 font-semibold cursor-pointer'>
-                    Position Text
+                    {t("Position text")}
                 </span>
             </div>
             <div className='flex justify-between gap-4 pt-4'>

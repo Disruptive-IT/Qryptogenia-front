@@ -3,7 +3,7 @@ import { motion } from "framer-motion";
 import { Modal, Backdrop, Box, Fade } from "@mui/material";
 import CreateDiscount from "./formDiscount";
 import ModalComponent from "./modal";
-
+import { useTranslation } from "react-i18next";
 /*
  * @Author : Nicolas Barrios,   @date 2024-08-05 18:45:58
  * @description : creación de modal que abre formulario de creación de descuentos
@@ -19,7 +19,7 @@ import ModalComponent from "./modal";
 function AddDiscount({reload}) {
 
     const [open, setOpen] = useState(false);
-
+    const { t } = useTranslation();
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
     return(
@@ -30,7 +30,7 @@ function AddDiscount({reload}) {
                     whileTap={{ scale: "0.9", transitionDuration: ".2s" }}
                     onClick={handleOpen}
                 >
-                    Create Discount
+                    {t("Create Discount")}
                 </motion.button>
                 <ModalComponent 
             isOpen={open}

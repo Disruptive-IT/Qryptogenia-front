@@ -11,11 +11,13 @@ import { AuthContext } from "../../context/AuthContext";
 import { Link as RouterLink } from 'react-router-dom';
 import QrCode from '@mui/icons-material/QrCode';
 import Logout from '@mui/icons-material/Logout';
+import { useTranslation } from 'react-i18next';
 
 export default function UserProfileMenu() {
     let { user, logoutUser, profileImage } = useContext(AuthContext)
     const [anchorEl, setAnchorEl] = React.useState(null);
     const open = Boolean(anchorEl);
+    const { t } = useTranslation();
 
     const handleOpen = (event) => {
         setAnchorEl(event.currentTarget);
@@ -76,7 +78,7 @@ export default function UserProfileMenu() {
                 <MenuItem onClick={handleClose}>
                     <Avatar />
                     <RouterLink to="/user/profile" style={{ textDecoration: 'none', color: 'inherit', margin: '0 10px' }}>
-                        <Typography textAlign="center">Profile</Typography>
+                        <Typography textAlign="center">{t("Profile")}</Typography>
                     </RouterLink>
                 </MenuItem>
                 <Divider />
@@ -94,7 +96,7 @@ export default function UserProfileMenu() {
                     <ListItemIcon>
                         <Logout fontSize="small" />
                     </ListItemIcon>
-                    <Typography textAlign="center" onClick={logoutUser} style={{ margin: '0 10px' }}>Logout</Typography>
+                    <Typography textAlign="center" onClick={logoutUser} style={{ margin: '0 10px' }}>{t("Logout")}</Typography>
                 </MenuItem>
             </Menu>
         </>

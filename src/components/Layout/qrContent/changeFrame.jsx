@@ -16,10 +16,11 @@ import { green } from '@mui/material/colors';
 import Box from '@mui/material/Box';
 import CellBox from './cellBox';
 import { PhoneContentSwitch } from '.';
-import { contentTexts } from './contentData';
+import {UseContentTexts} from './contentData';
 import CustomQr from './customQr';
 import Button from '@mui/material/Button';
 import './index.css'
+import { useTranslation } from 'react-i18next';
 
 function TabPanel(props) {
     const { children, value, index, ...other } = props;
@@ -75,6 +76,8 @@ export default function ChangeFrame({ name, appFormValues, socialFormValues, mus
     const isSpecialContent = ['pdf', 'website-url'].includes(contentName.toLowerCase()); // Verifica si contentName es "pdf" o "url"
     const [value, setValue] = React.useState((isSmallScreen || isSpecialContent) ? 1 : 0); // Inicializa en el tab de "QR" si la pantalla es pequeña o el contentName es especial
     const [isTabClickable, setIsTabClickable] = React.useState(true);
+    const { t } = useTranslation()
+    const contentTexts = UseContentTexts();
 
     console.log(contentName)
     console.log("ChangeFrame - appFormValues:", appFormValues);
@@ -157,7 +160,7 @@ export default function ChangeFrame({ name, appFormValues, socialFormValues, mus
                 {!(isSmallScreen || isSpecialContent) && (
                     <TabPanel value={value} index={0} dir={theme.direction} className="w-full flex justify-center">
                         <div className="w-full max-w-[450px]">
-                            <h2 className="text-center text-2xl font-bold mb-8">Preview CellPhone</h2>
+                            <h2 className="text-center text-2xl font-bold mb-8">{t("Preview")} CellPhone</h2>
                             <CellBox className="w-full">
                                 <PhoneContentSwitch
                                     contentName={name}
@@ -171,7 +174,7 @@ export default function ChangeFrame({ name, appFormValues, socialFormValues, mus
                 )}
                 <TabPanel value={value} index={1} dir={theme.direction} className="w-full flex justify-center">
                     <div className="w-[420px] max-w-[500px] px-5 relative">
-                        <h2 className="text-center text-2xl font-bold mb-8">Preview QRytogenia</h2>
+                        <h2 className="text-center text-2xl font-bold mb-8">{t("Preview")} QRytogenia</h2>
                         <CustomQr 
                         location={location}
                         qrId={qrId}

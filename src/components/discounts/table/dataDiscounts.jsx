@@ -8,7 +8,7 @@ import instance from "../../../libs/axios";
 import ModalComponent from "../form/modal.jsx";
 import UpdateDiscount from "../form/updateForm.jsx";
 import { toast, Toaster } from "sonner";
-
+import { useTranslation } from "react-i18next";
 const handleDateFormat = (fecha) => {
   return new Date(fecha).toLocaleDateString();
 };
@@ -20,7 +20,7 @@ function Discounts() {
   const [isDeleted,setIsDeleted]=useState(false);
   const [open, setOpen] = useState(false);
   const [selectedDiscountId, setSelectedDiscountId] = useState(); // Agregar el estado para el ID del descuento
-
+  const { t } = useTranslation();
   const handleOpen = (id) => {
     setSelectedDiscountId(id);
     setOpen(true);
@@ -135,15 +135,15 @@ function Discounts() {
 
   //columnas encabezado datatable
   const columns = [
-    { header: "Discount" },
-    { header: "Description" },
-    { header: "Create Date" },
-    { header: "Use Quantity" },
-    { header: "Current Quantity" },
-    { header: "State" },
-    { header: "Update Date" },
-    { header: "Limit Date" },
-    { header: "Actions" },
+    { header: t("Discount") },
+    { header: t("Description") },
+    { header: t("Create Date") },
+    { header: t("Use Quantity") },
+    { header: t("Current Quantity") },
+    { header: t("State") },
+    { header: t("Update Date") },
+    { header: t("Limit Date") },
+    { header: t("Actions") },
   ];
 
   //funcion que contiene la peticion del estado en la base de datos
@@ -170,7 +170,7 @@ function Discounts() {
           <div>
             <AddDiscount  reload={fetchData}/>
           </div>
-          <SearchBar placeholder={"Enter a discount"} />
+          <SearchBar placeholder={t("Enter a discount")} />
         </div>
         <table className="min-w-full bg-white">
           <thead>
@@ -204,7 +204,7 @@ function Discounts() {
                       row.state ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'
                     } w-20 text-center`}
                   >
-                    {row.state ? "Active" : "Inactive"}
+                    {row.state ? t("Active") : t("Inactive")}
                   </span>
                 </td>
                 <td className="py-2 px-4">{handleDateFormat(row.update_date)}</td>

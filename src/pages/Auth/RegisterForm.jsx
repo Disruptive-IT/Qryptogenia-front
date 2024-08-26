@@ -12,6 +12,7 @@ import CompleteRegisterForm from "../../components/auth/CompleteRegisterForm";
 import AuthSwitcher from "../../components/auth/pure/AuthSwitcher";
 import { IoIosMail } from "react-icons/io";
 import axios from "axios";
+import { useTranslation } from "react-i18next";
 
 /**
  * @Author : Daniel Salazar,   @date 2024-07-29 12:18:52
@@ -26,7 +27,7 @@ const RegisterForm = () => {
   const [showPinVerification, setShowPinVerification] = useState(false);
   const [showCompleteRegister, setShowCompleteRegister] = useState(false);
   const [email, setEmail] = useState("");
-
+  const { t } = useTranslation();
   const handleSubmit = async (values, { resetForm }) => {
     startLoading();
     try {
@@ -102,8 +103,7 @@ const RegisterForm = () => {
               <div className="border-t-2 border-gray-300 mb-2"></div>
 
               <span className="fullWidth text-center text-gray-400 mb-3">
-                Enter your email address and you will receive a verification
-                code to complete your registration.
+                {t("Enter your email address and you will receive a verification code to complete your registration.")}
               </span>
 
               <div className="flex flex-col h-14">
@@ -116,7 +116,7 @@ const RegisterForm = () => {
                     type="email"
                     title="Email"
                     name="email"
-                    placeholder="Email"
+                    placeholder={t("Email")}
                     maxLength="255"
                   />
                   <br />
@@ -129,15 +129,15 @@ const RegisterForm = () => {
               </div>
 
               <div className="flex flex-col gap-4 pt-4">
-                <SubmitButton text="Sing up" />
+                <SubmitButton text={t("Sign Up")} />
 
                 <GoogleButton
                   action={handleGoogleLogin}
-                  text="Sign up with Google"
+                  text={t("Sign up with Google")}
                   method="get"
                 />
               </div>
-              <AuthSwitcher text="Go to Login" to="/login" />
+              <AuthSwitcher text={t("Go to Login")} to="/login" />
             </Form>
           </section>
         </Formik>

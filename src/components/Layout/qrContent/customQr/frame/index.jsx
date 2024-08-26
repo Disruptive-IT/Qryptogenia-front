@@ -9,7 +9,7 @@ import Box from '@mui/material/Box';
 import { LuTextCursorInput } from "react-icons/lu";
 import { FaFont } from "react-icons/fa";
 import { MdBubbleChart } from "react-icons/md";
-
+import { useTranslation } from 'react-i18next';
 /**
  * @Author : Jobserd Julián Ocampo,   @date 2024-08-01 14:12:28
  * @description : Contenido principal de la seccion de frame
@@ -30,7 +30,7 @@ function Burbujas() {
 
 const Frame = () => {
     const [value, setValue] = React.useState(0);
-
+    const { t } = useTranslation();
     const handleChange = (event, newValue) => {
         setValue(newValue);
     };
@@ -69,13 +69,13 @@ const Frame = () => {
                     },
                 }}
             >
-                <Tab label="Input Text" icon={<LuTextCursorInput />} sx={{
+                <Tab label={t("INPUT TEXT")} icon={<LuTextCursorInput />} sx={{
                     fontSize: '14px', fontWeight: 'bold',
                 }} />
-                <Tab label="Styles" icon={<FaFont />} sx={{
+                <Tab label={t("STYLES")} icon={<FaFont />} sx={{
                     fontSize: '14px', fontWeight: 'bold',
                 }} />
-                <Tab label="Text Bubbles" icon={<MdBubbleChart />} sx={{
+                <Tab label={t("TEXT BUBBLES")} icon={<MdBubbleChart />} sx={{
                     fontSize: '14px', fontWeight: 'bold',
                 }} />
             </Tabs>
