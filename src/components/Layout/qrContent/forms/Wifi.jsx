@@ -2,6 +2,7 @@ import { useFormik } from "formik";
 import { useState } from "react";
 import instance from "../../../../libs/axios";
 import Swal from "sweetalert2";
+import { useQr } from "../../../../context/QrContext";
 
 function FormWifi() {
     const [initialValues, setInitialValues] = useState({
@@ -9,13 +10,20 @@ function FormWifi() {
         security_type: "",
         password: ""
     });
+    const {qrData,setQrData}=useQr();
+
+    const handleWifiLink=(link)=>{
+        setQrData(link)
+    }
+
+    let wifiLink;
 
     const getWifi = async () => {
         try {
             const result = await Swal.fire({
                 title: "<strong>STATE ALERT</strong>",
                 icon: "question",
-                html: `<h1>Are you sure you want to generate data of the current wifi connection</h1>`,
+                html: `<h1>Are you sure you want to get data of the current wifi connection</h1>`,
                 showConfirmButton: true,
                 confirmButtonColor: "#3C6E71",
                 showCancelButton: true,
@@ -77,7 +85,11 @@ function FormWifi() {
         validateOnBlur: true,
         onSubmit: (values, { setSubmitting, resetForm }) => {
             setTimeout(() => {
-                alert(JSON.stringify(values, null, 2));
+                if(values){
+                    const securityType = values.security_type === "OPEN" ? "nopass" : values.security_type;
+                    wifiLink=`WIFI:T:${securityType};S:${values.ssid};P:${values.password};`
+                    handleWifiLink(wifiLink);
+                }      
                 resetForm();
                 setSubmitting(false);
                 setInitialValues({
@@ -93,7 +105,7 @@ function FormWifi() {
         <div>
             <div className="flex items-center mt-6 mb-4">
                 <button type="button" onClick={getWifi} className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600" disabled={formik.isSubmitting}>
-                    Generate Data
+                    Get Wifi Data
                 </button>
             </div>
             <form className="max-w-4xl mx-auto mt-8 relative" onSubmit={formik.handleSubmit}>
