@@ -60,7 +60,7 @@ const CustomQr = ({ location, qrId }) => {
 
         if (isConfirmed) {
             console.log("Data: ", qrData + " Type: ", qrType)
-            if ((qrType === 'website-url' || qrType === 'pdf') && qrData === "") {
+            if ((qrType === 'website-url' || qrType === 'pdf' || qrType==="wifi") && qrData === "") {
                 await Swal.fire({
                     icon: 'error',
                     title: 'Incomplete QR Information',

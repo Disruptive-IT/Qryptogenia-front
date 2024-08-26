@@ -186,7 +186,7 @@ function Discounts() {
   return (
     <div className="overflow-x-auto">
       <div className="flex-grow p-12 overflow-auto">
-        <div className="w-full mb-4 flex flex-row flex-wrap justify-start">
+        <div className="w-full mb-4 flex flex-row flex-nowrap justify-start">
           <div>
             <AddDiscount  reload={fetchData}/>
           </div>
