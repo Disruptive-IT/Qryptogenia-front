@@ -10,11 +10,12 @@ function FormWifi() {
         security_type: "",
         password: ""
     });
-    const {qrData,setQrData}=useQr();
 
-    const handleWifiLink=(link)=>{
-        setQrData(link)
-    }
+    const { qrData, setQrData } = useQr();
+
+    const handleWifiLink = (link) => {
+        setQrData(link);
+    };
 
     let wifiLink;
 
@@ -28,30 +29,30 @@ function FormWifi() {
                 confirmButtonColor: "#3C6E71",
                 showCancelButton: true,
                 cancelButtonColor: "#dc2626",
-              });
-              if(result.isConfirmed){
+            });
+            if (result.isConfirmed) {
                 const getDataWifi = await instance("/getWifi");
                 if (getDataWifi.status === 200) {
                     const wifiData = getDataWifi.data[0];
                     const security = securityOptions.find(
                         (option) => option === wifiData.security_type
                     );
-                    setInitialValues(prevValues => ({
+                    setInitialValues((prevValues) => ({
                         ...prevValues,
                         ssid: wifiData?.wifi_name || prevValues.ssid,
                         security_type: security || prevValues.security_type,
-                        password: prevValues.password
+                        password: prevValues.password,
                     }));
                     formik.setValues({
                         ssid: wifiData?.wifi_name || "",
                         security_type: wifiData?.security_type || "",
-                        password: ""
+                        password: "",
                     });
                 }
-              }
-            } catch (error) {
-                console.error("Error al obtener los datos WiFi:", error);
             }
+        } catch (error) {
+            console.error("Error al obtener los datos WiFi:", error);
+        }
     };
 
     const securityOptions = [
@@ -77,6 +78,23 @@ function FormWifi() {
         return errors;
     };
 
+    const handlerOnChange = (e, field, handler) => {
+        setInitialValues((prevValues) => {
+            const updatedValues = {
+                ...prevValues,
+                [field]: e.target.value,
+            };
+            
+            const securityType = updatedValues.security_type === "OPEN" ? "nopass" : updatedValues.security_type;
+            const wifiLink = `WIFI:T:${securityType};S:${updatedValues.ssid};P:${updatedValues.password};`;
+    
+            handleWifiLink(wifiLink);
+    
+            return updatedValues;
+        });
+        handler(e);
+    };
+
     const formik = useFormik({
         initialValues,
         validate,
@@ -85,18 +103,18 @@ function FormWifi() {
         validateOnBlur: true,
         onSubmit: (values, { setSubmitting, resetForm }) => {
             setTimeout(() => {
-                if(values){
-                    const securityType = values.security_type === "OPEN" ? "nopass" : values.security_type;
-                    wifiLink=`WIFI:T:${securityType};S:${values.ssid};P:${values.password};`
+                if (values) {
+                    const securityType = initialValues.security_type === "OPEN" ? "nopass" : initialValues.security_type || values.security_type;
+                    wifiLink = `WIFI:T:${securityType};S:${initialValues.ssid || values.ssid};P:${initialValues.password || values.password};`;
                     handleWifiLink(wifiLink);
-                }      
+                }                
                 resetForm();
                 setSubmitting(false);
                 setInitialValues({
                     ssid: "",
                     security_type: "",
                     password: ""
-                })
+                });
             }, 400);
         }
     });
@@ -115,7 +133,7 @@ function FormWifi() {
                         type="text"
                         id="ssid"
                         name="ssid"
-                        onChange={formik.handleChange}
+                        onChange={(e) => handlerOnChange(e, "ssid", formik.handleChange)}
                         onBlur={formik.handleBlur}
                         value={formik.values.ssid}
                         className="border w-full border-gray-300 rounded p-2 mb-4"
@@ -129,7 +147,7 @@ function FormWifi() {
                     <select
                         name="security_type"
                         id="security_type"
-                        onChange={formik.handleChange}
+                        onChange={(e) => handlerOnChange(e, "security_type", formik.handleChange)}
                         onBlur={formik.handleBlur}
                         value={formik.values.security_type}
                         className="border w-full border-gray-300 rounded p-2 mb-4"
@@ -151,7 +169,7 @@ function FormWifi() {
                         type="password"
                         id="password"
                         name="password"
-                        onChange={formik.handleChange}
+                        onChange={(e) => handlerOnChange(e, "password", formik.handleChange)}
                         onBlur={formik.handleBlur}
                         value={formik.values.password}
                         className="border w-full border-gray-300 rounded p-2 mb-4"
@@ -160,7 +178,7 @@ function FormWifi() {
                         <div className="relative text-red-500 text-sm">{formik.errors.password}</div>
                     ) : null}
                 </div>
-                <button type="submit" className="px-4 py-2  bg-blue-500 text-white rounded hover:bg-blue-600" disabled={formik.isSubmitting}>
+                <button type="submit" className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600" disabled={formik.isSubmitting}>
                     Submit
                 </button>
             </form>
