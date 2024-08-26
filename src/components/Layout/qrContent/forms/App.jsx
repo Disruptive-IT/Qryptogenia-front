@@ -19,6 +19,7 @@ import { IoIosClose } from "react-icons/io";
 import apple from "../../../../../src/assets/imgs/apple.png";
 import huawei from "../../../../../src/assets/imgs/huawei.png";
 import microsoft from "../../../../../src/assets/imgs/microsoft.png";
+import { useTranslation } from 'react-i18next';
 
 export const AppForm = ({ onFormChangeApp, location, appFormValues }) => {
     const [title, setTitle] = useState('');
@@ -43,7 +44,7 @@ export const AppForm = ({ onFormChangeApp, location, appFormValues }) => {
     const [selectedOptions, setSelectedOptions] = useState([]);
     const [image, setImage] = useState(null);
     const [formErrors, setFormErrors] = useState({});
-
+    const { t } = useTranslation();
     const isEditRoute = location.pathname.startsWith('/edit')
 
     const validateForm = (values) => {
@@ -51,12 +52,12 @@ export const AppForm = ({ onFormChangeApp, location, appFormValues }) => {
 
         // Validar el título
         if (!values.title) {
-            errors.title = 'Title is required';
+            errors.title = t("Title is required");
         }
 
         // Validar la selección de opciones
         if (selectedOptions.length === 0) {
-            errors.selectedOptions = 'At least one option must be selected';
+            errors.selectedOptions = t("At least one option must be selected");
         }
         console.log(selectedOptions)
         // Validar cada campo url en selectedOptions
@@ -366,11 +367,11 @@ export const AppForm = ({ onFormChangeApp, location, appFormValues }) => {
                 <Form className="max-w-4xl mx-auto mt-8 relative">
                     <div className="flex flex-col md:flex-row md:items-start md:mb-4">
                         <div className="flex flex-col w-full md:w-2/3 mr-6 mb-4 md:mb-0">
-                            <label htmlFor="title" className="mb-2">Title:</label>
+                            <label htmlFor="title" className="mb-2">{t("Title")}:</label>
                             <Field
                                 type="text"
                                 id="title"
-                                placeholder="Title"
+                                placeholder={t("Title")}
                                 className="border w-full border-gray-300 rounded p-2"
                                 value={title}
                                 maxLength={maxTitle}
@@ -380,12 +381,12 @@ export const AppForm = ({ onFormChangeApp, location, appFormValues }) => {
                                 }}
                             />
                             <div className="text-right text-sm text-gray-900">
-                                {title.length}/{maxTitle} Characters
+                                {title.length}/{maxTitle} {t("Characters")}
                             </div>
                             {formErrors.title && <div className="text-red-500 text-sm">{formErrors.title}</div>}
                         </div>
                         <div className="flex flex-col relative">
-                            <label htmlFor="colorTitle" className="mb-2">Color:</label>
+                            <label htmlFor="colorTitle" className="mb-2">{t("Color")}</label>
                             <div className="flex items-center">
                                 <div
                                     className="w-20 md:w-10 h-10 border border-gray-300 rounded cursor-pointer"
@@ -415,12 +416,12 @@ export const AppForm = ({ onFormChangeApp, location, appFormValues }) => {
 
                     <div className="flex flex-col md:flex-row md:items-start md:mb-4 mt-4">
                         <div className="flex flex-col w-full md:w-2/3 mr-6 mb-4 md:mb-0">
-                            <label htmlFor="description" className="mb-2">Description:</label>
+                            <label htmlFor="description" className="mb-2">{t("Description")}</label>
                             <Field
                                 as="textarea"
                                 rows="5"
                                 type="text"
-                                placeholder="Description"
+                                placeholder={t("Description")}
                                 maxLength={maxLength}
                                 id="description"
                                 className="w-full min-h-20 max-h-40 border border-gray-300 rounded p-2"
@@ -428,11 +429,11 @@ export const AppForm = ({ onFormChangeApp, location, appFormValues }) => {
                                 onChange={handleDescriptionChange}
                             />
                             <div className="text-right text-sm text-gray-900">
-                                {description.length}/{maxLength} Characters
+                                {description.length}/{maxLength} {t("Characters")}
                             </div>
                         </div>
                         <div className="flex flex-col relative">
-                            <label htmlFor="descriptionColor" className="mb-2">Color:</label>
+                            <label htmlFor="descriptionColor" className="mb-2">{t("Color")}</label>
                             <div className="flex items-center">
                                 <div
                                     className="w-20 md:w-10 h-10 border border-gray-300 rounded cursor-pointer"
@@ -462,7 +463,7 @@ export const AppForm = ({ onFormChangeApp, location, appFormValues }) => {
 
                     <div className="flex flex-col md:flex-row md:items-start md:mb-4">
                         <div className="w-full md:w-2/3 mr-6 mb-4 md:mb-0">
-                            <label htmlFor="backgroundColor" className="mb-2">Background Color:</label>
+                            <label htmlFor="backgroundColor" className="mb-2">{t("Background Color")}</label>
                             <div className="flex items-center relative">
                                 <div
                                     className="w-20 md:w-16 h-10 border border-gray-300 rounded cursor-pointer"
@@ -489,7 +490,7 @@ export const AppForm = ({ onFormChangeApp, location, appFormValues }) => {
                                 )}
                             </div>
                             <div className="flex flex-col space-y-4 pt-4">
-                                <label>Upload Image:</label>
+                                <label>{t("Upload Image")}</label>
                                 <input type="file" className="hidden" ref={fileInputRef} accept="image/*" onChange={handleImageChange} />
                                 <button
                                     onClick={handleClick}
@@ -511,7 +512,7 @@ export const AppForm = ({ onFormChangeApp, location, appFormValues }) => {
                             </div>
                         </div>
                         <div className="w-full md:w-2/3 mt-4 md:mt-0">
-                            <label htmlFor="boxColor" className="mb-2">Box Color:</label>
+                            <label htmlFor="boxColor" className="mb-2">{t("Box Color")}</label>
                             <div className="flex items-center relative">
                                 <div
                                     className="w-20 md:w-16 h-10 border border-gray-300 rounded cursor-pointer"
@@ -540,7 +541,7 @@ export const AppForm = ({ onFormChangeApp, location, appFormValues }) => {
 
                             </div>
                             <div className='pt-4'>
-                                <label htmlFor="borderImg" className="mb-2">Border Profile Color:</label>
+                                <label htmlFor="borderImg" className="mb-2">{t("Border Profile Color")}</label>
                                 <div className="flex items-center relative">
                                     <div
                                         className="w-20 md:w-16 h-10 border border-gray-300 rounded cursor-pointer"
@@ -625,7 +626,7 @@ export const AppForm = ({ onFormChangeApp, location, appFormValues }) => {
     ))}
 </div>
                     <div className="flex items-center mt-6 mb-4">
-                        <button type="submit" className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600">Submit</button>
+                        <button type="submit" className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600">{t('Submit')}</button>
                     </div>
                 </Form>
             )}

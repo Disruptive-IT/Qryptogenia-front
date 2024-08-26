@@ -13,7 +13,7 @@ import ReCAPTCHA from "react-google-recaptcha";
 import { IoIosMail } from "react-icons/io";
 import { FaLock, FaLockOpen } from "react-icons/fa";
 import axios from "../../libs/axios";
-
+import { useTranslation } from "react-i18next";
 /**
  * @Author : Daniel Salazar,   @date 2024-07-26 11:25:43
  * @description :form login implementation with recaptcha, google login and email and password validation.
@@ -28,7 +28,7 @@ const LoginForm = () => {
   const [showCaptcha, setShowCaptcha] = useState(false);
   const [email, setEmail] = useState("");
   const [showPassword, setShowPassword] = useState(false); //? estate to changge the password to show/hide
-
+  const { t } = useTranslation();
   const toggleShowPassword = () => {
     setShowPassword(!showPassword);
   };
@@ -103,7 +103,7 @@ const LoginForm = () => {
 
             <div className="flex flex-col gap-2 justify-center items-center w-full tansition-all duration-500">
              
-              <span className="w-full text-center text-gray-400">Enter your details to access</span>
+              <span className="w-full text-center text-gray-400">{t("Enter your details to access")}</span>
 
               <div className="flex flex-col h-14 w-full sm:w-[90%]  ">{/*  //?box input User */}
                 <div className="flex w-full  ">
@@ -117,7 +117,7 @@ const LoginForm = () => {
                     type="email"
                     title="Email"
                     name="email"
-                    placeholder="Email"
+                    placeholder={t("Email")}
                     maxLength="255"
                     disabled={showCaptcha}
                   />
@@ -144,7 +144,7 @@ const LoginForm = () => {
                     type={showPassword ? "text" : "password"}
                     title="Password"
                     name="password"
-                    placeholder="Password"
+                    placeholder={t("Password")}
                     maxLength="64"
                     disabled={showCaptcha}
                   />
@@ -160,10 +160,10 @@ const LoginForm = () => {
               <div className="flex flex-col items-start w-full ml-20 mt-5">{/*  //?box Remember me */}
                 <div>
                   <Field type="checkbox" name="remember" className="mr-2"  />
-                  <label htmlFor="remember">Remember me</label>
+                  <label htmlFor="remember">{t("Remember me")}</label>
                 </div>
                 <Link className="text-dark-blue" to="/forgotPassword">
-                  Forgot your password?
+                  {t("Forgot your password?")}
                 </Link>
               </div>
 
@@ -174,11 +174,11 @@ const LoginForm = () => {
                 />
               )}
 
-              <SubmitButton text="Log in" />
+              <SubmitButton text={t("Log In")} />
 
               <GoogleButton
                 action={handleGoogleLogin}
-                text="Sign in with Google"
+                text={t("Sign in with Google")}
                 method="get"
               />
             </div>
@@ -187,7 +187,7 @@ const LoginForm = () => {
             
           </div>
         
-          <AuthSwitcher text="Sing Up" to="/register" />
+          <AuthSwitcher text={t("Sign Up")} to="/register" />
 
         </Form>
       </section>

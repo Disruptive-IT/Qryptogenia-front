@@ -9,12 +9,7 @@ import '../../styles/qrCode.css'
 import { useQr } from '../../../../context/QrContext';
 import Swal from 'sweetalert2';
 import { toast } from 'sonner';
-
-const options = [
-    { name: 'Frame', component: Frame },
-    { name: 'Design', component: Design },
-    { name: 'Logo', component: Logo },
-];
+import { useTranslation } from 'react-i18next';
 
 const CustomQr = ({ location, qrId }) => {
     const [selectedOptionIndex, setSelectedOptionIndex] = useState(0);
@@ -23,20 +18,26 @@ const CustomQr = ({ location, qrId }) => {
     const handleOptionSelect = (index) => {
         setSelectedOptionIndex(index);
     };
+    const { t } = useTranslation();
+    const options = [
+        { name: t("FRAME"), component: Frame },
+        { name: t("DESIGN"), component: Design },
+        { name: t("LOGO"), component: Logo },
+    ];
 
     const Dowload = async () => {
         const { value: qrName, isConfirmed } = await Swal.fire({
-            title: 'Save QR Code',
+            title: t("Save QR Code"),
             html: `
                 <input 
             id="swal-input1" 
             class="swal2-input" 
-            placeholder="Enter QR code name..."
+            placeholder="${t("Enter QR code name")}"
             style="width: 60%; padding: 10px; border: 1px solid #ccc; border-radius: 6px; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);"
         >
         <div style="margin: 2em 0;">
-            <p style="font-size: 1em; color: #888; margin-top: 10px;">Please enter a name for your QR code. If you do not set a name, the system will provide one for you.</p>
-            <p style="font-size: 0.8em; margin: 10px 0 0 0;">Click "Save" to finalize the creation of your QR code.</p>
+            <p style="font-size: 1em; color: #888; margin-top: 10px;">${t("Please enter a name for your QR code. If you do not set a name, the system will provide one for you.")}</p>
+            <p style="font-size: 0.8em; margin: 10px 0 0 0;">${t("Click Save to finalize the creation of your QR code.")}</p>
         </div>
             `,
             focusConfirm: false,
@@ -50,9 +51,9 @@ const CustomQr = ({ location, qrId }) => {
             },
             showCancelButton: true,
             confirmButtonColor: '#007bff',
-            confirmButtonText: 'Save',
+            confirmButtonText: t('Save'),
             cancelButtonColor: "#d33",
-            cancelButtonText: 'Cancel',
+            cancelButtonText: t('Cancel'),
             customClass: {
                 actions: 'swal2-actions-no-margin'
             }
@@ -126,7 +127,7 @@ const CustomQr = ({ location, qrId }) => {
                 onClick={Dowload}
                 className='absolute bottom-0 left-8 w-4/5 md:left-0 md:w-full'
             >
-                Create my qr
+                {t("CREATE MY QR")}
             </Button>
         </div>
     );

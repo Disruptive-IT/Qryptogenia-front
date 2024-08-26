@@ -1,18 +1,43 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { dataTypeQr } from './qrContent/contentData';
+import  UseDataTypeQr  from './qrContent/contentData';
 import { useQr } from '../../context/QrContext';
 import {animate, easeIn, motion} from 'framer-motion'
 import { Scale } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 
 export const BoxLink = () => {
   const { setQrType } = useQr()
   const navigate = useNavigate();
-
+  const dataTypeQr = UseDataTypeQr();
+  const { t } = useTranslation();
   const handleItemClick = (item) => {
+    console.log(item.name);
+    
     let title = item.name.toLowerCase().replace(/\s+/g, '-')
     navigate(`/qr/${title}`);
     setQrType(title)
+  };
+
+  const getTranslatedName = (name) => {
+    switch (name.toLowerCase()) {
+      case 'app store':
+        return t("App Store");
+      case 'social media':
+        return t("Social Media");
+      case 'music':
+        return t("Music");
+      case 'news':
+        return t("News");
+      case 'curriculum':
+        return t("Curriculum");
+      case 'food menu':
+        return t("Food Menu");
+      case 'website url':
+        return t("Website Url");
+      default:
+        return name;
+    }
   };
 
   return (
@@ -27,7 +52,7 @@ export const BoxLink = () => {
         >
           <img className="h-[60px]" src={item.img} alt="" />
           <div className="flex flex-col text-start">
-            <p className="font-bold">{item.name}</p>
+            <p className="font-bold">{getTranslatedName(item.name)}</p>
             <span>{item.description}</span>
           </div>
         </motion.button>

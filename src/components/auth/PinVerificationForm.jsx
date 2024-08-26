@@ -5,10 +5,10 @@ import { useAuthContext } from "../../context/AuthContext";
 import { useLoader } from "../../context/LoaderContext";
 import { SchemaPinValidate } from "../../helpers/validate/auth.validate";
 import { MdOutlineMailLock } from "react-icons/md";
-
+import { useTranslation } from "react-i18next";
 const PinVerificationForm = ({ onSuccess, onSendVerification, email }) => {
   const { verifyPin } = useAuthContext();
-
+  const { t } = useTranslation();
   const handleSendVerification = () => {
     onSendVerification();
   };
@@ -32,15 +32,15 @@ const PinVerificationForm = ({ onSuccess, onSendVerification, email }) => {
       <section className="w-full mt-24 flex flex-col justify-center items-center ">
         <Form className="flex flex-col flex-nowrap gap-3 border-2 border-white rounded-xl w-[calc(100%-20px)] md:w-[700px] p-5 shadow-2xl bg-gray-200">
           <h1 className="text-[30px] font-bold tex-center">
-            <span className="text-[#284B63]">Verificate</span> Code
+            <span className="text-[#284B63]">{t("Verificate")}</span> {t("Code")}
           </h1>
           <div className="border-t-2 border-gray-300 mb-2"></div>
           <div className="flex flex-col gap-2 justify-center items-center w-full tansition-all duration-500">
             <span className="fullWidth text-center text-gray-400">
-              An email has been sent to <strong>{email}</strong>
+            {t("An email has been sent to")} <strong>{email}</strong>
             </span>
             <span className="fullWidth text-center text-gray-400">
-             Verificate your email and get the code to complete your registration.
+            {t("Verificate your email and get the code to complete your registration.")}
             </span>
             
 
@@ -55,7 +55,7 @@ const PinVerificationForm = ({ onSuccess, onSendVerification, email }) => {
                   type="text"
                   title="PIN"
                   name="pin"
-                  placeholder="6 Digit Code"
+                  placeholder={t("6 Digit Code")}
                   maxLength="6"
                 />
               </div>
@@ -70,9 +70,9 @@ const PinVerificationForm = ({ onSuccess, onSendVerification, email }) => {
               className="cursor-pointer hover:text-opacity-80 block mb-4 text-[#103b79]"
               onClick={handleSendVerification}
             >
-              Send new verification code
+              {t("Send new verification code")}
             </span>
-            <SubmitButton text="Verify code" />
+            <SubmitButton text={t("Verify code")} />
           </div>
         </Form>
       </section>

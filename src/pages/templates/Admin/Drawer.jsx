@@ -17,7 +17,8 @@ import { Mails, Menu as MenuIcon, Users, LayoutDashboard, ScanLine, Orbit,Ticket
 import UserProfileMenu from '../../../components/Admin/Profile';
 import logo from "../../../assets/imgs/logoForms.png"
 import UseSwitchesCustom from '../../../components/UI/theme/SwitchesTheme';
-
+import { useTranslation } from 'react-i18next';
+import LenguageSelector from './../../../components/UI/lenguage/lenguageSelector'
 const drawerWidth = 180;
 
 const openedMixin = (theme) => ({
@@ -99,38 +100,11 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
     }),
 );
 
-const menuItems = [
-    {
-        title: "Dashboard",
-        icon: <LayoutDashboard />,
-        path: "/admin/dashboard"
-    },
-    {
-        title: "Usuarios",
-        icon: <Users />,
-        path: "/admin/users"
-    },
-    {
-        title: "QRs",
-        icon: <ScanLine />,
-        path: "/admin/qrs"
-    },
-    {
-        title: "Memberships",
-        icon: <Orbit />,
-        path: "/admin/membership"
-    },
-    {
-        title: "Descuentos",
-        icon: <TicketPercent />,
-        path: "/admin/discounts"
-    }
-];
 
 export default function MiniDrawer() {
     const theme = useTheme();
     const [open, setOpen] = React.useState(false);
-
+    const { t } = useTranslation();
     const handleDrawerOpen = () => {
         setOpen(true);
     };
@@ -138,6 +112,34 @@ export default function MiniDrawer() {
     const handleDrawerClose = () => {
         setOpen(false);
     };
+
+    const menuItems = [
+        {
+            title: "Dashboard",
+            icon: <LayoutDashboard />,
+            path: "/admin/dashboard"
+        },
+        {
+            title: t("Users"),
+            icon: <Users />,
+            path: "/admin/users"
+        },
+        {
+            title: "QRs",
+            icon: <ScanLine />,
+            path: "/admin/qrs"
+        },
+        {
+            title: t("Memberships"),
+            icon: <Orbit />,
+            path: "/admin/membership"
+        },
+        {
+            title: t("Discounts"),
+            icon: <TicketPercent />,
+            path: "/admin/discounts"
+        }
+    ];
     return (
         <>
             <CssBaseline />
@@ -151,10 +153,11 @@ export default function MiniDrawer() {
                         </Toolbar>
                         <Toolbar>
                             <Box>
-                                <UseSwitchesCustom />
                                 <UserProfileMenu />
+                                <LenguageSelector/>
                             </Box>
                         </Toolbar>
+                        
                     </div>
                 </div>
             </AppBar>

@@ -2,7 +2,7 @@ import React from "react";
 import { FaFacebookSquare , FaInstagramSquare, FaTwitterSquare } from 'react-icons/fa';
 import disruptive from "../../assets/imgs/disruptive/disruptive.png";
 import { FaLinkedin, FaSquareXTwitter  } from "react-icons/fa6";
-
+import { useTranslation } from "react-i18next";
 
 export const Footer = () => {
   const gradientStyle = {
@@ -12,6 +12,7 @@ export const Footer = () => {
     backgroundClip: 'text',
     textFillColor: 'transparent',
   };
+  const { t } = useTranslation();
 
     const socialMedia = [
       {
@@ -60,13 +61,13 @@ export const Footer = () => {
       <div className="flex justify-between flex-wrap bg-slate-300 w-full px-6">
 
         <div className="cursor-default flex flex-col items-center md:items-start justify-center w-full md:w-2/6 text-slate-500">
-          <p><strong>Contact us</strong></p>
-          <p><strong>Email:</strong> disruptive.devops@gmail.com</p>
-          <p><strong>Phone:</strong> +57 324 2167567</p>
+          <p><strong>{t("Contact us")}</strong></p>
+          <p><strong>{t("Email")}:</strong> disruptive.devops@gmail.com</p>
+          <p><strong>{t("Phone")}:</strong> +57 324 2167567</p>
         </div>
 
         <div className="flex flex-col items-center justify-center text-center w-full md:w-2/6">
-            <span className="cursor-default text-slate-500"><strong>Developed By</strong></span>
+            <span className="cursor-default text-slate-500"><strong>{t("Developed By")}</strong></span>
             <img src={disruptive} alt="disruptive" className="w-36 h-36"/>
             
         </div>
@@ -83,13 +84,13 @@ export const Footer = () => {
           ))}
           </div>
           
-          <p className="font-bold cursor-pointer">Terms of use</p>
-          <p className="font-bold cursor-pointer">Privacy policy</p>
+          <p className="font-bold cursor-pointer">{t("Terms of use")}</p>
+          <p className="font-bold cursor-pointer">{t("Privacy policy")}</p>
         </div>
         
       </div>
       <div className="w-full flex justify-center bg-slate-300 mb-[55px] md:mb-0 md:py-3  ">
-        <p className="text-slate-500 font-bold">© 2024 All rights reserved</p>
+        <p className="text-slate-500 font-bold">© 2024 {t("All rights reserved")}</p>
       </div>
     </footer>
   );

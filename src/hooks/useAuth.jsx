@@ -52,7 +52,7 @@ export const useAuth = (navigate) => {
         }
     }
 
-    async function loginUser(values) {
+    async function loginUser(values,  redirectTo = "/") {
         try {
             const res = await axios.post('/auth/login', values);
             toast.success(res.data.msg)
@@ -61,7 +61,7 @@ export const useAuth = (navigate) => {
             if (user.rol === "ADMIN") {
                 navigate("/admin/dashboard");
             } else {
-                navigate("/");
+                navigate(redirectTo);
             }
             return { success: true };
         } catch (err) {
