@@ -47,7 +47,7 @@ const PinVerificationForm = ({ onSuccess, onSendVerification, email }) => {
             <div className="flex flex-col h-14 w-[70%] sm:w-[40%]  ">
               {/*  //?box input User */}
               <div className="flex w-full  ">
-                <span className="inline-flex items-center px-2 text-lg text-gray-900 bg-gray-200 border rounded-e-0 border-gray-300 border-e-0 rounded-s-md dark:bg-my-gray dark:text-black dark:border-gray-600">
+                <span className="inline-flex items-center px-2 text-lg text-my-gray bg-dark-blue border rounded-e-0 border-gray-300 border-e-0 rounded-s-md">
                   <MdOutlineMailLock />
                 </span>
                 <Field

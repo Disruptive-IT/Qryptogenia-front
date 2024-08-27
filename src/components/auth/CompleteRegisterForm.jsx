@@ -41,7 +41,7 @@ const CompleteRegisterForm = ({ email }) => {
     >
       {({ values, touched }) => (
         <section className="w-full mt-24 flex flex-col justify-center items-center ">
-          <Form className="flex flex-col gap-5 flex-nowrap border-2 border-white rounded-xl w-[calc(100%-20px)] md:w-[700px] p-5 shadow-2xl bg-gray-200">
+          <Form className="flex flex-col gap-5 flex-nowrap border-2 items-center border-white rounded-xl w-[calc(100%-20px)] md:w-[700px] p-5 shadow-2xl bg-gray-200">
             
                 <h1 className="text-[30px] font-bold tex-center">
                   {t("Complete Your")} <span className="text-[#284B63]">{t("Sign Up")}</span>
@@ -51,11 +51,11 @@ const CompleteRegisterForm = ({ email }) => {
                 <span className="fullWidth text-center text-gray-400">{t("Introduce your details to complete your registration.")} <strong>{email}</strong> </span>
                 
 
-              <div className="flex flex-col h-14 w-full sm:w-[90%] ">
+              <div className="flex flex-col h-14 w-full sm:w-[70%] ">
                 {/*  //?box input ConfirmPassword */}
                 <div className="flex md:w-full ">
                   <span
-                    className="inline-flex items-center px-2 text-lg text-gray-900 cursor-pointer bg-gray-200 border rounded-e-0 border-gray-300 border-e-0 rounded-s-md dark:bg-my-gray dark:text-black dark:border-gray-600"
+                    className="inline-flex items-center px-2 text-lg text-my-gray cursor-pointer bg-dark-blue border rounded-e-0 border-gray-300 border-e-0 rounded-s-md"
                     onClick={toggleShowPassword}
                   >
                     <FaUser />
@@ -77,11 +77,11 @@ const CompleteRegisterForm = ({ email }) => {
                 />
               </div>
 
-              <div className="flex flex-col h-14 w-full sm:w-[90%] ">
+              <div className="flex flex-col h-14 w-full sm:w-[70%] ">
                 {/*  //?box input Password */}
                 <div className="flex md:w-full ">
                   <span
-                    className="inline-flex items-center px-2 text-lg text-gray-900 cursor-pointer bg-gray-200 border rounded-e-0 border-gray-300 border-e-0 rounded-s-md dark:bg-my-gray dark:text-black dark:border-gray-600"
+                    className="inline-flex items-center px-2 text-lg text-my-gray cursor-pointer bg-dark-blue border rounded-e-0 border-gray-300 border-e-0 rounded-s-md "
                     onClick={toggleShowPassword}
                   >
                     {showPassword ? <FaLockOpen /> : <FaLock />}
@@ -103,11 +103,11 @@ const CompleteRegisterForm = ({ email }) => {
                 />
               </div>
 
-              <div className="flex flex-col h-14 w-full sm:w-[90%] ">
+              <div className="flex flex-col h-14 w-full sm:w-[70%] ">
                 {/*  //?box input ConfirmPassword */}
                 <div className="flex md:w-full ">
                   <span
-                    className="inline-flex items-center px-2 text-lg text-gray-900 cursor-pointer bg-gray-200 border rounded-e-0 border-gray-300 border-e-0 rounded-s-md dark:bg-my-gray dark:text-black dark:border-gray-600"
+                    className="inline-flex items-center px-2 text-lg text-my-gray cursor-pointer bg-dark-blue border rounded-e-0 border-gray-300 border-e-0 rounded-s-md "
                     onClick={toggleShowPassword}
                   >
                     {showPassword ? <FaLockOpen /> : <FaLock />}
