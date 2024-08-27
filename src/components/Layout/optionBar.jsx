@@ -29,7 +29,7 @@ export const OptionBar = () => {
   const { t } = useTranslation();
 
   return (
-    <div className="w-screen px-10">
+    <div className="w-full px-10">
       <div className="flex items-start  md:p-2 lg:p-10">
         <BoxLink />
         <div className="w-full hidden lg:block gap-4 sm:min-h-[490px] md:h-[490px] lg:max-h-[690px] lg:max-w-60  cellPhone custom-max:ml-6">
