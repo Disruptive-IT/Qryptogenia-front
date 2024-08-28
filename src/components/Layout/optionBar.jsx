@@ -4,13 +4,14 @@ import "./optionBar.css";
 import { BoxLink } from "./boxLink";
 import QR from "../../assets/imgs/qr.png";
 import logo from "../../../public/Logo.png";
-import { dataTypeQr } from "./qrContent/contentData";
+import  UseDataTypeQr  from "./qrContent/contentData";
 import { useNavigate } from "react-router-dom";
 import menu from "../../assets/imgs/QR-types/menu.png";
 import Swal from 'sweetalert2';
 import { useQr } from "../../context/QrContext";
 import './styles/qr-animation.css'
 import { motion } from "framer-motion";
+import { useTranslation } from "react-i18next";
 
 /**
  * @UpdatedBy : Nicolas Barrios,   @date 2024-07-25 11:51:05
@@ -25,19 +26,20 @@ import { motion } from "framer-motion";
  */
 
 export const OptionBar = () => {
+  const { t } = useTranslation();
 
   return (
-    <div className="w-screen px-10">
-      <div className="flex items-start  md:p-2 lg:p-10">
+    <div className="w-full px-10">
+      <div className="flex items-center justify-center gap-5 ">
         <BoxLink />
         <div className="w-full hidden lg:block gap-4 sm:min-h-[490px] md:h-[490px] lg:max-h-[690px] lg:max-w-60  cellPhone custom-max:ml-6">
           <div className=" flex flex-col h-full gap-4 text-center  items-center jutify-center">
             <div className="h-1/3 w-full flex flex-col justify-end items-center">
               <img src={logo} alt="" className="w-20" />
             </div>
-            <h1> <strong>QR</strong>Type</h1>
+            <h1> <strong>QR</strong>{t("Type")}</h1>
             <p className="mt-3 p-3 text-sm">
-              Enjoy all the services that Qryptogenia can offer you, don't wait any longer
+              {t("Enjoy all the services that Qryptogenia can offer you, don't wait any longer")}
             </p>
             <div 
             className={`relative p-2 w-[40%] bg-transparent rounded-[10%] my-[1%]`}
@@ -72,17 +74,18 @@ export const OptionBarTwo = ({ contentName, name }) => {
   const [activeButtonIndex, setActiveButtonIndex] = useState(null);
   const { qrType, setQrType } = useQr();
   const navigate = useNavigate();
-
+  const dataTypeQr = UseDataTypeQr();
+  const { t } = useTranslation();
   const handleItemClick = (item) => {
     Swal.fire({
-      title: 'Alert',
-      text: 'Are you sure you want to change the type? The qr status will be lost.',
+      title: t("Alert"),
+      text: t("Are you sure you want to change the type? The qr status will be lost."),
       icon: 'warning',
       showCancelButton: true,
       confirmButtonColor: '#3085d6',
       cancelButtonColor: '#d33',
-      confirmButtonText: 'Confirm',
-      cancelButtonText: 'Cancel'
+      confirmButtonText: t("Confirm"),
+      cancelButtonText: t("Cancel")
     }).then((result) => {
       if (result.isConfirmed) {
         let direcc = item.name.toLowerCase().replace(/\s+/g, '-')

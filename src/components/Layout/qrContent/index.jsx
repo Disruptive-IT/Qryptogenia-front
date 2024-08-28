@@ -20,6 +20,7 @@ import SocialForm from "./forms/Social";
 import MusicForm from "./forms/Music";
 import { WebLinkPhoneMusic } from "./socialMedia/stylePhoneMusic";
 import MenuForm from "./forms/menu/menuForm";
+import FormWifi from "./forms/Wifi";
 export const QrContentSwitch = ({contentName, onFormChangeApp, onFormChange, onFormChangeMusic, onSocialFormSubmit, location, appFormValues, musicFormValues, socialFormValues}) => {
 
     let qrContent;
@@ -69,7 +70,7 @@ export const QrContentSwitch = ({contentName, onFormChangeApp, onFormChange, onF
         case "wifi":
             qrContent = (
                 <div>
-                    <p>WIFI</p>
+                    <FormWifi />
                 </div>
             );
             break;

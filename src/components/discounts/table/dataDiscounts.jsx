@@ -8,7 +8,7 @@ import instance from "../../../libs/axios";
 import ModalComponent from "../form/modal.jsx";
 import UpdateDiscount from "../form/updateForm.jsx";
 import { toast, Toaster } from "sonner";
-
+import { useTranslation } from "react-i18next";
 const handleDateFormat = (fecha) => {
   return new Date(fecha).toLocaleDateString();
 };
@@ -19,14 +19,34 @@ function Discounts() {
   const [state, setState] = useState({});
   const [isDeleted,setIsDeleted]=useState(false);
   const [open, setOpen] = useState(false);
-  const [selectedDiscountId, setSelectedDiscountId] = useState(); // Agregar el estado para el ID del descuento
-
+  const [selectedDiscountId, setSelectedDiscountId] = useState();
+  const [currentPage, setCurrentPage] = useState(1);
+  const [searchQuery, setSearchQuery] = useState('');
+  const { t } = useTranslation();
   const handleOpen = (id) => {
     setSelectedDiscountId(id);
     setOpen(true);
   };
 
+  const handleSearch = (event) => {
+    setSearchQuery(event.target.value.toLowerCase());
+  };
+
+  const filteredData = discountData.filter((discount) =>
+    discount.discount.toLowerCase().includes(searchQuery) ||
+    discount.description.toLowerCase().includes(searchQuery)
+  );
+
   const handleClose = () => setOpen(false);
+
+  const totalPages = Math.ceil(discountData.length / 7);
+  const itemsPerPage = 7;
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const paginatedData = filteredData.slice(startIndex, startIndex + itemsPerPage);
+
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
+  };
 
   //funcion para traer los datos del descuento a editar
   const fetchData = async () => {
@@ -83,7 +103,7 @@ function Discounts() {
           setIsDeleted(true);
           toast.success("Discount was deleted successfully", {
             position: "bottom-right",
-            duration: 5000,
+            duration: 3000,
           });
         } else if (deleteResponse.status === 400) {
           toast.error("Error: The record is currently associated with a membership.");
@@ -110,13 +130,13 @@ function Discounts() {
 
   //acciones del admin
   const actions = [
-    {
-      name: "ver",
-      icon: <MdVisibility className="w-[20px] h-auto" />,
-      evento: () => {
-        console.log("ver");
-      },
-    },
+    // {
+    //   name: "ver",
+    //   icon: <MdVisibility className="w-[20px] h-auto" />,
+    //   evento: () => {
+    //     console.log("ver");
+    //   },
+    // },
     {
       name: "editar",
       icon: <MdCreate className="w-[20px] h-auto text-yellow-400" />,
@@ -135,15 +155,15 @@ function Discounts() {
 
   //columnas encabezado datatable
   const columns = [
-    { header: "Discount" },
-    { header: "Description" },
-    { header: "Create Date" },
-    { header: "Use Quantity" },
-    { header: "Current Quantity" },
-    { header: "State" },
-    { header: "Update Date" },
-    { header: "Limit Date" },
-    { header: "Actions" },
+    { header: t("Discount") },
+    { header: t("Description") },
+    { header: t("Create Date") },
+    { header: t("Use Quantity") },
+    { header: t("Current Quantity") },
+    { header: t("State") },
+    { header: t("Update Date") },
+    { header: t("Limit Date") },
+    { header: t("Actions") },
   ];
 
   //funcion que contiene la peticion del estado en la base de datos
@@ -166,7 +186,7 @@ function Discounts() {
   return (
     <div className="overflow-x-auto">
       <div className="flex-grow p-12 overflow-auto">
-        <div className="w-full mb-4 flex flex-row flex-wrap justify-start">
+        <div className="w-full mb-4 flex flex-row flex-nowrap justify-start">
           <div>
             <AddDiscount  reload={fetchData}/>
           </div>
@@ -186,7 +206,7 @@ function Discounts() {
             </tr>
           </thead>
           <tbody>
-            {discountData.map((row) => (
+            {paginatedData.map((row) => (
               <motion.tr
                 whileHover={{ backgroundColor: "#D5DBDB" }}
                 key={row.id}
@@ -204,7 +224,7 @@ function Discounts() {
                       row.state ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'
                     } w-20 text-center`}
                   >
-                    {row.state ? "Active" : "Inactive"}
+                    {row.state ? t("Active") : t("Inactive")}
                   </span>
                 </td>
                 <td className="py-2 px-4">{handleDateFormat(row.update_date)}</td>
@@ -228,6 +248,25 @@ function Discounts() {
             ))}
           </tbody>
         </table>
+        <div className="flex flex-col sm:flex-row justify-between items-center mt-4">
+    <button
+      onClick={() => handlePageChange(currentPage - 1)}
+      disabled={currentPage === 1}
+      className="px-4 py-2 mb-2 sm:mb-0 sm:mr-2 bg-blue-500 text-white rounded disabled:bg-gray-300"
+    >
+      Previous
+    </button>
+    <span className="text-xs sm:text-sm">
+      Page {currentPage} of {totalPages}
+    </span>
+    <button
+      onClick={() => handlePageChange(currentPage + 1)}
+      disabled={currentPage === totalPages}
+      className="px-4 py-2 mt-2 sm:mt-0 sm:ml-2 bg-blue-500 text-white rounded disabled:bg-gray-300"
+    >
+      Next
+    </button>
+  </div>
       </div>
 
       {/* Modal Component */}

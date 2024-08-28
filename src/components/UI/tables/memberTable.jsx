@@ -4,6 +4,7 @@ import { FaCheck, FaTimes } from 'react-icons/fa';
 import { MdOutlineEdit, MdVisibility } from "react-icons/md";
 import { Modal } from '@mui/material';
 import axios from 'axios';
+import { useTranslation } from 'react-i18next';
 
 const QRCodeList = () => {
   const [data, setData] = useState([]);
@@ -14,7 +15,7 @@ const QRCodeList = () => {
   const [formValues, setFormValues] = useState({});
   const [selectedDiscounts, setSelectedDiscounts] = useState([]);
   const [discounts, setDiscounts] = useState([]);
-
+  const { t } = useTranslation();
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -101,11 +102,11 @@ const QRCodeList = () => {
   };
 
   const columns = [
-    { header: 'Type Membership', accessor: 'type_membership' },
-    { header: 'Price', accessor: 'price' },
-    { header: 'Active QRs', accessor: 'active_qrs' },
-    { header: 'Scan QRs', accessor: 'scan_qrs' },
-    { header: 'Discount', accessor: 'discount',
+    { header: t("Type Membership"), accessor: 'type_membership' },
+    { header: t("Price"), accessor: 'price' },
+    { header: t("Active QRs"), accessor: 'active_qrs' },
+    { header: t("Scan QRs"), accessor: 'scan_qrs' },
+    { header: t("Discount"), accessor: 'discount',
       render: (item) => {
         if (!item.discounts || item.discounts.length === 0) {
           return 'No Discounts'; // Mensaje alternativo si no hay descuentos
@@ -118,7 +119,7 @@ const QRCodeList = () => {
       }
     },
     {
-      header: 'Premium Support',
+      header: t("Premium Support"),
       accessor: 'premium_support',
       render: (item) => (
         <button
@@ -129,7 +130,7 @@ const QRCodeList = () => {
       )
     },
     {
-      header: 'Unlimited Static',
+      header: t("Unlimited Static"),
       accessor: 'unlimited_static',
       render: (item) => (
         <button
@@ -140,7 +141,7 @@ const QRCodeList = () => {
       )
     },
     {
-      header: 'Actions',
+      header: t("Actions"),
       accessor: 'actions',
       render: (item) => (
         <div className="flex space-x-2">
@@ -197,7 +198,7 @@ const QRCodeList = () => {
           <h2 id="modal-title" className="text-2xl font-bold mb-4">Edit Item</h2>
           <form onSubmit={handleSubmit} className="space-y-4">
             <div className="flex flex-col">
-              <label className="text-sm font-medium mb-1" htmlFor="type_membership">Type Membership:</label>
+              <label className="text-sm font-medium mb-1" htmlFor="type_membership">{t("Type Membership")}</label>
               <input
                 id="type_membership"
                 type="text"
@@ -208,7 +209,7 @@ const QRCodeList = () => {
               />
             </div>
             <div className="flex flex-col">
-              <label className="text-sm font-medium mb-1" htmlFor="discounts">Discounts:</label>
+              <label className="text-sm font-medium mb-1" htmlFor="discounts">{t("Discounts")}</label>
               <select
                 id="discounts"
                 name="discounts"
@@ -224,7 +225,7 @@ const QRCodeList = () => {
               </select>
             </div>
             <div className="flex flex-col">
-              <label className="text-sm font-medium mb-1" htmlFor="price">Price:</label>
+              <label className="text-sm font-medium mb-1" htmlFor="price">{t("Price")}</label>
               <input
                 id="price"
                 type="number"
@@ -236,7 +237,7 @@ const QRCodeList = () => {
               />
             </div>
             <div className="flex flex-col">
-              <label className="text-sm font-medium mb-1" htmlFor="active_qrs">Active QRs:</label>
+              <label className="text-sm font-medium mb-1" htmlFor="active_qrs">{t("Active QRs")}</label>
               <input
                 id="active_qrs"
                 type="number"
@@ -247,7 +248,7 @@ const QRCodeList = () => {
               />
             </div>
             <div className="flex flex-col">
-              <label className="text-sm font-medium mb-1" htmlFor="scan_qrs">Scan QRs:</label>
+              <label className="text-sm font-medium mb-1" htmlFor="scan_qrs">{t("Scan QRs")}</label>
               <input
                 id="scan_qrs"
                 type="number"
@@ -263,13 +264,13 @@ const QRCodeList = () => {
                 onClick={closeModal}
                 className="px-4 py-2 mr-2 border border-gray-300 rounded-md bg-gray-200"
               >
-                Cancel
+                {t('Cancel')}
               </button>
               <button
                 type="submit"
                 className="px-4 py-2 border border-gray-300 rounded-md bg-blue-500 text-white"
               >
-                Save
+                {t("Save")}
               </button>
             </div>
           </form>

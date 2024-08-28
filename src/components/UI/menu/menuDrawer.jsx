@@ -15,7 +15,7 @@ import QrCodeIcon from '@mui/icons-material/QrCode';
 import LogoutIcon from '@mui/icons-material/Logout';
 import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 import { motion } from 'framer-motion'
-
+import { useTranslation } from 'react-i18next';
 import { useAuthContext } from '../../../context/AuthContext';
 
 function MenuDrawer(props) {
@@ -23,7 +23,7 @@ function MenuDrawer(props) {
     const [windowWidth, setWindowWidth] = useState(window.innerWidth);
     const location = useLocation();
     const { user, logoutUser, profileImage } = useAuthContext();
-
+    const { t } = useTranslation();
     const isActive = (path) => location.pathname === path;
 
     const toggleDrawer = (newOpen) => () => {
@@ -62,19 +62,19 @@ function MenuDrawer(props) {
                     <List>
                         <ListItem button component={Link} to="/" className={isActive('/') ? 'active' : ''}>
                             <HomeIcon sx={{ mr: 1 }} />
-                            Home
+                            {t("Home")}
                         </ListItem>
                         <ListItem button component={Link} to="/about" className={isActive('/about') ? 'active' : ''}>
                             <InfoIcon sx={{ mr: 1 }} />
-                            About us
+                            {t("About us")}
                         </ListItem>
                         <ListItem button component={Link} to="/pricings" className={isActive('/pricings') ? 'active' : ''}>
                             <AttachMoneyIcon sx={{ mr: 1 }} />
-                            Plans
+                            {t("Plans")}
                         </ListItem>
                         <ListItem button component={Link} to="/faq" className={isActive('/faq') ? 'active' : ''}>
                             <HelpIcon sx={{ mr: 1 }} />
-                            FAQ
+                            {t("FAQ")}
                         </ListItem>
                         {!user || (user && user.rol != "CLIENT") ? (
                             <ListItem>
@@ -88,7 +88,7 @@ function MenuDrawer(props) {
                                 <p className='mb-4'>Acciones de Cuenta</p>
                                 <ListItem button component={Link} to="/user/profile">
                                     <PersonIcon sx={{ mr: 1 }} />
-                                    Profile
+                                    {t("Profile")}
                                 </ListItem>
                                 <ListItem button component={Link} to="/user/qr">
                                     <QrCodeIcon sx={{ mr: 1 }} />
@@ -96,7 +96,7 @@ function MenuDrawer(props) {
                                 </ListItem>
                                 <ListItem button onClick={logoutUser}>
                                     <LogoutIcon sx={{ mr: 1 }} />
-                                    Logout
+                                    {t("Logout")}
                                 </ListItem>
                             </div>
                         ) : null}

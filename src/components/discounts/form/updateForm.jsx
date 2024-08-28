@@ -3,16 +3,69 @@ import { useFormik } from "formik";
 import Swal from "sweetalert2";
 import instance from "../../../libs/axios";
 import { motion } from "framer-motion";
+import { useTranslation } from "react-i18next";
 
 const UpdateDiscount = ({ event, id, reload }) => {
     const [discountData, setDiscountData] = useState(null);
     const [isDataLoaded, setIsDataLoaded] = useState(false);
-    const [isUpdate,setIsUpdate]=useState(false);
-
-    const handleIsUpdate=(value)=>{
+    const [isUpdate,setIsUpdate] =useState(false);
+    const { t } = useTranslation();
+    const handleIsUpdate =(value) => {
         setIsUpdate(value);
-        console.log(value);
-    }
+    };
+
+    //ejecuta la peticion de actualizar el descuento
+    const handlePutDiscount = async (data, id) => {
+        try {
+            const response = await instance.put(`/admin/putDiscount/${id}`, data);
+            if (response.status === 200) {
+                console.log("Discount updated successfully");
+                if (typeof event === 'function') {
+                    await event();
+                }
+                await Swal.fire({
+                    icon: 'success',
+                    title: 'Success',
+                    text: 'Discount updated successfully!',
+                    confirmButtonColor:"#3C6E71"
+                });
+                await reload();
+            }
+        } catch (error) {
+            console.error("Error: ", error.message);
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: 'Error to send data'
+            });
+        }
+    };
+
+    //recuperar los datos del descuento con el id
+    const recoverData = async (id) => {
+        try {
+            const getDiscount = await instance.get(`/admin/getDiscount/${id}`);
+            if (getDiscount.status === 200) {
+                setDiscountData(getDiscount.data);
+                console.log("Discount data:", getDiscount.data);
+            }
+        } catch (error) {
+            console.error("Error: ", error.message);
+        }
+    };
+
+    useEffect(() => {
+        if (id) {
+            recoverData(id);
+        }
+    }, [id]);
+
+    //se ajustan las fechas a la zona horaria local
+    const adjustDateToLocal = (dateString) => {
+        const date = new Date(dateString);
+        date.setMinutes(date.getMinutes() - date.getTimezoneOffset());
+        return date.toISOString().split('T')[0];
+    };
 
     const formik = useFormik({
         initialValues: {
@@ -44,7 +97,7 @@ const UpdateDiscount = ({ event, id, reload }) => {
         },
         onSubmit: async (values, { setSubmitting, setStatus }) => {
             try {
-                await handlePutDiscount(values, id, event);
+                await handlePutDiscount(values, id, true);
                 setStatus({ success: true });
             } catch (error) {
                 setStatus({ success: false, message: 'Error al enviar los datos' });
@@ -54,59 +107,7 @@ const UpdateDiscount = ({ event, id, reload }) => {
             }
         },
     });
-
-    const handlePutDiscount = async (data, id, evento) => {
-        try {
-            const response = await instance.put(`/admin/putDiscount/${id}`, data);
-            if (response.status === 200) {
-                console.log("Discount updated successfully");
-                if (typeof evento === 'function') {
-                    await evento();
-                }
-                handleIsUpdate(true);
-                await Swal.fire({
-                    icon: 'success',
-                    title: 'Success',
-                    text: 'Discount updated successfully!',
-                    confirmButtonColor:"#3C6E71"
-                });
-            }
-        } catch (error) {
-            console.error("Error: ", error.message);
-            Swal.fire({
-                icon: 'error',
-                title: 'Error',
-                text: 'Error to send data'
-            });
-        }
-    };
-
-    const recoverData = async (id) => {
-        try {
-            const getDiscount = await instance.get(`/admin/getDiscount/${id}`);
-            if (getDiscount.status === 200) {
-                setDiscountData(getDiscount.data);
-                console.log(getDiscount.data);
-            }
-        } catch (error) {
-            console.error("error: ", error.message);
-        }
-    };
-
-    useEffect(() => {
-        if (id) {
-            recoverData(id);
-        }
-    }, [id]);
-
-    //esta funcion configura la zona horaria para limit date
-    const adjustDateToLocal = (dateString) => {
-        const date = new Date(dateString);
-        date.setMinutes(date.getMinutes() - date.getTimezoneOffset());
-        return date.toISOString().split('T')[0];
-    };
     
-    //este efecto establece los valores inciales del formik para actualizar el registro
     useEffect(() => {
         if (discountData) {
             const formattedDate = discountData.limit_date 
@@ -122,16 +123,13 @@ const UpdateDiscount = ({ event, id, reload }) => {
             setIsDataLoaded(true);
         }
     }, [discountData]);
-    
 
     useEffect(() => {
         const handleUpdateEffect = async () => {
             await reload();
-            handleIsUpdate(false);
         };
-
         handleUpdateEffect();
-    }, [isUpdate]);
+    }, []);
 
     if (!isDataLoaded) {
         return <div>Loading...</div>;
@@ -145,7 +143,7 @@ const UpdateDiscount = ({ event, id, reload }) => {
             >
                 <div className="mb-6">
                     <label className="block text-sm font-semibold mb-2" htmlFor="discount">
-                        Discount
+                        {t("Discount")}
                     </label>
                     <input
                         className="w-full p-3 text-sm text-gray-800 border border-cyan-900 rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500"
@@ -162,7 +160,7 @@ const UpdateDiscount = ({ event, id, reload }) => {
 
                 <div className="mb-6">
                     <label className="block text-sm font-semibold mb-2" htmlFor="description">
-                        Description
+                    {t("Description")}
                     </label>
                     <input
                         className="w-full p-3 text-sm text-gray-800 border border-cyan-900 rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500"
@@ -179,7 +177,7 @@ const UpdateDiscount = ({ event, id, reload }) => {
 
                 <div className="mb-6">
                     <label className="block text-sm font-semibold mb-2" htmlFor="limit_date">
-                        Limit Date
+                    {t("Limit Date")}
                     </label>
                     <input
                         className="w-full p-3 text-sm text-gray-800 border border-cyan-900 rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500"
@@ -196,7 +194,7 @@ const UpdateDiscount = ({ event, id, reload }) => {
 
                 <div className="mb-6">
                     <label className="block text-sm font-semibold mb-2" htmlFor="use_quantity">
-                        Quantity
+                    {t("Quantity")}
                     </label>
                     <input
                         className="w-full p-3 text-sm text-gray-800 border border-cyan-900 rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500"
