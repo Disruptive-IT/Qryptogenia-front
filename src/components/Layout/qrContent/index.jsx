@@ -19,6 +19,7 @@ import { PdfUploadComponent, LinkInput } from "./forms/Pdf";
 import SocialForm from "./forms/Social";
 import MusicForm from "./forms/Music";
 import { WebLinkPhoneMusic } from "./socialMedia/stylePhoneMusic";
+import MenuForm from "./forms/menu/menuForm";
 export const QrContentSwitch = ({contentName, onFormChangeApp, onFormChange, onFormChangeMusic, onSocialFormSubmit, location, appFormValues, musicFormValues, socialFormValues}) => {
 
     let qrContent;
@@ -82,7 +83,7 @@ export const QrContentSwitch = ({contentName, onFormChangeApp, onFormChange, onF
         case "food menu":
             qrContent = (
                 <div>
-                    <p>ACÁ EL MENU DEL NEGOCIO</p>
+                    <MenuForm />
                 </div>
             );
             break;
