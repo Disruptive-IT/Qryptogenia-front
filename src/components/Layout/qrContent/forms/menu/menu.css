@@ -1,3 +1,14 @@
 input{
     border: 1px solid #000;
 }
+
+.colorPicker{
+    position: absolute;
+    width: 8%;
+    transform: translateY(22%);
+}
+.colorPickerr {
+    position: absolute;
+    width: 8%;
+    transform: translateX(250%) ;
+}

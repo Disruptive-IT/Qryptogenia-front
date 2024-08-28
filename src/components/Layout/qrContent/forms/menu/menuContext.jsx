@@ -1,11 +1,11 @@
 import { createContext, useContext, useState } from "react";
-import { menuFormData } from "./menuData";
+import { menuFormData } from "./menuData.jsx";
 
 
 const MenuContext=createContext();
 
-function MenuProvider({children}) {
-    const [formData, setFormData] = useState({ ...menuFormData });
+export default function MenuProvider({children}) {
+    const [formData, setFormData] = useState(menuFormData);
 
     const handleRestaurantName = (e, handler) => {
         setFormData((prevValues) => ({
@@ -23,16 +23,6 @@ function MenuProvider({children}) {
         if (handler) handler();
     };
 
-    const handleTemplates = (index,e, handler) => {
-        setFormData((prevValues) =>{
-            const updateTemplate={...prevValues,backgroundTemplates}
-            updateTemplate[index]={
-                ...updateTemplate[index],
-                imgTemplate:e.target.file
-            }
-        });
-        if (handler) handler();
-    };
 
     const handleBackgroundCard = (e, handler) => {
         setFormData((prevValues) => ({
@@ -78,20 +68,26 @@ function MenuProvider({children}) {
         if (handler) handler();
     };
 
-    const handleCategory = (index, e, handler) => {
+    function addCategory(newCategory) {
+        setFormData((prevValues) => ({
+            ...prevValues,
+            category: [...prevValues.category, newCategory]
+        }));
+    }
+    
+    function addProductToCategory(index, newProduct) {
         setFormData((prevValues) => {
             const updatedCategories = [...prevValues.category];
-            updatedCategories[index] = {
-                ...updatedCategories[index],
-                categoryName: e.target.value
-            };
+            updatedCategories[index].products.push(newProduct);
+    
             return {
                 ...prevValues,
                 category: updatedCategories
             };
         });
-        if (handler) handler();
-    };
+    }
+
+    
 
     const handleProductField = (indexOne, indexTwo, field, value, handler) => {
         setFormData((prevValues) => {
@@ -134,12 +130,12 @@ function MenuProvider({children}) {
             setFormData,
             handleRestaurantName,
             handleLogo,
-            handleTemplates,
             handleBackgroundCard,
             handleColorName,
             handleColorDescription,
             handleColorPrice,
-            handleCategory,
+            addCategory,
+            addProductToCategory,
             handleProductField,
             handleProductImg,
             handleProductName,
