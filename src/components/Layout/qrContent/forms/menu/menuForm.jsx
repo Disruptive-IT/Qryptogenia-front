@@ -2,6 +2,7 @@ import { FieldArray, Formik, useFormik,Field } from 'formik';
 import { useState } from 'react';
 import { UseMenu } from './menuContext';
 import GradientColorPicker from 'react-gcolor-picker';
+import EjectIcon from '@mui/icons-material/Eject';
 import './menu.css'
 
 function MenuForm(){
@@ -12,10 +13,29 @@ function MenuForm(){
     const[showNamePicker,setShowNamePicker]=useState(false);
     const[showDescriptionPicker,setShowDescriptionPicker]=useState(false);
     const[showPricePicker,setShowPricePicker]=useState(false);
+    const[hideCategory,setHideCategory]=useState(false);
+    const[hideProduct,setHideProduct]=useState(false);
 
     const {formData}=UseMenu();
     console.log(formData);
 
+    const handleHideCategory = (index) => {
+        setHideCategory(prevState => ({
+          ...prevState,
+          [index]: !prevState[index]
+        }));
+      };
+
+      const handleHideProduct = (index, indexProd) => {
+        setHideProduct(prevState => ({
+          ...prevState,
+          [index]: {
+            ...prevState[index],
+            [indexProd]: !prevState[index]?.[indexProd]
+          }
+        }));
+      };
+      
 
     const handleActiveCategory = (index) => {
         setActiveCategory(index);
@@ -271,11 +291,13 @@ return (
                 + Add new category
             </button>
             {values.category.map((category, index) => (
-                <div key={index} className='bg-gray-300 my-5 p-4 w-[100%]'>
+                <div key={index} className='bg-gray-300 my-5 p-4 pb-2 w-[100%] rounded-2xl'>
                     <div className='mb-4'>
                         <label className='mb-2' htmlFor={`category.${index}.categoryName`}>Category Name</label>
-                        <Field className='p-2 border rounded w-full' type="text" name={`category.${index}.categoryName`} id={`category.${index}.categoryName`} />
+                        <button onClick={()=>handleHideCategory(index)} type="button" className='float-end'><EjectIcon className={hideCategory[index] ? 'rotate-180' : 'rotate-0'}/></button>
                     </div>
+                    <div className={hideCategory[index] ? '':'hidden'} id="category-container">
+                    <Field className='p-2 border rounded w-full mb-3' type="text" name={`category.${index}.categoryName`} id={`category.${index}.categoryName`} />
                     <FieldArray name={`category.${index}.products`}>
                         {({ push: pushProduct, remove: removeProduct }) => (
                             <div>
@@ -283,8 +305,13 @@ return (
                                     + Add New Product
                                 </button>
                                 {values.category[index].products.map((product, productIndex) => (
-                                    <div>
-                                                                            <div key={productIndex} className='flex flex-col mb-4'>
+                                    <div className='rounded-2xl bg-white px-2 py-2 mb-3'>
+                                        <div className='flex flex-column mb-3 justify-between'>
+                                            <h1>Product {productIndex+1}</h1>
+                                            <button onClick={()=>handleHideProduct(index,productIndex)} type="button" className='float-end'><EjectIcon className={hideProduct[index]?.[productIndex] ? 'rotate-180' : 'rotate-0'}/></button>
+                                        </div>
+                                        <div className={hideProduct[index]?.[productIndex] ? '':'hidden'}>
+                                        <div key={productIndex} className={'flex flex-col mb-4'}>
                                         <Field className='mb-4 p-2 border rounded' type="file" name={`category.${index}.products.${productIndex}.productImg`} />
                                         <Field className='mb-4 p-2 border rounded' type="text" placeholder='Product Name' name={`category.${index}.products.${productIndex}.productName`} />
                                         <Field className='mb-4 p-2 border rounded' type="text" placeholder='Product Description' name={`category.${index}.products.${productIndex}.productDescription`} />
@@ -299,9 +326,10 @@ return (
                                             </div>
                                         </div>
                                     </div>
-                                    <button onClick={() => removeProduct(productIndex)} type='button' className='mb-4 px-4 py-2 bg-red-600 text-white rounded'>
+                                    <button onClick={() =>{if(productIndex=!0){ removeProduct(productIndex)}}} type='button' className='mb-4 px-4 py-2 bg-red-600 text-white rounded'>
                                             Remove Product
                                     </button>
+                                        </div>
                                     </div>
                                 ))}
                             </div>
@@ -310,6 +338,7 @@ return (
                     <button onClick={() =>{if(index=!0){remove(index)}}} type='button' className='mb-4 px-4 py-2 bg-red-600 text-white rounded'>
                         Remove Category
                     </button>
+                    </div>
                 </div>
             ))}
         </div>
