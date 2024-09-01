@@ -7,6 +7,7 @@ import { toast } from 'sonner';
 import Swal from 'sweetalert2';
 import { toPng } from 'html-to-image';
 import { useLocation } from 'react-router-dom';
+import html2canvas from 'html2canvas';
 
 export const saveQrData = async (
     qrName, data, qrType, qrColor, qrBgColor, qrProps, qrImageInfo, qrTextProps, appFormValues, socialFormValues, musicFormValues, qrBase64, currentContentType, location, qrId
@@ -74,15 +75,24 @@ export const saveQrData = async (
     const isEditRoute = location.pathname.startsWith('/edit')
 
     try {
-        console.log(qrData)
+        console.log(qrData);
         const res = await axios({
             method: isEditRoute ? 'patch' : 'post',
             url: isEditRoute ? `/qr/edit/${qrId}` : '/qr',
-            data: isEditRoute ? {qrData} : qrData
-        })
+            data: isEditRoute ? { qrData } : qrData,
+        });
+    
+        // Si el servidor devuelve un mensaje de error, mostrar la alerta y no redirigir
+        if (res.status !== 201) {
+            toast.error(res.data.msg);
+            return false; // Salir de la función sin redirigir
+        }
+    
+        // Si el código QR se crea exitosamente, redirigir
         window.location.href = 'http://localhost:5173/user/qr';
         return true;
-    } catch (err) {
+    } 
+     catch (err) {
         const errorMessage = err.response && err.response.data && err.response.data.msg
             ? err.response.data.msg
             : 'An unknown error occurred';
@@ -109,7 +119,7 @@ export const saveQrData = async (
 
 
 const QR = () => {
-    const { qrType, qrData, qrBgColor, qrProps, qrImageInfo, qrTextProps, appFormValues, musicFormValues, socialFormValues, qrBase64, setQrBase64 } = useQr();
+    const { qrType, qrData, qrBgColor, qrProps, qrImageInfo, qrTextProps, qrBase64, setQrBase64 } = useQr();
     const qrRef = useRef(null);
     const qrCode = useRef(null);
     const mario = useRef(null);
@@ -121,25 +131,38 @@ const QR = () => {
         }
 
         try {
-            const dataUrl = await toPng(mario.current, { quality: 0.6 });
-            if (dataUrl) {
-                const base64String = dataUrl.split(',')[1];
-                setQrBase64(base64String);
-            } else {
-                throw new Error('Failed to capture image');
-            }
+            const scaleFactor = 3; // Ajusta según sea necesario
+            const rect = mario.current.getBoundingClientRect();
+
+            // Configura el canvas con las dimensiones escaladas
+            const canvas = document.createElement('canvas');
+            canvas.width = rect.width * scaleFactor;
+            canvas.height = rect.height * scaleFactor;
+            const ctx = canvas.getContext('2d');
+
+            await html2canvas(mario.current, {
+                canvas: canvas,
+                scale: scaleFactor,
+                useCORS: true,
+                backgroundColor: null,
+                logging: false,
+                removeContainer: true,
+            });
+
+            const dataUrl = canvas.toDataURL('image/png', 1.0);
+            const base64String = dataUrl.split(',')[1];
+            setQrBase64(base64String);
         } catch (error) {
             console.error('Failed to convert div to base64', error);
         }
     };
 
-
     useEffect(() => {
         const createOrUpdateQRCode = () => {
             if (!qrCode.current) {
                 qrCode.current = new QRCodeStyling({
-                    width: 250,
-                    height: 250,
+                    width: 1000,  // Aumenta el tamaño del QR a 1000x1000 para mayor resolución
+                    height: 1000,
                     data: qrData || 'www.qryptogenia.com',
                     dotsOptions: {
                         color: qrProps.dotsColor,
@@ -195,23 +218,20 @@ const QR = () => {
             }
         };
 
+        createOrUpdateQRCode();
+        console.log(qrBase64)
+        const timeoutId = setTimeout(() => {
+            generateBase64FromDiv();
+        }, 100);
 
-    
-    createOrUpdateQRCode();
-    // Esperar un breve período para asegurar que el QR se haya renderizado antes de capturar
-    const timeoutId = setTimeout(() => {
-        console.log("traka")
-        generateBase64FromDiv();
-    }, 100);
-    console.log(qrBase64);
-    return () => {
-        clearTimeout(timeoutId);
-    };
-}, [qrData, qrProps, qrImageInfo, qrTextProps.qrText, qrBgColor, qrTextProps.qrTextPosition, qrTextProps.qrTextColor, qrTextProps.qrTextSize, qrTextProps.qrTextChip, qrTextProps.qrTextChipColor, qrTextProps.qrTextFontStyle]);
+        return () => {
+            clearTimeout(timeoutId);
+        };
+    }, [qrData, qrProps, qrImageInfo, qrTextProps.qrText, qrBgColor, qrTextProps.qrTextPosition, qrTextProps.qrTextColor, qrTextProps.qrTextSize, qrTextProps.qrTextChip, qrTextProps.qrTextChipColor, qrTextProps.qrTextFontStyle]);
 
     return (
         <div className='m-auto'>
-            <div ref={mario} style={{ position: "relative" }}>
+            <div ref={mario} style={{ position: "relative", width: '330px', height: '330px' }}>
                 <div
                     className='m-auto'
                     style={{
@@ -219,10 +239,19 @@ const QR = () => {
                         border: qrProps.marcoType.type && qrProps.marcoType.type !== 'default' ? '4px solid' : 'none',
                         backgroundColor: qrBgColor,
                         transition: 'all 0.5s ease',
-                        padding: "37px"
+                        width: '100%',
+                        height: '100%',
+                        position: 'absolute',
+                        top: 0,
+                        left: 0,
+                        display: 'flex',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        boxSizing: 'border-box',
+                        padding: '20px'
                     }}
                 >
-                    <div className="flex items-center justify-center w-full" ref={qrRef}></div>
+                    <div className="flex items-center justify-center w-full" ref={qrRef} style={{ width: '1000px', height: '1000px', transform: 'scale(0.25)' }}></div>
                 </div>
                 {qrTextProps.qrText && (
                     <div
@@ -234,7 +263,6 @@ const QR = () => {
                             ...qrTextProps.qrTextChip,
                             ...qrTextProps.qrTextFontStyle,
                             ...qrTextProps.qrTextPosition.style
-
                         }}
                     >
                         <span className='text-center'>

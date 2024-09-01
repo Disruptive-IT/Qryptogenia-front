@@ -30,8 +30,9 @@ function Navbar() {
                     <MenuDrawer />
                 </div>
                 <div className='hidden md:block'>
-                    <UserProfileMenu />
                     <LenguageSelector/>
+                    <UserProfileMenu />
+                    
                 </div>
             </div>
         </nav>

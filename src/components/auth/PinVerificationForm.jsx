@@ -23,10 +23,12 @@ const PinVerificationForm = ({ onSuccess, onSendVerification, email }) => {
     }
   };
 
+  const schemaPin = SchemaPinValidate();
+
   return (
     <Formik
       initialValues={{ pin: "" }}
-      validationSchema={SchemaPinValidate}
+      validationSchema={schemaPin}
       onSubmit={handleSubmit}
     >
       <section className="w-full mt-24 flex flex-col justify-center items-center ">

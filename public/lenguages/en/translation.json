@@ -163,7 +163,26 @@
     "All our plans include full QR code customization features, allowing you to personalize with your colors and logos.": "All our plans include full QR code customization features, allowing you to personalize with your colors and logos.",
     "Enjoy unlimited static QR codes and downloadable files in print-quality formats (PNG, JPG, SVG).": "Enjoy unlimited static QR codes and downloadable files in print-quality formats (PNG, JPG, SVG).",
     "All prices are inclusive of value-added tax (VAT) and shipping fees.": "All prices are inclusive of value-added tax (VAT) and shipping fees.",
-    "MOST POPULAR": "MOST POPULAR"
+    "MOST POPULAR": "MOST POPULAR",
+    "Invalid email": "Invalid email",
+    "Password is required": "Password is required",
+    "Please enter digits only": "Please enter digits only",
+    "Username is required": "Username is required",
+    "Password is too short - should be 8 chars minimum": "Password is too short - should be 8 chars minimum",
+    "The password cannot contain only numbers": "The password cannot contain only numbers",
+    "Password must contain at least one uppercase letter": "Password must contain at least one uppercase letter",
+    "Password must contain at least one lowercase letter": "Password must contain at least one lowercase letter",
+    "Password must contain at least one special character": "Password must contain at least one special character",
+    "Passwords must match": "Passwords must match",
+    "Confirm Password is required": "Confirm Password is required",
+    "You must accept the terms and conditions": "You must accept the terms and conditions",
+    "Sign": "Sign",
+    "-In": "-In",
+    "Sign-": "Sign-",
+    "Up": "Up"
+
+
+
 
 
 
