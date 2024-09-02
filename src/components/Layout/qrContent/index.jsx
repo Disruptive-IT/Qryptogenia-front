@@ -96,7 +96,7 @@ export const QrContentSwitch = ({contentName, onFormChangeApp, onFormChange, onF
 };
 
 
-export const PhoneContentSwitch = ({contentName, appFormValues, socialFormValues, musicFormValues}) => {
+export const PhoneContentSwitch = ({contentName, appFormValues, socialFormValues, musicFormValues,menuFormValues}) => {
 console.log(contentName);
 let phoneContent;
 switch (contentName) {
@@ -159,7 +159,7 @@ switch (contentName) {
         case "food menu":
             phoneContent = (
                 <div>
-                    <WebLinkMenuFood ContentName={contentName} />
+                    <WebLinkMenuFood FormValues={menuFormValues}  ContentName={contentName} />
                 </div>
             );
             break;

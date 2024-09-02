@@ -1,19 +1,20 @@
-import { createContext, useContext, useState } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
 import { menuFormData } from "./menuData.jsx";
 
 
 const MenuContext=createContext();
 
 export default function MenuProvider({children}) {
-    const [formData, setFormData] = useState(menuFormData);
+    const [formData, setFormData] = useState({...menuFormData});
 
-    const handleRestaurantName = (e, handler) => {
-        setFormData((prevValues) => ({
+    const handleRestaurantName =(e, handler) => {
+        setFormData(prevValues=>({
             ...prevValues,
-            restaurantName: e.target.value
-        }));
-        if (handler) handler();
+            restaurantName:e.target.value
+        }))
+        handler(e);
     };
+    
 
     const handleLogo = (e, handler) => {
         setFormData((prevValues) => ({

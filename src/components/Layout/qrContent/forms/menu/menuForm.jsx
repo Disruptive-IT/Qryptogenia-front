@@ -1,23 +1,25 @@
 import { FieldArray, Formik, useFormik,Field } from 'formik';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { UseMenu } from './menuContext';
 import GradientColorPicker from 'react-gcolor-picker';
 import EjectIcon from '@mui/icons-material/Eject';
 import './menu.css'
 
 function MenuForm(){
+    const {formData,handleRestaurantName}=UseMenu();
+
     const[activeCategory,setActiveCategory]=useState(0);
     const[activeProduct,setActiveProduct]=useState(0);
+    const[initialValues,setInitialValues]=useState(formData);
     const[showBackgroundPicker,setShowBackgroundPicker]=useState(false);
     const[showBackCategoryPicker,setShowBackCategoryPicker]=useState(false);
     const[showNamePicker,setShowNamePicker]=useState(false);
     const[showDescriptionPicker,setShowDescriptionPicker]=useState(false);
     const[showPricePicker,setShowPricePicker]=useState(false);
-    const[hideCategory,setHideCategory]=useState(false);
-    const[hideProduct,setHideProduct]=useState(false);
+    const[hideCategory,setHideCategory]=useState(true);
+    const[hideProduct,setHideProduct]=useState(true);
 
-    const {formData}=UseMenu();
-    console.log(formData);
+
 
     const handleHideCategory = (index) => {
         setHideCategory(prevState => ({
@@ -66,7 +68,6 @@ function MenuForm(){
     }
 
 
-    const initialValues=formData;
 
     const validation=(values)=>{
         const errors={};
@@ -105,6 +106,7 @@ function MenuForm(){
         }
 });
 
+
 return (
     <div className='p-4'>
         <Formik
@@ -120,7 +122,7 @@ return (
                     <div className='flex flex-row mb-6'>
                         <div className='flex flex-col p-4 mx-4'>
                             <label className='my-1' htmlFor="restaurantName">Restaurant Name</label>
-                            <Field className='p-2 border rounded' type="text" name='restaurantName' id='restaurantName' />
+                            <input onChange={(e)=>handleRestaurantName(e,formik.handleChange)} className='p-2 border rounded' type="text" name='restaurantName' id='restaurantName' />
                         </div>
                         <div className='flex flex-col p-4 mx-4'>
                             <label className='mb-2' htmlFor="restaurantLogo">Logo</label>
@@ -285,16 +287,19 @@ return (
                             <div><h1>no hay categorias agregadas</h1></div>
                         ) : (
 <FieldArray name="category">
-    {({ push, remove }) => (
+    {({remove ,unshift}) => (
         <div>
-            <button onClick={() => push({ categoryName: "", products: [] })} className='mb-4 px-4 py-2 bg-blue-500 text-white rounded' type='button'>
+            <button onClick={() =>unshift({ categoryName: "", products: [] })} className='mb-4 px-4 py-2 bg-blue-500 text-white rounded' type='button'>
                 + Add new category
             </button>
             {values.category.map((category, index) => (
                 <div key={index} className='bg-gray-300 my-5 p-4 pb-2 w-[100%] rounded-2xl'>
-                    <div className='mb-4'>
+                    <div className='flex flex-row justify-between p-2'>
                         <label className='mb-2' htmlFor={`category.${index}.categoryName`}>Category Name</label>
-                        <button onClick={()=>handleHideCategory(index)} type="button" className='float-end'><EjectIcon className={hideCategory[index] ? 'rotate-180' : 'rotate-0'}/></button>
+                        <div className='self-end'>
+                            <button onClick={()=>handleHideCategory(index)} type="button" className='float-end'><EjectIcon className={hideCategory[index] ? 'rotate-0' : 'rotate-180'}/></button>
+                            <button onClick={() =>{if(index!==0){remove(index)}}} type='button' className='float-right p-1 text-red-600 font-semibold mx-2 hover:underline'>X</button>
+                        </div>
                     </div>
                     <div className={hideCategory[index] ? '':'hidden'} id="category-container">
                     <Field className='p-2 border rounded w-full mb-3' type="text" name={`category.${index}.categoryName`} id={`category.${index}.categoryName`} />
@@ -306,9 +311,12 @@ return (
                                 </button>
                                 {values.category[index].products.map((product, productIndex) => (
                                     <div className='rounded-2xl bg-white px-2 py-2 mb-3'>
-                                        <div className='flex flex-column mb-3 justify-between'>
-                                            <h1>Product {productIndex+1}</h1>
-                                            <button onClick={()=>handleHideProduct(index,productIndex)} type="button" className='float-end'><EjectIcon className={hideProduct[index]?.[productIndex] ? 'rotate-180' : 'rotate-0'}/></button>
+                                        <div className='flex flex-row justify-between p-2'>
+                                            <h1 className='mb-2'>Product {productIndex+1}</h1>
+                                            <div className='self-end'>
+                                                <button onClick={()=>handleHideProduct(index,productIndex)} type="button" className='float-end'><EjectIcon className={hideProduct[index]?.[productIndex] ? 'rotate-180' : 'rotate-0'}/></button>
+                                                <button onClick={() =>{if(productIndex!==0){removeProduct(productIndex)}}} type='button' className='float-right p-1 text-red-600 font-semibold hover:underline'>X</button>
+                                            </div>
                                         </div>
                                         <div className={hideProduct[index]?.[productIndex] ? '':'hidden'}>
                                         <div key={productIndex} className={'flex flex-col mb-4'}>
@@ -326,18 +334,12 @@ return (
                                             </div>
                                         </div>
                                     </div>
-                                    <button onClick={() =>{if(productIndex=!0){ removeProduct(productIndex)}}} type='button' className='mb-4 px-4 py-2 bg-red-600 text-white rounded'>
-                                            Remove Product
-                                    </button>
                                         </div>
                                     </div>
                                 ))}
                             </div>
                         )}
                     </FieldArray>
-                    <button onClick={() =>{if(index=!0){remove(index)}}} type='button' className='mb-4 px-4 py-2 bg-red-600 text-white rounded'>
-                        Remove Category
-                    </button>
                     </div>
                 </div>
             ))}

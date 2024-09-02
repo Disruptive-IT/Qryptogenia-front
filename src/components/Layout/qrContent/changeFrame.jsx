@@ -69,7 +69,7 @@ const fabGreenStyle = {
 
 
 
-export default function ChangeFrame({ name, appFormValues, socialFormValues, musicFormValues, location, qrId }) {
+export default function ChangeFrame({ name, appFormValues, socialFormValues, musicFormValues, location, qrId,menuFormValues }) {
     const { contentName } = useParams();
     const theme = useTheme();
     const isSmallScreen = useMediaQuery(theme.breakpoints.down(1023)); // Detecta si la pantalla es pequeña
@@ -167,6 +167,7 @@ export default function ChangeFrame({ name, appFormValues, socialFormValues, mus
                                     appFormValues={appFormValues}
                                     socialFormValues={socialFormValues}
                                     musicFormValues={musicFormValues}
+                                    menuFormValues={menuFormValues}
                                 />
                             </CellBox>
                         </div>
