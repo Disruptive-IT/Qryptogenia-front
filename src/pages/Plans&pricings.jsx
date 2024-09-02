@@ -87,7 +87,7 @@ export const PlansPricings = () => {
       <PricingsCards 
         data={data} 
         onCardClick={handleCardClick} 
-        isSelectionMode={location.pathname === '/selectPlan'} 
+        isSelectionMode={location.pathname === '/selectPlan'} // Pasar la ruta como prop
       />
       <span className='text-slate-400 '>{t('All our plans include full QR code customization features, allowing you to personalize with your colors and logos.')} {t('Enjoy unlimited static QR codes and downloadable files in print-quality formats (PNG, JPG, SVG).')}</span>
       <span className='text-slate-400'>{t('All prices are inclusive of value-added tax (VAT) and shipping fees.')}</span>
