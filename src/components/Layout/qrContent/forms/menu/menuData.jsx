@@ -1,11 +1,11 @@
 export const menuFormData={
-    restaurantName:"", //name-restaurant
-    resturantLogo:null,
+    restaurantName:"",
+    restaurantLogo:null,
+    backgroundCard:"#000",
     backgroundTemplates:[{
         imgTemplate:null
     }],
     styleProductCard:{
-        backgroundCard:"",
         colorName:"",
         colorDescription:"",
         colorPrice:""

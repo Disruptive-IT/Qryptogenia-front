@@ -17,25 +17,40 @@ export default function MenuProvider({children}) {
     
 
     const handleLogo = (e, handler) => {
+        const file = e.target.files[0];
+        
         setFormData((prevValues) => ({
             ...prevValues,
-            restaurantLogo: e.target.files[0]
+            restaurantLogo: file
         }));
-        if (handler) handler();
-    };
-
-
-    const handleBackgroundCard = (e, handler) => {
-        setFormData((prevValues) => ({
-            ...prevValues,
-            styleProductCard: {
-                ...prevValues.styleProductCard,
-                backgroundCard: e.target.value
+    
+        const reader = new FileReader();
+        reader.addEventListener("load", (event) => {
+            const previewElement = document.getElementById("restaurantLogoPreview");
+            if (previewElement) {
+                previewElement.src = event.target.result;
             }
-        }));
+        });
+    
+        if (file) {
+            reader.readAsDataURL(file);
+        }
+    
         if (handler) handler();
     };
+    
 
+    const handleBackgroundCard = (color) => {
+        if (color) {
+            setFormData((prevValues) => ({
+                ...prevValues,
+                backgroundCard: color
+            }));
+        } else {
+            console.error("Color is undefined or null");
+        }
+    };
+    
     const handleColorName = (e, handler) => {
         setFormData((prevValues) => ({
             ...prevValues,
@@ -75,12 +90,47 @@ export default function MenuProvider({children}) {
             category: [...prevValues.category, newCategory]
         }));
     }
+
+    function removeCategory(index) {
+        setFormData((prevValues) => {
+            const updatedCategories = [...prevValues.category];
+            updatedCategories.splice(index, 1);
+            return {
+                ...prevValues,
+                category: updatedCategories,
+            };
+        });
+    }
+
+    function handleChangeCategoryName(index, e) {
+        setFormData((prevValues) => {
+            const updatedCategories = [...prevValues.category];
+            updatedCategories[index].categoryName=e.target.value
+            return {
+                ...prevValues,
+                category: updatedCategories,
+            };
+        });
+    }
+    
     
     function addProductToCategory(index, newProduct) {
         setFormData((prevValues) => {
             const updatedCategories = [...prevValues.category];
             updatedCategories[index].products.push(newProduct);
-    
+            
+            return {
+                ...prevValues,
+                category: updatedCategories
+            };
+        });
+    }
+
+    function removeProductToCategory(index, indexProd) {
+        setFormData((prevValues) => {
+            const updatedCategories = [...prevValues.category];
+            updatedCategories[index].products.splice(indexProd,1);
+            
             return {
                 ...prevValues,
                 category: updatedCategories
@@ -135,8 +185,11 @@ export default function MenuProvider({children}) {
             handleColorName,
             handleColorDescription,
             handleColorPrice,
+            handleChangeCategoryName,
             addCategory,
+            removeCategory,
             addProductToCategory,
+            removeProductToCategory,
             handleProductField,
             handleProductImg,
             handleProductName,

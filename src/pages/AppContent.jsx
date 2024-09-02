@@ -19,6 +19,7 @@ import axios from 'axios';
 import { OptionBarTwo } from '../components/Layout/optionBar';
 import { useQr } from '../context/QrContext';
 import { useTranslation } from 'react-i18next';
+import { UseMenu } from '../components/Layout/qrContent/forms/menu/menuContext';
 Modal.setAppElement('#root');
 
 const initialAppFormValues = Valuesjson.appFormValues;
@@ -61,6 +62,7 @@ const AppContent = () => {
         setTextChipColor,
         setQrImage
     } = useQr();
+    const {formData}=UseMenu();
     const [valuesLoaded, setValuesLoaded] = useState(false);
     const [isModalOpen, setIsModalOpen] = useState(false);
     setCurrentContentType(contentName);
@@ -216,6 +218,7 @@ const AppContent = () => {
                                 appFormValues={appFormValues}
                                 socialFormValues={socialFormValues}
                                 musicFormValues={musicFormValues}
+                                menuFormValues={formData}
                                 selectedTab={selectedTab}
                                 onTabChange={handleTabChange}
                                 location={location}

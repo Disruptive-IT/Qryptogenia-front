@@ -6,7 +6,10 @@ import EjectIcon from '@mui/icons-material/Eject';
 import './menu.css'
 
 function MenuForm(){
-    const {formData,handleRestaurantName}=UseMenu();
+    const {formData,handleRestaurantName,handleLogo,handleBackgroundCard,addCategory,
+        addProductToCategory,removeCategory,removeProductToCategory,handleProductName,handleProductDescription,
+        handleProductTop,handleProductPrice,handleChangeCategoryName,handleProductImg
+    }=UseMenu();
 
     const[activeCategory,setActiveCategory]=useState(0);
     const[activeProduct,setActiveProduct]=useState(0);
@@ -27,6 +30,7 @@ function MenuForm(){
           [index]: !prevState[index]
         }));
       };
+      console.log(formData);
 
       const handleHideProduct = (index, indexProd) => {
         setHideProduct(prevState => ({
@@ -126,7 +130,7 @@ return (
                         </div>
                         <div className='flex flex-col p-4 mx-4'>
                             <label className='mb-2' htmlFor="restaurantLogo">Logo</label>
-                            <Field className='p-2 border rounded' type="file" name="restaurantLogo" id="restaurantLogo"/>
+                            <input onChange={(e)=>handleLogo(e,formik.handleChange)} className='p-2 border rounded' type="file" name="restaurantLogo" id="restaurantLogo"/>
                         </div>
                     </div>
 
@@ -134,12 +138,12 @@ return (
                     <div className='flex flex-col my-6'>
                         <div className='flex flex-row items-center p-2'>
                             <button className='mx-5 my-2 px-4 py-2 bg-gray-200 rounded' type='button'>
-                                Background <button type='button'>icono</button>
+                                Background <button type='button'><EjectIcon /></button>
                             </button>
                             <div 
                                 className='w-20 h-10 border border-gray-300 rounded cursor-pointer'
                                 onClick={()=>handleShowBackgroundPicker(!showBackgroundPicker)}
-                                style={{ backgroundColor: '#000' }}
+                                style={{backgroundColor:formData.backgroundCard || "#000"}}
                             ></div>
                             {showBackgroundPicker && (
                                 <div className='colorPicker'>
@@ -152,9 +156,13 @@ return (
                                         disableRgbInput={false}
                                         disableAlphaInput={false}
                                         presetColors={[]}
-                                        gradient
-                                        color=''
-                                        onChange={() => {}}
+                                        gradient={true}
+                                        color={formik.values.backgroundCard}
+                                        value={formik.values.backgroundCard}
+                                        onChange={(color) => {
+                                            handleBackgroundCard(color);
+                                            formik.setFieldValue("backgroundCard",color);
+                                        }}
                                     />
                                 </div>
                             )}
@@ -289,7 +297,10 @@ return (
 <FieldArray name="category">
     {({remove ,unshift}) => (
         <div>
-            <button onClick={() =>unshift({ categoryName: "", products: [] })} className='mb-4 px-4 py-2 bg-blue-500 text-white rounded' type='button'>
+            <button onClick={() =>{
+                unshift({ categoryName: "", products: [] });
+                addCategory({ categoryName: "", products: [] })}}
+                className='mb-4 px-4 py-2 bg-blue-500 text-white rounded' type='button'>
                 + Add new category
             </button>
             {values.category.map((category, index) => (
@@ -298,15 +309,19 @@ return (
                         <label className='mb-2' htmlFor={`category.${index}.categoryName`}>Category Name</label>
                         <div className='self-end'>
                             <button onClick={()=>handleHideCategory(index)} type="button" className='float-end'><EjectIcon className={hideCategory[index] ? 'rotate-0' : 'rotate-180'}/></button>
-                            <button onClick={() =>{if(index!==0){remove(index)}}} type='button' className='float-right p-1 text-red-600 font-semibold mx-2 hover:underline'>X</button>
+                            <button onClick={() =>{if(index!==0){remove(index); removeCategory(index)}}} type='button' className='float-right p-1 text-red-600 font-semibold mx-2 hover:underline'>X</button>
                         </div>
                     </div>
                     <div className={hideCategory[index] ? '':'hidden'} id="category-container">
-                    <Field className='p-2 border rounded w-full mb-3' type="text" name={`category.${index}.categoryName`} id={`category.${index}.categoryName`} />
+                    <input onChange={(e)=>handleChangeCategoryName(index,e)} className='p-2 border rounded w-full mb-3' type="text" name={`category.${index}.categoryName`} id={`category.${index}.categoryName`} />
                     <FieldArray name={`category.${index}.products`}>
                         {({ push: pushProduct, remove: removeProduct }) => (
                             <div>
-                                <button onClick={() => pushProduct({ productImg: null, productName: "", productDescription: "", top: false, price: null })} className='mb-4 px-4 py-2 bg-green-500 text-white rounded' type='button'>
+                                <button onClick={() =>{
+                                    pushProduct({ productImg: null, productName: "", productDescription: "", top: false, price: null });
+                                    addProductToCategory(index,{ productImg: null, productName: "", productDescription: "", top: false, price: null })}
+                                }
+                                    className='mb-4 px-4 py-2 bg-blue-500 text-white rounded' type='button'>
                                     + Add New Product
                                 </button>
                                 {values.category[index].products.map((product, productIndex) => (
@@ -315,22 +330,22 @@ return (
                                             <h1 className='mb-2'>Product {productIndex+1}</h1>
                                             <div className='self-end'>
                                                 <button onClick={()=>handleHideProduct(index,productIndex)} type="button" className='float-end'><EjectIcon className={hideProduct[index]?.[productIndex] ? 'rotate-180' : 'rotate-0'}/></button>
-                                                <button onClick={() =>{if(productIndex!==0){removeProduct(productIndex)}}} type='button' className='float-right p-1 text-red-600 font-semibold hover:underline'>X</button>
+                                                <button onClick={() =>{if(productIndex!==0){removeProduct(productIndex); removeProductToCategory(index,productIndex)}}} type='button' className='float-right p-1 text-red-600 font-semibold hover:underline'>X</button>
                                             </div>
                                         </div>
                                         <div className={hideProduct[index]?.[productIndex] ? '':'hidden'}>
                                         <div key={productIndex} className={'flex flex-col mb-4'}>
-                                        <Field className='mb-4 p-2 border rounded' type="file" name={`category.${index}.products.${productIndex}.productImg`} />
-                                        <Field className='mb-4 p-2 border rounded' type="text" placeholder='Product Name' name={`category.${index}.products.${productIndex}.productName`} />
-                                        <Field className='mb-4 p-2 border rounded' type="text" placeholder='Product Description' name={`category.${index}.products.${productIndex}.productDescription`} />
+                                        <input onChange={(e)=>handleProductImg(index,productIndex,e,formik.handleChange)} className='mb-4 p-2 border rounded' type="file" name={`category.${index}.products.${productIndex}.productImg`} />
+                                        <input onChange={(e)=>handleProductName(index,productIndex,e,formik.handleChange)} className='mb-4 p-2 border rounded' type="text" placeholder='Product Name' name={`category.${index}.products.${productIndex}.productName`} />
+                                        <input onChange={(e)=>handleProductDescription(index,productIndex,e,formik.handleChange)} className='mb-4 p-2 border rounded' type="text" placeholder='Product Description' name={`category.${index}.products.${productIndex}.productDescription`} />
                                         <div className='flex items-center'>
                                             <div className='flex items-center mr-4'>
-                                                <Field className='mr-2' type="checkbox" name={`category.${index}.products.${productIndex}.top`} /> 
-                                                <label>Top</label>
+                                                <input className='mr-2' type="checkbox" name={`category.${index}.products.${productIndex}.top`} /> 
+                                                <label>Top</label>0
                                             </div>
                                             <div className='flex items-center'>
                                                 <label className='mr-2'>Price</label>
-                                                $<Field className='p-2 border rounded w-20' type="number" name={`category.${index}.products.${productIndex}.price`} />
+                                                $<input onChange={(e)=>handleProductPrice(index,productIndex,e,formik.handleChange)} className='p-2 border rounded w-20' type="number" name={`category.${index}.products.${productIndex}.price`} />
                                             </div>
                                         </div>
                                     </div>

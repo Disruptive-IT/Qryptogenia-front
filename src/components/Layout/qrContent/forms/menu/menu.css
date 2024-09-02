@@ -5,10 +5,32 @@ input{
 .colorPicker{
     position: absolute;
     width: 8%;
-    transform: translateY(22%);
+    transform: translateX(230%);
 }
 .colorPickerr {
     position: absolute;
     width: 8%;
     transform: translateX(250%) ;
 }
+.scroll-container::-webkit-scrollbar {
+    width: 12px;
+  }
+  
+  .scroll-container::-webkit-scrollbar-track {
+    background: #f1f1f1;
+  }
+  
+  .scroll-container::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 10px;
+  }
+  
+  .scroll-container::-webkit-scrollbar-thumb:hover {
+    background: #555;
+  }
+.scroll-container {
+    scrollbar-width: thin;
+    scrollbar-color: #888 #f1f1f1;
+  }
+  
+  
