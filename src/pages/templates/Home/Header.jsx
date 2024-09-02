@@ -34,15 +34,16 @@ function Navbar() {
                 </nav>
 
                 <ul className='md:flex hidden gap-4 w-2/6 justify-end pr-5'>
+                <li className="transition-all duration-200 hover:scale-105 hover:ease-linear ">
+                        <LenguageSelector/>
+                    </li>
                     <li className="transition-all duration-300 hover:scale-105 hover:ease-linear">
                         <Link to="/login" className="font-sans font-bold  text-light-blue focus:text-lg focus:text-dark-blue">{t('Sign In')}</Link>
                     </li>
                     <li className="transition-all duration-200 hover:scale-105 hover:ease-linear ">
                         <Link to="/register" className=" font-bold font-sans  text-light-blue focus:text-lg focus:text-dark-blue">{t('Sign Up')}</Link>
                     </li>
-                    <li className="transition-all duration-200 hover:scale-105 hover:ease-linear ">
-                        <LenguageSelector/>
-                    </li>
+                    
                 </ul>
                 <MenuDrawer />
             </div>

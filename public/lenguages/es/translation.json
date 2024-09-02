@@ -163,6 +163,22 @@
     "All our plans include full QR code customization features, allowing you to personalize with your colors and logos.": "Todos nuestros planes incluyen funciones completas de personalización de códigos QR, permitiéndote personalizar con tus colores y logotipos.",
     "Enjoy unlimited static QR codes and downloadable files in print-quality formats (PNG, JPG, SVG).": "Disfruta de códigos QR estáticos ilimitados y archivos descargables en formatos de calidad de impresión (PNG, JPG, SVG).",
     "All prices are inclusive of value-added tax (VAT) and shipping fees.": "Todos los precios incluyen el impuesto al valor añadido (IVA) y los gastos de envío.",
-    "MOST POPULAR": "MÁS POPULAR"
+    "MOST POPULAR": "MÁS POPULAR",
+    "Invalid email": "Correo electrónico inválido",
+    "Password is required": "La contraseña es obligatoria",
+    "Please enter digits only": "Por favor, ingrese solo dígitos",
+    "Username is required": "El nombre de usuario es obligatorio",
+    "Password is too short - should be 8 chars minimum": "La contraseña es demasiado corta, debe tener al menos 8 caracteres",
+    "The password cannot contain only numbers": "La contraseña no puede contener solo números",
+    "Password must contain at least one uppercase letter": "La contraseña debe contener al menos una letra mayúscula",
+    "Password must contain at least one lowercase letter": "La contraseña debe contener al menos una letra minúscula",
+    "Password must contain at least one special character": "La contraseña debe contener al menos un carácter especial",
+    "Passwords must match": "Las contraseñas deben coincidir",
+    "Confirm Password is required": "La confirmación de la contraseña es obligatoria",
+    "You must accept the terms and conditions": "Debes aceptar los términos y condiciones",
+    "Sign": "Inicia",
+    "-In": " sesión",
+    "Sign-": "Úne",
+    "Up": "te"
 
 }

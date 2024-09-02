@@ -77,17 +77,29 @@ const App = () => {
     }).then(async (result) => {
       if (result.isConfirmed) {
         try {
-          const response = await axios.patch(`http://localhost:3000/api/qr/patchqrs/${item.id}`, {
-            state: newState
-          }, {
-            withCredentials: true,
-          });
-
+          const response = await axios.patch(
+            `http://localhost:3000/api/qr/patchqrs/${item.id}`,
+            { state: newState },
+            { withCredentials: true }
+          );
+  
           console.log('API response:', response.data);
-          setQRCodes(qrCodes.map(qr => qr.id === item.id ? { ...qr, state: newState } : qr));
+          setQRCodes(
+            qrCodes.map((qr) =>
+              qr.id === item.id ? { ...qr, state: newState } : qr
+            )
+          );
         } catch (error) {
           console.error('Error updating QR code state:', error);
-          Swal.fire('Error', 'Failed to update QR code state', 'error');
+          
+          // Extraer el mensaje de error del backend
+          const errorMessage =
+            error.response && error.response.data && error.response.data.error
+              ? error.response.data.error
+              : 'Failed to update QR code state';
+  
+          // Mostrar el error en SweetAlert
+          Swal.fire('Error', errorMessage, 'error');
         }
       }
     });

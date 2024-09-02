@@ -28,6 +28,8 @@ const CompleteRegisterForm = ({ email }) => {
     stopLoading();
   };
 
+  const schemaComplete = SchemaCompleteRegisterValidate();
+
   return (
     <Formik
       initialValues={{
@@ -36,7 +38,7 @@ const CompleteRegisterForm = ({ email }) => {
         confirmPassword: "",
         terms: false,
       }}
-      validationSchema={SchemaCompleteRegisterValidate}
+      validationSchema={schemaComplete}
       onSubmit={handleSubmit}
     >
       {({ values, touched }) => (

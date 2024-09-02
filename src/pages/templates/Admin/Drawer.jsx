@@ -153,8 +153,9 @@ export default function MiniDrawer() {
                         </Toolbar>
                         <Toolbar>
                             <Box>
+                            <LenguageSelector/>
                                 <UserProfileMenu />
-                                <LenguageSelector/>
+                                
                             </Box>
                         </Toolbar>
                         
