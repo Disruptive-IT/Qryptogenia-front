@@ -24,10 +24,11 @@ export const saveQrData = async (
     const qrData = {
         qr: {
             qrName: qrName || '',
-            data,
+            data: 'http://localhost:3000/qr/scan/temp',
             qrType,
             qrColor,
             qrBgColor,
+            url: data
         },
         qrPreview: {
             title: currentContentType === 'social-media' ? socialFormValues.title : currentContentType === 'music' ? musicFormValues.title : appFormValues.title,
@@ -81,15 +82,28 @@ export const saveQrData = async (
             url: isEditRoute ? `/qr/edit/${qrId}` : '/qr',
             data: isEditRoute ? { qrData } : qrData,
         });
-    
+        console.log(qrData)
+        const createdQrId = res.data.newQR.id;
+        if(!isEditRoute){
+            const updatedUrl = `http://localhost:3000/qr/scan/${createdQrId}`;
+            const updatedQrData = {
+                ...qrData,
+                qr: {
+                    ...qrData.qr,
+                    data: updatedUrl, // Actualizar la URL
+                }
+            };
+            await axios.patch(`/qr/edit/${createdQrId}`, { qrData: updatedQrData });
+            console.log(qrData);
+            
+        }
         // Si el servidor devuelve un mensaje de error, mostrar la alerta y no redirigir
         if (res.status !== 201) {
             toast.error(res.data.msg);
             return false; // Salir de la función sin redirigir
         }
-    
+    console.log(qrId)
         // Si el código QR se crea exitosamente, redirigir
-        window.location.href = 'http://localhost:5173/user/qr';
         return true;
     } 
      catch (err) {

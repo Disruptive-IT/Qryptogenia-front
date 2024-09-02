@@ -37,19 +37,27 @@ const App = () => {
         const response = await axios.get(`http://localhost:3000/api/qr/`, {
           withCredentials: true,
         });
-
-        const formattedData = response.data.map(qr => ({
+  
+        // Ordenar los QR codes por fecha de creación en orden descendente
+        const sortedQRCodes = response.data.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+  
+        // Formatear la fecha
+        const formattedQRCodes = sortedQRCodes.map((qr) => ({
           ...qr,
-          createdAt: formatDate(qr.createdAt),
+          createdAt: new Date(qr.createdAt).toLocaleDateString('es-ES', {
+            day: '2-digit',
+            month: '2-digit',
+            year: 'numeric',
+          }),
         }));
-
-        setQRCodes(formattedData);
+  
+        setQRCodes(formattedQRCodes);
       } catch (error) {
         console.error('Error fetching QR codes:', error);
         setError('Error fetching QR codes');
       }
     };
-
+  
     fetchQRCodes();
   }, []);
 
