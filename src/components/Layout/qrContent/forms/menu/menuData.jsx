@@ -5,14 +5,13 @@ export const menuFormData={
     backgroundTemplates:[{
         imgTemplate:null
     }],
-    styleProductCard:{
-        colorName:"",
-        colorDescription:"",
-        colorPrice:""
-    },
     category:[{
         categoryName:"",
         products:[{
+            backgroundProductCard:"#000",
+            colorName:"#000",
+            colorDescription:"000",
+            colorPrice:"#000",
             productImg:null,
             productName:"",
             productDescription:"",

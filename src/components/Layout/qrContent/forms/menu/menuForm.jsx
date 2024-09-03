@@ -19,8 +19,8 @@ function MenuForm(){
     const[showNamePicker,setShowNamePicker]=useState(false);
     const[showDescriptionPicker,setShowDescriptionPicker]=useState(false);
     const[showPricePicker,setShowPricePicker]=useState(false);
-    const[hideCategory,setHideCategory]=useState(true);
-    const[hideProduct,setHideProduct]=useState(true);
+    const[hideCategory,setHideCategory]=useState([]);
+    const[hideProduct,setHideProduct]=useState(false);
 
 
 
@@ -31,6 +31,8 @@ function MenuForm(){
         }));
       };
       console.log(formData);
+      console.log("categoria ",activeCategory);
+      console.log("producto ",activeProduct);
 
       const handleHideProduct = (index, indexProd) => {
         setHideProduct(prevState => ({
@@ -295,20 +297,20 @@ return (
                             <div><h1>no hay categorias agregadas</h1></div>
                         ) : (
 <FieldArray name="category">
-    {({remove ,unshift}) => (
+    {({remove ,push}) => (
         <div>
             <button onClick={() =>{
-                unshift({ categoryName: "", products: [] });
-                addCategory({ categoryName: "", products: [] })}}
+                push({ categoryName: "", products: [{ productImg: null, productName: "", productDescription: "", top: false, price: null }] });
+                addCategory({ categoryName: "", products: [{ productImg: null, productName: "", productDescription: "", top: false, price: null }] });}}
                 className='mb-4 px-4 py-2 bg-blue-500 text-white rounded' type='button'>
                 + Add new category
             </button>
             {values.category.map((category, index) => (
-                <div key={index} className='bg-gray-300 my-5 p-4 pb-2 w-[100%] rounded-2xl'>
+                <div key={index} onClick={()=>setActiveCategory(index)} className='bg-gray-300 my-5 p-4 pb-2 w-[100%] rounded-2xl'>
                     <div className='flex flex-row justify-between p-2'>
                         <label className='mb-2' htmlFor={`category.${index}.categoryName`}>Category Name</label>
                         <div className='self-end'>
-                            <button onClick={()=>handleHideCategory(index)} type="button" className='float-end'><EjectIcon className={hideCategory[index] ? 'rotate-0' : 'rotate-180'}/></button>
+                            <button onClick={()=>!handleHideCategory(index)} type="button" className='float-end'><EjectIcon className={hideCategory[index] ? 'rotate-0' : 'rotate-180'}/></button>
                             <button onClick={() =>{if(index!==0){remove(index); removeCategory(index)}}} type='button' className='float-right p-1 text-red-600 font-semibold mx-2 hover:underline'>X</button>
                         </div>
                     </div>
@@ -325,7 +327,7 @@ return (
                                     + Add New Product
                                 </button>
                                 {values.category[index].products.map((product, productIndex) => (
-                                    <div className='rounded-2xl bg-white px-2 py-2 mb-3'>
+                                    <div onClick={(e)=>setActiveProduct(productIndex)} className='rounded-2xl bg-white px-2 py-2 mb-3'>
                                         <div className='flex flex-row justify-between p-2'>
                                             <h1 className='mb-2'>Product {productIndex+1}</h1>
                                             <div className='self-end'>

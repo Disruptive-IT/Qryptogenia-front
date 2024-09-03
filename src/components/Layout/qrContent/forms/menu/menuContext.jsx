@@ -16,7 +16,7 @@ export default function MenuProvider({children}) {
     };
     
 
-    const handleLogo = (e, handler) => {
+    const handleLogo = (e) => {
         const file = e.target.files[0];
         
         setFormData((prevValues) => ({
@@ -35,8 +35,6 @@ export default function MenuProvider({children}) {
         if (file) {
             reader.readAsDataURL(file);
         }
-    
-        if (handler) handler();
     };
     
 
@@ -49,39 +47,6 @@ export default function MenuProvider({children}) {
         } else {
             console.error("Color is undefined or null");
         }
-    };
-    
-    const handleColorName = (e, handler) => {
-        setFormData((prevValues) => ({
-            ...prevValues,
-            styleProductCard: {
-                ...prevValues.styleProductCard,
-                colorName: e.target.value
-            }
-        }));
-        if (handler) handler();
-    };
-
-    const handleColorDescription = (e, handler) => {
-        setFormData((prevValues) => ({
-            ...prevValues,
-            styleProductCard: {
-                ...prevValues.styleProductCard,
-                colorDescription: e.target.value
-            }
-        }));
-        if (handler) handler();
-    };
-
-    const handleColorPrice = (e, handler) => {
-        setFormData((prevValues) => ({
-            ...prevValues,
-            styleProductCard: {
-                ...prevValues.styleProductCard,
-                colorPrice: e.target.value
-            }
-        }));
-        if (handler) handler();
     };
 
     function addCategory(newCategory) {
@@ -140,7 +105,7 @@ export default function MenuProvider({children}) {
 
     
 
-    const handleProductField = (indexOne, indexTwo, field, value, handler) => {
+    const handleProductField = (indexOne, indexTwo, field, value) => {
         setFormData((prevValues) => {
             const updatedCategories = [...prevValues.category];
             updatedCategories[indexOne].products[indexTwo] = {
@@ -152,27 +117,39 @@ export default function MenuProvider({children}) {
                 category: updatedCategories
             };
         });
-        if (handler) handler();
     };
 
+    const handleBackgroundProduct=(indexOne, indexTwo, color)=>{
+        handleProductField(indexOne,indexTwo,'backgroundProductCard',color);
+    }
+    const handleColorNameProduct=(indexOne, indexTwo, color)=>{
+        handleProductField(indexOne,indexTwo,'colorName',color);
+    }
+    const handleColorDescriptionProduct=(indexOne, indexTwo, color)=>{
+        handleProductField(indexOne,indexTwo,'colorDescription',color);
+    }
+    const handleColorPriceProduct=(indexOne, indexTwo, color)=>{
+        handleProductField(indexOne,indexTwo,'colorPrice',color);
+    }
+
     const handleProductImg = (indexOne, indexTwo, e, handler) => {
-        handleProductField(indexOne, indexTwo, 'productImg', e.target.files[0], handler);
+        handleProductField(indexOne, indexTwo, 'productImg', e.target.files[0]);
     };
 
     const handleProductName = (indexOne, indexTwo, e, handler) => {
-        handleProductField(indexOne, indexTwo, 'productName', e.target.value, handler);
+        handleProductField(indexOne, indexTwo, 'productName', e.target.value);
     };
 
     const handleProductDescription = (indexOne, indexTwo, e, handler) => {
-        handleProductField(indexOne, indexTwo, 'productDescription', e.target.value, handler);
+        handleProductField(indexOne, indexTwo, 'productDescription', e.target.value);
     };
 
     const handleProductTop = (indexOne, indexTwo, e, handler) => {
-        handleProductField(indexOne, indexTwo, 'top', e.target.checked, handler);
+        handleProductField(indexOne, indexTwo, 'top', e.target.checked);
     };
 
     const handleProductPrice = (indexOne, indexTwo, e, handler) => {
-        handleProductField(indexOne, indexTwo, 'price', parseFloat(e.target.value), handler);
+        handleProductField(indexOne, indexTwo, 'price', parseFloat(e.target.value));
     };
 
     return(
@@ -182,15 +159,16 @@ export default function MenuProvider({children}) {
             handleRestaurantName,
             handleLogo,
             handleBackgroundCard,
-            handleColorName,
-            handleColorDescription,
-            handleColorPrice,
             handleChangeCategoryName,
             addCategory,
             removeCategory,
             addProductToCategory,
             removeProductToCategory,
             handleProductField,
+            handleBackgroundProduct,
+            handleColorNameProduct,
+            handleColorDescriptionProduct,
+            handleColorPriceProduct,
             handleProductImg,
             handleProductName,
             handleProductDescription,
