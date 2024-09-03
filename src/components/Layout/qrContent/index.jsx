@@ -19,21 +19,22 @@ import { PdfUploadComponent, LinkInput } from "./forms/Pdf";
 import SocialForm from "./forms/Social";
 import MusicForm from "./forms/Music";
 import { WebLinkPhoneMusic } from "./socialMedia/stylePhoneMusic";
-export const QrContentSwitch = ({contentName, onFormChangeApp, onFormChange, onFormChangeMusic, onSocialFormSubmit}) => {
+import FormWifi from "./forms/Wifi";
+export const QrContentSwitch = ({contentName, onFormChangeApp, onFormChange, onFormChangeMusic, onSocialFormSubmit, location, appFormValues, musicFormValues, socialFormValues}) => {
 
     let qrContent;
     switch (contentName) {
         case "app store":
             qrContent = (
                 <div>
-                    <AppForm onFormChangeApp={onFormChangeApp}/>
+                    <AppForm onFormChangeApp={onFormChangeApp} location={location} appFormValues={appFormValues}/>
                 </div>
             );
             break;
         case "social media":
             qrContent = (
                 <div>
-                    <SocialForm onFormChange={onFormChange} onSubmit={onSocialFormSubmit} />
+                    <SocialForm onFormChange={onFormChange} onSubmit={onSocialFormSubmit} location={location} socialFormValues={socialFormValues} />
                 </div>
             );
             break;
@@ -61,14 +62,14 @@ export const QrContentSwitch = ({contentName, onFormChangeApp, onFormChange, onF
         case "music":
             qrContent = (
                 <div>
-                    <MusicForm onFormChangeMusic={onFormChangeMusic}/>
+                    <MusicForm onFormChangeMusic={onFormChangeMusic} location={location} musicFormValues={musicFormValues}/>
                 </div>
             );
             break;
         case "wifi":
             qrContent = (
                 <div>
-                    <p>WIFI</p>
+                    <FormWifi />
                 </div>
             );
             break;

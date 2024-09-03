@@ -10,7 +10,8 @@ import Swal from 'sweetalert2';
 import { saveAs } from 'file-saver';
 import { useNavigate } from 'react-router-dom'; // Importa useNavigate
 import { useAuth } from '../../../hooks/useAuth';
-
+import { motion } from 'framer-motion';
+import { useTranslation } from 'react-i18next';
 const formatDate = (isoDate) => {
   const date = new Date(isoDate);
   return date.toLocaleDateString('es-US');
@@ -29,11 +30,11 @@ const App = () => {
   const [codeType, setCodeType] = useState(null);
   const { getStoreData } = useAuth();
   const navigate = useNavigate(); // Usa useNavigate
-
+  const { t } = useTranslation();
   useEffect(() => {
     const fetchQRCodes = async () => {
       try {
-        const response = await axios.get(`http://localhost:3000/api/qr/getqrs`, {
+        const response = await axios.get(`http://localhost:3000/api/qr/`, {
           withCredentials: true,
         });
 
@@ -60,33 +61,45 @@ const App = () => {
   const handleStateClick = async (item) => {
     const newState = !item.state;
     const confirmationText = newState
-      ? 'Are you sure you want to activate this QR code?'
-      : 'Are you sure you want to deactivate this QR code?';
+      ? t('Are you sure you want to activate this QR code?')
+      : t('Are you sure you want to deactivate this QR code?');
 
     Swal.fire({
-      title: 'Confirmation',
+      title: t('Confirmation'),
       text: confirmationText,
       icon: 'warning',
       showCancelButton: true,
       confirmButtonColor: '#3085d6',
       cancelButtonColor: '#d33',
-      confirmButtonText: 'Yes',
-      cancelButtonText: 'No',
+      confirmButtonText: t('Yes'),
+      cancelButtonText: t('No'),
       scrollbarPadding: true
     }).then(async (result) => {
       if (result.isConfirmed) {
         try {
-          const response = await axios.patch(`http://localhost:3000/api/qr/patchqrs/${item.id}`, {
-            state: newState
-          }, {
-            withCredentials: true,
-          });
-
+          const response = await axios.patch(
+            `http://localhost:3000/api/qr/patchqrs/${item.id}`,
+            { state: newState },
+            { withCredentials: true }
+          );
+  
           console.log('API response:', response.data);
-          setQRCodes(qrCodes.map(qr => qr.id === item.id ? { ...qr, state: newState } : qr));
+          setQRCodes(
+            qrCodes.map((qr) =>
+              qr.id === item.id ? { ...qr, state: newState } : qr
+            )
+          );
         } catch (error) {
           console.error('Error updating QR code state:', error);
-          Swal.fire('Error', 'Failed to update QR code state', 'error');
+          
+          // Extraer el mensaje de error del backend
+          const errorMessage =
+            error.response && error.response.data && error.response.data.error
+              ? error.response.data.error
+              : 'Failed to update QR code state';
+  
+          // Mostrar el error en SweetAlert
+          Swal.fire('Error', errorMessage, 'error');
         }
       }
     });
@@ -103,10 +116,10 @@ const App = () => {
 
   const handleDownloadClick = (imageBase64,name) => {
     Swal.fire({
-      title: 'Select Download Format and Size',
+      title: t('Select Download Format and Size'),
       html: `
         <div style="margin-bottom: 10px;">
-      <label for="format-select" style="display: inline-block; width: 100px;">Format:</label>
+      <label for="format-select" style="display: inline-block; width: 100px;">${t("Format")}</label>
       <select id="format-select" class="swal2-select" style="width: 200px;">
         <option value="png">PNG</option>
         <option value="jpeg">JPG</option>
@@ -114,7 +127,7 @@ const App = () => {
       </select>
     </div>
     <div>
-      <label for="size-select" style="display: inline-block; width: 100px;">Size:</label>
+      <label for="size-select" style="display: inline-block; width: 100px;">${t("Size")}</label>
       <select id="size-select" class="swal2-select" style="width: 200px;">
         <option value="250">250x250</option>
         <option value="500">500x500</option>
@@ -123,7 +136,8 @@ const App = () => {
     </div>
       `,
       showCancelButton: true,
-      confirmButtonText: 'Download',
+      confirmButtonText: t('Download'),
+      cancelButtonText: t("Cancel"),
       customClass: {
         cancelButton: 'swal2-red-button',
         confirmButton: 'swal2-blue-button'
@@ -265,7 +279,7 @@ const App = () => {
 
   const columns = [
     {
-      header: 'Preview', accessor: 'preview', render: (item) => (
+      header: t("Preview"), accessor: 'preview', render: (item) => (
         <img
           src={`data:image/png;base64,${item.qr_image_base64}`}
           alt="QR Code Preview"
@@ -274,41 +288,56 @@ const App = () => {
         />
       )
     },
-    { header: 'QR Code Name', accessor: 'name_qr' },
+    { header: t("QR Code Name"), accessor: 'name_qr' },
     {
-      header: 'QR Code Type',
+      header: t("QR Code Type"),
       accessor: 'qrType.id',
       render: (item) => item.qrType ? item.qrType.type : 'N/A'
     },
     {
-      header: 'Status', accessor: 'state', render: (item) => (
+      header: t("Status"), accessor: 'state', render: (item) => (
         <span
           className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${item.state ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'} w-20 text-center justify-center items-center`}
           onClick={() => handleStateClick(item)}
           style={{ cursor: 'pointer' }}
         >
-          {item.state ? 'Active' : 'Inactive'}
+          {item.state ? t('Active') : t('Inactive')}
         </span>
       )
     },
-    { header: 'Date', accessor: 'createdAt' },
+    { header: t("Date"), accessor: 'createdAt' },
     {
-      header: 'Actions',
+      header: t("Actions"),
       accessor: 'actions',
       render: (item) => (
         <div className="flex space-x-2">
-          <FaDownload
+          <motion.div  
+            whileHover={{scale:"1.2"}}
+          >
+          <FaDownload         
             className="cursor-pointer text-xl text-blue-500"
             onClick={() => handleDownloadClick(item.qr_image_base64,item.name_qr)}
           />
+          </motion.div>
+          <motion.div 
+            whileHover={{scale:"1.2"}}
+          >
           <MdOutlineEdit
             className="cursor-pointer text-xl text-yellow-500"
             onClick={() => handleActionClick('edit', item)}
           />
+          
+          </motion.div>
+          <motion.div  
+            whileHover={{scale:"1.2"}}
+          >
+          {item.qrType && item.qrType.type !== 'website-url' && (
           <MdVisibility
             className="cursor-pointer text-xl"
-            onClick={() => handleOpenModal(item.id, item.qrType ? item.qrType.type : 'N/A')} // Pasa el ID y el tipo de código
+            onClick={() => handleOpenModal(item.id, item.qrType ? item.qrType.type : 'N/A')}
           />
+        )}
+          </motion.div>
         </div>
       )
     }
@@ -330,7 +359,7 @@ const App = () => {
       <input
         type="text"
         className="p-2 border border-gray-300 rounded w-full"
-        placeholder="Search QR codes..."
+        placeholder={t("Search QR codes")}
         value={searchQuery}
         onChange={handleSearch}
       />

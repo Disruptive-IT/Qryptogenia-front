@@ -13,7 +13,7 @@ import SearchBar from '../searchbar/searchbar';
 import UserModal from './ModalUser'
 import { FaDownload } from 'react-icons/fa';
 import { MdOutlineEdit, MdDelete, MdVisibility } from "react-icons/md";
-
+import { useTranslation } from "react-i18next";
 const DownloadAction = ({ item }) => (
     <FaDownload className="text-gray-500 hover:text-gray-700 cursor-pointer mr-3" />
 );
@@ -42,7 +42,7 @@ const UserTable = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [selectedUser, setSelectedUser] = useState(null);
   const [openDialog, setOpenDialog] = useState(false);
-
+  const { t } = useTranslation();
   useEffect(() => {
     const fetchData = async () => {
       const result = await getUsersData();
@@ -74,15 +74,15 @@ const UserTable = () => {
   );
 
   const userColumns = [
-    { header: 'Username', accessor: 'username' },
-    { header: 'Email', accessor: 'email' },
-    { header: 'Rol', accessor: 'rol' },
-    { header: 'Status', accessor: 'state', render: (item) => (
+    { header: t("Username"), accessor: 'username' },
+    { header: t("Email"), accessor: 'email' },
+    { header: t("Role"), accessor: 'rol' },
+    { header: t("Status"), accessor: 'state', render: (item) => (
       <span className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${item.state ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}`}>
         {item.state ? 'Active' : 'Inactive'}
       </span>
     )},
-    { header: 'Actions', accessor: 'actions' },
+    { header: t("Actions"), accessor: 'actions' },
     
   ];
 
@@ -105,7 +105,7 @@ const UserTable = () => {
         <SearchBar 
           searchQuery={searchQuery} 
           handleSearch={handleSearch} 
-          placeholder="Search users..." 
+          placeholder={t("Search users")} 
         />
       </div>
       <QRTable 

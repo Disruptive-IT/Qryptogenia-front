@@ -78,13 +78,16 @@ export default function Scrollcornersqueare({ onStyleClick, value, onChange  }) 
                                     borderColor: style.borderColor,
                                     borderWidth: style.shape !== 'none' ? '2px' : '0px',
                                     borderStyle: 'solid',
-                                    padding: '14px'
+                                    padding: '20px',
+                                    display: 'flex',       // Ensure the div takes full space
+                                    alignItems: 'center',  // Center content vertically
+                                    justifyContent: 'center'
                                 }}
-                                onClick={() => onStyleClick(style.type)}
                             >
                                 <img src={style.patternImage} alt="" className='w-12 m-auto' />
                             </div>
                         }
+                        onClick={() => onStyleClick(style.type)}
                     />
                 ))}
             </Tabs>

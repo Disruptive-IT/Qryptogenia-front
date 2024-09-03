@@ -19,18 +19,18 @@ import { IoIosClose } from "react-icons/io";
 import apple from "../../../../../src/assets/imgs/apple.png";
 import huawei from "../../../../../src/assets/imgs/huawei.png";
 import microsoft from "../../../../../src/assets/imgs/microsoft.png";
+import { useTranslation } from 'react-i18next';
 
-export const AppForm = ({ onFormChangeApp }) => {
+export const AppForm = ({ onFormChangeApp, location, appFormValues }) => {
     const [title, setTitle] = useState('');
-    const [errors, setErrors] = useState({});
     const [description, setDescription] = useState('');
     const maxLength = 250;
     const maxTitle = 30;
     const [backgroundColor, setBackgroundColor] = useState('linear-gradient(180deg, rgb(253, 93, 8) 0.00%,rgb(251, 164, 14) 100.00%)');
     const [boxColor, setBoxColor] = useState('rgb(216, 61, 34)');
-    const [titleColor, setTitleColor] = useState('rgb(6, 35, 254)');
+    const [colorTitle, setTitleColor] = useState('rgb(6, 35, 254)');
     const [descriptionColor, setDescriptionColor] = useState('rgb(42, 40, 40)');
-    const [borderColor, setBorderColor] = useState('#ffffff')
+    const [borderImg, setBorderColor] = useState('#ffffff')
     const [showBorderColorPicker, setShowBorderColorPicker] = useState(false);
     const [showTitleColorPicker, setShowTitleColorPicker] = useState(false);
     const [showDescriptionColorPicker, setShowDescriptionColorPicker] = useState(false);
@@ -44,18 +44,20 @@ export const AppForm = ({ onFormChangeApp }) => {
     const [selectedOptions, setSelectedOptions] = useState([]);
     const [image, setImage] = useState(null);
     const [formErrors, setFormErrors] = useState({});
+    const { t } = useTranslation();
+    const isEditRoute = location.pathname.startsWith('/edit')
 
     const validateForm = (values) => {
         const errors = {};
 
         // Validar el título
         if (!values.title) {
-            errors.title = 'Title is required';
+            errors.title = t("Title is required");
         }
 
         // Validar la selección de opciones
         if (selectedOptions.length === 0) {
-            errors.selectedOptions = 'At least one option must be selected';
+            errors.selectedOptions = t("At least one option must be selected");
         }
         console.log(selectedOptions)
         // Validar cada campo url en selectedOptions
@@ -103,12 +105,12 @@ export const AppForm = ({ onFormChangeApp }) => {
     };
     const handleBorderColorChange = (newHexCoor) => {
         setBorderColor(newHexCoor);
-        onFormChangeApp((prevValues) => ({ ...prevValues, borderColor: newHexCoor }));
+        onFormChangeApp((prevValues) => ({ ...prevValues, borderImg: newHexCoor }));
     };
 
     const handleTitleColorChange = (newHexColor) => {
         setTitleColor(newHexColor);
-        onFormChangeApp((prevValues) => ({ ...prevValues, titleColor: newHexColor }));
+        onFormChangeApp((prevValues) => ({ ...prevValues, colorTitle: newHexColor }));
 
     };
 
@@ -145,8 +147,7 @@ export const AppForm = ({ onFormChangeApp }) => {
     const handleMultiSelectChange = (selectedOptions) => {
         const updatedOptions = selectedOptions.map(option => ({
             value: option.value,
-            url: '',
-            icon: option.icon
+            url: option.url || ''
         }));
         setSelectedOptions(updatedOptions);
         onFormChangeApp((prevValues) => ({ ...prevValues, selectedOptions: updatedOptions }));
@@ -180,11 +181,32 @@ export const AppForm = ({ onFormChangeApp }) => {
         };
     }, []);
 
-    const initialValues = {
-        title: '',
-        description: '',
-    };
+    useEffect(() => {
+        if (isEditRoute && appFormValues) {
+            setTitle(appFormValues.title || '');
+            setDescription(appFormValues.description || '');
+            setTitleColor(appFormValues.colorTitle || '');
+            setDescriptionColor(appFormValues.descriptionColor || '');
+            setBackgroundColor(appFormValues.backgroundColor || '');
+            setBoxColor(appFormValues.boxColor || '');
+            setBorderColor(appFormValues.borderImg || '');
+            setSelectedOptions(appFormValues.selectedOptions || []);
+            setImage(appFormValues.image || null);
+        }
+    }, [isEditRoute, appFormValues]);
 
+    const initialValues = {
+        title: isEditRoute && appFormValues ? appFormValues.title : '',
+        description: isEditRoute && appFormValues ? appFormValues.description : '',
+        colorTitle: isEditRoute && appFormValues ? appFormValues.colorTitle : '',
+        descriptionColor: isEditRoute && appFormValues ? appFormValues.descriptionColor : '',
+        backgroundColor: isEditRoute && appFormValues ? appFormValues.backgroundColor : '',
+        boxColor: isEditRoute && appFormValues ? appFormValues.boxColor : '',
+        borderImg: isEditRoute && appFormValues ? appFormValues.borderImg : '',
+        selectedOptions: isEditRoute && appFormValues ? appFormValues.selectedOptions : [],
+        image: isEditRoute && appFormValues ? appFormValues.image : null,
+    };
+    console.log(selectedOptions)
     const options = [
         {
             value: 'Samsung Galaxy Store', label: (
@@ -213,28 +235,28 @@ export const AppForm = ({ onFormChangeApp }) => {
         {
             value: 'Apple', label: (
                 <div style={{ display: 'flex', alignItems: 'center' }}>
-                    <img src={apple} style={{ width: '25px', height: '25px'}}/>
+                    <img src={apple} style={{ width: '25px', height: '25px' }} />
                     <span>App Store</span>
                 </div>
-            ), icon: <img src={apple} style={{width: '40px', height: '40px', marginRight: '5px'}}/>
+            ), icon: <img src={apple} style={{ width: '40px', height: '40px', marginRight: '5px' }} />
         },
         {
             value: 'huawei', label: (
-                <div style={{ display: 'flex', alignItems: 'center'}}>
-                    <img src={huawei} style={{ width: '20px', height: '20px', marginRight: '5px'}}/>
+                <div style={{ display: 'flex', alignItems: 'center' }}>
+                    <img src={huawei} style={{ width: '20px', height: '20px', marginRight: '5px' }} />
                     <span>Huawei App Gallery</span>
 
                 </div>
-            ), icon: <img src={huawei} style={{width: '34px', height: '34px', marginRight: '5px', marginTop: '8px'}}/>
+            ), icon: <img src={huawei} style={{ width: '34px', height: '34px', marginRight: '5px', marginTop: '8px' }} />
         },
         {
             value: 'microsoft', label: (
-                <div style={{ display: 'flex', alignItems: 'center'}}>
-                    <img src={microsoft} style={{ width: '20px', height: '20px', marginRight: '5px'}}/>
+                <div style={{ display: 'flex', alignItems: 'center' }}>
+                    <img src={microsoft} style={{ width: '20px', height: '20px', marginRight: '5px' }} />
                     <span>Microsoft Store</span>
 
                 </div>
-            ), icon: <img src={microsoft} style={{width: '40px', height: '40px', marginRight: '5px'}}/>
+            ), icon: <img src={microsoft} style={{ width: '40px', height: '40px', marginRight: '5px' }} />
         }
     ];
 
@@ -298,6 +320,21 @@ export const AppForm = ({ onFormChangeApp }) => {
         reader.readAsDataURL(file);
     };
 
+    const [updatedSelectedOptions, setUpdatedSelectedOptions] = useState([]);
+
+    useEffect(() => {
+        // Actualiza el estado de las opciones seleccionadas con los íconos correspondientes
+        const updatedOptions = selectedOptions.map((option) => {
+            const fullOption = options.find((opt) => opt.value === option.value);
+            return {
+                ...option,
+                icon: fullOption ? fullOption.icon : '',
+                label: fullOption ? fullOption.label : ''
+            };
+        });
+        setUpdatedSelectedOptions(updatedOptions);
+    }, [selectedOptions]);
+
     const handleRemoveImage = () => {
         setImage(null);
         onFormChangeApp((prevValues) => ({
@@ -306,6 +343,9 @@ export const AppForm = ({ onFormChangeApp }) => {
         }));
     };
 
+    const isOptionSelected = (option) => {
+        return selectedOptions.some(selected => selected.value === option.value);
+    };
 
     return (
         <Formik
@@ -325,33 +365,32 @@ export const AppForm = ({ onFormChangeApp }) => {
         >
             {({ setFieldValue, handleSubmit }) => (
                 <Form className="max-w-4xl mx-auto mt-8 relative">
-                    <h2 className="text-xl font-semibold mb-4">App Qr</h2>
                     <div className="flex flex-col md:flex-row md:items-start md:mb-4">
                         <div className="flex flex-col w-full md:w-2/3 mr-6 mb-4 md:mb-0">
-                            <label htmlFor="title" className="mb-2">Title:</label>
+                            <label htmlFor="title" className="mb-2">{t("Title")}:</label>
                             <Field
                                 type="text"
                                 id="title"
-                                placeholder="Title"
+                                placeholder={t("Title")}
                                 className="border w-full border-gray-300 rounded p-2"
                                 value={title}
+                                maxLength={maxTitle}
                                 onChange={(e) => {
                                     handleTitleChange(e);
                                     setFieldValue('title', e.target.value);
                                 }}
-                                maxLength={maxTitle}
                             />
                             <div className="text-right text-sm text-gray-900">
-                                {title.length}/{maxTitle} Characters
+                                {title.length}/{maxTitle} {t("Characters")}
                             </div>
-                            {errors.title && <div className="text-red-500 text-sm">{errors.title}</div>}
+                            {formErrors.title && <div className="text-red-500 text-sm">{formErrors.title}</div>}
                         </div>
                         <div className="flex flex-col relative">
-                            <label htmlFor="titleColor" className="mb-2">Color:</label>
+                            <label htmlFor="colorTitle" className="mb-2">{t("Color")}</label>
                             <div className="flex items-center">
                                 <div
                                     className="w-20 md:w-10 h-10 border border-gray-300 rounded cursor-pointer"
-                                    style={{ background: titleColor }}
+                                    style={{ background: colorTitle }}
                                     onClick={() => setShowTitleColorPicker(!showTitleColorPicker)}
                                 ></div>
                                 {showTitleColorPicker && (
@@ -366,7 +405,7 @@ export const AppForm = ({ onFormChangeApp }) => {
                                             disableAlphaInput={false}
                                             presetColors={[]}
                                             gradient={true}
-                                            color={titleColor}
+                                            color={colorTitle}
                                             onChange={handleTitleColorChange}
                                         />
                                     </div>
@@ -377,26 +416,24 @@ export const AppForm = ({ onFormChangeApp }) => {
 
                     <div className="flex flex-col md:flex-row md:items-start md:mb-4 mt-4">
                         <div className="flex flex-col w-full md:w-2/3 mr-6 mb-4 md:mb-0">
-                            <label htmlFor="description" className="mb-2">Description:</label>
+                            <label htmlFor="description" className="mb-2">{t("Description")}</label>
                             <Field
                                 as="textarea"
                                 rows="5"
-                                placeholder="Description"
                                 type="text"
+                                placeholder={t("Description")}
+                                maxLength={maxLength}
                                 id="description"
                                 className="w-full min-h-20 max-h-40 border border-gray-300 rounded p-2"
                                 value={description}
                                 onChange={handleDescriptionChange}
-                                maxLength={maxLength}
                             />
                             <div className="text-right text-sm text-gray-900">
-                                {description.length}/{maxLength} Characters
+                                {description.length}/{maxLength} {t("Characters")}
                             </div>
-
                         </div>
-
                         <div className="flex flex-col relative">
-                            <label htmlFor="descriptionColor" className="mb-2">Color:</label>
+                            <label htmlFor="descriptionColor" className="mb-2">{t("Color")}</label>
                             <div className="flex items-center">
                                 <div
                                     className="w-20 md:w-10 h-10 border border-gray-300 rounded cursor-pointer"
@@ -426,7 +463,7 @@ export const AppForm = ({ onFormChangeApp }) => {
 
                     <div className="flex flex-col md:flex-row md:items-start md:mb-4">
                         <div className="w-full md:w-2/3 mr-6 mb-4 md:mb-0">
-                            <label htmlFor="backgroundColor" className="mb-2">Background Color:</label>
+                            <label htmlFor="backgroundColor" className="mb-2">{t("Background Color")}</label>
                             <div className="flex items-center relative">
                                 <div
                                     className="w-20 md:w-16 h-10 border border-gray-300 rounded cursor-pointer"
@@ -453,7 +490,7 @@ export const AppForm = ({ onFormChangeApp }) => {
                                 )}
                             </div>
                             <div className="flex flex-col space-y-4 pt-4">
-                                <label>Upload Image:</label>
+                                <label>{t("Upload Image")}</label>
                                 <input type="file" className="hidden" ref={fileInputRef} accept="image/*" onChange={handleImageChange} />
                                 <button
                                     onClick={handleClick}
@@ -463,7 +500,7 @@ export const AppForm = ({ onFormChangeApp }) => {
                                 </button>
                                 {image && (
                                     <div className="relative w-12">
-                                        <img src={image} width="30" alt="Uploaded" />
+                                        <img src={isEditRoute ? `data:image/png;base64,${image}` : image} width="30" alt="Uploaded" />
                                         <button
                                             onClick={handleRemoveImage}
                                             className="absolute top-0 right-0 bg-white p-0.2 rounded-full hover:bg-gray-200"
@@ -474,10 +511,8 @@ export const AppForm = ({ onFormChangeApp }) => {
                                 )}
                             </div>
                         </div>
-
-
                         <div className="w-full md:w-2/3 mt-4 md:mt-0">
-                            <label htmlFor="boxColor" className="mb-2">Box Color:</label>
+                            <label htmlFor="boxColor" className="mb-2">{t("Box Color")}</label>
                             <div className="flex items-center relative">
                                 <div
                                     className="w-20 md:w-16 h-10 border border-gray-300 rounded cursor-pointer"
@@ -501,15 +536,16 @@ export const AppForm = ({ onFormChangeApp }) => {
                                             style={{ width: "calc(100% + 2rem)" }} // Ajuste del ancho
                                         />
                                     </div>
-                                )}
-                            </div>
 
+                                )}
+
+                            </div>
                             <div className='pt-4'>
-                                <label htmlFor="boxColor" className="mb-2">Border Profile Color:</label>
+                                <label htmlFor="borderImg" className="mb-2">{t("Border Profile Color")}</label>
                                 <div className="flex items-center relative">
                                     <div
                                         className="w-20 md:w-16 h-10 border border-gray-300 rounded cursor-pointer"
-                                        style={{ background: borderColor }}
+                                        style={{ background: borderImg }}
                                         onClick={() => setShowBorderColorPicker(!showBorderColorPicker)}
                                     ></div>
                                     {showBorderColorPicker && (
@@ -524,7 +560,7 @@ export const AppForm = ({ onFormChangeApp }) => {
                                                 disableAlphaInput={false}
                                                 presetColors={[]}
                                                 gradient={true}
-                                                color={borderColor}
+                                                color={borderImg}
                                                 onChange={handleBorderColorChange}
                                                 style={{ width: "calc(100% + 2rem)" }} // Ajuste del ancho
                                             />
@@ -533,57 +569,69 @@ export const AppForm = ({ onFormChangeApp }) => {
                                 </div>
                             </div>
                         </div>
-
                     </div>
 
-                    <div className="flex flex-col md:flex-row md:items-start md:mb-4">
+                    <div className="flex flex-col md:flex-row md:items-center mb-4 mt-4">
                         <div className="w-full md:w-2/3">
-                            <label htmlFor="multiselect" className="mb-2">Multiselect:</label>
+                            <label htmlFor="" className="mb-2">Multiselect:</label>
                             <Select
-                                id="multiselect"
+                                id="selectedOptions"
                                 options={options}
                                 isMulti
                                 className="basic-multi-select w-full"
-                                classNamePrefix="select "
+                                classNamePrefix="select"
+                                value={updatedSelectedOptions.map(({ icon, ...rest }) => rest)}
                                 onChange={(selected) => {
                                     handleMultiSelectChange(selected);
+                                    setFieldValue('selectedOptions', selected);
                                 }}
+                                getOptionLabel={(option) => (
+                                    <div className="flex items-center">
+                                        {isOptionSelected(option) && <span className="mr-2">{option.icon}</span>}
+                                        {option.label}
+                                    </div>
+                                )}
+                                getOptionValue={(option) => option.value}
                             />
+                            {formErrors.selectedOptions && (
+                                <div className="text-red-500 text-sm">{formErrors.selectedOptions}</div>
+                            )}
                         </div>
                     </div>
-                    <div className='grid grid-cols-1 md:grid-cols-2 gap-4'>
-                        {selectedOptions.map((option, index) => (
-                            <div key={index} className="flex items-center mb-4">
-                                <label htmlFor={`input_${option.value}`} className="mb-2">{option.icon}</label>
-                                <Field
-                                    type="text"
-                                    id={`url_${index}`}
-                                    name={`url_${index}`}
-                                    placeholder={`URL for ${option.value}`}
-                                    className="border w-full border-gray-300 rounded p-2"
-                                    value={option.url}
-                                    onChange={(e) => {
-                                        handleUrlChange(index, e.target.value)
-                                        const updatedOptions = [...selectedOptions];
-                                        updatedOptions[index] = { ...updatedOptions[index], url: e.target.value };
-                                        setSelectedOptions(updatedOptions);
-                                        setFieldValue('selectedOptions', updatedOptions);
-                                    }}
-                                />
-                                {/* Mostrar mensaje de error para cada URL */}
-                                {formErrors[`url_${index}`] && <div className="text-red-500 text-sm">{formErrors[`url_${index}`]}</div>}
-                            </div>
-                        ))}
-                    </div>
+    <div className='grid grid-cols-1 md:grid-cols-2 gap-4'>
+    {updatedSelectedOptions.map((option, index) => (
+        <div key={index} className="grid gap-3 mb-3">
+    <div className="grid grid-cols-[auto_1fr] gap-3 items-center">
+    <label htmlFor={`input_${option.value}`} className="mb-2">{option.icon}</label>
+        <Field
+            type="text"
+            id={`url_${index}`}
+            name={`url_${index}`}
+            placeholder={`URL for ${option.value}`}
+            className="border border-gray-300 rounded p-2 w-full"
+            value={option.url}
+            onChange={(e) => handleUrlChange(index, e.target.value)}
+        />
+    </div>
+    <div className="relative flex justify-center items-center">
+        {/* Mostrar mensaje de error para cada URL */}
+        {formErrors[`url_${index}`] && (
+            <div className="absolute text-red-500 text-xs">
+                {formErrors[`url_${index}`]}
+            </div>
+        )}
+    </div>
+</div>
 
-                    <div className="flex items-center mb-4">
-                        <button type="submit" className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600">Submit</button>
+    ))}
+</div>
+                    <div className="flex items-center mt-6 mb-4">
+                        <button type="submit" className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600">{t('Submit')}</button>
                     </div>
                 </Form>
             )}
         </Formik>
     );
-
 };
 
 export default AppForm;

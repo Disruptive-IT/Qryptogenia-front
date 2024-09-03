@@ -5,6 +5,7 @@ import { MdClose } from 'react-icons/md';
 import './scroll.css'
 import Modal from 'react-modal';
 import { PhoneContentSwitch } from '../../Layout/qrContent';
+import { animate, motion } from 'framer-motion';
 
 const StoreModal = ({ open, handleClose, storeData, codeType }) => {
   if (!open) return null;
@@ -25,9 +26,9 @@ const StoreModal = ({ open, handleClose, storeData, codeType }) => {
         className="fixed inset-0 flex items-center justify-center p-4 bg-transparent"
         overlayClassName="fixed inset-0 bg-black bg-opacity-50 overflow-auto"
       >
-        <div className="bg-transparent p-0 rounded-lg border-none shadow-none flex justify-center items-center w-full h-full">
+        <div onClick={handleClose} className="bg-transparent p-0 rounded-lg border-none shadow-none flex justify-center items-center w-full h-full">
         <div className="relative flex justify-center items-start" style={{ maxHeight: 'calc(100vh - 40px)', maxWidth: 'calc(100vw - 40px)' }}>
-          <button onClick={handleClose} className="absolute top-4 right-4 text-red-500 z-10">Cerrar</button>
+          <motion.button whileTap={{scale:0}} onClick={handleClose} className="absolute bg-white p-1 tracking-wider rounded-[10px] hover:bg-red-600 hover:text-white top-0 left-50 text-red-500">Cerrar</motion.button>
             <div className="relative scale-wrapper" style={{ marginTop: '40px' }}>
               <CellBox>
                 <PhoneContentSwitch

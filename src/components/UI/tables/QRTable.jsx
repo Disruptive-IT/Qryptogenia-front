@@ -1,4 +1,6 @@
 import React from 'react';
+import { motion } from 'framer-motion';
+import Paginator from './paginator.jsx'; // Asegúrate de ajustar la ruta según tu estructura de archivos
 
 const QRTable = ({ data, columns, currentPage, totalPages, onPageChange }) => {
   const itemsPerPage = 7;
@@ -22,7 +24,7 @@ const QRTable = ({ data, columns, currentPage, totalPages, onPageChange }) => {
     </thead>
     <tbody>
       {paginatedData.map((item) => (
-        <tr key={item.id}>
+        <motion.tr key={item.id} whileHover={{backgroundColor:'#D5DBDB'}}>
           {columns.map((column) => (
             <td
               key={column.header}
@@ -31,29 +33,15 @@ const QRTable = ({ data, columns, currentPage, totalPages, onPageChange }) => {
               {column.render ? column.render(item) : item[column.accessor]}
             </td>
           ))}
-        </tr>
+        </motion.tr>
       ))}
     </tbody>
   </table>
-  <div className="flex flex-col sm:flex-row justify-between items-center mt-4">
-    <button
-      onClick={() => onPageChange(currentPage - 1)}
-      disabled={currentPage === 1}
-      className="px-4 py-2 mb-2 sm:mb-0 sm:mr-2 bg-blue-500 text-white rounded disabled:bg-gray-300"
-    >
-      Previous
-    </button>
-    <span className="text-xs sm:text-sm">
-      Page {currentPage} of {totalPages}
-    </span>
-    <button
-      onClick={() => onPageChange(currentPage + 1)}
-      disabled={currentPage === totalPages}
-      className="px-4 py-2 mt-2 sm:mt-0 sm:ml-2 bg-blue-500 text-white rounded disabled:bg-gray-300"
-    >
-      Next
-    </button>
-  </div>
+  <Paginator
+        currentPage={currentPage}
+        totalPages={totalPages}
+        onPageChange={onPageChange}
+      />
 </div>
   );
 };

@@ -2,7 +2,7 @@ import React from "react"
 import { useNavigate } from "react-router-dom";
 
 
-/*
+/**
  * @Author : Nicolas Barrios,   @date 2024-07-25 10:00:16
  * @description : vista error escaneos no permitidos
  * @Props : image,message,title,labelLink,path

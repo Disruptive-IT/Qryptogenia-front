@@ -28,6 +28,10 @@ const Dashboard = () => {
                                              <p className="text-gray-700">Sin Planes</p>
                                              <p className="text-2xl font-semibold text-gray-800">8</p>
                                         </div>
+                                        <div className="flex flex-col items-center bg-lime-200 rounded-md p-4">
+                                             <p className="text-gray-700">Con Descuentos</p>
+                                             <p className="text-2xl font-semibold text-gray-800">8</p>
+                                        </div>
                                    </div>
                               </div>
                          </div>

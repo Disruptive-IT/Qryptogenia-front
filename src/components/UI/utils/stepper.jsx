@@ -12,6 +12,7 @@ import AutoFixHighIcon from '@mui/icons-material/AutoFixHigh';
 import DownloadIcon from '@mui/icons-material/Download';
 import Tooltip from '@mui/material/Tooltip'; // Importa Tooltip
 import { useStepper } from '../../../context/StepperContext';
+import { useTranslation } from 'react-i18next';
 
 const ColorlibConnector = styled(StepConnector)(({ theme }) => ({
     [`&.${stepConnectorClasses.alternativeLabel}`]: {
@@ -80,15 +81,16 @@ ColorlibStepIcon.propTypes = {
     icon: PropTypes.node,
 };
 
-const steps = [
-    { label: 'Select qr type', explanation: 'Choose the type of QR code you want to generate. This could be a simple QR code, a QR code with a logo, or a QR code with a custom design.' },
-    { label: 'Customize QR design', explanation: 'Customize the appearance of your QR code. You can choose colors, add logos, and adjust the size to fit your needs.' },
-    { label: 'Generate and download QR', explanation: 'Generate your QR code based on your selections. Once generated, you can download the QR code for use in your projects or print it out.' },
-];
+
 
 export default function StepperQr() {
     const { activeStep } = useStepper();
-
+    const { t } = useTranslation();
+    const steps = [
+        { label: t('Select qr type'), explanation: 'Choose the type of QR code you want to generate. This could be a simple QR code, a QR code with a logo, or a QR code with a custom design.' },
+        { label: t('Customize QR design'), explanation: 'Customize the appearance of your QR code. You can choose colors, add logos, and adjust the size to fit your needs.' },
+        { label: t('Generate and download QR'), explanation: 'Generate your QR code based on your selections. Once generated, you can download the QR code for use in your projects or print it out.' },
+    ];
     return (
         <Stack sx={{ width: { xs: '100%', md: '70%' }, margin: 'auto' }} spacing={4}>
             <Stepper alternativeLabel activeStep={activeStep} connector={<ColorlibConnector />}>

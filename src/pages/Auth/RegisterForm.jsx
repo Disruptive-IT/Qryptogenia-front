@@ -12,6 +12,7 @@ import CompleteRegisterForm from "../../components/auth/CompleteRegisterForm";
 import AuthSwitcher from "../../components/auth/pure/AuthSwitcher";
 import { IoIosMail } from "react-icons/io";
 import axios from "axios";
+import { useTranslation } from "react-i18next";
 
 /**
  * @Author : Daniel Salazar,   @date 2024-07-29 12:18:52
@@ -26,7 +27,7 @@ const RegisterForm = () => {
   const [showPinVerification, setShowPinVerification] = useState(false);
   const [showCompleteRegister, setShowCompleteRegister] = useState(false);
   const [email, setEmail] = useState("");
-
+  const { t } = useTranslation();
   const handleSubmit = async (values, { resetForm }) => {
     startLoading();
     try {
@@ -86,29 +87,30 @@ const RegisterForm = () => {
       console.err("Error:", err);
     }
   }
+
+  const schemaRegister = SchemaRegisterValidate();
   return (
     <div className="mt-20">
       {!showPinVerification && !showCompleteRegister ? (
         <Formik
           initialValues={{ email: "" }}
-          validationSchema={SchemaRegisterValidate}
+          validationSchema={schemaRegister}
           onSubmit={handleSubmit}
         >
           <section className="w-full  flex flex-col justify-center items-center ">
             <Form className="flex flex-col flex-nowrap border-2 border-white rounded-xl w-[calc(100%-20px)] md:w-[700px] p-5 shadow-2xl bg-gray-200">
-              <h1 className="authTittle mb-4">
-                <span className="text-[#284B63]">Sing</span>-Up
+              <h1 className="text-[30px] font-bold tex-center">
+                <span className="text-[#284B63]">{t("Sign-")}</span>{t("Up")}
               </h1>
               <div className="border-t-2 border-gray-300 mb-2"></div>
 
               <span className="fullWidth text-center text-gray-400 mb-3">
-                Enter your email address and you will receive a verification
-                code to complete your registration.
+                {t("Enter your email address and you will receive a verification code to complete your registration.")}
               </span>
 
               <div className="flex flex-col h-14">
                 <div className="flex  ">
-                  <span className="inline-flex items-center px-2 text-lg text-gray-900 bg-gray-200 border rounded-e-0 border-gray-300 border-e-0 rounded-s-md dark:bg-my-gray dark:text-black dark:border-gray-600">
+                  <span className="inline-flex items-center px-2 text-lg text-my-gray bg-dark-blue border rounded-e-0 border-gray-300 border-e-0 rounded-s-md">
                     <IoIosMail />
                   </span>
                   <Field
@@ -116,7 +118,7 @@ const RegisterForm = () => {
                     type="email"
                     title="Email"
                     name="email"
-                    placeholder="Email"
+                    placeholder={t("Email")}
                     maxLength="255"
                   />
                   <br />
@@ -129,15 +131,15 @@ const RegisterForm = () => {
               </div>
 
               <div className="flex flex-col gap-4 pt-4">
-                <SubmitButton text="Sing up" />
+                <SubmitButton text={t("Sign Up")} />
 
                 <GoogleButton
                   action={handleGoogleLogin}
-                  text="Sign up with Google"
+                  text={t("Sign up with Google")}
                   method="get"
                 />
               </div>
-              <AuthSwitcher text="Go to Login" to="/login" />
+              <AuthSwitcher text={t("Go to Login")} to="/login" />
             </Form>
           </section>
         </Formik>

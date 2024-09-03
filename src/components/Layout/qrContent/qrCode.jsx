@@ -7,14 +7,18 @@ import { toast } from 'sonner';
 import Swal from 'sweetalert2';
 import { toPng } from 'html-to-image';
 import { useLocation } from 'react-router-dom';
+import html2canvas from 'html2canvas';
 
-export const saveQrData = async (qrName, data, qrType, qrColor, qrBgColor, qrProps, qrImageInfo, qrTextProps, appFormValues, socialFormValues, musicFormValues, qrBase64, currentContentType, location, qrId) => {
+export const saveQrData = async (
+    qrName, data, qrType, qrColor, qrBgColor, qrProps, qrImageInfo, qrTextProps, appFormValues, socialFormValues, musicFormValues, qrBase64, currentContentType, location, qrId
+) => {
     const removeIconFromSelectOptions = (options) => {
         return options.map(option => {
-            const { icon, ...rest } = option; // Desestructura para eliminar `icon`
-            return rest; // Devuelve el objeto sin `icon`
+            const { url, ...rest } = option; 
+            return rest; 
         });
     };
+
     console.log(qrType);
 
     const qrData = {
@@ -27,26 +31,30 @@ export const saveQrData = async (qrName, data, qrType, qrColor, qrBgColor, qrPro
         },
         qrPreview: {
             title: currentContentType === 'social-media' ? socialFormValues.title : currentContentType === 'music' ? musicFormValues.title : appFormValues.title,
-            colorTitle: currentContentType === 'social-media' ? socialFormValues.titleColor : currentContentType === 'music' ? musicFormValues.titleColor : appFormValues.titleColor,
+            colorTitle: currentContentType === 'social-media' ? socialFormValues.colorTitle : currentContentType === 'music' ? musicFormValues.colorTitle : appFormValues.colorTitle,
             description: currentContentType === 'social-media' ? socialFormValues.description : currentContentType === 'music' ? musicFormValues.description : appFormValues.description,
             descriptionColor: currentContentType === 'social-media' ? socialFormValues.descriptionColor : currentContentType === 'music' ? musicFormValues.descriptionColor : appFormValues.descriptionColor,
             boxColor: currentContentType === 'social-media' ? socialFormValues.boxColor : currentContentType === 'music' ? musicFormValues.boxColor : appFormValues.boxColor,
-            borderImg: currentContentType === 'social-media' ? socialFormValues.borderColor : currentContentType === 'music' ? musicFormValues.borderColor : appFormValues.borderColor,
+            borderImg: currentContentType === 'social-media' ? socialFormValues.borderImg : currentContentType === 'music' ? musicFormValues.borderImg : appFormValues.borderImg,
             imgBoxBackgroud: currentContentType === 'social-media' ? socialFormValues.image : currentContentType === 'music' ? musicFormValues.image : appFormValues.image,
             backgroudColor: currentContentType === 'social-media' ? socialFormValues.backgroundColor : currentContentType === 'music' ? musicFormValues.backgroundColor : appFormValues.backgroundColor,
             SelectOptions: currentContentType === 'social-media' ? removeIconFromSelectOptions(socialFormValues.selectedOptions) : currentContentType === 'music' ? removeIconFromSelectOptions(musicFormValues.selectedOptions) : removeIconFromSelectOptions(appFormValues.selectedOptions),
         },
         qrText: {
-            text: qrTextProps.qrText,
-            position: qrTextProps.qrTextPosition,
-            colorText: qrTextProps.qrTextColor,
+            text: qrTextProps.qrText || '', 
+            position: qrTextProps.qrTextPosition || {}, 
+            colorText: qrTextProps.qrTextColor || '#000000'
         },
         qrTextFont: {
             fontFamily: qrTextProps.qrTextFontStyle || 'Arial, sans-serif'
         },
         qrTextBubble: {
-            burbble: qrTextProps.qrTextChip || {},
-            color: qrTextProps.qrTextChipColor
+            bubble: qrTextProps.qrTextChip || { 
+                borderRadius: '5px',
+                padding: '5px',
+                backgroundColor: '#FFFFFF'
+            },
+            color: qrTextProps.qrTextChipColor || '#000000'
         },
         qrDesign: {
             frame: qrProps.marcoType.shape || 'default',
@@ -59,23 +67,32 @@ export const saveQrData = async (qrName, data, qrType, qrColor, qrBgColor, qrPro
             cornerDotColor: qrProps.cornersDotColor
         },
         qrLogo: {
-            logo: qrImageInfo.qrImage || 'null',
-            size: qrImageInfo.qrImageSize.toString()
+            logo:  qrImageInfo.includeImage ? qrImageInfo.qrImage : null || null,
         },
-        qrBase64: qrBase64 // Asegúrate de que qrBase64 esté pasando correctamente
+        qrBase64: qrBase64 || ''
     };
 
     const isEditRoute = location.pathname.startsWith('/edit')
 
     try {
+        console.log(qrData);
         const res = await axios({
             method: isEditRoute ? 'patch' : 'post',
             url: isEditRoute ? `/qr/edit/${qrId}` : '/qr',
-            data: {qrData}
-        })
+            data: isEditRoute ? { qrData } : qrData,
+        });
+    
+        // Si el servidor devuelve un mensaje de error, mostrar la alerta y no redirigir
+        if (res.status !== 201) {
+            toast.error(res.data.msg);
+            return false; // Salir de la función sin redirigir
+        }
+    
+        // Si el código QR se crea exitosamente, redirigir
         window.location.href = 'http://localhost:5173/user/qr';
         return true;
-    } catch (err) {
+    } 
+     catch (err) {
         const errorMessage = err.response && err.response.data && err.response.data.msg
             ? err.response.data.msg
             : 'An unknown error occurred';
@@ -100,8 +117,9 @@ export const saveQrData = async (qrName, data, qrType, qrColor, qrBgColor, qrPro
     }
 };
 
+
 const QR = () => {
-    const { qrType, qrData, qrBgColor, qrProps, qrImageInfo, qrTextProps, appFormValues, musicFormValues, socialFormValues, qrBase64, setQrBase64 } = useQr();
+    const { qrType, qrData, qrBgColor, qrProps, qrImageInfo, qrTextProps, qrBase64, setQrBase64 } = useQr();
     const qrRef = useRef(null);
     const qrCode = useRef(null);
     const mario = useRef(null);
@@ -113,26 +131,38 @@ const QR = () => {
         }
 
         try {
-            const dataUrl = await toPng(mario.current, { quality: 0.6 });
-            if (dataUrl) {
-                const base64String = dataUrl.split(',')[1];
-                setQrBase64(base64String);
-            } else {
-                throw new Error('Failed to capture image');
-            }
+            const scaleFactor = 3; // Ajusta según sea necesario
+            const rect = mario.current.getBoundingClientRect();
+
+            // Configura el canvas con las dimensiones escaladas
+            const canvas = document.createElement('canvas');
+            canvas.width = rect.width * scaleFactor;
+            canvas.height = rect.height * scaleFactor;
+            const ctx = canvas.getContext('2d');
+
+            await html2canvas(mario.current, {
+                canvas: canvas,
+                scale: scaleFactor,
+                useCORS: true,
+                backgroundColor: null,
+                logging: false,
+                removeContainer: true,
+            });
+
+            const dataUrl = canvas.toDataURL('image/png', 1.0);
+            const base64String = dataUrl.split(',')[1];
+            setQrBase64(base64String);
         } catch (error) {
             console.error('Failed to convert div to base64', error);
         }
     };
 
-
     useEffect(() => {
-        console.log("asdasdasd", qrProps.marcoType.style)
         const createOrUpdateQRCode = () => {
             if (!qrCode.current) {
                 qrCode.current = new QRCodeStyling({
-                    width: 250,
-                    height: 250,
+                    width: 1000,  // Aumenta el tamaño del QR a 1000x1000 para mayor resolución
+                    height: 1000,
                     data: qrData || 'www.qryptogenia.com',
                     dotsOptions: {
                         color: qrProps.dotsColor,
@@ -149,11 +179,12 @@ const QR = () => {
                     backgroundOptions: {
                         color: "transparent",
                     },
+                    image: qrImageInfo.includeImage ? qrImageInfo.qrImage : null,
                     imageOptions: {
                         crossOrigin: "anonymous",
                         hideBackgroundDots: true,
                         margin: 2,
-                        imageSize: qrImageInfo.qrImageSize
+                        imageSize: '0.5'
                     },
                 });
                 qrCode.current.append(qrRef.current);
@@ -176,34 +207,31 @@ const QR = () => {
                         color: qrProps.cornersDotColor,
                         type: qrProps.cornersDotType || 'dot'
                     },
-                    image: qrImageInfo.qrImage,
+                    image: qrImageInfo.includeImage ? qrImageInfo.qrImage : null,
                     imageOptions: {
                         crossOrigin: "anonymous",
                         hideBackgroundDots: true,
                         margin: 2,
-                        imageSize: qrImageInfo.qrImageSize
+                        imageSize: '0.5'
                     },
                 });
             }
         };
 
+        createOrUpdateQRCode();
+        console.log(qrBase64)
+        const timeoutId = setTimeout(() => {
+            generateBase64FromDiv();
+        }, 100);
 
-    
-    createOrUpdateQRCode();
-    // Esperar un breve período para asegurar que el QR se haya renderizado antes de capturar
-    const timeoutId = setTimeout(() => {
-        console.log("traka")
-        generateBase64FromDiv();
-    }, 100);
-    console.log(qrBase64);
-    return () => {
-        clearTimeout(timeoutId);
-    };
-}, [qrData, qrProps, qrImageInfo, qrTextProps.qrText, qrBgColor, qrTextProps.qrTextPosition, qrTextProps.qrTextColor, qrTextProps.qrTextSize, qrTextProps.qrTextChip, qrTextProps.qrTextChipColor, qrTextProps.qrTextFontStyle]);
+        return () => {
+            clearTimeout(timeoutId);
+        };
+    }, [qrData, qrProps, qrImageInfo, qrTextProps.qrText, qrBgColor, qrTextProps.qrTextPosition, qrTextProps.qrTextColor, qrTextProps.qrTextSize, qrTextProps.qrTextChip, qrTextProps.qrTextChipColor, qrTextProps.qrTextFontStyle]);
 
     return (
         <div className='m-auto'>
-            <div ref={mario} style={{ position: "relative" }}>
+            <div ref={mario} style={{ position: "relative", width: '330px', height: '330px' }}>
                 <div
                     className='m-auto'
                     style={{
@@ -211,10 +239,19 @@ const QR = () => {
                         border: qrProps.marcoType.type && qrProps.marcoType.type !== 'default' ? '4px solid' : 'none',
                         backgroundColor: qrBgColor,
                         transition: 'all 0.5s ease',
-                        padding: "37px"
+                        width: '100%',
+                        height: '100%',
+                        position: 'absolute',
+                        top: 0,
+                        left: 0,
+                        display: 'flex',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        boxSizing: 'border-box',
+                        padding: '20px'
                     }}
                 >
-                    <div className="flex items-center justify-center w-full" ref={qrRef}></div>
+                    <div className="flex items-center justify-center w-full" ref={qrRef} style={{ width: '1000px', height: '1000px', transform: 'scale(0.25)' }}></div>
                 </div>
                 {qrTextProps.qrText && (
                     <div
@@ -226,7 +263,6 @@ const QR = () => {
                             ...qrTextProps.qrTextChip,
                             ...qrTextProps.qrTextFontStyle,
                             ...qrTextProps.qrTextPosition.style
-
                         }}
                     >
                         <span className='text-center'>
