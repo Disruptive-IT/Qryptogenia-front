@@ -1,3 +1,19 @@
+/*
+ * @Author : Cristian Escobar, @date 2024-09-03 16:23:07
+ * @description: Componentes para renderizar un encabezado en una vista de teléfono móvil, con un logo opcional y estilos personalizados.
+ *                El componente `WebLinkPhoneHeader` muestra un logo con una imagen base64 o un logo predeterminado, y aplica estilos según los colores de fondo y borde proporcionados.
+ *                El componente `WebLinkPhoneHeaderq` es una variante de `WebLinkPhoneHeader`, con la diferencia de que el logo siempre se muestra con bordes redondeados.
+ * @Props:
+ *   - image: (opcional) Cadena que representa la imagen en formato base64. Si se proporciona, se muestra en lugar del logo predeterminado.
+ *   - logo: Cadena con la URL del logo predeterminado a usar si no se proporciona una imagen base64.
+ *   - headerColor: Color de fondo del contenedor del encabezado.
+ *   - bordercolor: Color del borde alrededor del logo.
+ *   - showImage: (solo en `WebLinkPhoneHeader`) Booleano que determina si la imagen debe ser visible.
+ * @return: 
+ *   - `WebLinkPhoneHeader`: Retorna un componente con un contenedor de encabezado que incluye el logo, visible solo si `showImage` es verdadero.
+ *   - `WebLinkPhoneHeaderq`: Retorna un componente con un contenedor de encabezado que siempre muestra el logo con bordes redondeados.
+ */
+
 import React from 'react';
 import mesadoko from "../../../../assets/imgs/mesadoko.png";
 

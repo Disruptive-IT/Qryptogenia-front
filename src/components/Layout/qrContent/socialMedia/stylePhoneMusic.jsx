@@ -5,6 +5,18 @@ import mesadoko from "../../../../assets/imgs/mesadoko.png";
 import google from "../../../../assets/imgs/google.png";
 
 import { SocialButton, SocialButtonS } from './socialButton';
+/*
+ * @Author : Cristian Escobar, @date 2024-09-03 20:13:14
+ * @description: Componente que renderiza una vista de enlace web en la preview del movil. 
+ *                Muestra una imagen, título y descripción según los valores del formulario, 
+ *                y un conjunto de botones sociales con íconos que cambian en función del color de fondo. 
+ *                El componente también se ajusta según el `contentName`, mostrando diferentes botones sociales.
+ * @Props:
+ *   - FormValues: Objeto que contiene valores de configuración como título, descripción, colores y opciones seleccionadas.
+ *   - contentName: Cadena que determina el tipo de contenido y ajusta la visualización de botones sociales.
+ * @return: Retorna un componente que renderiza un contenedor con imagen, título, descripción y botones sociales,
+ *          y ajusta la visibilidad de estos elementos en función de los cambios en `FormValues` y `contentName`.
+ */
 
 /*
  * @UpdatedBy : Nicolas Barrios,   @date 2024-07-29 16:58:46

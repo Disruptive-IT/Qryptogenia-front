@@ -1,6 +1,17 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 
+/**
+ * @Author : Cristian Escobar
+ * @date : 2024-09-04
+ * @description : El componente `Paginator` se encarga de mostrar controles de paginación para navegar entre las páginas de un conjunto de datos. Permite al usuario avanzar o retroceder entre páginas y muestra información sobre la página actual y el total de páginas. Utiliza `react-i18next` para la traducción del texto.
+ * @Props :
+ *   - `currentPage` (number): La página actual en la paginación.
+ *   - `totalPages` (number): El número total de páginas disponibles.
+ *   - `onPageChange` (function): Función que se llama cuando se cambia la página, recibe el número de la nueva página como argumento.
+ * @return : Renderiza un control de paginación con botones para avanzar o retroceder de página y una etiqueta que muestra la página actual y el total de páginas. Los botones se desactivan cuando no es posible avanzar o retroceder más allá de los límites.
+ */
+
 const Paginator = ({ currentPage, totalPages, onPageChange }) => {
   const { t } = useTranslation();
   return (
