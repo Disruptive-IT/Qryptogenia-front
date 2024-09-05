@@ -8,7 +8,10 @@ import './menu.css'
 function MenuForm(){
     const {formData,handleRestaurantName,handleLogo,handleBackgroundCard,addCategory,
         addProductToCategory,removeCategory,removeProductToCategory,handleProductName,handleProductDescription,
-        handleProductTop,handleProductPrice,handleChangeCategoryName,handleProductImg
+        handleProductTop,handleProductPrice,handleChangeCategoryName,handleImgProduct,handleBackgroundProduct,
+        handleColorNameProduct,
+        handleColorDescriptionProduct,
+        handleColorPriceProduct,
     }=UseMenu();
 
     const[activeCategory,setActiveCategory]=useState(0);
@@ -148,7 +151,7 @@ return (
                                 style={{backgroundColor:formData.backgroundCard || "#000"}}
                             ></div>
                             {showBackgroundPicker && (
-                                <div className='colorPicker'>
+                                <div className='colorPickerr'>
                                     <GradientColorPicker
                                         enableAlpha
                                         disableHueSlider={false}
@@ -187,23 +190,27 @@ return (
                                 <div 
                                     className='w-20 h-10 border border-gray-300 rounded cursor-pointer'
                                     onClick={()=>handleShowBackCategoryPicker(!showBackCategoryPicker)}
-                                    style={{ backgroundColor: '#000' }}
+                                    style={{ backgroundColor: formData.category?.[activeCategory]?.products?.[activeProduct]?.backgroundProductCard || "#000" }}
                                 ></div>
                                 {showBackCategoryPicker && (
                                     <div className='colorPicker'>
-                                        <GradientColorPicker
-                                            enableAlpha
-                                            disableHueSlider={false}
-                                            disableAlphaSlider={false}
-                                            disableInput={false}
-                                            disableHexInput={false}
-                                            disableRgbInput={false}
-                                            disableAlphaInput={false}
-                                            presetColors={[]}
-                                            gradient
-                                            color=''
-                                            onChange={() => {}}
-                                        />
+                                <GradientColorPicker
+                                    enableAlpha
+                                    disableHueSlider={false}
+                                    disableAlphaSlider={false}
+                                    disableInput={false}
+                                    disableHexInput={false}
+                                    disableRgbInput={false}
+                                    disableAlphaInput={false}
+                                    presetColors={[]}
+                                    gradient={true}
+                                    color={formData.category?.[activeCategory]?.products?.[activeProduct]?.backgroundProductCard || '#FFFFFF'} 
+                                    onChange={(color) => {
+                                        if (activeCategory !== null && activeProduct !== null) {
+                                            handleBackgroundProduct(activeCategory, activeProduct, color);
+                                        }
+                                    }}
+                                />
                                     </div>
                                 )}
                             </div>
@@ -306,12 +313,17 @@ return (
                 + Add new category
             </button>
             {values.category.map((category, index) => (
-                <div key={index} onClick={()=>setActiveCategory(index)} className='bg-gray-300 my-5 p-4 pb-2 w-[100%] rounded-2xl'>
+                <div key={index} onClick={()=>setActiveCategory(index)} className={`bg-gray-300 my-5 p-4 pb-2 w-[100%] rounded-2xl focus:border-4 focus:border-y-neutral-800 ${activeCategory==index ? 'border-[1px] border-zinc-800' : ''}`}>
                     <div className='flex flex-row justify-between p-2'>
                         <label className='mb-2' htmlFor={`category.${index}.categoryName`}>Category Name</label>
                         <div className='self-end'>
                             <button onClick={()=>!handleHideCategory(index)} type="button" className='float-end'><EjectIcon className={hideCategory[index] ? 'rotate-0' : 'rotate-180'}/></button>
-                            <button onClick={() =>{if(index!==0){remove(index); removeCategory(index)}}} type='button' className='float-right p-1 text-red-600 font-semibold mx-2 hover:underline'>X</button>
+                            <button onClick={() =>{if(index!==0){remove(index);
+                                 removeCategory(index)}
+                                 if(activeCategory==index){
+                                    handleActiveCategory(index-1);
+                                 }
+                                 }} type='button' className={`float-right p-1 text-red-600 font-semibold mx-2 hover:underline ${index==0 ? 'hidden':''}`}>X</button>
                         </div>
                     </div>
                     <div className={hideCategory[index] ? '':'hidden'} id="category-container">
@@ -327,23 +339,32 @@ return (
                                     + Add New Product
                                 </button>
                                 {values.category[index].products.map((product, productIndex) => (
-                                    <div onClick={(e)=>setActiveProduct(productIndex)} className='rounded-2xl bg-white px-2 py-2 mb-3'>
+                                    <div onClick={(e)=>setActiveProduct(productIndex)} className={`rounded-2xl bg-white px-2 py-2 mb-2 ${activeProduct==productIndex ? 'border-[1px] border-gray-800':''}`}>
                                         <div className='flex flex-row justify-between p-2'>
                                             <h1 className='mb-2'>Product {productIndex+1}</h1>
                                             <div className='self-end'>
                                                 <button onClick={()=>handleHideProduct(index,productIndex)} type="button" className='float-end'><EjectIcon className={hideProduct[index]?.[productIndex] ? 'rotate-180' : 'rotate-0'}/></button>
-                                                <button onClick={() =>{if(productIndex!==0){removeProduct(productIndex); removeProductToCategory(index,productIndex)}}} type='button' className='float-right p-1 text-red-600 font-semibold hover:underline'>X</button>
+                                                <button onClick={async() =>{
+                                                    if (productIndex !== 0) {
+                                                        handleActiveProduct(productIndex-1);
+                                                        removeProduct(productIndex);
+                                                        removeProductToCategory(index, productIndex);
+                                                    }
+                                                }} type='button' className={`float-right p-1 text-red-600 font-semibold hover:underline ${productIndex==0 ? 'hidden':''}`}>X</button>
                                             </div>
                                         </div>
-                                        <div className={hideProduct[index]?.[productIndex] ? '':'hidden'}>
-                                        <div key={productIndex} className={'flex flex-col mb-4'}>
-                                        <input onChange={(e)=>handleProductImg(index,productIndex,e,formik.handleChange)} className='mb-4 p-2 border rounded' type="file" name={`category.${index}.products.${productIndex}.productImg`} />
+                                        <div className={hideProduct[index]?.[productIndex] ? 'flex flex-row w-[100%] w-max-[100%]':'hidden'}>
+                                        <div className='w-[30%] rounded-[10px] bg-slate-600'>
+                                            <img id={`imgProductPreview-${index}-${productIndex}`} className='object-cover w-full h-full rounded-[10px]' src="" alt="" />
+                                        </div>
+                                        <div key={productIndex} className={'w-[68%] ml-[2%] flex flex-col p-2'}>
+                                        <input onChange={(e)=>handleImgProduct(index,productIndex,e)} className='mb-4 p-2 border rounded' type="file" name={`category.${index}.products.${productIndex}.productImg`} />
                                         <input onChange={(e)=>handleProductName(index,productIndex,e,formik.handleChange)} className='mb-4 p-2 border rounded' type="text" placeholder='Product Name' name={`category.${index}.products.${productIndex}.productName`} />
                                         <input onChange={(e)=>handleProductDescription(index,productIndex,e,formik.handleChange)} className='mb-4 p-2 border rounded' type="text" placeholder='Product Description' name={`category.${index}.products.${productIndex}.productDescription`} />
                                         <div className='flex items-center'>
                                             <div className='flex items-center mr-4'>
                                                 <input className='mr-2' type="checkbox" name={`category.${index}.products.${productIndex}.top`} /> 
-                                                <label>Top</label>0
+                                                <label>Top</label>
                                             </div>
                                             <div className='flex items-center'>
                                                 <label className='mr-2'>Price</label>

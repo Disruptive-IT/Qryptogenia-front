@@ -5,12 +5,12 @@ input{
 .colorPicker{
     position: absolute;
     width: 8%;
-    transform: translateX(230%);
+    transform: translateY(20%);
 }
 .colorPickerr {
     position: absolute;
-    width: 8%;
-    transform: translateX(250%) ;
+    width: 6%;
+    transform: translateX(300%);
 }
 .scroll-container::-webkit-scrollbar {
     width: 12px;

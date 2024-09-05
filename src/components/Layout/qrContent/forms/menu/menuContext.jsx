@@ -119,6 +119,43 @@ export default function MenuProvider({children}) {
         });
     };
 
+    const handleImgProduct = (indexOne, indexTwo, e) => {
+        const file = e.target.files[0];
+    
+        // Creamos una nueva instancia de FileReader
+        const reader = new FileReader();
+        reader.onload = () => {
+            const imgProductPreview = document.getElementById(`imgProductPreview-${indexOne}-${indexTwo}`);
+            if (imgProductPreview) {
+                imgProductPreview.src = reader.result;
+            }
+
+            setFormData((prevValues) => {
+                const updatedCategory = [...prevValues.category];
+                const updatedProducts = [...updatedCategory[indexOne].products];
+                
+                updatedProducts[indexTwo] = {
+                    ...updatedProducts[indexTwo],
+                    productImg: file
+                };
+    
+                updatedCategory[indexOne] = {
+                    ...updatedCategory[indexOne],
+                    products: updatedProducts
+                };
+    
+                return {
+                    ...prevValues,
+                    category: updatedCategory
+                };
+            });
+        };
+    
+        if (file) {
+            reader.readAsDataURL(file);
+        }
+    };
+    
     const handleBackgroundProduct=(indexOne, indexTwo, color)=>{
         handleProductField(indexOne,indexTwo,'backgroundProductCard',color);
     }
@@ -131,10 +168,6 @@ export default function MenuProvider({children}) {
     const handleColorPriceProduct=(indexOne, indexTwo, color)=>{
         handleProductField(indexOne,indexTwo,'colorPrice',color);
     }
-
-    const handleProductImg = (indexOne, indexTwo, e, handler) => {
-        handleProductField(indexOne, indexTwo, 'productImg', e.target.files[0]);
-    };
 
     const handleProductName = (indexOne, indexTwo, e, handler) => {
         handleProductField(indexOne, indexTwo, 'productName', e.target.value);
@@ -169,7 +202,7 @@ export default function MenuProvider({children}) {
             handleColorNameProduct,
             handleColorDescriptionProduct,
             handleColorPriceProduct,
-            handleProductImg,
+            handleImgProduct,
             handleProductName,
             handleProductDescription,
             handleProductPrice,

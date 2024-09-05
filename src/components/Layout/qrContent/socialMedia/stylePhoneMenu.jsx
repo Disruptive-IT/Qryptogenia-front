@@ -13,6 +13,8 @@ export default function WebLinkMenuFood({ FormValues, ContentName }) {
     setTabValue(newValue);
   };
 
+  let categoryIndex;
+
   const theme = createTheme({
     components: {
       MuiTabs: {
@@ -94,6 +96,7 @@ export default function WebLinkMenuFood({ FormValues, ContentName }) {
                   key={index}
                   label={element.categoryName}
                   value={index}
+                  onChange={()=>categoryIndex=index}
                 />
               ))}
             </Tabs>
@@ -102,19 +105,31 @@ export default function WebLinkMenuFood({ FormValues, ContentName }) {
     {category.products && category.products.length > 0 ? (
       category.products.map((element, productIndex) => (
         <div
-          key={productIndex}
-          className="w-[100%] f- m-w-[100%] p-3 flex flex-row  justify-items-start my-2 mx-2 bg-white rounded-[10px]"
-        >
-          <div className='mx-2 w-[50%] h-[90%] rounded-[50%]'>
-            <img className='object-cover rounded-[50%]' src="https://images.aws.nestle.recipes/resized/8689e8d974203563ddcc9bbff91323c2_MG_CHORIZOBURGER_Main-880x660_1080_850.png" alt="" />
-          </div>
-          <div className='flex flex-col p-1 flex-wrap'>
-            <h1 className='my-1'>{element.productName}</h1>
-            <h1 className='my-1'>{element.productDescription}</h1>
-            <h1 className='my-1'>{element.price}</h1>
-            {element.top && <h1>Top</h1>}
-            </div>
-        </div>
+  key={productIndex}
+  className="w-full max-w-[100%] p-1 flex flex-col justify-start items-center my-2 bg-white rounded-lg shadow-md"
+  style={{backgroundColor:element.backgroundProductCard || '#fff'}}
+>
+  {/* Contenedor de la imagen */}
+  <div className="w-24 h-24 rounded-full overflow-hidden border-[3px] border-black flex-shrink-0 mb-1">
+    <img
+      className="object-cover w-full h-full"
+      id={`imgProductPreview-${categoryIndex}-${index}`}
+      src={element.productImg ? URL.createObjectURL(element.productImg) : 'jajajaja'}
+      alt={element.productName}
+    />
+  </div>
+
+  {/* Contenedor del contenido */}
+  <div className={`flex bg-slate-600 flex-col justify-center items-center py-2 px-2 rounded-md w-full`}>
+    <h1 className="text-white font-bold text-lg my-1">{element.productName}</h1>
+    <p className="text-gray-300 text-sm my-1 text-center">{element.productDescription}</p>
+    <h1 className="text-green-400 font-semibold text-md my-1">{element.price} $</h1>
+    {element.top && (
+      <span className="text-yellow-400 font-bold text-sm">Top</span>
+    )}
+  </div>
+</div>
+
       ))
     ) : (
       <div>No products available</div>

@@ -8,10 +8,10 @@ export const menuFormData={
     category:[{
         categoryName:"",
         products:[{
-            backgroundProductCard:"#000",
-            colorName:"#000",
-            colorDescription:"000",
-            colorPrice:"#000",
+            backgroundProductCard:"#fff",
+            colorName:"#fff",
+            colorDescription:"#fff",
+            colorPrice:"#fff",
             productImg:null,
             productName:"",
             productDescription:"",
