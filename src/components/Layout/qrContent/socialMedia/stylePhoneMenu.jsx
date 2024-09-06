@@ -4,14 +4,41 @@ import Tabs from '@mui/material/Tabs';
 import Typography from '@mui/material/Typography';
 import { useState } from 'react';
 import './../forms/menu/menu.css';
-import { createTheme, ThemeProvider } from '@mui/material';
+import { createTheme, Modal, ThemeProvider } from '@mui/material';
 
 export default function WebLinkMenuFood({ FormValues, ContentName }) {
   const [tabValue, setTabValue] = useState(0);
+  const [openModal,setOpenModal]=useState(false);
+  const [selectedIndex,setSelectedIndex]=useState(null);
+
+  const handleOpenModal=()=>{
+    setOpenModal(true)
+  }
+
+  const handleCloseModal=()=>{
+    setOpenModal(false)
+  }
 
   const handleTabValue = (event, newValue) => {
     setTabValue(newValue);
   };
+
+
+  const modalStyle = {
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%, -50%)',
+    width: '80%',
+    maxWidth: 400,
+    backgroundColor: 'white',
+    border: '2px solid #000',
+    boxShadow: 24,
+    padding: '16px',
+    borderRadius: '10px',
+    zIndex: 10
+  };
+  
 
   let categoryIndex;
 
@@ -110,26 +137,31 @@ export default function WebLinkMenuFood({ FormValues, ContentName }) {
   style={{backgroundColor:element.backgroundProductCard || '#fff'}}
 >
   {/* Contenedor de la imagen */}
-  <div className="w-24 h-24 rounded-full overflow-hidden border-[3px] border-black flex-shrink-0 mb-1">
-    <img
-      className="object-cover w-full h-full"
-      id={`imgProductPreview-${categoryIndex}-${index}`}
-      src={element.productImg ? URL.createObjectURL(element.productImg) : 'jajajaja'}
-      alt={element.productName}
-    />
-  </div>
+  <div onClick={()=>{if(element.productImg!==null){setSelectedIndex(index) ;handleOpenModal()}}} className="w-24 h-24 rounded-full overflow-hidden border-[3px] border-black flex-shrink-0 mb-1">
+  <img
+    className="object-cover w-full h-full"
+    src={element.productImg ? URL.createObjectURL(element.productImg) : 'jajajaja'}
+    alt={element.productName}
+    onClick={()=>handleOpenModal(index)}
+  />
+</div>
 
   {/* Contenedor del contenido */}
-  <div className={`flex bg-slate-600 flex-col justify-center items-center py-2 px-2 rounded-md w-full`}>
-    <h1 className="text-white font-bold text-lg my-1">{element.productName}</h1>
-    <p className="text-gray-300 text-sm my-1 text-center">{element.productDescription}</p>
-    <h1 className="text-green-400 font-semibold text-md my-1">{element.price} $</h1>
+  <div className={`flex bg-white flex-col justify-center items-center py-2 px-2 rounded-md w-full`}>
+    <h1 style={{color: element.colorName}} className="text-white font-bold text-lg my-1">{element.productName}</h1>
+    <p style={{color: element.colorDescription}} className="text-gray-300 text-sm my-1 text-center">{element.productDescription}</p>
+    <h1 style={{color: element.colorPrice}} className="text-green-400 font-semibold text-md my-1">{element.price} $</h1>
     {element.top && (
       <span className="text-yellow-400 font-bold text-sm">Top</span>
     )}
   </div>
+  <div className={`absolute w-full h-full bg-[rgba(0,0,0,0.5)] top-[0] left-[0] text-white ${openModal ? '':'hidden'}`}>
+    <button onClick={()=>handleCloseModal()} className='m-9 float-end'><span className='text-red-600 font-bold text-[25px]'>x</span></button>
+    <div className={`absolute  top-[30%] w-[50%] left-[25%] h-[30%] rounded-[10px]`}>
+        <img className='w-full h-full object-cover rounded-[10px]' src={element[selectedIndex]?.productImg ? URL.createObjectURL(element[selectedIndex].productImg) : 'jajajaja'} alt={element[selectedIndex]?.productName || 'Unknown Product'}  />
+    </div>
+  </div>
 </div>
-
       ))
     ) : (
       <div>No products available</div>

@@ -3,6 +3,8 @@ import { useEffect, useState } from 'react';
 import { UseMenu } from './menuContext';
 import GradientColorPicker from 'react-gcolor-picker';
 import EjectIcon from '@mui/icons-material/Eject';
+import DeleteIcon from '@mui/icons-material/Delete';
+import {Accordion,AccordionItem} from '@nextui-org/accordion'
 import './menu.css'
 
 function MenuForm(){
@@ -221,7 +223,7 @@ return (
                                 <div 
                                     className='w-20 h-10 border border-gray-300 rounded cursor-pointer'
                                     onClick={()=>handleShowNamePicker(!showNamePicker)}
-                                    style={{ backgroundColor: '#000' }}
+                                    style={{ backgroundColor:formData.category?.[activeCategory]?.products?.[activeProduct]?.colorName || '#000' }}
                                 ></div>
                                 {showNamePicker && (
                                     <div className='colorPicker'>
@@ -235,8 +237,8 @@ return (
                                             disableAlphaInput={false}
                                             presetColors={[]}
                                             gradient
-                                            color=''
-                                            onChange={() => {}}
+                                            color={formData.category?.[activeCategory]?.products?.[activeProduct]?.colorName || "#FFFFF"}
+                                            onChange={(color) =>handleColorNameProduct(activeCategory,activeProduct,color)}
                                         />
                                     </div>
                                 )}
@@ -248,7 +250,7 @@ return (
                                 <div 
                                     className='w-20 h-10 border border-gray-300 rounded cursor-pointer'
                                     onClick={()=>handleShowDescriptionPicker(!showDescriptionPicker)}
-                                    style={{ backgroundColor: '#000' }}
+                                    style={{ backgroundColor:formData.category?.[activeCategory]?.products?.[activeProduct]?.colorDescription || '#000' }}
                                 ></div>
                                 {showDescriptionPicker && (
                                     <div className='colorPicker'>
@@ -261,9 +263,9 @@ return (
                                             disableRgbInput={false}
                                             disableAlphaInput={false}
                                             presetColors={[]}
-                                            gradient
-                                            color=''
-                                            onChange={() => {}}
+                                            gradient={true}
+                                            color={formData.category?.[activeCategory]?.products?.[activeProduct]?.colorDescription || "#FFFFF"}
+                                            onChange={(color) =>handleColorDescriptionProduct(activeCategory,activeProduct,color)}
                                         />
                                     </div>
                                 )}
@@ -275,7 +277,7 @@ return (
                                 <div 
                                     className='w-20 h-10 border border-gray-300 rounded cursor-pointer'
                                     onClick={()=>handleShowPricePicker(!showPricePicker)}
-                                    style={{ backgroundColor: '#000' }}
+                                    style={{ backgroundColor:formData.category?.[activeCategory]?.products?.[activeProduct]?.colorPrice || '#000' }}
                                 ></div>
                                 {showPricePicker && (
                                     <div className='colorPicker'>
@@ -288,9 +290,9 @@ return (
                                             disableRgbInput={false}
                                             disableAlphaInput={false}
                                             presetColors={[]}
-                                            gradient
-                                            color=''
-                                            onChange={() => {}}
+                                            gradient={true}
+                                            color={formData.category?.[activeCategory]?.products?.[activeProduct]?.colorPrice || "#FFFFF"}
+                                            onChange={(color) =>handleColorPriceProduct(activeCategory,activeProduct,color)}
                                         />
                                     </div>
                                 )}
@@ -304,85 +306,206 @@ return (
                             <div><h1>no hay categorias agregadas</h1></div>
                         ) : (
 <FieldArray name="category">
-    {({remove ,push}) => (
-        <div>
-            <button onClick={() =>{
-                push({ categoryName: "", products: [{ productImg: null, productName: "", productDescription: "", top: false, price: null }] });
-                addCategory({ categoryName: "", products: [{ productImg: null, productName: "", productDescription: "", top: false, price: null }] });}}
-                className='mb-4 px-4 py-2 bg-blue-500 text-white rounded' type='button'>
-                + Add new category
-            </button>
-            {values.category.map((category, index) => (
-                <div key={index} onClick={()=>setActiveCategory(index)} className={`bg-gray-300 my-5 p-4 pb-2 w-[100%] rounded-2xl focus:border-4 focus:border-y-neutral-800 ${activeCategory==index ? 'border-[1px] border-zinc-800' : ''}`}>
-                    <div className='flex flex-row justify-between p-2'>
-                        <label className='mb-2' htmlFor={`category.${index}.categoryName`}>Category Name</label>
-                        <div className='self-end'>
-                            <button onClick={()=>!handleHideCategory(index)} type="button" className='float-end'><EjectIcon className={hideCategory[index] ? 'rotate-0' : 'rotate-180'}/></button>
-                            <button onClick={() =>{if(index!==0){remove(index);
-                                 removeCategory(index)}
-                                 if(activeCategory==index){
-                                    handleActiveCategory(index-1);
-                                 }
-                                 }} type='button' className={`float-right p-1 text-red-600 font-semibold mx-2 hover:underline ${index==0 ? 'hidden':''}`}>X</button>
-                        </div>
-                    </div>
-                    <div className={hideCategory[index] ? '':'hidden'} id="category-container">
-                    <input onChange={(e)=>handleChangeCategoryName(index,e)} className='p-2 border rounded w-full mb-3' type="text" name={`category.${index}.categoryName`} id={`category.${index}.categoryName`} />
-                    <FieldArray name={`category.${index}.products`}>
-                        {({ push: pushProduct, remove: removeProduct }) => (
-                            <div>
-                                <button onClick={() =>{
-                                    pushProduct({ productImg: null, productName: "", productDescription: "", top: false, price: null });
-                                    addProductToCategory(index,{ productImg: null, productName: "", productDescription: "", top: false, price: null })}
-                                }
-                                    className='mb-4 px-4 py-2 bg-blue-500 text-white rounded' type='button'>
-                                    + Add New Product
-                                </button>
-                                {values.category[index].products.map((product, productIndex) => (
-                                    <div onClick={(e)=>setActiveProduct(productIndex)} className={`rounded-2xl bg-white px-2 py-2 mb-2 ${activeProduct==productIndex ? 'border-[1px] border-gray-800':''}`}>
-                                        <div className='flex flex-row justify-between p-2'>
-                                            <h1 className='mb-2'>Product {productIndex+1}</h1>
-                                            <div className='self-end'>
-                                                <button onClick={()=>handleHideProduct(index,productIndex)} type="button" className='float-end'><EjectIcon className={hideProduct[index]?.[productIndex] ? 'rotate-180' : 'rotate-0'}/></button>
-                                                <button onClick={async() =>{
-                                                    if (productIndex !== 0) {
-                                                        handleActiveProduct(productIndex-1);
-                                                        removeProduct(productIndex);
-                                                        removeProductToCategory(index, productIndex);
-                                                    }
-                                                }} type='button' className={`float-right p-1 text-red-600 font-semibold hover:underline ${productIndex==0 ? 'hidden':''}`}>X</button>
-                                            </div>
-                                        </div>
-                                        <div className={hideProduct[index]?.[productIndex] ? 'flex flex-row w-[100%] w-max-[100%]':'hidden'}>
-                                        <div className='w-[30%] rounded-[10px] bg-slate-600'>
-                                            <img id={`imgProductPreview-${index}-${productIndex}`} className='object-cover w-full h-full rounded-[10px]' src="" alt="" />
-                                        </div>
-                                        <div key={productIndex} className={'w-[68%] ml-[2%] flex flex-col p-2'}>
-                                        <input onChange={(e)=>handleImgProduct(index,productIndex,e)} className='mb-4 p-2 border rounded' type="file" name={`category.${index}.products.${productIndex}.productImg`} />
-                                        <input onChange={(e)=>handleProductName(index,productIndex,e,formik.handleChange)} className='mb-4 p-2 border rounded' type="text" placeholder='Product Name' name={`category.${index}.products.${productIndex}.productName`} />
-                                        <input onChange={(e)=>handleProductDescription(index,productIndex,e,formik.handleChange)} className='mb-4 p-2 border rounded' type="text" placeholder='Product Description' name={`category.${index}.products.${productIndex}.productDescription`} />
-                                        <div className='flex items-center'>
-                                            <div className='flex items-center mr-4'>
-                                                <input className='mr-2' type="checkbox" name={`category.${index}.products.${productIndex}.top`} /> 
-                                                <label>Top</label>
-                                            </div>
-                                            <div className='flex items-center'>
-                                                <label className='mr-2'>Price</label>
-                                                $<input onChange={(e)=>handleProductPrice(index,productIndex,e,formik.handleChange)} className='p-2 border rounded w-20' type="number" name={`category.${index}.products.${productIndex}.price`} />
-                                            </div>
-                                        </div>
-                                    </div>
-                                        </div>
-                                    </div>
-                                ))}
-                            </div>
-                        )}
-                    </FieldArray>
-                    </div>
+  {({ remove, push }) => (
+    <div>
+      {/* Botón para agregar nueva categoría */}
+      <button
+        onClick={() => {
+          push({
+            categoryName: "",
+            products: [{ productImg: null, productName: "", productDescription: "", top: false, price: null }],
+          });
+          addCategory({
+            categoryName: "",
+            products: [{ productImg: null, productName: "", productDescription: "", top: false, price: null }],
+          });
+        }}
+        className="mb-4 px-4 py-2 bg-blue-500 text-white rounded"
+        type="button"
+      >
+        + Add new category
+      </button>
+
+      {/* Asegurarse de que hay categorías antes de mostrar el Accordion */}
+      {values.category.length > 0 && (
+        <Accordion variant="splitted">
+          {values.category.map((category, index) => (
+            <AccordionItem
+              className={`bg-gray-300 my-2 p-3 pb-2 w-full rounded-2xl cursor-pointer ${
+                  activeCategory === index ? "border-2 border-zinc-800" : ""
+                }`}
+              key={index}
+              aria-label={`category ${index}`}
+              title={
+                <div onClick={()=>handleActiveCategory(index)} className="flex justify-between p-2">
+                  <label htmlFor={`category.${index}.categoryName`} className="">
+                    Category Name
+                  </label>
+                    <button
+                      onClick={() => {
+                        if (index !== 0) {
+                          remove(index);
+                          removeCategory(index);
+                        }
+                        if (activeCategory === index) {
+                          handleActiveCategory(index - 1);
+                        }
+                      }}
+                      type="button"
+                      className={`p-1 text-red-600 self-end font-semibold hover:underline ${values.category.length > 1 ? "" : "hidden"}`}
+                    >
+                      <DeleteIcon className='text-red-600 hover:underline hover:translate-y-[-2px] hover:duration-[.4s]' />
+                    </button>
                 </div>
-            ))}
-        </div>
-    )}
+              }
+              keepContentMounted={true}
+            >
+              <div
+                onClick={() => setActiveCategory(index)}
+                className={`bg-gray-300 my-1 p-3 pb-2 w-full rounded-2xl cursor-pointer`}
+              >
+                {/* Input para el nombre de la categoría */}
+                <input
+                  onChange={(e) => handleChangeCategoryName(index, e)}
+                  className="p-2 border rounded w-full mb-3"
+                  type="text"
+                  name={`category.${index}.categoryName`}
+                  placeholder="Enter category name"
+                />
+
+                {/* Si hay productos en la categoría, se muestran dentro del FieldArray */}
+                <FieldArray name={`category.${index}.products`}>
+                  {({ push: pushProduct, remove: removeProduct }) => (
+                    <div>
+                      {/* Botón para agregar un nuevo producto */}
+                      <button
+                        onClick={() => {
+                          pushProduct({
+                            productImg: null,
+                            productName: "",
+                            productDescription: "",
+                            top: false,
+                            price: null,
+                          });
+                          addProductToCategory(index, {
+                            productImg: null,
+                            productName: "",
+                            productDescription: "",
+                            top: false,
+                            price: null,
+                          });
+                        }}
+                        className="mb-4 px-4 py-2 bg-blue-500 text-white rounded"
+                        type="button"
+                      >
+                        + Add New Product
+                      </button>
+
+                      {/* Accordion para los productos */}
+                      <Accordion>
+                        {values.category[index].products.map((product, productIndex) => (
+                            <AccordionItem
+                            key={`${index}-${productIndex}`}
+                            aria-label={`product ${index}-${productIndex}`}
+                            title={
+                              <div onClick={()=>handleActiveProduct(productIndex)} className="flex justify-between p-2">
+                                <h1 className="mb-2">Product {productIndex + 1}</h1>
+                                <div className="self-end">
+                                  {/* Botón para eliminar producto, visible solo si hay más de uno */}
+                                  <button
+                                    onClick={() => {
+                                      if (productIndex !== 0) {
+                                        handleActiveProduct(productIndex - 1);
+                                        removeProduct(productIndex);
+                                        removeProductToCategory(index, productIndex);
+                                      }
+                                    }}
+                                    type="button"
+                                    className={`p-1 text-red-600 font-semibold hover:underline ${
+                                      values.category[index].products.length > 1 ? "" : "hidden"
+                                    }`}
+                                  >
+                                    <DeleteIcon className='text-red-600 hover:translate-y-[-2px]' />
+                                  </button>
+                                </div>
+                              </div>
+                            }
+                            keepContentMounted={true}
+                            className={`bg-white p-3 my-2 rounded-[10px] ${activeProduct==productIndex ? 'border-2 border-neutral-500':''}`}
+                          >
+                            {/* Contenedor de cada producto */}
+                            <div>
+                              {/* Contenedor de la imagen y detalles del producto */}
+                              <div className="flex flex-row">
+                                <div className="w-[30%] rounded-[10px] bg-slate-600">
+                                  <img
+                                    id={`imgProductPreview-${index}-${productIndex}`}
+                                    className="object-cover w-full h-full rounded-[10px]"
+                                    src=""
+                                    alt=""
+                                  />
+                                </div>
+                                <div className="w-[68%] ml-4 flex flex-col">
+                                  {/* Input para la imagen del producto */}
+                                  <input
+                                    onChange={(e) => handleImgProduct(index, productIndex, e)}
+                                    className="mb-4 p-2 border rounded"
+                                    type="file"
+                                    name={`category.${index}.products.${productIndex}.productImg`}
+                                  />
+                                  {/* Input para el nombre del producto */}
+                                  <input
+                                    onChange={(e) => handleProductName(index, productIndex, e)}
+                                    className="mb-4 p-2 border rounded"
+                                    type="text"
+                                    placeholder="Product Name"
+                                    name={`category.${index}.products.${productIndex}.productName`}
+                                  />
+                                  {/* Input para la descripción del producto */}
+                                  <input
+                                    onChange={(e) => handleProductDescription(index, productIndex, e)}
+                                    className="mb-4 p-2 border rounded"
+                                    type="text"
+                                    placeholder="Product Description"
+                                    name={`category.${index}.products.${productIndex}.productDescription`}
+                                  />
+                                  {/* Checkbox y input para el precio */}
+                                  <div className="flex items-center">
+                                    <div className="flex items-center mr-4">
+                                      <input
+                                        className="mr-2"
+                                        type="checkbox"
+                                        name={`category.${index}.products.${productIndex}.top`}
+                                      />
+                                      <label>Top</label>
+                                    </div>
+                                    <div className="flex items-center">
+                                      <label className="mr-2">Price</label>
+                                      $
+                                      <input
+                                        onChange={(e) => handleProductPrice(index, productIndex, e)}
+                                        className="p-2 border rounded w-20"
+                                        type="number"
+                                        name={`category.${index}.products.${productIndex}.price`}
+                                      />
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </AccordionItem>
+                        ))}
+                      </Accordion>
+                    </div>
+                  )}
+                </FieldArray>
+              </div>
+            </AccordionItem>
+          ))}
+        </Accordion>
+      )}
+    </div>
+  )}
 </FieldArray>
                         )}
                     </div>

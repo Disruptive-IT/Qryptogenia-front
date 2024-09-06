@@ -9,9 +9,9 @@ export const menuFormData={
         categoryName:"",
         products:[{
             backgroundProductCard:"#fff",
-            colorName:"#fff",
-            colorDescription:"#fff",
-            colorPrice:"#fff",
+            colorName:"#000",
+            colorDescription:"#000",
+            colorPrice:"#000",
             productImg:null,
             productName:"",
             productDescription:"",
