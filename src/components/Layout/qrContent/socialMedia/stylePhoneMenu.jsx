@@ -1,15 +1,19 @@
 import Box from '@mui/material/Box';
 import Tab from '@mui/material/Tab';
 import Tabs from '@mui/material/Tabs';
+import StarIcon from '@mui/icons-material/Star';
 import Typography from '@mui/material/Typography';
 import { useState } from 'react';
 import './../forms/menu/menu.css';
 import { createTheme, Modal, ThemeProvider } from '@mui/material';
+import { ConstructionOutlined } from '@mui/icons-material';
 
 export default function WebLinkMenuFood({ FormValues, ContentName }) {
   const [tabValue, setTabValue] = useState(0);
   const [openModal,setOpenModal]=useState(false);
   const [selectedIndex,setSelectedIndex]=useState(null);
+  const [activeprod,setActiveprod]=useState(0);
+  const [activeCategory,setActiveCategory]=useState(0);
 
   const handleOpenModal=()=>{
     setOpenModal(true)
@@ -20,9 +24,17 @@ export default function WebLinkMenuFood({ FormValues, ContentName }) {
   }
 
   const handleTabValue = (event, newValue) => {
+    if (newValue === FormValues.category.length) {
+      setActiveCategory(null);
+    } else {
+      setActiveCategory(newValue);
+    }
     setTabValue(newValue);
   };
+  
 
+  const topProducts=FormValues.category.flatMap(category=>category.products.filter(product=>product.top==true));
+  console.log(topProducts);
 
   const modalStyle = {
     position: 'absolute',
@@ -39,8 +51,8 @@ export default function WebLinkMenuFood({ FormValues, ContentName }) {
     zIndex: 10
   };
   
-
-  let categoryIndex;
+  console.log("modal producto activo ",activeprod);
+  console.log("catgeoria activa: ",activeCategory);
 
   const theme = createTheme({
     components: {
@@ -83,7 +95,7 @@ export default function WebLinkMenuFood({ FormValues, ContentName }) {
         style={{ backgroundColor: FormValues.backgroundCard }}
       >
         <div
-          className="w-[70%] p-2 rounded-[10px] mx-auto my-6 bg-slate-500 flex justify-center items-center"
+          className="w-[60%] p-2 rounded-[10px] mx-auto my-6 bg-slate-500 flex justify-center items-center"
           id="logo-container"
         >
           <img
@@ -103,11 +115,11 @@ export default function WebLinkMenuFood({ FormValues, ContentName }) {
         </div>
 
         <h1 className="text-center font-semibold text-[25px] text-white">
-          CATEGORIES
+          MENU
         </h1>
 
         <div
-          className="w-[100%] max-w-[100%] bg-transparent h-auto p-4 mx-auto my-4 rounded-md shadow-sm scroll-container"
+          className="w-[100%] max-w-[100%] bg-transparent h-auto py-2 my-4 mx-1 rounded-md shadow-sm scroll-container"
           id="categories-container"
         >
           <Box sx={{ width: '100%', typography: 'body1' }}>
@@ -123,53 +135,108 @@ export default function WebLinkMenuFood({ FormValues, ContentName }) {
                   key={index}
                   label={element.categoryName}
                   value={index}
-                  onChange={()=>categoryIndex=index}
                 />
               ))}
+              {topProducts.length>0 && (
+                <Tab
+                  sx={{ color: 'white' }}
+                  key={top}
+                  label={"top"}
+                  value={FormValues.category.length}
+                />
+              )}
             </Tabs>
             {FormValues.category.map((category, index) => (
   <TabPanel key={index} value={tabValue} index={index}>
-    {category.products && category.products.length > 0 ? (
+    {category.products && category.products.length > 0 && activeCategory!=null ? (
       category.products.map((element, productIndex) => (
-        <div
-  key={productIndex}
-  className="w-full max-w-[100%] p-1 flex flex-col justify-start items-center my-2 bg-white rounded-lg shadow-md"
-  style={{backgroundColor:element.backgroundProductCard || '#fff'}}
->
-  {/* Contenedor de la imagen */}
-  <div onClick={()=>{if(element.productImg!==null){setSelectedIndex(index) ;handleOpenModal()}}} className="w-24 h-24 rounded-full overflow-hidden border-[3px] border-black flex-shrink-0 mb-1">
-  <img
-    className="object-cover w-full h-full"
-    src={element.productImg ? URL.createObjectURL(element.productImg) : 'jajajaja'}
-    alt={element.productName}
-    onClick={()=>handleOpenModal(index)}
-  />
-</div>
-
-  {/* Contenedor del contenido */}
-  <div className={`flex bg-white flex-col justify-center items-center py-2 px-2 rounded-md w-full`}>
-    <h1 style={{color: element.colorName}} className="text-white font-bold text-lg my-1">{element.productName}</h1>
-    <p style={{color: element.colorDescription}} className="text-gray-300 text-sm my-1 text-center">{element.productDescription}</p>
-    <h1 style={{color: element.colorPrice}} className="text-green-400 font-semibold text-md my-1">{element.price} $</h1>
-    {element.top && (
-      <span className="text-yellow-400 font-bold text-sm">Top</span>
-    )}
-  </div>
-  <div className={`absolute w-full h-full bg-[rgba(0,0,0,0.5)] top-[0] left-[0] text-white ${openModal ? '':'hidden'}`}>
-    <button onClick={()=>handleCloseModal()} className='m-9 float-end'><span className='text-red-600 font-bold text-[25px]'>x</span></button>
-    <div className={`absolute  top-[30%] w-[50%] left-[25%] h-[30%] rounded-[10px]`}>
-        <img className='w-full h-full object-cover rounded-[10px]' src={element[selectedIndex]?.productImg ? URL.createObjectURL(element[selectedIndex].productImg) : 'jajajaja'} alt={element[selectedIndex]?.productName || 'Unknown Product'}  />
-    </div>
-  </div>
-</div>
+        <div key={productIndex} className='w-full h-[135px] flex flex-row rounded-[10px] overflow-auto mb-4' onClick={() => {setActiveprod(productIndex); handleOpenModal();}}>
+          <div style={{backgroundColor:element.backgroundProductCard}} className='w-[40%] h-full bg-slate-500 overflow-auto'>
+            <img className='object-cover w-full h-full' src={element.productImg ? URL.createObjectURL(element.productImg) : 'jajajaja'} alt={element.productName} />
+          </div>
+          <div style={{backgroundColor:element.backgroundProductCard}} className='w-[60%] h-full bg-red-300 px-1 py-1  flex flex-col self-center'>
+            <span className='flex w-full items-end justify-end hover:cursor-pointer'>+</span>
+            <div className='w-full  h-[80%] bg-transparent flex flex-col justify-evenly'>
+              <h1 style={{color: element.colorName}} className='text-[17px] text-center break-words font-bold'>{element.productName=='' ? 'Product name' : element.productName}</h1>
+              <h1 style={{color: element.colorPrice}} className='text-center break-words font-bold'>{element.price==null ? 'price':element.price+'$'}</h1>
+            </div>
+            <span className='text-end'>{element.top ? <StarIcon className='text-yellow-300 text-2xl' /> : ''}</span>
+          </div>
+        </div>
       ))
     ) : (
       <div>No products available</div>
     )}
   </TabPanel>
 ))}
+<TabPanel key={'top'} value={tabValue} index={FormValues.category.length}>
+  {
+    topProducts.length > 0 ? (
+      topProducts.map((element, index) => (
+        <div key={index} className='w-full h-[135px] flex flex-row rounded-[10px] overflow-auto mb-4' onClick={() => { setActiveprod(index); handleOpenModal(); }}>
+          <div style={{backgroundColor:element.backgroundProductCard}} className='w-[40%] h-full bg-slate-500 overflow-auto'>
+            <img className='object-cover w-full h-full' src={element.productImg ? URL.createObjectURL(element.productImg) : 'jajaja'} alt={element.productName} />
+          </div>
+          <div style={{backgroundColor:element.backgroundProductCard}} className='w-[60%] h-full bg-red-300 px-1 py-1  flex flex-col self-center'>
+            <span className='flex w-full items-end justify-end hover:cursor-pointer'>+</span>
+            <div className='w-full  h-[80%] bg-transparent flex flex-col justify-evenly'>
+              <h1 style={{color: element.colorName}} className='text-[17px] text-center break-words font-bold'>{element.productName === '' ? 'Product name' : element.productName}</h1>
+              <h1 style={{color: element.colorPrice}} className='text-center break-words font-bold'>{element.price == null ? 'price' : element.price + '$'}</h1>
+            </div>
+            <span className='text-end'>{element.top ? <StarIcon className='text-yellow-300 text-2xl' /> : ''}</span>
+          </div>
+        </div>
+      ))
+    ) : (
+      'There are no top products'
+    )
+  }
+</TabPanel>
+
           </Box>
         </div>
+        <div className={`absolute w-full max-w-full max-h-full h-full bg-[rgba(0,0,0,0.5)] inset-0 text-white ${openModal ? '' : 'hidden'}`}>
+  <button onClick={() => { handleCloseModal(); setActiveprod(0); }} className='m-9 float-end'>
+    <span className='text-red-600 font-bold text-[25px]'>x</span>
+  </button>
+  
+  {activeCategory !== null ? (
+    // Si estás en una categoría normal
+    FormValues.category[activeCategory]?.products?.[activeprod] && (
+      <div style={{backgroundColor: FormValues.category[activeCategory].products[activeprod].backgroundProductCard}} className={`absolute bg-orange-400 top-[25%] w-[80%] left-[10%] h-auto rounded-[10px] p-4`}>
+        <img className='rounded-2xl border-[4px] border-black' src={FormValues.category[activeCategory].products[activeprod].productImg ? URL.createObjectURL(FormValues.category[activeCategory].products[activeprod].productImg) : 'jajaja'} alt={FormValues.category[activeCategory].products[activeprod].productName} />
+        <div className='flex flex-row w-full h-auto justify-between p-2 mb-1'>
+          <h1 className='mx-3 my-4 font-bold text-[20px] text-black'>{FormValues.category[activeCategory].products[activeprod].productName}</h1>
+          <h1 className='mx-3 my-4 font-bold text-[20px] text-black'>{FormValues.category[activeCategory].products[activeprod].price}$</h1>
+        </div>
+        <div>
+          <h1 className='font-bold text-[20px] text-center text-black'>{FormValues.category[activeCategory].products[activeprod].productDescription}</h1>
+        </div>
+        <div>
+          <span className='float-end'>{FormValues.category[activeCategory].products[activeprod].top ? <StarIcon className='text-yellow-400' /> : ''}</span>
+        </div>
+      </div>
+    )
+  ) : (
+    // Si estás en la pestaña "top" y quieres mostrar los productos destacados
+    topProducts[activeprod] && (
+      <div style={{backgroundColor: topProducts[activeprod].backgroundProductCard}} className={`absolute bg-orange-400 top-[25%] w-[80%] left-[10%] h-auto rounded-[10px] p-4`}>
+        <img className='rounded-2xl border-[4px] border-black' src={topProducts[activeprod].productImg ? URL.createObjectURL(topProducts[activeprod].productImg) : 'jajaja'} alt={topProducts[activeprod].productName} />
+        <div className='flex flex-row w-full h-auto justify-between p-2 mb-1'>
+          <h1 className='mx-3 my-4 font-bold text-[20px] text-black'>{topProducts[activeprod].productName}</h1>
+          <h1 className='mx-3 my-4 font-bold text-[20px] text-black'>{topProducts[activeprod].price}$</h1>
+        </div>
+        <div>
+          <h1 className='font-bold text-[20px] text-center text-black'>{topProducts[activeprod].productDescription}</h1>
+        </div>
+        <div>
+          <span className='float-end'>{topProducts[activeprod].top ? <StarIcon className='text-yellow-400' /> : ''}</span>
+        </div>
+      </div>
+    )
+  )}
+</div>
+
       </div>
     </ThemeProvider>
   );

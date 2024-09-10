@@ -13,7 +13,7 @@ function MenuForm(){
         handleProductTop,handleProductPrice,handleChangeCategoryName,handleImgProduct,handleBackgroundProduct,
         handleColorNameProduct,
         handleColorDescriptionProduct,
-        handleColorPriceProduct,
+        handleColorPriceProduct
     }=UseMenu();
 
     const[activeCategory,setActiveCategory]=useState(0);
@@ -24,8 +24,7 @@ function MenuForm(){
     const[showNamePicker,setShowNamePicker]=useState(false);
     const[showDescriptionPicker,setShowDescriptionPicker]=useState(false);
     const[showPricePicker,setShowPricePicker]=useState(false);
-    const[hideCategory,setHideCategory]=useState([]);
-    const[hideProduct,setHideProduct]=useState(false);
+    const[isStyleCheck,setIsStyleCheck]=useState(false);
 
 
 
@@ -192,7 +191,7 @@ return (
                                 <div 
                                     className='w-20 h-10 border border-gray-300 rounded cursor-pointer'
                                     onClick={()=>handleShowBackCategoryPicker(!showBackCategoryPicker)}
-                                    style={{ backgroundColor: formData.category?.[activeCategory]?.products?.[activeProduct]?.backgroundProductCard || "#000" }}
+                                    style={{ backgroundColor: formData.category?.[activeCategory]?.products[0]?.backgroundProductCard || "#000" }}
                                 ></div>
                                 {showBackCategoryPicker && (
                                     <div className='colorPicker'>
@@ -206,10 +205,10 @@ return (
                                     disableAlphaInput={false}
                                     presetColors={[]}
                                     gradient={true}
-                                    color={formData.category?.[activeCategory]?.products?.[activeProduct]?.backgroundProductCard || '#FFFFFF'} 
+                                    color={formData.category?.[activeCategory]?.products[0]?.backgroundProductCard || '#FFFFFF'}
                                     onChange={(color) => {
-                                        if (activeCategory !== null && activeProduct !== null) {
-                                            handleBackgroundProduct(activeCategory, activeProduct, color);
+                                        if (activeCategory !== null) {
+                                            handleBackgroundProduct(activeCategory, color);
                                         }
                                     }}
                                 />
@@ -223,7 +222,7 @@ return (
                                 <div 
                                     className='w-20 h-10 border border-gray-300 rounded cursor-pointer'
                                     onClick={()=>handleShowNamePicker(!showNamePicker)}
-                                    style={{ backgroundColor:formData.category?.[activeCategory]?.products?.[activeProduct]?.colorName || '#000' }}
+                                    style={{ backgroundColor:formData.category?.[activeCategory]?.products[0]?.colorName || '#000' }}
                                 ></div>
                                 {showNamePicker && (
                                     <div className='colorPicker'>
@@ -237,8 +236,8 @@ return (
                                             disableAlphaInput={false}
                                             presetColors={[]}
                                             gradient
-                                            color={formData.category?.[activeCategory]?.products?.[activeProduct]?.colorName || "#FFFFF"}
-                                            onChange={(color) =>handleColorNameProduct(activeCategory,activeProduct,color)}
+                                            color={formData.category?.[activeCategory]?.products?.colorName || "#FFFFF"}
+                                            onChange={(color) =>handleColorNameProduct(activeCategory,color)}
                                         />
                                     </div>
                                 )}
@@ -250,7 +249,7 @@ return (
                                 <div 
                                     className='w-20 h-10 border border-gray-300 rounded cursor-pointer'
                                     onClick={()=>handleShowDescriptionPicker(!showDescriptionPicker)}
-                                    style={{ backgroundColor:formData.category?.[activeCategory]?.products?.[activeProduct]?.colorDescription || '#000' }}
+                                    style={{ backgroundColor:formData.category?.[activeCategory]?.products[0]?.colorDescription || '#000' }}
                                 ></div>
                                 {showDescriptionPicker && (
                                     <div className='colorPicker'>
@@ -264,8 +263,8 @@ return (
                                             disableAlphaInput={false}
                                             presetColors={[]}
                                             gradient={true}
-                                            color={formData.category?.[activeCategory]?.products?.[activeProduct]?.colorDescription || "#FFFFF"}
-                                            onChange={(color) =>handleColorDescriptionProduct(activeCategory,activeProduct,color)}
+                                            color={formData.category?.[activeCategory]?.products?.colorDescription || "#FFFFF"}
+                                            onChange={(color) =>handleColorDescriptionProduct(activeCategory,color)}
                                         />
                                     </div>
                                 )}
@@ -277,7 +276,7 @@ return (
                                 <div 
                                     className='w-20 h-10 border border-gray-300 rounded cursor-pointer'
                                     onClick={()=>handleShowPricePicker(!showPricePicker)}
-                                    style={{ backgroundColor:formData.category?.[activeCategory]?.products?.[activeProduct]?.colorPrice || '#000' }}
+                                    style={{ backgroundColor:formData.category?.[activeCategory]?.products[0]?.colorPrice || '#000' }}
                                 ></div>
                                 {showPricePicker && (
                                     <div className='colorPicker'>
@@ -291,8 +290,8 @@ return (
                                             disableAlphaInput={false}
                                             presetColors={[]}
                                             gradient={true}
-                                            color={formData.category?.[activeCategory]?.products?.[activeProduct]?.colorPrice || "#FFFFF"}
-                                            onChange={(color) =>handleColorPriceProduct(activeCategory,activeProduct,color)}
+                                            color={formData.category?.[activeCategory]?.products?.colorPrice || "#FFFFF"}
+                                            onChange={(color) =>handleColorPriceProduct(activeCategory,color)}
                                         />
                                     </div>
                                 )}
@@ -313,11 +312,27 @@ return (
         onClick={() => {
           push({
             categoryName: "",
-            products: [{ productImg: null, productName: "", productDescription: "", top: false, price: null }],
+            products: [{backgroundProductCard:"#fff",
+              colorName:"#000",
+              colorDescription:"#000",
+              colorPrice:"#000", 
+              productImg: null, 
+              productName: "", 
+              productDescription: "", 
+              top: false, 
+              price: null }],
           });
           addCategory({
             categoryName: "",
-            products: [{ productImg: null, productName: "", productDescription: "", top: false, price: null }],
+            products: [{backgroundProductCard:"#fff",
+              colorName:"#000",
+              colorDescription:"#000",
+              colorPrice:"#000", 
+              productImg: null, 
+              productName: "", 
+              productDescription: "", 
+              top: false, 
+              price: null }],
           });
         }}
         className="mb-4 px-4 py-2 bg-blue-500 text-white rounded"
@@ -381,6 +396,10 @@ return (
                       <button
                         onClick={() => {
                           pushProduct({
+                            backgroundProductCard:formData.category?.[index]?.products?.[0]?.backgroundProductCard || "#fff",
+                            colorName:formData.category?.[index]?.products?.[0]?.colorName || "#000",
+                            colorDescription:formData.category?.[index]?.products?.[0]?.colorDescription || "#000",
+                            colorPrice:formData.category?.[index]?.products?.[0]?.colorPrice || "#000",
                             productImg: null,
                             productName: "",
                             productDescription: "",
@@ -388,6 +407,10 @@ return (
                             price: null,
                           });
                           addProductToCategory(index, {
+                            backgroundProductCard:formData.category?.[index]?.products?.[0]?.backgroundProductCard || "#fff",
+                            colorName:formData.category?.[index]?.products?.[0]?.colorName || "#000",
+                            colorDescription:formData.category?.[index]?.products?.[0]?.colorDescription || "#000",
+                            colorPrice:formData.category?.[index]?.products?.[0]?.colorPrice || "#000",
                             productImg: null,
                             productName: "",
                             productDescription: "",
@@ -408,8 +431,8 @@ return (
                             key={`${index}-${productIndex}`}
                             aria-label={`product ${index}-${productIndex}`}
                             title={
-                              <div onClick={()=>handleActiveProduct(productIndex)} className="flex justify-between p-2">
-                                <h1 className="mb-2">Product {productIndex + 1}</h1>
+                              <div className="flex justify-between px-2">
+                                <h1 className="">Product {productIndex + 1}</h1>
                                 <div className="self-end">
                                   {/* Botón para eliminar producto, visible solo si hay más de uno */}
                                   <button
@@ -431,7 +454,7 @@ return (
                               </div>
                             }
                             keepContentMounted={true}
-                            className={`bg-white p-3 my-2 rounded-[10px] ${activeProduct==productIndex ? 'border-2 border-neutral-500':''}`}
+                            className={`bg-white p-3 my-2 rounded-[10px]`}
                           >
                             {/* Contenedor de cada producto */}
                             <div>
@@ -473,6 +496,7 @@ return (
                                   <div className="flex items-center">
                                     <div className="flex items-center mr-4">
                                       <input
+                                        onChange={(e)=>handleProductTop(index,productIndex,e)}
                                         className="mr-2"
                                         type="checkbox"
                                         name={`category.${index}.products.${productIndex}.top`}

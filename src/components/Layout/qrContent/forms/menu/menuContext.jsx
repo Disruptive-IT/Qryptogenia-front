@@ -119,6 +119,26 @@ export default function MenuProvider({children}) {
         });
     };
 
+    const handleProductFieldStyle = (categoryIndex, field, value) => {
+        setFormData((prevValues) => {
+          const updatedCategories = [...prevValues.category];
+    
+          updatedCategories[categoryIndex] = {
+            ...updatedCategories[categoryIndex],
+            products: updatedCategories[categoryIndex].products.map((product) => ({
+              ...product,
+              [field]: value
+            }))
+          };
+      
+          return {
+            ...prevValues,
+            category: updatedCategories
+          };
+        });
+      };
+      
+
     const handleImgProduct = (indexOne, indexTwo, e) => {
         const file = e.target.files[0];
     
@@ -156,17 +176,17 @@ export default function MenuProvider({children}) {
         }
     };
     
-    const handleBackgroundProduct=(indexOne, indexTwo, color)=>{
-        handleProductField(indexOne,indexTwo,'backgroundProductCard',color);
+    const handleBackgroundProduct=(indexOne, color)=>{
+        handleProductFieldStyle(indexOne,'backgroundProductCard',color);
     }
-    const handleColorNameProduct=(indexOne, indexTwo, color)=>{
-        handleProductField(indexOne,indexTwo,'colorName',color);
+    const handleColorNameProduct=(indexOne,color)=>{
+        handleProductFieldStyle(indexOne,'colorName',color);
     }
-    const handleColorDescriptionProduct=(indexOne, indexTwo, color)=>{
-        handleProductField(indexOne,indexTwo,'colorDescription',color);
+    const handleColorDescriptionProduct=(indexOne,color)=>{
+        handleProductFieldStyle(indexOne,'colorDescription',color);
     }
-    const handleColorPriceProduct=(indexOne, indexTwo, color)=>{
-        handleProductField(indexOne,indexTwo,'colorPrice',color);
+    const handleColorPriceProduct=(indexOne,color)=>{
+        handleProductFieldStyle(indexOne,'colorPrice',color);
     }
 
     const handleProductName = (indexOne, indexTwo, e, handler) => {
