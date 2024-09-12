@@ -13,7 +13,7 @@ import ReCAPTCHA from "react-google-recaptcha";
 import { IoIosMail } from "react-icons/io";
 import { FaLock, FaLockOpen } from "react-icons/fa";
 import axios from "../../libs/axios";
-
+import { useTranslation } from "react-i18next";
 /**
  * @Author : Daniel Salazar,   @date 2024-07-26 11:25:43
  * @description :form login implementation with recaptcha, google login and email and password validation.
@@ -28,7 +28,7 @@ const LoginForm = () => {
   const [showCaptcha, setShowCaptcha] = useState(false);
   const [email, setEmail] = useState("");
   const [showPassword, setShowPassword] = useState(false); //? estate to changge the password to show/hide
-
+  const { t } = useTranslation();
   const toggleShowPassword = () => {
     setShowPassword(!showPassword);
   };
@@ -86,29 +86,30 @@ const LoginForm = () => {
 
     fetchData();
   }, [recaptchaValue, email]);
+  const validationSchema = SchemaLoginValidate();
 
   return (
     <Formik
       initialValues={{ email: "", password: "" }}
-      validationSchema={SchemaLoginValidate}
+      validationSchema={validationSchema}
       onSubmit={handleSubmit}
     >
       <section className="w-full  flex flex-col justify-center items-center ">
         <Form className="flex flex-col flex-nowrap border-2 border-white rounded-xl w-[calc(100%-20px)] md:w-[700px] p-5 shadow-2xl bg-gray-200">
               <h1 className="text-[30px] font-bold tex-center">
-                <span className="text-dark-blue">Sing</span>-In
+                <span className="text-dark-blue">{t("Sign")}</span>{t("-In")}
               </h1>
         <div className='border-t-2 border-gray-300 mb-2'></div>
           <div className="flex flex-nowrap">
 
             <div className="flex flex-col gap-2 justify-center items-center w-full tansition-all duration-500">
              
-              <span className="w-full text-center text-gray-400">Enter your details to access</span>
+              <span className="w-full text-center text-gray-400">{t("Enter your details to access")}</span>
 
               <div className="flex flex-col h-14 w-full sm:w-[90%]  ">{/*  //?box input User */}
                 <div className="flex w-full  ">
-                  <span className="inline-flex items-center px-2 text-lg text-gray-900 bg-gray-200 border rounded-e-0 border-gray-300 border-e-0 rounded-s-md dark:bg-my-gray dark:text-black dark:border-gray-600">
-                    <IoIosMail />
+                  <span className="inline-flex items-center px-2 text-lg text-gray-900 bg-dark-blue border rounded-e-0 border-gray-600 border-e-0 rounded-s-md ">
+                    <IoIosMail className="text-my-gray " />
                   </span>
                   <Field
                     className={`rounded-none rounded-e-lg bg-gray-50 border text-gray-900 focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-full text-sm border-gray-300 p-2.5  dark:bg-my-gray dark:border-gray-600 dark:placeholder-gray-400 dark:text-black dark:focus:dark-blue dark:focus:border-blue-500 ${
@@ -117,7 +118,7 @@ const LoginForm = () => {
                     type="email"
                     title="Email"
                     name="email"
-                    placeholder="Email"
+                    placeholder={t("Email")}
                     maxLength="255"
                     disabled={showCaptcha}
                   />
@@ -132,10 +133,10 @@ const LoginForm = () => {
               <div className="flex flex-col h-14 w-full sm:w-[90%] ">{/*  //?box input Password */}
                 <div className="flex md:w-full ">
                   <span
-                    className="inline-flex items-center px-2 text-lg text-gray-900 cursor-pointer bg-gray-200 border rounded-e-0 border-gray-300 border-e-0 rounded-s-md dark:bg-my-gray dark:text-black dark:border-gray-600"
+                    className="inline-flex items-center px-2 text-lg text-gray-900 cursor-pointer bg-dark-blue border rounded-e-0  border-e-0 rounded-s-md border-gray-600"
                     onClick={toggleShowPassword}
                   >
-                    {showPassword ? <FaLockOpen /> : <FaLock />}
+                    {showPassword ? <FaLockOpen className="text-my-gray" title="Press to hide password" /> : <FaLock className="text-my-gray" title="Press to show password" />}
                   </span>
                   <Field
                     className={`rounded-none rounded-e-lg bg-gray-50 border text-gray-900 focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 text-sm border-gray-300 p-2.5  dark:bg-my-gray dark:border-gray-600 dark:placeholder-gray-400 dark:text-black dark:focus:ring-blue-500 dark:focus:border-blue-500 ${
@@ -144,7 +145,7 @@ const LoginForm = () => {
                     type={showPassword ? "text" : "password"}
                     title="Password"
                     name="password"
-                    placeholder="Password"
+                    placeholder={t("Password")}
                     maxLength="64"
                     disabled={showCaptcha}
                   />
@@ -159,11 +160,11 @@ const LoginForm = () => {
 
               <div className="flex flex-col items-start w-full ml-20 mt-5">{/*  //?box Remember me */}
                 <div>
-                  <Field type="checkbox" name="remember" className="mr-2" />
-                  <label htmlFor="remember">Remember me</label>
+                  <Field type="checkbox" name="remember" className="mr-2"  />
+                  <label htmlFor="remember">{t("Remember me")}</label>
                 </div>
-                <Link className="text-[#103b79]" to="/forgotPassword">
-                  Forgot your password?
+                <Link className="text-dark-blue" to="/forgotPassword">
+                  {t("Forgot your password?")}
                 </Link>
               </div>
 
@@ -174,11 +175,11 @@ const LoginForm = () => {
                 />
               )}
 
-              <SubmitButton text="Log in" />
+              <SubmitButton text={t("Log In")} />
 
               <GoogleButton
                 action={handleGoogleLogin}
-                text="Sign in with Google"
+                text={t("Sign in with Google")}
                 method="get"
               />
             </div>
@@ -187,7 +188,7 @@ const LoginForm = () => {
             
           </div>
         
-          <AuthSwitcher text="Sing Up" to="/register" />
+          <AuthSwitcher text={t("Sign Up")} to="/register" />
 
         </Form>
       </section>

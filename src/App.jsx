@@ -7,8 +7,11 @@ function App() {
 
   return (
     <Store>
-      <PageRouter />
-      <Toaster expand={false} richColors autoClose={2000} closeButton={true} />
+      <div className='font-custom'>
+
+        <PageRouter />
+        <Toaster expand={false} richColors autoClose={2000} closeButton={true} />
+      </div>
     </Store>
   );
 }

@@ -116,7 +116,7 @@ export const RecoverPassForm = () => {
               {/*  //?box input Password */}
               <div className="flex md:w-full ">
                 <span
-                  className="inline-flex items-center px-2 text-lg text-gray-900 cursor-pointer bg-gray-200 border rounded-e-0 border-gray-300 border-e-0 rounded-s-md dark:bg-my-gray dark:text-black dark:border-gray-600"
+                  className="inline-flex items-center px-2 text-lg text-my-gray cursor-pointer bg-dark-blue border rounded-e-0 border-gray-300 border-e-0 rounded-s-md dark:bg-my-gray dark:text-black dark:border-gray-600"
                   onClick={toggleShowPassword}
                 >
                   {showPassword ? <FaLockOpen /> : <FaLock />}
@@ -142,7 +142,7 @@ export const RecoverPassForm = () => {
               {/*  //?box input Password */}
               <div className="flex md:w-full ">
                 <span
-                  className="inline-flex items-center px-2 text-lg text-gray-900 cursor-pointer bg-gray-200 border rounded-e-0 border-gray-300 border-e-0 rounded-s-md dark:bg-my-gray dark:text-black dark:border-gray-600"
+                  className="inline-flex items-center px-2 text-lg text-my-gray cursor-pointer bg-dark-blue border rounded-e-0 border-gray-300 border-e-0 rounded-s-md dark:bg-my-gray dark:text-black dark:border-gray-600"
                   onClick={toggleShowPassword}
                 >
                   {showPassword ? <FaLockOpen /> : <FaLock />}

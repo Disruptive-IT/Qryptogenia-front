@@ -1,5 +1,9 @@
-// LoaderContext.js
 import { createContext, useContext, useState } from 'react';
+
+/**
+ * @Author : Jobserd Julián Ocampo,   @date 2024-08-13 09:54:39
+ * @description : Este archivo define el contexto `LoaderContext` y el hook `useLoader` para gestionar el estado de carga (loader) en la aplicación. Proporciona un contexto que permite a los componentes acceder y modificar el estado de carga globalmente.
+**/
 
 export const LoaderContext = createContext();
 

@@ -2,7 +2,7 @@ import React from "react"
 import { useNavigate } from "react-router-dom";
 
 
-/*
+/**
  * @Author : Nicolas Barrios,   @date 2024-07-25 10:00:16
  * @description : vista error escaneos no permitidos
  * @Props : image,message,title,labelLink,path
@@ -38,7 +38,7 @@ export default function ShowAlert(){
           title={"You have exceeded the scan limit"}
           message={"please contact with the QR provider"}
           labelLink={"click to go to home page"}
-          path={"/user"}
+          path={"/"}
           />
      )
 }

@@ -5,6 +5,18 @@ import mesadoko from "../../../../assets/imgs/mesadoko.png";
 import google from "../../../../assets/imgs/google.png";
 
 import { SocialButton, SocialButtonS } from './socialButton';
+/*
+ * @Author : Cristian Escobar, @date 2024-09-03 20:13:14
+ * @description: Componente que renderiza una vista de enlace web en la preview del movil. 
+ *                Muestra una imagen, título y descripción según los valores del formulario, 
+ *                y un conjunto de botones sociales con íconos que cambian en función del color de fondo. 
+ *                El componente también se ajusta según el `contentName`, mostrando diferentes botones sociales.
+ * @Props:
+ *   - FormValues: Objeto que contiene valores de configuración como título, descripción, colores y opciones seleccionadas.
+ *   - contentName: Cadena que determina el tipo de contenido y ajusta la visualización de botones sociales.
+ * @return: Retorna un componente que renderiza un contenedor con imagen, título, descripción y botones sociales,
+ *          y ajusta la visibilidad de estos elementos en función de los cambios en `FormValues` y `contentName`.
+ */
 
 /*
  * @UpdatedBy : Nicolas Barrios,   @date 2024-07-29 16:58:46
@@ -12,6 +24,7 @@ import { SocialButton, SocialButtonS } from './socialButton';
  */
 export const WebLinkPhoneMusic = ({ FormValues, contentName }) => {
   const [showImage, setShowImage] = useState(true);
+  const [showDesc, setShowDesc] = useState(true);
   const initialValues = useRef(FormValues);
   const [isDark, setIsDark] = useState('#000000');
   console.log(contentName)
@@ -31,6 +44,11 @@ export const WebLinkPhoneMusic = ({ FormValues, contentName }) => {
       });
     };
 
+    if(hasChanged(FormValues, initialValues.current)){
+      setShowImage(false);
+      setShowDesc(FormValues.description !== initialValues.current.description);
+    }
+
     // Check if any of the values (excluding image) have changed from initial values
     if (hasChanged(FormValues, initialValues.current)) {
       console.log('Values have changed, setting showImage to false');
@@ -42,12 +60,18 @@ export const WebLinkPhoneMusic = ({ FormValues, contentName }) => {
       console.log('New image provided, setting showImage to true');
       setShowImage(true);
     }
+
+    // Update initialValues ref
+    initialValues.current = FormValues;
   }, [FormValues]);
-  
+
   useEffect(() => {
     // Reset showImage when contentName changes
     setShowImage(true);
+    // Reset description visibility when contentName changes
+    setShowDesc(true);
   }, [contentName]);
+
 
   const options = [
     {
@@ -92,17 +116,22 @@ export const WebLinkPhoneMusic = ({ FormValues, contentName }) => {
     },
     {
       value: 'youtube',
-      icon: <img style={{ width: '50px', height: '50px' }} src='https://img.icons8.com/color/48/youtube-music.png' />
+      icon: <img style={{ width: '50px', height: '50px' }} src='https://img.icons8.com/color/48/youtube-music.png' />,
+      iconw: <img style={{ width: '50px', height: '50px' }} src='https://img.icons8.com/color/48/youtube-music.png' />
     },
     {
       value: 'soundcloud',
       textTop: "GET IT ON",
       textBottom: "Google Play",
-      icon: <img style={{ width: '50px', height: '50px' }} src='https://img.icons8.com/?size=100&id=13669&format=png&color=000000' />
+      icon: <img style={{ width: '50px', height: '50px' }} src='https://img.icons8.com/?size=100&id=13669&format=png&color=000000' />,
+      iconw: <img style={{ width: '50px', height: '50px' }} src='https://img.icons8.com/?size=100&id=13669&format=png&color=000000' />
     },
     {
       value: 'deezer',
       icon: <img style={{ width: '50px', height: '50px' }} src='https://img.icons8.com/external-tal-revivo-bold-tal-revivo/48/external-deezer-a-french-online-music-streaming-service-logo-bold-tal-revivo.png' />,
+      iconw: <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="50" height="50" viewBox="0,0,256,256">
+      <g fill="#ffffff" fill-rule="nonzero" stroke="none" stroke-width="1" stroke-linecap="butt" stroke-linejoin="miter" stroke-miterlimit="10" stroke-dasharray="" stroke-dashoffset="0" font-family="none" font-weight="none" font-size="none" text-anchor="none"><g transform="scale(5.12,5.12)"><path d="M39,14v2h8v-2zM21,17v2h8v-2zM39,17v2h8v-2zM21,20v2h8v-2zM39,20v2h8v-2zM3,23v2h8v-2zM21,23v2h8v-2zM30,23v2h8v-2zM39,23v2h8v-2zM3,26v2h8v-2zM21,26v2h8v-2zM30,26v2h8v-2zM39,26v2h8v-2zM3,29v2h8v-2zM12,29v2h8v-2zM21,29v2h8v-2zM30,29v2h8v-2zM39,29v2h8v-2zM3,32v2h8v-2zM12,32v2h8v-2zM21,32v2h8v-2zM30,32v2h8v-2zM39,32v2h8v-2zM3,35v2h8v-2zM12,35v2h8v-2zM21,35v2h8v-2zM30,35v2h8v-2zM39,35v2h8v-2z"></path></g></g>
+      </svg>,
       textTop: "Download on the",
       textBottom: "App Store",
     },
@@ -115,12 +144,14 @@ export const WebLinkPhoneMusic = ({ FormValues, contentName }) => {
     {
       value: 'amazon',
       icon: <img style={{ width: '50px', height: '50px' }} src='https://img.icons8.com/?size=100&id=lxwUaALAeQmr&format=png&color=000000' />,
+      iconw: <img style={{ width: '50px', height: '50px' }} src='https://img.icons8.com/?size=100&id=lxwUaALAeQmr&format=png&color=000000' />,
       textTop: "Download on the",
       textBottom: "App Store",
     },
     {
       value: 'apple',
       icon: <img style={{ width: '50px', height: '50px' }} src='https://img.icons8.com/?size=100&id=Bri4HBrgCsPa&format=png&color=000000' />,
+      iconw: <img style={{ width: '50px', height: '50px' }} src='https://img.icons8.com/?size=100&id=Bri4HBrgCsPa&format=png&color=000000' />,
       textTop: "Download on the",
       textBottom: "App Store",
     }
@@ -192,32 +223,33 @@ export const WebLinkPhoneMusic = ({ FormValues, contentName }) => {
     })
     : [];
 
-  console.log(FormValues.backgroundColor)
+  console.log(FormValues)
 
   return (
     <div className='relative flex flex-col w-[100%] h-[100%] items-center rounded-t-[52px] rounded-b-[50px]  p-4 overflow-y-auto custom-scrollbarphone' style={{ background:FormValues.backgroundColor, minHeight: '670px', maxHeight: '670px', minWidth: '350px', maxWidth: '350px'}}>
         <div className='flex flex-col items-center mt-28 w-[97%] bg-white rounded-2xl' style={{ background:FormValues.boxColor }}>
             {showImage && (
-                <div className='relative bg-white rounded-2xl -mt-14 border-4 shadow-lg' style={{ borderColor: FormValues.borderColor }}>
+                <div className='relative bg-white rounded-2xl -mt-14 border-4 shadow-lg' style={{ borderColor: FormValues.borderImg }}>
                     <img className='w-36  rounded-2xl' src={FormValues.image ? `data:image/png;base64,${FormValues.image}` : (contentName === 'music' ? logot : (contentName === 'social media' ? google : mesadoko))} alt="" />
                 </div>
             )}
             <div className="mt-[1%] mb-2 w-[90%] text-center">
-                <div className='break-words overflow-y-auto' style={{ color:FormValues.titleColor, fontSize: '20px' }}>
+                <div className='break-words overflow-y-auto' style={{ color:FormValues.colorTitle, fontSize: '30px' }}>
                     {FormValues.title}
                 </div>
+                {showDesc && (
                 <div
                     className="break-words overflow-y-auto max-h-[200px] mt-5 custom-scrollbar text-lg leading-relaxed relative"
                     style={{ color:FormValues.descriptionColor }}
-                >
-                    {FormValues.description}
+                >{FormValues.description}
                 </div>
+                )}
             </div>
         </div>
 
         {contentName === 'app store' && <SocialButton data={data} botonColor={isDark}/>}
-        {contentName === 'social media' && <SocialButtonS data={data} />}
-        {contentName === 'music' && <SocialButtonM data={data} />}
+        {contentName === 'social media' && <SocialButtonS data={data} botonColor={isDark}/>}
+        {contentName === 'music' && <SocialButtonM data={data} botonColor={isDark}/>}
 
     </div>
 );

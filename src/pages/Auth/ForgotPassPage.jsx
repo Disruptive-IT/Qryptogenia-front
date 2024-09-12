@@ -99,7 +99,7 @@ export const ForgotPassForm = () => {
 
               <div className="flex w-full flex-col h-14 mb-3">
                 <div className="flex  ">
-                  <span className="inline-flex items-center px-2 text-lg text-gray-900 bg-gray-200 border rounded-e-0 border-gray-300 border-e-0 rounded-s-md dark:bg-my-gray dark:text-black dark:border-gray-600">
+                  <span className="inline-flex items-center px-2 text-lg text-my-gray bg-dark-blue border rounded-e-0 border-gray-300 border-e-0 rounded-s-md dark:bg-my-gray dark:text-black dark:border-gray-600">
                     <IoIosMail />
                   </span>
                   <Field

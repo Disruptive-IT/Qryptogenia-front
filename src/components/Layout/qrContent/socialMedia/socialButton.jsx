@@ -1,3 +1,17 @@
+/*
+ * @Author : Cristian Escobar, @date 2024-09-03 20:13:14
+ * @description: Componente que renderiza un conjunto de botones sociales con íconos personalizados y colores adaptables. 
+ *               Los botones cambian de color de fuente según el color de fondo del botón.
+ * @Props:
+ *   - data: Array de objetos que representan las opciones sociales, cada uno con las propiedades:
+ *     - url: Enlace asociado al botón social.
+ *     - icon: Identificador del icono de la red social.
+ *     - iconw: Icono en versión white o alternativa, según el color del botón.
+ *     - textBottom: Texto para mostrar en la parte inferior del botón.
+ *   - botonColor: Color de fondo para los botones, que también determina el color del texto.
+ * @return: Retorna un componente que renderiza botones sociales con íconos y texto.
+ */
+
 import React, { useEffect, useState} from 'react';
 import { FaApple } from "react-icons/fa";
 import { SocialIcon } from 'react-social-icons'
@@ -8,6 +22,7 @@ import play from "../../../../../src/assets/imgs/play.png"
 import galaxy from "../../../../../src/assets/imgs/galaxy.png"
 import microsoft from "../../../../../src/assets/imgs/microsoft.png"
 import microsoftw from "../../../../../src/assets/imgs/microsoftw.png"
+import { bottomNavigationActionClasses } from '@mui/material';
 /*
  * @UpdatedBy : Daniel Salazar,   @date 2024-07-25 11:28:17
  * @description : correcion estilos en div padre
@@ -28,18 +43,16 @@ export const SocialButton = ({ data, botonColor}) => {
   console.log(data)
 
   useEffect(()=>{
-    if(botonColor==='#ffffff')
+    if(botonColor==='#ffffff'){
       setfontColor('#000000')
-    console.log(fontColor);
-  },[botonColor]);
-  useEffect(()=>{
-    if(botonColor==='#000000')
+    }
+    if(botonColor==='#000000'){
       setfontColor('#ffffff')
-    console.log(fontColor);
-  },[botonColor]);
+    }
+  },[botonColor])
   
     return (
-      <div className="flex gap-3 justify-center flex-wrap w-full mt-20 mb-5">
+      <div className="flex gap-3 justify-center flex-wrap w-full mt-5 mb-5">
         {data && data.map((social, index) => (
           <a
             key={index}
@@ -72,10 +85,19 @@ export const SocialButton = ({ data, botonColor}) => {
     return string.charAt(0).toUpperCase() + string.slice(1);
   };
 
-  export const SocialButtonS = ({ data }) => {
+  export const SocialButtonS = ({ data, botonColor }) => {
+    const [fontColor, setfontColor] = useState('#ffffff');
+    useEffect(()=>{
+      if(botonColor==='#ffffff'){
+        setfontColor('#000000')
+      }
+      if(botonColor==='#000000'){
+        setfontColor('#ffffff')
+      }
+    },[botonColor])
     console.log(data)
     return (
-      <div className='flex gap-3 justify-center flex-wrap w-full mt-20 mb-5'>
+      <div className='flex gap-3 justify-center flex-wrap w-full mt-5 mb-5'>
         {data && data.map((social, index) => (
           <a
             target="_blank"
@@ -84,11 +106,11 @@ export const SocialButton = ({ data, botonColor}) => {
             key={index}
             type="button"
             className="relative bg-gray-100 p-2 min-w-32 h-12 rounded-lg flex gap-2 items-center"
-            style={{ cursor: "pointer" }}
+            style={{ cursor: "pointer", backgroundColor: botonColor}}
           >
             <SocialIcon network={social.name.toLowerCase()} style={{ width: 30, height: 30 }} />
             {/* Mostrar el nombre del botón solo en pantallas grandes */}
-            <span>{capitalizeFirstLetter(social.name)}</span>
+            <span style={{color: fontColor}}>{capitalizeFirstLetter(social.name)}</span>
           </a>
   
         ))}

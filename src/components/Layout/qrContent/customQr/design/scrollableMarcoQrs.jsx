@@ -94,46 +94,49 @@ export default function ScrollableMarcoQrs({ onStyleClick, value, onChange }) {
     return (
         <Box sx={{ width: 'auto', bgcolor: 'background.paper' }}>
             <Tabs
-                value={value}
-                onChange={onChange}
-                variant="scrollable"
-                scrollButtons="auto"
-                TabIndicatorProps={{
-                    style: {
-                        backgroundColor: "",
-                        height: '4px'
-                    }
-                }}
-                aria-label="scrollable auto tabs example"
-                sx={{
-                    '& .MuiTabs-scrollButtons': {
-                        width: '20px',
-                        color: '#284B63',
-                    },
-                }}
-            >
-                {qrStyles.map((style) => (
-                    <Tab
-                        key={style.id}
-                        label={
-                            <div
-                                className='tab'
-                                style={{
-                                    ...getShapeStyle(style.shape),
-                                    ...getBackgroundStyle(style.backgroundType, style.style.backgroundColor, style.patternImage,),
-                                    borderColor: style.style.borderColor,
-                                    borderWidth: style.shape !== 'none' ? '2px' : '0px',
-                                    borderStyle: 'solid',
-                                    padding: '20px'
-                                }}
-                                onClick={() => onStyleClick(style)}
-                            >
-                                <style.icon size={35} />
-                            </div>
-                        }
-                    />
-                ))}
-            </Tabs>
+    value={value}
+    onChange={onChange}
+    variant="scrollable"
+    scrollButtons="auto"
+    TabIndicatorProps={{
+        style: {
+            backgroundColor: "",
+            height: '4px'
+        }
+    }}
+    aria-label="scrollable auto tabs example"
+    sx={{
+        '& .MuiTabs-scrollButtons': {
+            width: '20px',
+            color: '#284B63',
+        },
+    }}
+>
+    {qrStyles.map((style) => (
+        <Tab
+            key={style.id}
+            label={
+                <div
+                    className='tab'
+                    style={{
+                        ...getShapeStyle(style.shape),
+                        ...getBackgroundStyle(style.backgroundType, style.style.backgroundColor, style.patternImage),
+                        borderColor: style.style.borderColor,
+                        borderWidth: style.shape !== 'none' ? '2px' : '0px',
+                        borderStyle: 'solid',
+                        padding: '20px',
+                        display: 'flex',       // Ensure the div takes full space
+                        alignItems: 'center',  // Center content vertically
+                        justifyContent: 'center' // Center content horizontally
+                    }}
+                >
+                    <style.icon size={35} />
+                </div>
+            }
+            onClick={() => onStyleClick(style)}  // Move onClick here
+        />
+    ))}
+</Tabs>
             <div className='pl-4 flex items-center gap-4'>
                 <div className="flex items-center border border-gray-300 rounded p-2 ml-3 mt-5 mb-1">
                     <div
