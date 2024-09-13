@@ -7,17 +7,22 @@ function LayoutHome() {
     const location = useLocation();
 
     return (
-        <div className="flex flex-col min-h-screen relative bg-slate-200">
-            <Navbar />
+        <div className="flex flex-col h-sreen  w-full bg-slate-200 ">
+            {location.pathname !== '/login' && location.pathname !== '/register'  && location.pathname !== '/forgotPassword' && location.pathname !== '/pricings' && (
+                <Navbar />
+            )}
             {location.pathname !== '/login' && location.pathname !== '/register'  && location.pathname !== '/forgotPassword' && location.pathname !== '/pricings'  && (
                 <div className='mt-10'>
                     <StepperQr />
                 </div>
             )}
-            <main className="flex-grow mt-8">
+            <main className=" ">
                 <Outlet />
             </main>
-            <Footer/>
+            {location.pathname !== '/login' && location.pathname !== '/register'  && location.pathname !== '/forgotPassword' && location.pathname !== '/pricings' && (
+                <Footer/>
+
+            )}
         </div>
     );
 }
