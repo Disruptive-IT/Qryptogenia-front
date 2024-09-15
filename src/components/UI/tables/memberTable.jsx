@@ -6,6 +6,14 @@ import { Modal } from '@mui/material';
 import axios from 'axios';
 import { useTranslation } from 'react-i18next';
 
+/**
+ * @Author : Cristian Escobar
+ * @date : 2024-09-04
+ * @description : El componente `QRCodeList` gestiona la visualización y edición de una lista de membresías. Incluye la capacidad de abrir modales para editar y ver detalles de cada membresía, así como la gestión de descuentos asociados. Utiliza `axios` para obtener datos de la API y `sweetalert2` para mostrar mensajes de error. Implementa una tabla con funcionalidades para editar y visualizar detalles de membresías, así como modales para esas acciones.
+ * @Props : Ninguna
+ * @return : Renderiza una tabla con la lista de membresías que incluye columnas para tipo de membresía, precio, QRs activos, QRs escaneados, descuentos, soporte premium, y estático ilimitado. También incluye botones para editar y visualizar cada ítem. Los modales permiten editar y ver detalles de la membresía seleccionada.
+ */
+
 const QRCodeList = () => {
   const [data, setData] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);

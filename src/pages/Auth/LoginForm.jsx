@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import { SubmitButton } from "../../components/auth/pure/submitButton";
 import { GoogleButton } from "../../components/auth/pure/googleButton";
 import { IconsRight } from "../../components/auth/pure/iconsRight";
-import logo from "../../assets/imgs/logoForms.png";
+import logo from "../../../public/Logo.png";
 import { useAuthContext } from "../../context/AuthContext";
 import { useLoader } from "../../context/LoaderContext";
 import { SchemaLoginValidate } from "../../helpers/validate/auth.validate";
@@ -14,6 +14,7 @@ import { IoIosMail } from "react-icons/io";
 import { FaLock, FaLockOpen } from "react-icons/fa";
 import axios from "../../libs/axios";
 import { useTranslation } from "react-i18next";
+import { FaArrowLeft } from "react-icons/fa6";
 /**
  * @Author : Daniel Salazar,   @date 2024-07-26 11:25:43
  * @description :form login implementation with recaptcha, google login and email and password validation.
@@ -94,19 +95,30 @@ const LoginForm = () => {
       validationSchema={validationSchema}
       onSubmit={handleSubmit}
     >
-      <section className="w-full  flex flex-col justify-center items-center ">
-        <Form className="flex flex-col flex-nowrap border-2 border-white rounded-xl w-[calc(100%-20px)] md:w-[700px] p-5 shadow-2xl bg-gray-200">
-              <h1 className="text-[30px] font-bold tex-center">
-                <span className="text-dark-blue">{t("Sign")}</span>{t("-In")}
-              </h1>
-        <div className='border-t-2 border-gray-300 mb-2'></div>
+      <section className="flex w-full h-screen justify-center items-center bg-gradient-to-r from-dark-blue to-light-blue ">
+
+<Link to="/" className="text-my-gray flex gap-2 absolute top-1 left-2 w-48 transition-all duration-300 hover:scale-105 hover:underline">
+  <FaArrowLeft className="text-2xl"/>
+  <p>{t("Back Home")}</p>
+</Link>
+
+        <Form className="flex flex-col flex-nowrap justify-between  border-white  w-[90%] h-[90%] md:w-[60%] lg:w-[40%] md:h-full rounded-lg md:rounded-none p-5 shadow-3xl bg-slate-200 transition-all duration-1000 ">
+          <div className="flex flex-col items-center justify-center sm:mt-14 transition-all duration-500">
+            <img src={logo} alt="logo" className="w-20 h-20 drop-shadow-lg " />
+            <h1 className="text-[30px] font-bold tex-center cursor-default">
+              <span className="text-dark-blue">{t("Sign")}</span>
+              {t("-In")}
+            </h1>
+          </div>         
+          {/* <div className="border-t-2 border-gray-300 mb-2"></div> */}
           <div className="flex flex-nowrap">
-
             <div className="flex flex-col gap-2 justify-center items-center w-full tansition-all duration-500">
-             
-              <span className="w-full text-center text-gray-400">{t("Enter your details to access")}</span>
+              <span className="w-full text-center text-gray-400 cursor-default">
+                {t("Enter your details to access")}
+              </span>
 
-              <div className="flex flex-col h-14 w-full sm:w-[90%]  ">{/*  //?box input User */}
+              <div className="flex flex-col h-14 w-full sm:w-[90%]  ">
+                {/*  //?box input User */}
                 <div className="flex w-full  ">
                   <span className="inline-flex items-center px-2 text-lg text-gray-900 bg-dark-blue border rounded-e-0 border-gray-600 border-e-0 rounded-s-md ">
                     <IoIosMail className="text-my-gray " />
@@ -130,13 +142,24 @@ const LoginForm = () => {
                 />
               </div>
 
-              <div className="flex flex-col h-14 w-full sm:w-[90%] ">{/*  //?box input Password */}
+              <div className="flex flex-col h-14 w-full sm:w-[90%] ">
+                {/*  //?box input Password */}
                 <div className="flex md:w-full ">
                   <span
                     className="inline-flex items-center px-2 text-lg text-gray-900 cursor-pointer bg-dark-blue border rounded-e-0  border-e-0 rounded-s-md border-gray-600"
                     onClick={toggleShowPassword}
                   >
-                    {showPassword ? <FaLockOpen className="text-my-gray" title="Press to hide password" /> : <FaLock className="text-my-gray" title="Press to show password" />}
+                    {showPassword ? (
+                      <FaLockOpen
+                        className="text-my-gray"
+                        title="Press to hide password"
+                      />
+                    ) : (
+                      <FaLock
+                        className="text-my-gray"
+                        title="Press to show password"
+                      />
+                    )}
                   </span>
                   <Field
                     className={`rounded-none rounded-e-lg bg-gray-50 border text-gray-900 focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 text-sm border-gray-300 p-2.5  dark:bg-my-gray dark:border-gray-600 dark:placeholder-gray-400 dark:text-black dark:focus:ring-blue-500 dark:focus:border-blue-500 ${
@@ -158,9 +181,10 @@ const LoginForm = () => {
                 />
               </div>
 
-              <div className="flex flex-col items-start w-full ml-20 mt-5">{/*  //?box Remember me */}
+              <div className="flex flex-col items-start w-full ml-20 mt-5">
+                {/*  //?box Remember me */}
                 <div>
-                  <Field type="checkbox" name="remember" className="mr-2"  />
+                  <Field type="checkbox" name="remember" className="mr-2" />
                   <label htmlFor="remember">{t("Remember me")}</label>
                 </div>
                 <Link className="text-dark-blue" to="/forgotPassword">
@@ -183,13 +207,8 @@ const LoginForm = () => {
                 method="get"
               />
             </div>
-            
-            
-            
           </div>
-        
           <AuthSwitcher text={t("Sign Up")} to="/register" />
-
         </Form>
       </section>
     </Formik>
