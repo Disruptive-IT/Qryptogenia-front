@@ -6,13 +6,14 @@ import { useAuthContext } from "../../context/AuthContext";
 import { useLoader } from "../../context/LoaderContext";
 import { SchemaRegisterValidate } from "../../helpers/validate/auth.validate";
 import PinVerificationForm from "../../components/auth/PinVerificationForm";
-import logo from "../../assets/imgs/logoForms.png";
-import { IconsLeft } from "../../components/auth/pure/iconsLeft";
+import logo from "../../../public/Logo.png";
 import CompleteRegisterForm from "../../components/auth/CompleteRegisterForm";
 import AuthSwitcher from "../../components/auth/pure/AuthSwitcher";
 import { IoIosMail } from "react-icons/io";
 import axios from "axios";
 import { useTranslation } from "react-i18next";
+import { FaArrowLeft } from "react-icons/fa6";
+import { Link } from "react-router-dom";
 
 /**
  * @Author : Daniel Salazar,   @date 2024-07-29 12:18:52
@@ -90,22 +91,38 @@ const RegisterForm = () => {
 
   const schemaRegister = SchemaRegisterValidate();
   return (
-    <div className="mt-20">
+    <div>
       {!showPinVerification && !showCompleteRegister ? (
         <Formik
           initialValues={{ email: "" }}
           validationSchema={schemaRegister}
           onSubmit={handleSubmit}
         >
-          <section className="w-full  flex flex-col justify-center items-center ">
+          <section className="flex w-full h-screen justify-center items-center bg-gradient-to-r from-dark-blue to-light-blue">
+            <Link
+              to="/"
+              className="text-my-gray flex gap-2 absolute top-1 left-2 w-48 transition-all duration-300 hover:scale-105 hover:underline"
+            >
+              <FaArrowLeft className="text-2xl" />
+              <p>{t("Back Home")}</p>
+            </Link>
             <Form className="flex flex-col flex-nowrap border-2 border-white rounded-xl w-[calc(100%-20px)] md:w-[700px] p-5 shadow-2xl bg-gray-200">
-              <h1 className="text-[30px] font-bold tex-center">
-                <span className="text-[#284B63]">{t("Sign-")}</span>{t("Up")}
-              </h1>
-              <div className="border-t-2 border-gray-300 mb-2"></div>
+              <div className="flex flex-col items-center justify-center sm:mt-14 transition-all duration-500">
+                <img
+                  src={logo}
+                  alt="logo"
+                  className="w-20 h-20 drop-shadow-lg "
+                />
+                <h1 className="text-[30px] font-bold tex-center cursor-default">
+                  <span className="text-[#284B63]">{t("Sign-")}</span>
+                  {t("Up")}
+                </h1>
+              </div>
 
               <span className="fullWidth text-center text-gray-400 mb-3">
-                {t("Enter your email address and you will receive a verification code to complete your registration.")}
+                {t(
+                  "Enter your email address and you will receive a verification code to complete your registration."
+                )}
               </span>
 
               <div className="flex flex-col h-14">
@@ -114,7 +131,7 @@ const RegisterForm = () => {
                     <IoIosMail />
                   </span>
                   <Field
-                    className="rounded-none rounded-e-lg bg-gray-50 border text-gray-900 focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-full text-sm border-gray-300 p-2.5  dark:bg-my-gray dark:border-gray-600 dark:placeholder-gray-400 dark:text-black dark:focus:dark-blue dark:focus:border-blue-500"
+                    className="rounded-none rounded-e-lg bg-gray-50 border text-gray-900 focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-full text-sm border-gray-300 p-2.5  dark:bg-my-gray "
                     type="email"
                     title="Email"
                     name="email"
@@ -152,7 +169,6 @@ const RegisterForm = () => {
       ) : (
         <CompleteRegisterForm email={email} />
       )}
-
     </div>
   );
 };

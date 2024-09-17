@@ -8,10 +8,10 @@ function LayoutHome() {
 
     return (
         <div className="flex flex-col h-sreen  w-full bg-slate-200 ">
-            {location.pathname !== '/login' && location.pathname !== '/register'  && location.pathname !== '/forgotPassword' && location.pathname !== '/pricings' && (
+            {location.pathname !== '/login' && location.pathname !== '/register'  && location.pathname !== '/forgotPassword' && location.pathname !== '/pricings' && location.pathname !== '/recoverPassword' && (
                 <Navbar />
             )}
-            {location.pathname !== '/login' && location.pathname !== '/register'  && location.pathname !== '/forgotPassword' && location.pathname !== '/pricings'  && (
+            {location.pathname !== '/login' && location.pathname !== '/register'  && location.pathname !== '/forgotPassword' && location.pathname !== '/pricings' && location.pathname !== '/recoverPassword' && (
                 <div className='mt-10'>
                     <StepperQr />
                 </div>
@@ -19,7 +19,7 @@ function LayoutHome() {
             <main className=" ">
                 <Outlet />
             </main>
-            {location.pathname !== '/login' && location.pathname !== '/register'  && location.pathname !== '/forgotPassword' && location.pathname !== '/pricings' && (
+            {location.pathname !== '/login' && location.pathname !== '/register'  && location.pathname !== '/forgotPassword' && location.pathname !== '/pricings' && location.pathname !== '/recoverPassword' &&(
                 <Footer/>
 
             )}

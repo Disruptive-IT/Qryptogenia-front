@@ -180,5 +180,14 @@
     "-In": " sesión",
     "Sign-": "Úne",
     "Up": "te",
-    "Back Home": "Volver a Inicio"
+    "Back Home": "Volver a Inicio",
+    "Send Email": "Enviar Correo",
+    "Enter your email adress to send you a password recovery email":"Ingresa tu correo electrónico para enviarte un correo de recuperación de contraseña",
+    "Forgot": "Recuperar",
+    "Please enter a valid e-mail":"Por favor ingrese un correo electrónico válido",
+    "Recover Password": "Restablecer Contraseña",
+    "Set your new password": "Ingresa tu nueva contraseña",
+    "Recover":"Restablecer",
+    "Passwords don't match":"Las contraseñas no coinciden"
+
 }
