@@ -1,12 +1,13 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import { menuFormData } from "./menuData.jsx";
-
+import instance from "../../../../../libs/axios.jsx";
 
 const MenuContext=createContext();
 
 export default function MenuProvider({children}) {
     const [formData, setFormData] = useState({...menuFormData});
-
+    const [isStyleCheck,setIsStyleCheck]=useState(false);
+      
     const handleRestaurantName =(e, handler) => {
         setFormData(prevValues=>({
             ...prevValues,
@@ -14,7 +15,20 @@ export default function MenuProvider({children}) {
         }))
         handler(e);
     };
-    
+
+    const handleTemplate=(e)=>{
+        setFormData(prevValues=>({
+            ...prevValues,
+            imgTemplate:e.target.id
+        }))
+    }
+
+    const templateNull=()=>{
+        setFormData((prevValues)=>({
+            ...prevValues,
+            imgTemplate:null
+        }))
+    }
 
     const handleLogo = (e) => {
         const file = e.target.files[0];
@@ -49,11 +63,27 @@ export default function MenuProvider({children}) {
         }
     };
 
+    const handleMenuColor=(color)=>{
+        if(color){
+            setFormData((prevValues)=>({
+                ...prevValues,
+                colorMenu:color
+            }))
+        }
+    }
+
     function addCategory(newCategory) {
         setFormData((prevValues) => ({
             ...prevValues,
             category: [...prevValues.category, newCategory]
         }));
+    }
+
+    function handleFontFamily(e){
+        setFormData((prevValues)=>({
+            ...prevValues,
+            fontFamily:e.target.value
+        }))
     }
 
     function removeCategory(index) {
@@ -78,18 +108,23 @@ export default function MenuProvider({children}) {
         });
     }
     
-    
     function addProductToCategory(index, newProduct) {
+        console.log('Adding product to category index:', index);
+        console.log('New product:', newProduct);
+    
         setFormData((prevValues) => {
             const updatedCategories = [...prevValues.category];
             updatedCategories[index].products.push(newProduct);
-            
+    
+            console.log('Updated categories in formData:', updatedCategories);
+    
             return {
                 ...prevValues,
                 category: updatedCategories
             };
         });
     }
+    
 
     function removeProductToCategory(index, indexProd) {
         setFormData((prevValues) => {
@@ -107,17 +142,22 @@ export default function MenuProvider({children}) {
 
     const handleProductField = (indexOne, indexTwo, field, value) => {
         setFormData((prevValues) => {
-            const updatedCategories = [...prevValues.category];
+          const updatedCategories = [...prevValues.category];
+
+          if (updatedCategories[indexOne] && updatedCategories[indexOne].products[indexTwo]) {
             updatedCategories[indexOne].products[indexTwo] = {
-                ...updatedCategories[indexOne].products[indexTwo],
-                [field]: value
+              ...updatedCategories[indexOne].products[indexTwo],
+              [field]: value
             };
-            return {
-                ...prevValues,
-                category: updatedCategories
-            };
+          }
+      
+          return {
+            ...prevValues,
+            category: updatedCategories
+          };
         });
-    };
+      };
+      
 
     const handleProductFieldStyle = (categoryIndex, field, value) => {
         setFormData((prevValues) => {
@@ -137,8 +177,7 @@ export default function MenuProvider({children}) {
           };
         });
       };
-      
-
+    
     const handleImgProduct = (indexOne, indexTwo, e) => {
         const file = e.target.files[0];
     
@@ -208,10 +247,16 @@ export default function MenuProvider({children}) {
     return(
         <MenuContext.Provider value={{
             formData,
+            isStyleCheck,
+            setIsStyleCheck,
             setFormData,
             handleRestaurantName,
+            handleTemplate,
+            templateNull,
             handleLogo,
             handleBackgroundCard,
+            handleMenuColor,
+            handleFontFamily,
             handleChangeCategoryName,
             addCategory,
             removeCategory,

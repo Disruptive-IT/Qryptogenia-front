@@ -79,10 +79,10 @@ export default function ChangeFrame({ name, appFormValues, socialFormValues, mus
     const { t } = useTranslation()
     const contentTexts = UseContentTexts();
 
-    console.log(contentName)
-    console.log("ChangeFrame - appFormValues:", appFormValues);
-    console.log("ChangeFrame - socialFormValues:", socialFormValues);
-    console.log("ChangeFrame - musicFormValues:", musicFormValues);
+    // console.log(contentName)
+    // console.log("ChangeFrame - appFormValues:", appFormValues);
+    // console.log("ChangeFrame - socialFormValues:", socialFormValues);
+    // console.log("ChangeFrame - musicFormValues:", musicFormValues);
 
     React.useEffect(() => {
         if (isSmallScreen || isSpecialContent) {

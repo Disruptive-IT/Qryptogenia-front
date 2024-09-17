@@ -62,7 +62,7 @@ const AppContent = () => {
         setTextChipColor,
         setQrImage
     } = useQr();
-    const {formData}=UseMenu();
+    const {formData,secondFormData,isStyleCheck,setIsStyleCheck}=UseMenu();
     const [valuesLoaded, setValuesLoaded] = useState(false);
     const [isModalOpen, setIsModalOpen] = useState(false);
     setCurrentContentType(contentName);

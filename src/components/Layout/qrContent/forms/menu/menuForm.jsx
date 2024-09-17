@@ -1,53 +1,78 @@
 import { FieldArray, Formik, useFormik,Field } from 'formik';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { UseMenu } from './menuContext';
 import GradientColorPicker from 'react-gcolor-picker';
+import { motion } from "framer-motion";
 import EjectIcon from '@mui/icons-material/Eject';
 import DeleteIcon from '@mui/icons-material/Delete';
+import CancelIcon from '@mui/icons-material/Cancel';
 import {Accordion,AccordionItem} from '@nextui-org/accordion'
 import './menu.css'
+import instance from '../../../../../libs/axios';
 
 function MenuForm(){
     const {formData,handleRestaurantName,handleLogo,handleBackgroundCard,addCategory,
         addProductToCategory,removeCategory,removeProductToCategory,handleProductName,handleProductDescription,
         handleProductTop,handleProductPrice,handleChangeCategoryName,handleImgProduct,handleBackgroundProduct,
         handleColorNameProduct,
+        handleFontFamily,
+        handleTemplate,
+        templateNull,
         handleColorDescriptionProduct,
-        handleColorPriceProduct
+        handleColorPriceProduct,
+        isStyleCheck,setIsStyleCheck,
+        handleMenuColor
     }=UseMenu();
+
 
     const[activeCategory,setActiveCategory]=useState(0);
     const[activeProduct,setActiveProduct]=useState(0);
     const[initialValues,setInitialValues]=useState(formData);
     const[showBackgroundPicker,setShowBackgroundPicker]=useState(false);
+    const[showMenuPicker,setShowMenuPicker]=useState(false);
     const[showBackCategoryPicker,setShowBackCategoryPicker]=useState(false);
     const[showNamePicker,setShowNamePicker]=useState(false);
     const[showDescriptionPicker,setShowDescriptionPicker]=useState(false);
     const[showPricePicker,setShowPricePicker]=useState(false);
-    const[isStyleCheck,setIsStyleCheck]=useState(false);
+    const[fonts,setFonts]=useState([]);
+    const[templates,setTemplates]=useState([]);
 
+    const [currentTemplate, setCurrentTemplate] = useState(0);
+    const [indexTemplate,setIndexTemplate]=useState(null);
 
-
-    const handleHideCategory = (index) => {
-        setHideCategory(prevState => ({
-          ...prevState,
-          [index]: !prevState[index]
-        }));
-      };
       console.log(formData);
       console.log("categoria ",activeCategory);
       console.log("producto ",activeProduct);
+      console.log("fonts",fonts);
+      console.log("templates: ",templates);
 
-      const handleHideProduct = (index, indexProd) => {
-        setHideProduct(prevState => ({
-          ...prevState,
-          [index]: {
-            ...prevState[index],
-            [indexProd]: !prevState[index]?.[indexProd]
-          }
-        }));
+    const getFonts=async()=>{
+        try{
+            const getFontsArray=await instance.get('getFonts');
+            setFonts(getFontsArray.data);
+            return getFontsArray.data;
+        }catch(error){
+            console.error("error fonts request: ",error.message);
+        }
+    }
+
+    const getTemplates=async()=>{
+        try{
+            const getTemplatesArray=await instance.get('getTemplates');
+            setTemplates(getTemplatesArray.data);
+            return getTemplatesArray.data;
+        }catch(error){
+            console.error("error fonts request: ",error.message);
+        }
+    }
+
+      const handlePrev = () => {
+        setCurrentTemplate((prevIndex) => (prevIndex > 0 ? prevIndex - 1 : templates.length - 1));
       };
       
+      const handleNext = () => {
+        setCurrentTemplate((prevIndex) => (prevIndex < templates.length - 1 ? prevIndex + 1 : 0));
+      };
 
     const handleActiveCategory = (index) => {
         setActiveCategory(index);
@@ -59,6 +84,10 @@ function MenuForm(){
 
     const handleShowBackgroundPicker=(value)=>{
         setShowBackgroundPicker(value)
+    }
+
+    const handleShowMenuPicker=(value)=>{
+        setShowMenuPicker(value)
     }
 
     const handleShowBackCategoryPicker=(value)=>{
@@ -76,9 +105,7 @@ function MenuForm(){
     const handleShowPricePicker=(value)=>{
         setShowPricePicker(value)
     }
-
-
-
+    
     const validation=(values)=>{
         const errors={};
 
@@ -114,8 +141,16 @@ function MenuForm(){
         onsubmit:(values,{setSubmitting})=>{
             console.log(values);
         }
-});
+    });
 
+    useEffect(()=>{
+      const executeFunctions=async()=>{
+        await getFonts();
+        await getTemplates();
+      }
+
+      executeFunctions();
+    },[])
 
 return (
     <div className='p-4'>
@@ -141,46 +176,91 @@ return (
                     </div>
 
                     {/* Sección del Color de Fondo */}
-                    <div className='flex flex-col my-6'>
-                        <div className='flex flex-row items-center p-2'>
-                            <button className='mx-5 my-2 px-4 py-2 bg-gray-200 rounded' type='button'>
-                                Background <button type='button'><EjectIcon /></button>
-                            </button>
-                            <div 
-                                className='w-20 h-10 border border-gray-300 rounded cursor-pointer'
-                                onClick={()=>handleShowBackgroundPicker(!showBackgroundPicker)}
-                                style={{backgroundColor:formData.backgroundCard || "#000"}}
-                            ></div>
-                            {showBackgroundPicker && (
-                                <div className='colorPickerr'>
-                                    <GradientColorPicker
-                                        enableAlpha
-                                        disableHueSlider={false}
-                                        disableAlphaSlider={false}
-                                        disableInput={false}
-                                        disableHexInput={false}
-                                        disableRgbInput={false}
-                                        disableAlphaInput={false}
-                                        presetColors={[]}
-                                        gradient={true}
-                                        color={formik.values.backgroundCard}
-                                        value={formik.values.backgroundCard}
-                                        onChange={(color) => {
-                                            handleBackgroundCard(color);
-                                            formik.setFieldValue("backgroundCard",color);
-                                        }}
-                                    />
-                                </div>
-                            )}
+                    <div className="flex flex-col md:flex-row justify-start items-center space-x-6 p-4">
+                    {/* Background Section */}
+                    <div className="flex items-center space-x-4 mx-3">
+                    <label htmlFor="">Background color</label>
+                    <button></button>
+                      <div 
+                        className="w-10 h-10 border border-gray-300 rounded cursor-pointer"
+                        onClick={() =>indexTemplate==null && (handleShowBackgroundPicker(!showBackgroundPicker))}
+                        aria-disabled={indexTemplate!=null ? false:true}
+                        style={{ backgroundColor: formData.backgroundCard || "#000" }}
+                      />
+                      {showBackgroundPicker && (
+                        <div className="colorPickerr z-50">
+                          <GradientColorPicker
+                            enableAlpha
+                            disableHueSlider={false}
+                            disableAlphaSlider={false}
+                            disableInput={false}
+                            disableHexInput={false}
+                            disableRgbInput={false}
+                            disableAlphaInput={false}
+                            presetColors={[]}
+                            gradient={true}
+                            color={formik.values.backgroundCard}
+                            value={formik.values.backgroundCard}
+                            onChange={(color) => {
+                              handleBackgroundCard(color);
+                              formik.setFieldValue("backgroundCard", color);
+                            }}
+                          />
                         </div>
-                        <div className='flex w-full justify-around items-start mt-4'>
-                            <h1 className='w-1/5 h-auto border-2 border-black p-4 text-center'>Carta</h1>
-                            <h1 className='w-1/5 h-auto border-2 border-black p-4 text-center'>Carta</h1>
-                            <h1 className='w-1/5 h-auto border-2 border-black p-4 text-center'>Carta</h1>
-                            <h1 className='w-1/5 h-auto border-2 border-black p-4 text-center'>Carta</h1>
-                        </div>
+                      )}
                     </div>
 
+                    {/* Menu Color Section */}
+                    <div className="flex items-center space-x-4">
+                      <label className="text-[17px]">Color menu:</label>
+                      <div 
+                        className="w-10 h-10 border border-gray-300 rounded cursor-pointer"
+                        onClick={() => handleShowMenuPicker(!showMenuPicker)}
+                        style={{ backgroundColor: formData.colorMenu || "#000" }}
+                      />
+                      {showMenuPicker && (
+                        <div className="menuPicker z-50">
+                          <GradientColorPicker
+                            enableAlpha
+                            disableHueSlider={false}
+                            disableAlphaSlider={false}
+                            disableInput={false}
+                            disableHexInput={false}
+                            disableRgbInput={false}
+                            disableAlphaInput={false}
+                            presetColors={[]}
+                            gradient={true}
+                            value={formData.colorMenu}
+                            color={formData.colorMenu}
+                            onChange={(color) => handleMenuColor(color)}
+                          />
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                  <Accordion>
+                    <AccordionItem className='bg-gray-300 px-3 rounded-[10px] my-3' aria-label='Background Templates' key={'1'} title='Background templates'>
+                    <div className='flex flex-col my-6'>
+                    <div className="relative w-full overflow-hidden mt-4">
+                      <div
+                        className="flex transition-transform duration-500 ease-in-out w-full p-4"
+                        style={{ transform: `translateX(-${currentTemplate * 100}%)` }}
+                      >
+                        <div onClick={()=>{templateNull(); setIndexTemplate(null)}} className={`w-1/5 px-2 flex-shrink-0 flex align-middle justify-center bg-white rounded-lg ${indexTemplate==null ? 'border-[2px] border-black':''}`}>
+                            <CancelIcon sx={{width:80,height:80,marginTop:5}} id='nullTemplate' className='text-red-600 text-center' />
+                        </div>
+                        {templates?.length > 0 && templates.map((element, index) => (
+                          <motion.div whileHover={{translateY:'-1px',transition:'.4s'}}  key={index} className="w-1/5 px-2 flex-shrink-0">
+                            <img onClick={(e)=>{handleTemplate(e); setIndexTemplate(index)}} id={element.id} className={`w-full h-full object-cover rounded-lg hover:shadow-md hover:shadow-black ${indexTemplate==index ? 'brightness-50':''}`} src={element.image} alt="imagen" />
+                          </motion.div>
+                        ))}
+                      </div>
+                      <button onClick={handlePrev} type='button' className="absolute left-0 top-1/2 transform -translate-y-1/2 bg-gray-700 text-white px-4 py-2 opacity-75 hover:opacity-100">‹</button>
+                      <button onClick={handleNext} type='button' className="absolute right-0 top-1/2 transform -translate-y-1/2 bg-gray-700 text-white px-4 py-2 opacity-75 hover:opacity-100">›</button>
+                      </div>
+                    </div>
+                    </AccordionItem>
+                  </Accordion>
                     {/* Sección de Personalización de la Tarjeta de Producto */}
                     <div className='flex flex-col mb-6'>
                         <h1 className='mb-4 text-lg font-semibold'>Customize your product card</h1>
@@ -189,9 +269,9 @@ return (
                             <div className='flex flex-col items-center'>
                                 <label className='my-2' htmlFor="">Background</label>
                                 <div 
-                                    className='w-20 h-10 border border-gray-300 rounded cursor-pointer'
+                                    className='w-10 h-10 border-2 border-gray-300 rounded  cursor-pointer'
                                     onClick={()=>handleShowBackCategoryPicker(!showBackCategoryPicker)}
-                                    style={{ backgroundColor: formData.category?.[activeCategory]?.products[0]?.backgroundProductCard || "#000" }}
+                                    style={{ backgroundColor:formData.category?.[activeCategory]?.products[0]?.backgroundProductCard || "#000" }}
                                 ></div>
                                 {showBackCategoryPicker && (
                                     <div className='colorPicker'>
@@ -206,11 +286,12 @@ return (
                                     presetColors={[]}
                                     gradient={true}
                                     color={formData.category?.[activeCategory]?.products[0]?.backgroundProductCard || '#FFFFFF'}
+                                    value={formData.category?.[activeCategory]?.products[0]?.backgroundProductCard || '#FFFFFF'}
                                     onChange={(color) => {
                                         if (activeCategory !== null) {
-                                            handleBackgroundProduct(activeCategory, color);
-                                        }
-                                    }}
+                                          handleBackgroundProduct(activeCategory, color);
+                                      }
+                                      }}
                                 />
                                     </div>
                                 )}
@@ -220,7 +301,7 @@ return (
                             <div className='flex flex-col items-center'>
                                 <label className='my-2' htmlFor="">Name-Color</label>
                                 <div 
-                                    className='w-20 h-10 border border-gray-300 rounded cursor-pointer'
+                                    className='w-10 h-10 border border-gray-300 rounded cursor-pointer'
                                     onClick={()=>handleShowNamePicker(!showNamePicker)}
                                     style={{ backgroundColor:formData.category?.[activeCategory]?.products[0]?.colorName || '#000' }}
                                 ></div>
@@ -237,7 +318,8 @@ return (
                                             presetColors={[]}
                                             gradient
                                             color={formData.category?.[activeCategory]?.products?.colorName || "#FFFFF"}
-                                            onChange={(color) =>handleColorNameProduct(activeCategory,color)}
+                                            value={formData.category?.[activeCategory]?.products?.colorName || "#FFFFF"}
+                                            onChange={(color) =>{handleColorNameProduct(activeCategory,color)}}
                                         />
                                     </div>
                                 )}
@@ -247,7 +329,7 @@ return (
                             <div className='flex flex-col items-center'>
                                 <label className='my-2' htmlFor="">Description-Color</label>
                                 <div 
-                                    className='w-20 h-10 border border-gray-300 rounded cursor-pointer'
+                                    className='w-10 h-10 border border-gray-300 rounded cursor-pointer'
                                     onClick={()=>handleShowDescriptionPicker(!showDescriptionPicker)}
                                     style={{ backgroundColor:formData.category?.[activeCategory]?.products[0]?.colorDescription || '#000' }}
                                 ></div>
@@ -264,7 +346,8 @@ return (
                                             presetColors={[]}
                                             gradient={true}
                                             color={formData.category?.[activeCategory]?.products?.colorDescription || "#FFFFF"}
-                                            onChange={(color) =>handleColorDescriptionProduct(activeCategory,color)}
+                                            value={formData.category?.[activeCategory]?.products?.colorDescription || "#FFFFF"}
+                                            onChange={(color) =>{handleColorDescriptionProduct(activeCategory,color)}}
                                         />
                                     </div>
                                 )}
@@ -274,7 +357,7 @@ return (
                             <div className='flex flex-col items-center'>
                                 <label className='my-2' htmlFor="">Price-Color</label>
                                 <div 
-                                    className='w-20 h-10 border border-gray-300 rounded cursor-pointer'
+                                    className='w-10 h-10 border border-gray-300 rounded cursor-pointer'
                                     onClick={()=>handleShowPricePicker(!showPricePicker)}
                                     style={{ backgroundColor:formData.category?.[activeCategory]?.products[0]?.colorPrice || '#000' }}
                                 ></div>
@@ -291,11 +374,21 @@ return (
                                             presetColors={[]}
                                             gradient={true}
                                             color={formData.category?.[activeCategory]?.products?.colorPrice || "#FFFFF"}
-                                            onChange={(color) =>handleColorPriceProduct(activeCategory,color)}
+                                            value={formData.category?.[activeCategory]?.products?.colorPrice || "#FFFFF"}
+                                            onChange={(color) =>{ handleColorPriceProduct(activeCategory,color)}}
                                         />
                                     </div>
                                 )}
                             </div>
+                        </div>
+                        <div className='my-3 mx-2'>
+                          <select className='p-4 rounded-[10px] bg-gray-300' name="fontFamily" id="" onChange={(e)=>handleFontFamily(e)}>
+                          {fonts?.map((item, index) => (
+                            <option style={{ fontFamily: item.fontName }} key={index} id={item.id} value={item.id}>
+                              {item.fontName}
+                            </option>
+                          ))}
+                          </select>
                         </div>
                     </div>
 
@@ -307,6 +400,10 @@ return (
 <FieldArray name="category">
   {({ remove, push }) => (
     <div>
+      <div className='flex flex-row py-1 justify-start mx-1 mb-2'>
+        <input onClick={()=>setIsStyleCheck(!isStyleCheck)} className='mr-4 p-3 text-blue-500 text-[16px]' type="checkbox" name='productStyle' id='productStyle' />
+        <label htmlFor="">Apply a same style on all categories</label>
+      </div>
       {/* Botón para agregar nueva categoría */}
       <button
         onClick={() => {
@@ -358,7 +455,7 @@ return (
                   </label>
                     <button
                       onClick={() => {
-                        if (index !== 0) {
+                        if (values.category.length>1 && formData.category.length>1) {
                           remove(index);
                           removeCategory(index);
                         }
@@ -437,7 +534,7 @@ return (
                                   {/* Botón para eliminar producto, visible solo si hay más de uno */}
                                   <button
                                     onClick={() => {
-                                      if (productIndex !== 0) {
+                                      if (values.category[index].products.length>1 && formData.category[index].products.length>1) {
                                         handleActiveProduct(productIndex - 1);
                                         removeProduct(productIndex);
                                         removeProductToCategory(index, productIndex);

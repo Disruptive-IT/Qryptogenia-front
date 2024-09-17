@@ -22,9 +22,8 @@ import { WebLinkPhoneMusic } from "./socialMedia/stylePhoneMusic";
 import MenuForm from "./forms/menu/menuForm";
 import FormWifi from "./forms/Wifi";
 import WebLinkMenuFood from "./socialMedia/stylePhoneMenu";
-import { UseMenu } from "./forms/menu/menuContext";
 export const QrContentSwitch = ({contentName, onFormChangeApp, onFormChange, onFormChangeMusic, onSocialFormSubmit, location, appFormValues, musicFormValues, socialFormValues}) => {
-    const {formData}=UseMenu();
+
     let qrContent;
     switch (contentName) {
         case "app store":

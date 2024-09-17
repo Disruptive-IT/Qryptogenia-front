@@ -10,7 +10,12 @@ input{
 .colorPickerr {
     position: absolute;
     width: 6%;
-    transform: translateX(300%);
+    transform: translateX(220%);
+}
+.menuPicker{
+  position:absolute;
+  width:6%;
+  transform:translateX(150%);
 }
 .scroll-container::-webkit-scrollbar {
     width: 12px;

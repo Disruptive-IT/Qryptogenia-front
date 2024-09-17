@@ -3,15 +3,18 @@ import Tab from '@mui/material/Tab';
 import Tabs from '@mui/material/Tabs';
 import StarIcon from '@mui/icons-material/Star';
 import Typography from '@mui/material/Typography';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import instance from '../../../../libs/axios';
 import './../forms/menu/menu.css';
 import { createTheme, Modal, ThemeProvider } from '@mui/material';
-import { ConstructionOutlined } from '@mui/icons-material';
+import { Form } from 'formik';
 
 export default function WebLinkMenuFood({ FormValues, ContentName }) {
   const [tabValue, setTabValue] = useState(0);
   const [openModal,setOpenModal]=useState(false);
   const [selectedIndex,setSelectedIndex]=useState(null);
+  const [fontFamily,setFontFamily]=useState({});
+  const [templateUrl,setTemplateUrl]=useState({});
   const [activeprod,setActiveprod]=useState(0);
   const [activeCategory,setActiveCategory]=useState(0);
 
@@ -31,8 +34,27 @@ export default function WebLinkMenuFood({ FormValues, ContentName }) {
     }
     setTabValue(newValue);
   };
-  
 
+  const getNameFont=async(id)=>{
+    try{
+        const getFontsArray=await instance.get(`/getFonts/${id}`);
+       setFontFamily(getFontsArray.data);
+        return getFontsArray.data;
+    }catch(error){
+        console.error("error fonts request: ",error.message);
+    }
+}
+
+const getLinkTemplate=async(id)=>{
+    try{
+        const getTemplatesArray=await instance.get(`/getTemplates/${id}`);
+        setTemplateUrl(getTemplatesArray.data);
+        return getTemplatesArray.data;
+    }catch(error){
+        console.error("error fonts request: ",error.message);
+    }
+}
+  
   const topProducts=FormValues.category.flatMap(category=>category.products.filter(product=>product.top==true));
   console.log(topProducts);
 
@@ -55,15 +77,17 @@ export default function WebLinkMenuFood({ FormValues, ContentName }) {
   console.log("catgeoria activa: ",activeCategory);
 
   const theme = createTheme({
-    components: {
-      MuiTabs: {
-        styleOverrides: {
-          scrollButtons: {
-            color: 'blue',
-          },
-        },
+    palette:{
+      primary:{
+        main:'#3f50b5'
       },
+      secondary:{
+        main:FormValues.colorMenu
+      }
     },
+    typography:{
+      fontFamily:fontFamily?.[0]?.fontFamily || 'Arial, sans-serif'
+    }
   });
 
   function TabPanel(props) {
@@ -87,13 +111,34 @@ export default function WebLinkMenuFood({ FormValues, ContentName }) {
     );
   }
 
+  useEffect(()=>{
+    if(FormValues.imgTemplate!=null){
+      getLinkTemplate(FormValues.imgTemplate);
+    }
+  },[FormValues.imgTemplate])
+
+  useEffect(()=>{
+    getNameFont(FormValues.fontFamily);
+    console.log(fontFamily);
+  },[FormValues.fontFamily]);
+
   return (
-    <ThemeProvider theme={theme}>
-      <div
-        className="absolute left-0 top-0 w-full h-full overflow-y-auto p-4"
-        id="main-container"
-        style={{ backgroundColor: FormValues.backgroundCard }}
-      >
+      <div className='parent-container absolute left-0 w-full h-full'>
+        <div
+          className="relative left-0 top-0 w-full h-full overflow-y-auto p-4"
+          id="main-container"
+          style={{
+            backgroundColor: FormValues.imgTemplate!==null ? 'rgba(255, 255, 255, 0.8)': FormValues.backgroundCard,
+            backgroundImage: FormValues.imgTemplate == null ? '' : `url(${templateUrl?.image})`,
+            backgroundSize: 'cover',
+            backgroundPosition: 'center',
+            backgroundRepeat: 'no-repeat',
+            position: 'relative',
+            top: 0,
+            width: '100%',
+            height: '100%',
+          }}
+        >
         <div
           className="w-[60%] p-2 rounded-[10px] mx-auto my-6 bg-slate-500 flex justify-center items-center"
           id="logo-container"
@@ -109,23 +154,21 @@ export default function WebLinkMenuFood({ FormValues, ContentName }) {
           className="w-[80%] max-w-[84%] bg-slate-100 h-auto p-4 mx-auto my-4 rounded-md shadow-sm"
           id="name-container"
         >
-          <h1 className="text-center font-semibold text-[25px] break-words">
+          <h1 style={{fontFamily:fontFamily?.fontName}} className="text-center font-semibold text-[25px] break-words">
             {FormValues.restaurantName}
           </h1>
         </div>
-
-        <h1 className="text-center font-semibold text-[25px] text-white">
-          MENU
-        </h1>
-
         <div
-          className="w-[100%] max-w-[100%] bg-transparent h-auto py-2 my-4 mx-1 rounded-md shadow-sm scroll-container"
+          className="w-[100%] max-w-[100%] bg-transparent h-auto py-2 my-3 mx-1 rounded-md shadow-sm scroll-container"
           id="categories-container"
         >
+          <ThemeProvider theme={theme}>
           <Box sx={{ width: '100%', typography: 'body1' }}>
             <Tabs
               variant="scrollable"
               scrollButtons="auto"
+              textColor='secondary'
+              indicatorColor='secondary'
               value={tabValue}
               onChange={handleTabValue}
             >
@@ -157,8 +200,8 @@ export default function WebLinkMenuFood({ FormValues, ContentName }) {
           <div style={{backgroundColor:element.backgroundProductCard}} className='w-[60%] h-full bg-red-300 px-1 py-1  flex flex-col self-center'>
             <span className='flex w-full items-end justify-end hover:cursor-pointer'>+</span>
             <div className='w-full  h-[80%] bg-transparent flex flex-col justify-evenly'>
-              <h1 style={{color: element.colorName}} className='text-[17px] text-center break-words font-bold'>{element.productName=='' ? 'Product name' : element.productName}</h1>
-              <h1 style={{color: element.colorPrice}} className='text-center break-words font-bold'>{element.price==null ? 'price':element.price+'$'}</h1>
+              <h1 style={{color: element.colorName,fontFamily:fontFamily?.fontName}} className='text-[17px] text-center break-words font-bold'>{element.productName=='' ? 'Product name' : element.productName}</h1>
+              <h1 style={{color: element.colorPrice,fontFamily:fontFamily?.fontName}} className='text-center break-words font-bold'>{element.price==null ? 'price':element.price+'$'}</h1>
             </div>
             <span className='text-end'>{element.top ? <StarIcon className='text-yellow-300 text-2xl' /> : ''}</span>
           </div>
@@ -179,7 +222,7 @@ export default function WebLinkMenuFood({ FormValues, ContentName }) {
           </div>
           <div style={{backgroundColor:element.backgroundProductCard}} className='w-[60%] h-full bg-red-300 px-1 py-1  flex flex-col self-center'>
             <span className='flex w-full items-end justify-end hover:cursor-pointer'>+</span>
-            <div className='w-full  h-[80%] bg-transparent flex flex-col justify-evenly'>
+            <div style={{fontFamily:fontFamily?.fontName || 'sans-serif'}} className='w-full  h-[80%] bg-transparent flex flex-col justify-evenly'>
               <h1 style={{color: element.colorName}} className='text-[17px] text-center break-words font-bold'>{element.productName === '' ? 'Product name' : element.productName}</h1>
               <h1 style={{color: element.colorPrice}} className='text-center break-words font-bold'>{element.price == null ? 'price' : element.price + '$'}</h1>
             </div>
@@ -194,6 +237,7 @@ export default function WebLinkMenuFood({ FormValues, ContentName }) {
 </TabPanel>
 
           </Box>
+          </ThemeProvider>
         </div>
         <div className={`absolute w-full max-w-full max-h-full h-full bg-[rgba(0,0,0,0.5)] inset-0 text-white ${openModal ? '' : 'hidden'}`}>
   <button onClick={() => { handleCloseModal(); setActiveprod(0); }} className='m-9 float-end'>
@@ -238,6 +282,6 @@ export default function WebLinkMenuFood({ FormValues, ContentName }) {
 </div>
 
       </div>
-    </ThemeProvider>
+      </div>
   );
 }
