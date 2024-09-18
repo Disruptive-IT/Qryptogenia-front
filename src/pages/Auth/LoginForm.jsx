@@ -97,22 +97,22 @@ const LoginForm = () => {
     >
       <section className="flex w-full h-screen justify-center items-center bg-gradient-to-r from-dark-blue to-light-blue ">
 
-<Link to="/" className="text-my-gray flex gap-2 absolute top-1 left-2 w-48 transition-all duration-300 hover:scale-105 hover:underline">
-  <FaArrowLeft className="text-2xl"/>
-  <p>{t("Back Home")}</p>
-</Link>
 
-        <Form className="flex flex-col flex-nowrap justify-between  border-white  w-[90%] h-[90%] md:w-[60%] lg:w-[40%] md:h-full rounded-lg md:rounded-none p-5 shadow-3xl bg-slate-200 transition-all duration-1000 ">
-          <div className="flex flex-col items-center justify-center sm:mt-14 transition-all duration-500">
-            <img src={logo} alt="logo" className="w-20 h-20 drop-shadow-lg " />
-            <h1 className="text-[30px] font-bold tex-center cursor-default">
-              <span className="text-dark-blue">{t("Sign")}</span>
-              {t("-In")}
-            </h1>
-          </div>         
+        <Link to="/" className="text-my-gray flex gap-2 absolute top-1 left-2 w-48 transition-all duration-300 hover:scale-105 hover:underline">
+          <FaArrowLeft className="text-2xl"/>
+          <p>{t("Back Home")}</p>
+        </Link>
+        <Form className="flex flex-col flex-nowrap justify-center  border-white  w-[90%] h-[90%] md:w-[60%] lg:w-[40%] md:h-full rounded-lg md:rounded-none p-5 shadow-3xl bg-slate-200 transition-all duration-1000 ">
           {/* <div className="border-t-2 border-gray-300 mb-2"></div> */}
           <div className="flex flex-nowrap">
             <div className="flex flex-col gap-2 justify-center items-center w-full tansition-all duration-500">
+              <div className="flex flex-col items-center justify-center sm:mt-14 transition-all duration-500">
+                <img src={logo} alt="logo" className="w-20 h-20 drop-shadow-lg " />
+                <h1 className="text-[30px] font-bold tex-center cursor-default">
+                  <span className="text-dark-blue">{t("Sign")}</span>
+                  {t("-In")}
+                </h1>
+              </div>         
               <span className="w-full text-center text-gray-400 cursor-default">
                 {t("Enter your details to access")}
               </span>
