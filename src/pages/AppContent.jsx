@@ -20,11 +20,13 @@ import { OptionBarTwo } from '../components/Layout/optionBar';
 import { useQr } from '../context/QrContext';
 import { useTranslation } from 'react-i18next';
 import { UseMenu } from '../components/Layout/qrContent/forms/menu/menuContext';
+import { menuFormData } from '../components/Layout/qrContent/forms/menu/menuData';
 Modal.setAppElement('#root');
 
 const initialAppFormValues = Valuesjson.appFormValues;
 const initialSocialFormValues = Valuesjson.socialFormValues;
 const initialMusicFormValues = Valuesjson.musicFormValues;
+const initialMenuValues=menuFormData;
 
 const AppContent = () => {
     const { contentName, id } = useParams(); // Asegúrate de que qrId está presente en la ruta
@@ -42,6 +44,8 @@ const AppContent = () => {
         appFormValues,
         setAppFormValues,
         musicFormValues,
+        menuFormValues,
+        setMenuFormValues,
         setMusicFormValues,
         socialFormValues,
         setSocialFormValues,
@@ -62,7 +66,7 @@ const AppContent = () => {
         setTextChipColor,
         setQrImage
     } = useQr();
-    const {formData,secondFormData,isStyleCheck,setIsStyleCheck}=UseMenu();
+    const {formData,setFormData}=UseMenu();
     const [valuesLoaded, setValuesLoaded] = useState(false);
     const [isModalOpen, setIsModalOpen] = useState(false);
     setCurrentContentType(contentName);
@@ -147,13 +151,14 @@ const AppContent = () => {
                 setAppFormValues(initialAppFormValues);
                 setSocialFormValues(initialSocialFormValues);
                 setMusicFormValues(initialMusicFormValues);
+                setFormData(initialMenuValues);
                 setValuesLoaded(true); // Indicar que los valores se han cargado
             }
             setActiveStep(1);
         };
     
         fetchQRData();
-    }, [location, id, setActiveStep, setAppFormValues, setSocialFormValues, setMusicFormValues]);
+    }, [location, id, setActiveStep, setAppFormValues, setSocialFormValues, setMusicFormValues,setFormData]);
 
     const content = contentTexts[contentName.toLowerCase().replace(/\s+/g, '-')];
     const name = contentName.replace(/-/g, ' ');
@@ -209,6 +214,7 @@ const AppContent = () => {
                             appFormValues={appFormValues}
                             socialFormValues={socialFormValues}
                             musicFormValues={musicFormValues}
+                            menuFormValues={formData}
                         />
                     </div>
                     <div className='col-span-1 lg:col-span-2'>

@@ -163,23 +163,44 @@ return (
         >
             {({ values }) => (
                 <form action="" className='w-full h-auto flex flex-col'>
-                    {/* Sección de Nombre del Restaurante y Logo */}
-                    <div className='flex flex-row mb-6'>
-                        <div className='flex flex-col p-4 mx-4'>
-                            <label className='my-1' htmlFor="restaurantName">Restaurant Name</label>
-                            <input onChange={(e)=>handleRestaurantName(e,formik.handleChange)} className='p-2 border rounded' type="text" name='restaurantName' id='restaurantName' />
-                        </div>
-                        <div className='flex flex-col p-4 mx-4'>
-                            <label className='mb-2' htmlFor="restaurantLogo">Logo</label>
-                            <input onChange={(e)=>handleLogo(e,formik.handleChange)} className='p-2 border rounded' type="file" name="restaurantLogo" id="restaurantLogo"/>
-                        </div>
-                    </div>
+            {/* Sección de Nombre del Restaurante y Logo */}
+            <div className="flex flex-row mb-6">
+              {/* Contenedor del input para el nombre del restaurante */}
+              <div className="flex flex-col p-4 mx-4">
+                <label className="my-1" htmlFor="restaurantName">Restaurant Name</label>
+                <input
+                  onChange={(e) => handleRestaurantName(e, formik.handleChange)}
+                  className="p-2 border rounded"
+                  type="text"
+                  name="restaurantName"
+                  id="restaurantName"
+                />
+              </div>
+
+              {/* Contenedor del botón para subir el logo */}
+              <div className="flex flex-col justify-center items-center p-4 mt-7 ml-6">
+                <label
+                  htmlFor="restaurantLogo"
+                  className="cursor-pointer bg-light-blue hover:bg-dark-blue text-white py-2 px-4 rounded-md"
+                >
+                  Subir logo
+                </label>
+                <input
+                  onChange={(e) => handleLogo(e, formik.handleChange)}
+                  className="hidden"
+                  type="file"
+                  name="restaurantLogo"
+                  id="restaurantLogo"
+                />
+              </div>
+            </div>
+
 
                     {/* Sección del Color de Fondo */}
                     <div className="flex flex-col md:flex-row justify-start items-center space-x-6 p-4">
                     {/* Background Section */}
                     <div className="flex items-center space-x-4 mx-3">
-                    <label htmlFor="">Background color</label>
+                    <label htmlFor="">Background color:</label>
                     <button></button>
                       <div 
                         className="w-10 h-10 border border-gray-300 rounded cursor-pointer"
@@ -212,7 +233,7 @@ return (
 
                     {/* Menu Color Section */}
                     <div className="flex items-center space-x-4">
-                      <label className="text-[17px]">Color menu:</label>
+                      <label className="text-[17px]">Color navbar:</label>
                       <div 
                         className="w-10 h-10 border border-gray-300 rounded cursor-pointer"
                         onClick={() => handleShowMenuPicker(!showMenuPicker)}
@@ -240,8 +261,8 @@ return (
                   </div>
                   <Accordion>
                     <AccordionItem className='bg-gray-300 px-3 rounded-[10px] my-3' aria-label='Background Templates' key={'1'} title='Background templates'>
-                    <div className='flex flex-col my-6'>
-                    <div className="relative w-full overflow-hidden mt-4">
+                    <div className='flex flex-col my-2'>
+                    <div className="relative w-full overflow-hidden">
                       <div
                         className="flex transition-transform duration-500 ease-in-out w-full p-4"
                         style={{ transform: `translateX(-${currentTemplate * 100}%)` }}
@@ -261,9 +282,19 @@ return (
                     </div>
                     </AccordionItem>
                   </Accordion>
+                  <div className='my-3 mb-4 flex flex-row justify-start align-middle'>
+                          <h1 className='mt-3 text-lg font-semibold mr-6'>Font style:</h1>
+                          <select className='p-4 rounded-[10px] bg-gray-300' name="fontFamily" id="" onChange={(e)=>handleFontFamily(e)}>
+                          {fonts?.map((item, index) => (
+                            <option style={{ fontFamily: item.fontName }} key={index} id={item.id} value={item.id}>
+                              {item.fontName}
+                            </option>
+                          ))}
+                          </select>
+                  </div>
                     {/* Sección de Personalización de la Tarjeta de Producto */}
-                    <div className='flex flex-col mb-6'>
-                        <h1 className='mb-4 text-lg font-semibold'>Customize your product card</h1>
+                    <div className='flex flex-col mb-6 '>
+                        <h1 className='mb-2 text-lg font-semibold'>Customize your product card</h1>
                         <div className='flex flex-row w-[80%] p-4 justify-around'>
                             {/* Color de Fondo */}
                             <div className='flex flex-col items-center'>
@@ -381,15 +412,6 @@ return (
                                 )}
                             </div>
                         </div>
-                        <div className='my-3 mx-2'>
-                          <select className='p-4 rounded-[10px] bg-gray-300' name="fontFamily" id="" onChange={(e)=>handleFontFamily(e)}>
-                          {fonts?.map((item, index) => (
-                            <option style={{ fontFamily: item.fontName }} key={index} id={item.id} value={item.id}>
-                              {item.fontName}
-                            </option>
-                          ))}
-                          </select>
-                        </div>
                     </div>
 
                     {/* Sección para Agregar Nueva Categoría y Productos */}
@@ -400,10 +422,10 @@ return (
 <FieldArray name="category">
   {({ remove, push }) => (
     <div>
-      <div className='flex flex-row py-1 justify-start mx-1 mb-2'>
+      {/* <div className='flex flex-row py-1 justify-start mx-1 mb-2'>
         <input onClick={()=>setIsStyleCheck(!isStyleCheck)} className='mr-4 p-3 text-blue-500 text-[16px]' type="checkbox" name='productStyle' id='productStyle' />
         <label htmlFor="">Apply a same style on all categories</label>
-      </div>
+      </div> */}
       {/* Botón para agregar nueva categoría */}
       <button
         onClick={() => {
@@ -432,7 +454,7 @@ return (
               price: null }],
           });
         }}
-        className="mb-4 px-4 py-2 bg-blue-500 text-white rounded"
+        className="mb-4 px-4 py-2 bg-light-blue hover:bg-dark-blue text-white rounded"
         type="button"
       >
         + Add new category
@@ -474,7 +496,7 @@ return (
             >
               <div
                 onClick={() => setActiveCategory(index)}
-                className={`bg-gray-300 my-1 p-3 pb-2 w-full rounded-2xl cursor-pointer`}
+                className={`bg-gray-300 my-1 p-3 w-full rounded-2xl cursor-pointer`}
               >
                 {/* Input para el nombre de la categoría */}
                 <input
@@ -515,7 +537,7 @@ return (
                             price: null,
                           });
                         }}
-                        className="mb-4 px-4 py-2 bg-blue-500 text-white rounded"
+                        className="mb-4 px-4 py-2 bg-light-blue hover:bg-dark-blue text-white rounded"
                         type="button"
                       >
                         + Add New Product
@@ -556,7 +578,7 @@ return (
                             {/* Contenedor de cada producto */}
                             <div>
                               {/* Contenedor de la imagen y detalles del producto */}
-                              <div className="flex flex-row">
+                              <div className="flex flex-row m-0">
                                 <div className="w-[30%] rounded-[10px] bg-slate-600">
                                   <img
                                     id={`imgProductPreview-${index}-${productIndex}`}
@@ -569,10 +591,12 @@ return (
                                   {/* Input para la imagen del producto */}
                                   <input
                                     onChange={(e) => handleImgProduct(index, productIndex, e)}
-                                    className="mb-4 p-2 border rounded"
+                                    className="hidden"
                                     type="file"
                                     name={`category.${index}.products.${productIndex}.productImg`}
+                                    id={`category.${index}.products.${productIndex}.productImg`}
                                   />
+                                  <label htmlFor={`category.${index}.products.${productIndex}.productImg`} className='p-2 text-[17px] rounded-md my-3 w-[40%] text-center bg-light-blue text-white hover:bg-dark-blue'>agregar imagen</label>
                                   {/* Input para el nombre del producto */}
                                   <input
                                     onChange={(e) => handleProductName(index, productIndex, e)}
@@ -592,20 +616,19 @@ return (
                                   {/* Checkbox y input para el precio */}
                                   <div className="flex items-center">
                                     <div className="flex items-center mr-4">
+                                      <label>Top</label>
                                       <input
                                         onChange={(e)=>handleProductTop(index,productIndex,e)}
-                                        className="mr-2"
+                                        className="mx-2"
                                         type="checkbox"
                                         name={`category.${index}.products.${productIndex}.top`}
                                       />
-                                      <label>Top</label>
                                     </div>
                                     <div className="flex items-center">
-                                      <label className="mr-2">Price</label>
-                                      $
+                                      <label className="mx-2">Price $</label>
                                       <input
                                         onChange={(e) => handleProductPrice(index, productIndex, e)}
-                                        className="p-2 border rounded w-20"
+                                        className="p-2 border rounded w-24 h-10"
                                         type="number"
                                         name={`category.${index}.products.${productIndex}.price`}
                                       />

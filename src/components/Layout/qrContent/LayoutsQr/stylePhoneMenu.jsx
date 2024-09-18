@@ -7,7 +7,6 @@ import { useEffect, useState } from 'react';
 import instance from '../../../../libs/axios';
 import './../forms/menu/menu.css';
 import { createTheme, Modal, ThemeProvider } from '@mui/material';
-import { Form } from 'formik';
 
 export default function WebLinkMenuFood({ FormValues, ContentName }) {
   const [tabValue, setTabValue] = useState(0);
@@ -45,6 +44,7 @@ export default function WebLinkMenuFood({ FormValues, ContentName }) {
     }
 }
 
+
 const getLinkTemplate=async(id)=>{
     try{
         const getTemplatesArray=await instance.get(`/getTemplates/${id}`);
@@ -57,21 +57,6 @@ const getLinkTemplate=async(id)=>{
   
   const topProducts=FormValues.category.flatMap(category=>category.products.filter(product=>product.top==true));
   console.log(topProducts);
-
-  const modalStyle = {
-    position: 'absolute',
-    top: '50%',
-    left: '50%',
-    transform: 'translate(-50%, -50%)',
-    width: '80%',
-    maxWidth: 400,
-    backgroundColor: 'white',
-    border: '2px solid #000',
-    boxShadow: 24,
-    padding: '16px',
-    borderRadius: '10px',
-    zIndex: 10
-  };
   
   console.log("modal producto activo ",activeprod);
   console.log("catgeoria activa: ",activeCategory);
@@ -86,7 +71,17 @@ const getLinkTemplate=async(id)=>{
       }
     },
     typography:{
-      fontFamily:fontFamily?.[0]?.fontFamily || 'Arial, sans-serif'
+      fontFamily:`${fontFamily?.fontName}` || 'Arial, sans-serif',
+      fontWeightBold:'1000'
+    },
+    components:{
+      MuiTabs:{
+        styleOverrides:{
+          scrollButtons:{
+            color:FormValues.colorMenu,
+          }
+        }
+      }
     }
   });
 
@@ -140,13 +135,14 @@ const getLinkTemplate=async(id)=>{
           }}
         >
         <div
-          className="w-[60%] p-2 rounded-[10px] mx-auto my-6 bg-slate-500 flex justify-center items-center"
+          className="w-[60%] overflow-auto rounded-[10px] mx-auto my-6 bg-slate-500 flex justify-center items-center"
           id="logo-container"
         >
           <img
-            className="w-full h-auto object-contain"
+            className={`w-full h-auto object-contain rounded-md ${FormValues.restaurantLogo!==null ? '':'hidden'}`}
             id="restaurantLogoPreview"
             alt="restaurantLogo"
+            src={FormValues.restaurantLogo!==null ? URL.createObjectURL(FormValues.restaurantLogo):''}
           />
         </div>
 
@@ -155,7 +151,7 @@ const getLinkTemplate=async(id)=>{
           id="name-container"
         >
           <h1 style={{fontFamily:fontFamily?.fontName}} className="text-center font-semibold text-[25px] break-words">
-            {FormValues.restaurantName}
+            {FormValues.restaurantName!==''?FormValues.restaurantName:'Restaurant name'}
           </h1>
         </div>
         <div
@@ -174,9 +170,9 @@ const getLinkTemplate=async(id)=>{
             >
               {FormValues.category.map((element, index) => (
                 <Tab
-                  sx={{ color: 'white' }}
+                  sx={{ color: 'white',fontWeight:'800'}}
                   key={index}
-                  label={element.categoryName}
+                  label={element.categoryName!==""?element.categoryName:`category ${index+1}`}
                   value={index}
                 />
               ))}

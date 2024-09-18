@@ -5,7 +5,7 @@ import instance from "../../../../../libs/axios.jsx";
 const MenuContext=createContext();
 
 export default function MenuProvider({children}) {
-    const [formData, setFormData] = useState({...menuFormData});
+    const [formData, setFormData] = useState({...structuredClone(menuFormData)});
     const [isStyleCheck,setIsStyleCheck]=useState(false);
       
     const handleRestaurantName =(e, handler) => {
@@ -32,24 +32,27 @@ export default function MenuProvider({children}) {
 
     const handleLogo = (e) => {
         const file = e.target.files[0];
-        
-        setFormData((prevValues) => ({
-            ...prevValues,
-            restaurantLogo: file
-        }));
     
-        const reader = new FileReader();
-        reader.addEventListener("load", (event) => {
-            const previewElement = document.getElementById("restaurantLogoPreview");
-            if (previewElement) {
-                previewElement.src = event.target.result;
-            }
-        });
+        if (file && file.type.startsWith("image/")) {
+            const reader = new FileReader();
+            reader.addEventListener("load", (event) => {
+                const previewElement = document.getElementById("restaurantLogoPreview");
+                if (previewElement) {
+                    previewElement.src = reader.result;
+                }
+            });
+            
+            setFormData((prevValues) => ({
+                ...prevValues,
+                restaurantLogo: file
+            }));
     
-        if (file) {
-            reader.readAsDataURL(file);
+            reader.readAsDataURL(file); 
+        } else {
+            console.error("Por favor, selecciona un archivo de imagen válido.");
         }
     };
+    
     
 
     const handleBackgroundCard = (color) => {
@@ -247,6 +250,7 @@ export default function MenuProvider({children}) {
     return(
         <MenuContext.Provider value={{
             formData,
+            setFormData,
             isStyleCheck,
             setIsStyleCheck,
             setFormData,

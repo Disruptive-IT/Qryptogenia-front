@@ -21,8 +21,8 @@ import MusicForm from "./forms/Music";
 import { WebLinkPhoneMusic } from "./socialMedia/stylePhoneMusic";
 import MenuForm from "./forms/menu/menuForm";
 import FormWifi from "./forms/Wifi";
-import WebLinkMenuFood from "./socialMedia/stylePhoneMenu";
-export const QrContentSwitch = ({contentName, onFormChangeApp, onFormChange, onFormChangeMusic, onSocialFormSubmit, location, appFormValues, musicFormValues, socialFormValues}) => {
+import WebLinkMenuFood from "./LayoutsQr/stylePhoneMenu";
+export const QrContentSwitch = ({contentName, onFormChangeApp, onFormChange, onFormChangeMusic, onSocialFormSubmit, location, appFormValues, musicFormValues, socialFormValues,menuFormValues}) => {
 
     let qrContent;
     switch (contentName) {
