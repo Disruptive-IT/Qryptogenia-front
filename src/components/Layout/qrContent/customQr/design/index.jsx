@@ -4,7 +4,7 @@ import Scrollcornersqueare from './scrollcornersquare';
 import Scrollcornerdot from './scrollcornerdot';
 import ScrollableDesingQrs from './scrollableDesingQrs';
 import ScrollableMarcoQrs from './scrollableMarcoQrs';
-import { Tabs, Tab } from '@mui/material';
+import { Tabs, Tab, Box } from '@mui/material'; // Importa Box aquí
 import GradientColorPicker from 'react-gcolor-picker';
 import { MdQrCodeScanner, MdOutlineQrCode, MdOutlineQrCode2 } from "react-icons/md";
 import { IoQrCodeOutline } from "react-icons/io5";
@@ -89,7 +89,6 @@ const Design = () => {
         setMarcoType(type);
     };
 
-
     const handleStyleChange = (type) => {
         setDotsType(type);
     };
@@ -102,10 +101,23 @@ const Design = () => {
         setCornersDotType(type);
     };
 
-    const tabTextColor = "#FF001F";
+    const tabTextColor = "#CC2905";
 
     return (
-        <>
+        <Box sx={{  width: { //Manejo de responsive para diferentes dispositivos
+            xs:300,
+            sm:350,
+            md:325,
+            lg:300,
+            xl:400
+
+        },
+            bgcolor: 'background.paper', 
+            position: 'relative', 
+            left: '50%',              // Mueve el elemento 50% hacia la derecha desde su posición original
+            transform: 'translateX(-50%)', // Ajusta la posición para centrarlo 
+            
+             }}>
             <div className="tabs-container">
                 <Tabs
                     value={tabValue}
@@ -113,25 +125,25 @@ const Design = () => {
                     variant="scrollable"
                     scrollButtons="auto"
                     aria-label="scrollable auto tabs example"
-
-                    TabIndicatorProps={{
+                        
+                    TabIndicatorProps={{                    //Colores seccion DesignScroll
                         style: {
-                            backgroundColor: "#FF001F",
+                            backgroundColor: "#CC2905", // Color linea scroll
                             height: '4px'
                         }
                     }}
                     sx={{
                         '& .MuiTabs-scrollButtons': {
                             width: '20px',
-                            color: '#284B63',
+                            color: '', // Color flechas scroll
                         },
                         '& .Mui-selected': {
-                            color: '#FF001F', // cplor del texto seleccionado
+                            color: '#CC2905', // cplor del texto seleccionado
                         },
                         '& .MuiTab-root': {
                             color: '#808080', // color text
                             '&.Mui-selected': {
-                                color: '#FF001F', ///coolor cuadro
+                                color: '#CC2905', ///coolor cuadro
                             }
                         },
                     }}
@@ -265,7 +277,7 @@ const Design = () => {
                     </div>
                 </div>
             )}
-        </>
+        </Box> // Cierra Box aquí
     );
 };
 

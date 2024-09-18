@@ -10,6 +10,10 @@ import GradientColorPicker from 'react-gcolor-picker';
  * @description : Componente de la seccion frame o texto. El contenido es dedicado a las fuentes
  * @return : Retorna los tabs para seleccion de fuentes y color picker
 **/
+/**
+ @UpdatedBy : Cristian Rueda,   @date 2024-09-16 13:010:49
+ * @description :Se cambian los colores del color de la letra, linea scroll y cuadro seleccionado acorde al formato manejado
+ */
 
 export default function ScrollableFontText() {
     const { setQrFontStyle, setTextColor, qrTextProps } = useQr();
@@ -56,30 +60,35 @@ export default function ScrollableFontText() {
 
     return (
         <Box sx={{ width: 'auto', bgcolor: 'background.paper', marginTop: "10px" }}>
-            <Tabs
-                value={value}
-                onChange={handleChange}
-                variant="scrollable"
-                scrollButtons="auto"
-                aria-label="scrollable font tabs"
-                sx={{
-                    '&.MuiTabs-scrollButtons': {
-                        width: '20px',
-                        color: '#284B63',
-                    },
-                }}
-                TabIndicatorProps={{
-                    style: {
-                        backgroundColor: "",
-                        height: '4px'
-                    }
-                }}
-            >
-                {fontStyles.map((style, index) => {
-                    const fontName = style.fontFamily ? style.fontFamily.split(',')[0] : 'x';
-                    return <Tab key={index} sx={{ margin: "5px" }} label={<span style={style}>{fontName}</span>} />;
-                })}
-            </Tabs>
+                <Tabs
+                    value={value}
+                    onChange={handleChange}
+                    variant="scrollable"
+                    scrollButtons="auto"
+                    aria-label="scrollable font tabs"
+                    sx={{
+                        '& .MuiTabs-scrollButtons': {
+                            width: '20px',
+                            color: '', //Color flechas
+                        },
+                        '& .Mui-selected': {  
+                            color: '#CC2905 !important',  // Asegura que el color del texto del tab seleccionado cambie
+                        },
+                     
+                    }}
+                    TabIndicatorProps={{
+                        style: {
+                            backgroundColor: "#CC2905", // Color linea scroll Styles
+                            height: '4px',
+                        }
+                    }}
+                >
+                    {fontStyles.map((style, index) => {
+                        const fontName = style.fontFamily ? style.fontFamily.split(',')[0] : 'x';
+                        return <Tab key={index} sx={{ margin: "5px" }} label={<span style={style}>{fontName}</span>} />;
+                    })}
+                </Tabs>
+
             <div className='relative space-y-4 p-4'>
                 <div className='flex gap-4 items-center'>
                     <div className="flex items-center border border-gray-300 rounded p-2 ml-3 mt-5 mb-1">

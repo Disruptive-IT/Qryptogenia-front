@@ -7,8 +7,8 @@ import dot1 from '../../../../../assets/imgs/cornerdot1.png';
 import dot3 from '../../../../../assets/imgs/cornerdot2_1.png';
 
 const qrStyles = [
-    { id: 1, type: 'dot', color: '#284B63', borderColor: '#284B63', shape: 'rounded', backgroundType: 'none', patternImage: dot1 },
-    { id: 2, type: 'square', color: '#284B63', borderColor: '#284B63', shape: 'rounded', backgroundType: 'none', patternImage: dot3 },
+    { id: 1, type: 'dot', color: '#284B63', borderColor: '#000000', shape: 'rounded', backgroundType: 'none', patternImage: dot1 }, // Corners
+    { id: 2, type: 'square', color: '#284B63', borderColor: '#000000', shape: 'rounded', backgroundType: 'none', patternImage: dot3 }, // Corners
 ];
 
 const getBackgroundStyle = (backgroundType, color, patternImage) => {
@@ -33,14 +33,14 @@ export default function Scrollcornerdot({ onStyleClick, value, onChange }) {
                 aria-label="scrollable auto tabs example"
                 TabIndicatorProps={{
                     style: {
-                        backgroundColor: "",
+                        backgroundColor: "#CC2905", //Color scroll linea Dot
                         height: '4px'
                     }
                 }}
                 sx={{
-                    '& .MuiTabs-scrollButtons': {
+                    '& .MuiTabs-scrollButtons': { // Flechas
                         width: '20px',
-                        color: '#284B63',
+                        color: '',
                     },
                 }}
             >

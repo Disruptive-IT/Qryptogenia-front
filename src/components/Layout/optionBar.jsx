@@ -24,6 +24,11 @@ import { useTranslation } from "react-i18next";
  * @Props : ninguna
  * @return :
  */
+/**
+ @UpdatedBy : Cristian Rueda,   @date 2024-09-17 16:45:54
+ * @description :
+ */
+
 
 export const OptionBar = () => {
   const { t } = useTranslation();
@@ -82,8 +87,8 @@ export const OptionBarTwo = ({ contentName, name }) => {
       text: t("Are you sure you want to change the type? The qr status will be lost."),
       icon: 'warning',
       showCancelButton: true,
-      confirmButtonColor: '#3085d6',
-      cancelButtonColor: '#d33',
+      confirmButtonColor: '#3C6E71',
+      cancelButtonColor: '#CC2905',
       confirmButtonText: t("Confirm"),
       cancelButtonText: t("Cancel")
     }).then((result) => {

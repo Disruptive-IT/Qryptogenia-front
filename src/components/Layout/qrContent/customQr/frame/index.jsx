@@ -15,6 +15,12 @@ import { useTranslation } from 'react-i18next';
  * @description : Contenido principal de la seccion de frame
  * @return : Retorna los tabs con las opciones del frame o texto: InputText(contiene el input y su posicion), Fuente(contiene las fuentes del texto y su color), Burbujas(contiene las formas o burbujas del texto y su color)
 **/
+/**
+ @UpdatedBy : Cristian Rueda,   @date 2024-09-17 16:15:06
+ * @description : Se cambian los colores del color de la letra, linea scroll y cuadro seleccionado acorde al formato manejado, tambien se adecúa 
+ con mayor espacio el apartado para personalizar el QR
+ */
+
 
 function InputText() {
     return <ScrollableInputText />;
@@ -36,7 +42,18 @@ const Frame = () => {
     };
 
     return (
-        <Box sx={{ width: '100%', bgcolor: 'background.paper' }}>
+        <Box sx={{  width: { // Manejo de breakpoints para ampliar el area de personalización del QR
+            xs:200,
+            sm:350,
+            md:325,
+            lg:300,
+            xl:400
+
+        },
+            position: 'relative', 
+            left: '50%',              // 50% hacia la derecha desde su posicion original
+            transform: 'translateX(-50%)', // ajusta la posicion para centrarlo 
+             }}>
             <Tabs
                 value={value}
                 onChange={handleChange}
@@ -49,22 +66,22 @@ const Frame = () => {
                 }}
                 TabIndicatorProps={{
                     style: {
-                        backgroundColor: "#FF001F",
+                        backgroundColor: "#CC2905", //Linea scroll
                         height: '4px'
                     }
                 }}
                 sx={{
                     '& .MuiTabs-scrollButtons': {
                         width: '20px',
-                        color: '#284B63',
+                        color: '',
                     },
                     '& .Mui-selected': {
-                        color: '#FF001F',
+                        color: '#CC2905',
                     },
                     '& .MuiTab-root': {
-                        color: '#808080',
+                        color: '#808080', // Color texto no seleccionado
                         '&.Mui-selected': {
-                            color: '#FF001F',
+                            color: '#CC2905', // Color letra scroll (Input text, Styles, Text )
                         }
                     },
                 }}

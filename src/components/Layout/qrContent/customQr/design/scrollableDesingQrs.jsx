@@ -23,13 +23,13 @@ import pattern1 from '../../../../../assets/imgs/patter1.avif';
 import pattern2 from '../../../../../assets/imgs/patter1.avif';
 
 const qrStyles = [
-    { id: 1, type: 'rounded', color: '#284B63', borderColor: '#284B63', shape: 'rounded', backgroundType: 'none', patternImage: imgQr },
-    { id: 2, type: 'dots', color: '#284B63', borderColor: '#284B63', shape: 'rounded', backgroundType: 'none', patternImage: dots2 },
+    { id: 1, type: 'rounded', color: '#284B63', borderColor: '#000000', shape: 'rounded', backgroundType: 'none', patternImage: imgQr },
+    { id: 2, type: 'dots', color: '#284B63', borderColor: '#000000', shape: 'rounded', backgroundType: 'none', patternImage: dots2 },
     
-    { id: 4, type: 'classy-rounded', color: '#284B63', borderColor: '#284B63', shape: 'rounded', backgroundType: 'none', patternImage: dots4 },
-    { id: 5, type: 'square', color: '#284B63', borderColor: '#284B63', shape: 'rounded', backgroundType: 'none', patternImage: dots5 },
-    { id: 6, type: 'extra-rounded', color: '#284B63', borderColor: '#284B63', shape: 'rounded', backgroundType: 'none', patternImage: dots6 },
-    { id: 3, type: 'classy', color: '#284B63', borderColor: '#284B63', shape: 'rounded', backgroundType: 'none', patternImage: dots3  },
+    { id: 4, type: 'classy-rounded', color: '#284B63', borderColor: '#000000', shape: 'rounded', backgroundType: 'none', patternImage: dots4 },
+    { id: 5, type: 'square', color: '#284B63', borderColor: '#000000', shape: 'rounded', backgroundType: 'none', patternImage: dots5 },
+    { id: 6, type: 'extra-rounded', color: '#284B63', borderColor: '#000000', shape: 'rounded', backgroundType: 'none', patternImage: dots6 },
+    { id: 3, type: 'classy', color: '#284B63', borderColor: '#000000', shape: 'rounded', backgroundType: 'none', patternImage: dots3  },
 ];
 
 
@@ -54,7 +54,7 @@ export default function ScrollableDesignQrs({ onStyleClick, value, onChange }) {
                 scrollButtons="auto"
                 TabIndicatorProps={{
                     style: {
-                      backgroundColor: "",
+                      backgroundColor: "#CC2905",
                       height: '4px'
                     }
                   }}
@@ -62,7 +62,7 @@ export default function ScrollableDesignQrs({ onStyleClick, value, onChange }) {
                 sx={{
                     '& .MuiTabs-scrollButtons': {
                         width: '20px',
-                        color: '#284B63',
+                        color: '', //Color scroll felchas DOTS
                     },
                 }}
             >

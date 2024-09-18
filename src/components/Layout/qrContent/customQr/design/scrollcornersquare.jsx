@@ -10,9 +10,9 @@ import pattern1 from '../../../../../assets/imgs/patter1.avif';
 import pattern2 from '../../../../../assets/imgs/patter1.avif';
 
 const qrStyles = [
-    { id: 1, type: 'dot', color: '#284B63', borderColor: '#284B63', shape: 'rounded', backgroundType: 'none', patternImage: squeare1 },
-    { id: 2, type: 'square', color: '#284B63', borderColor: '#284B63', shape: 'rounded', backgroundType: 'none', patternImage: squeare2 },
-    { id: 3, type: 'extra-rounded', color: '#284B63', borderColor: '#284B63', shape: 'rounded', backgroundType: 'none', patternImage: squeare3 },
+    { id: 1, type: 'dot', color: '#284B63', borderColor: '#000000', shape: 'rounded', backgroundType: 'none', patternImage: squeare1 },
+    { id: 2, type: 'square', color: '#284B63', borderColor: '#000000', shape: 'rounded', backgroundType: 'none', patternImage: squeare2 },
+    { id: 3, type: 'extra-rounded', color: '#284B63', borderColor: '#000000', shape: 'rounded', backgroundType: 'none', patternImage: squeare3 },
     
 ];
 
@@ -55,14 +55,14 @@ export default function Scrollcornersqueare({ onStyleClick, value, onChange  }) 
                 aria-label="scrollable auto tabs example"
                 TabIndicatorProps={{
                     style: {
-                      backgroundColor: "",
+                      backgroundColor: "#CC2905", // Color scroll linea Corners Square
                       height: '4px'
                     }
                   }}
                 sx={{
-                    '& .MuiTabs-scrollButtons': {
+                    '& .MuiTabs-scrollButtons': { //Flechas
                         width: '20px',
-                        color: '#284B63',
+                        color: '', 
                     },
                 }}
             >

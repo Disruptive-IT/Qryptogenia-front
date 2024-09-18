@@ -10,12 +10,18 @@ import { useQr } from '../../../../context/QrContext';
 import Swal from 'sweetalert2';
 import { toast } from 'sonner';
 import { useTranslation } from 'react-i18next';
+import { createTheme, ThemeProvider } from '@mui/material';
 import { v4 as uuidv4 } from 'uuid';
 import axios from '../../../../libs/axios';
 
 /*
  * @UpdatedBy : Cristian Escobar,   @date 2024-09-03 15:05:11
  * @description : Se implemento una funcion para generar una llave unica y pasarla como prop a los componente saveQrData y QR
+ */
+
+/**
+ @UpdatedBy : Cristian Rueda,   @date 2024-09-17 14:11:06
+ * @description : Se modifica el color de los botones, bordes y su respectivo hover
  */
 
 const generateUniqueKey = async () => {
@@ -72,6 +78,18 @@ const CustomQr = ({ location, qrId }) => {
         { name: t("LOGO"), component: Logo },
     ];
 
+    const themee = createTheme({
+        palette:{
+          primary:{
+            main:'#3C6E71'
+          },
+          secondary:{
+            main:'#284B63'
+          }
+        }
+      });
+
+
     const Dowload = async () => {
         const { value: qrName, isConfirmed } = await Swal.fire({
             title: t("Save QR Code"),
@@ -97,9 +115,9 @@ const CustomQr = ({ location, qrId }) => {
                 return input;
             },
             showCancelButton: true,
-            confirmButtonColor: '#007bff',
+            confirmButtonColor: '#3C6E71',
             confirmButtonText: t('Save'),
-            cancelButtonColor: "#d33",
+            cancelButtonColor: "#CC2905",
             cancelButtonText: t('Cancel'),
             customClass: {
                 actions: 'swal2-actions-no-margin'
@@ -153,10 +171,14 @@ const CustomQr = ({ location, qrId }) => {
                                 fontFamily: 'Arial',
                                 fontSize: '14px',
                                 fontWeight: selectedOptionIndex === index ? 'bold' : 'bold',
-                                color: selectedOptionIndex === index ? '#ffffff' : 'primary',
-                                backgroundColor: selectedOptionIndex === index ? '#007bff' : 'transparent',
+                                color: selectedOptionIndex === index ? '#ffffff' : '#284B63', // Color del texto
+                                backgroundColor: selectedOptionIndex === index ? '#284B63' : '', // Color del fondo
+                                borderColor : selectedOptionIndex === index ? '#284B63' : '#284B63', // Color del borde del boton
+                                
                                 '&:hover': {
-                                    backgroundColor: selectedOptionIndex === index ? '#007bff' : '#f0f0f0',
+                                    backgroundColor: selectedOptionIndex === index ? '#3C6E71' : '#3C6E71', //Color del boton al hacer hover
+                                    borderColor : '#3C6E71', // Color del borde al hacer hover
+                                    color : '#ffffff', // Color letra al hacer hover 
                                 },
                             }}
                         >
@@ -168,14 +190,19 @@ const CustomQr = ({ location, qrId }) => {
                     <OptionComponent onTabSelect={handleOptionSelect} />
                 </div>
             </div>
+            
+            <ThemeProvider theme={themee}> 
             <Button
-                variant="contained"
+                variant="contained" // manejar el boton de crearQR
                 color="primary"
                 onClick={Dowload}
                 className='absolute bottom-0 left-8 w-4/5 md:left-0 md:w-full'
             >
-                {t("CREATE MY QR")}
-            </Button>
+                   {t("CREATE MY QR")}
+                   </Button>
+            </ThemeProvider>
+
+           
         </div>
     );
 }
