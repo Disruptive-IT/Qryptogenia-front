@@ -29,7 +29,7 @@ export const QrContentSwitch = ({contentName, onFormChangeApp, onFormChange, onF
         case "app store":
             qrContent = (
                 <div>
-                    <AppForm onFormChangeApp={onFormChangeApp} location={location} appFormValues={appFormValues}/>
+                    <AppForm onFormChangeApp={onFormChangeApp} location={location} appFormValues={appFormValues} />
                 </div>
             );
             break;

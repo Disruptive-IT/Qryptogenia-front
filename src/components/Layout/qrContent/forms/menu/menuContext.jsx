@@ -30,7 +30,7 @@ export default function MenuProvider({children}) {
         }))
     }
 
-    const handleLogo = (e) => {
+    const handleLogo = (e,handler) => {
         const file = e.target.files[0];
     
         if (file && file.type.startsWith("image/")) {
@@ -51,6 +51,8 @@ export default function MenuProvider({children}) {
         } else {
             console.error("Por favor, selecciona un archivo de imagen válido.");
         }
+
+        if(handler) handler(e);
     };
     
     
@@ -100,7 +102,7 @@ export default function MenuProvider({children}) {
         });
     }
 
-    function handleChangeCategoryName(index, e) {
+    function handleChangeCategoryName(index, e,handler) {
         setFormData((prevValues) => {
             const updatedCategories = [...prevValues.category];
             updatedCategories[index].categoryName=e.target.value
@@ -109,6 +111,8 @@ export default function MenuProvider({children}) {
                 category: updatedCategories,
             };
         });
+
+        if(handler) handler(e);
     }
     
     function addProductToCategory(index, newProduct) {
@@ -143,7 +147,7 @@ export default function MenuProvider({children}) {
 
     
 
-    const handleProductField = (indexOne, indexTwo, field, value) => {
+    const handleProductField = (indexOne, indexTwo, field, value,handler,e) => {
         setFormData((prevValues) => {
           const updatedCategories = [...prevValues.category];
 
@@ -159,6 +163,8 @@ export default function MenuProvider({children}) {
             category: updatedCategories
           };
         });
+
+        if(handler) handler(e);
       };
       
 
@@ -181,7 +187,7 @@ export default function MenuProvider({children}) {
         });
       };
     
-    const handleImgProduct = (indexOne, indexTwo, e) => {
+    const handleImgProduct = (indexOne, indexTwo, e,handler) => {
         const file = e.target.files[0];
     
         // Creamos una nueva instancia de FileReader
@@ -216,6 +222,7 @@ export default function MenuProvider({children}) {
         if (file) {
             reader.readAsDataURL(file);
         }
+        if(handler) handler;
     };
     
     const handleBackgroundProduct=(indexOne, color)=>{
@@ -232,19 +239,19 @@ export default function MenuProvider({children}) {
     }
 
     const handleProductName = (indexOne, indexTwo, e, handler) => {
-        handleProductField(indexOne, indexTwo, 'productName', e.target.value);
+        handleProductField(indexOne, indexTwo, 'productName', e.target.value,handler);
     };
 
     const handleProductDescription = (indexOne, indexTwo, e, handler) => {
-        handleProductField(indexOne, indexTwo, 'productDescription', e.target.value);
+        handleProductField(indexOne, indexTwo, 'productDescription', e.target.value,handler);
     };
 
     const handleProductTop = (indexOne, indexTwo, e, handler) => {
-        handleProductField(indexOne, indexTwo, 'top', e.target.checked);
+        handleProductField(indexOne, indexTwo, 'top', e.target.checked,handler);
     };
 
     const handleProductPrice = (indexOne, indexTwo, e, handler) => {
-        handleProductField(indexOne, indexTwo, 'price', parseFloat(e.target.value));
+        handleProductField(indexOne, indexTwo, 'price', parseFloat(e.target.value),handler);
     };
 
     return(
@@ -275,7 +282,7 @@ export default function MenuProvider({children}) {
             handleProductName,
             handleProductDescription,
             handleProductPrice,
-            handleProductTop,
+            handleProductTop
         }}>
             {children}
         </MenuContext.Provider>

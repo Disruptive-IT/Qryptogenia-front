@@ -8,8 +8,9 @@ import '../../../../../src/assets/style/index.css'
 import '../../styles/qrCode.css'
 import { useQr } from '../../../../context/QrContext';
 import Swal from 'sweetalert2';
-import { toast } from 'sonner';
 import { useTranslation } from 'react-i18next';
+import { useValidate } from '../../../../context/validateFormContext';
+import { toast } from 'sonner';
 
 const CustomQr = ({ location, qrId }) => {
     const [selectedOptionIndex, setSelectedOptionIndex] = useState(0);
@@ -88,9 +89,10 @@ const CustomQr = ({ location, qrId }) => {
 
 
     const OptionComponent = options[selectedOptionIndex].component;
+    const {validateFormWifi,validateFormLink,validateFormPdf}=useValidate();
 
     return (
-        <div className='w-full rounded-md flex flex-col justify-between pb-4 font-sans'>
+        <div style={{pointerEvents:validateFormWifi || validateFormLink || validateFormPdf ? '':'none'}} className='w-full rounded-md flex flex-col justify-between pb-4 font-sans'>
             <div className={`flex relative mb-4 py-8 max-h-[400px] ${qrTextProps.qrText ? 'min-h-[380px]' : ''}`}>
                 <QR />
             </div>

@@ -1,10 +1,12 @@
 import { FieldArray, Formik, useFormik,Field } from 'formik';
+import * as yup from 'yup';
 import { useEffect, useMemo, useState } from 'react';
 import { UseMenu } from './menuContext';
 import GradientColorPicker from 'react-gcolor-picker';
 import { motion } from "framer-motion";
 import EjectIcon from '@mui/icons-material/Eject';
 import DeleteIcon from '@mui/icons-material/Delete';
+import { toast } from 'sonner';
 import CancelIcon from '@mui/icons-material/Cancel';
 import {Accordion,AccordionItem} from '@nextui-org/accordion'
 import './menu.css'
@@ -106,38 +108,37 @@ function MenuForm(){
         setShowPricePicker(value)
     }
     
-    const validation=(values)=>{
-        const errors={};
-
-        if(!values.restaurantName){
-            errors.restaurantName="restaurant name is required";
-        }
-        if(!values.restaurantLogo){
-            errors.restaurantLogo="logo is required";
-        }
-
-        if(!values.category.categoryName){
-            errors.category.categoryName="category name is required";
-        }
-
-        if(!values.category.products.productName){
-            errors.category.products.productName="product name is required"
-        }
-
-        if(!values.category.products.productDescription){
-            errors.category.products.productDescription="product description is required"
-        }
-
-        if(!values.category.products.productPrice){
-            values.category.products.productPrice="product price is required"
-        }
-
-        return errors;
-    }
-
+    const validation=yup.object().shape({
+      restaurantName:yup.string().matches(/^[a-zA-Z0-9\s]+$/, 'restaurant name just can contain letters and numbers').required('restaurant name is required'),
+      restaurantLogo:yup.mixed()
+      .required('file is required')
+      .test('fileType', 'the file must be an image', value => {
+        return value && ['image/jpg', 'image/jpeg', 'image/png','image/webp'].includes(value.type);
+      }),
+      backgroundCard: yup.string().matches(/^(#([A-Fa-f0-9]{3}|[A-Fa-f0-9]{6})|rgb\((\s*\d{1,3}\s*,){2}\s*\d{1,3}\s*\))$/, 'invalid color format'),
+      colorMenu:yup.string().matches(/^(#([A-Fa-f0-9]{3}|[A-Fa-f0-9]{6})|rgb\((\s*\d{1,3}\s*,){2}\s*\d{1,3}\s*\))$/, 'invalid color format'),
+      category:yup.array().of(
+        yup.object().shape({
+          categoryName:yup.string().matches(/^[a-zA-Z0-9\s]+$/, 'category name just can contain letters and numbers').required('category name is required'),
+          products:yup.array().of(
+            yup.object().shape({
+              productImg:yup.mixed()
+              .required('image product is required')
+              .test('fileType', 'the file must be an image', value => {
+                return value && ['image/jpg', 'image/jpeg', 'image/png','image/webp'].includes(value.type);
+              }),
+              productName:yup.string().matches(/^[a-zA-Z0-9\s]+$/, 'product name just can contain letters and numbers').required('product name is required'),
+              productDescription:yup.string().matches(/^[a-zA-Z0-9\s]+$/, 'description name just can contain letters and numbers'),
+              price:yup.number().positive('price cant be negative').typeError('price must be a number').min(0,'the price must be greater than zero').required('price product is required'),
+            })
+          )
+        })
+      )
+    })
+    
     const formik=useFormik({
         initialValues,
-        validation,
+        validationSchema:validation,
         onsubmit:(values,{setSubmitting})=>{
             console.log(values);
         }
@@ -152,11 +153,13 @@ function MenuForm(){
       executeFunctions();
     },[])
 
+    console.log("formik errors",formik.errors);
+
 return (
     <div className='p-4'>
         <Formik
             initialValues={formData}
-            validate={validation}
+            validationSchema={validation}
             onSubmit={(values) => {
                 console.log(values);
             }}
@@ -166,15 +169,17 @@ return (
             {/* Sección de Nombre del Restaurante y Logo */}
             <div className="flex flex-row mb-6">
               {/* Contenedor del input para el nombre del restaurante */}
-              <div className="flex flex-col p-4 mx-4">
+              <div className="flex flex-col p-4 mr-4">
                 <label className="my-1" htmlFor="restaurantName">Restaurant Name</label>
                 <input
                   onChange={(e) => handleRestaurantName(e, formik.handleChange)}
-                  className="p-2 border rounded"
+                  className="p-2 border rounded w-80"
                   type="text"
+                  onBlur={formik.handleBlur}
                   name="restaurantName"
                   id="restaurantName"
                 />
+                {formik.touched.restaurantName && formik.errors.restaurantName ? (<div className='error'>{formik.errors.restaurantName}</div>) : null}
               </div>
 
               {/* Contenedor del botón para subir el logo */}
@@ -189,15 +194,15 @@ return (
                   onChange={(e) => handleLogo(e, formik.handleChange)}
                   className="hidden"
                   type="file"
+                  accept="image/*"
                   name="restaurantLogo"
                   id="restaurantLogo"
+                  onBlur={formik.handleBlur}
                 />
               </div>
             </div>
-
-
                     {/* Sección del Color de Fondo */}
-                    <div className="flex flex-col md:flex-row justify-start items-center space-x-6 p-4">
+                    <div className="flex flex-col md:flex-row justify-start items-center space-x-6 py-4">
                     {/* Background Section */}
                     <div className="flex items-center space-x-4 mx-3">
                     <label htmlFor="">Background color:</label>
@@ -429,31 +434,35 @@ return (
       {/* Botón para agregar nueva categoría */}
       <button
         onClick={() => {
-          push({
-            categoryName: "",
-            products: [{backgroundProductCard:"#fff",
-              colorName:"#000",
-              colorDescription:"#000",
-              colorPrice:"#000", 
-              productImg: null, 
-              productName: "", 
-              productDescription: "", 
-              top: false, 
-              price: null }],
-          });
-          addCategory({
-            categoryName: "",
-            products: [{backgroundProductCard:"#fff",
-              colorName:"#000",
-              colorDescription:"#000",
-              colorPrice:"#000", 
-              productImg: null, 
-              productName: "", 
-              productDescription: "", 
-              top: false, 
-              price: null }],
-          });
-        }}
+            push({
+              categoryName: "",
+              products: [{
+                backgroundProductCard: "#fff",
+                colorName: "#000",
+                colorDescription: "#000",
+                colorPrice: "#000",
+                productImg: null,
+                productName: "",
+                productDescription: "",
+                top: false,
+                price: null
+              }],
+            });
+            addCategory({
+              categoryName: "",
+              products: [{
+                backgroundProductCard: "#fff",
+                colorName: "#000",
+                colorDescription: "#000",
+                colorPrice: "#000",
+                productImg: null,
+                productName: "",
+                productDescription: "",
+                top: false,
+                price: null
+              }],
+            });
+        }}        
         className="mb-4 px-4 py-2 bg-light-blue hover:bg-dark-blue text-white rounded"
         type="button"
       >
@@ -500,12 +509,14 @@ return (
               >
                 {/* Input para el nombre de la categoría */}
                 <input
-                  onChange={(e) => handleChangeCategoryName(index, e)}
+                  onChange={(e) => handleChangeCategoryName(index, e,formik.handleChange)}
                   className="p-2 border rounded w-full mb-3"
                   type="text"
-                  name={`category.${index}.categoryName`}
+                  name={`category.[${index}].categoryName`}
                   placeholder="Enter category name"
+                  onBlur={formik.handleBlur}
                 />
+                {formik.touched.category?.[index]?.categoryName && formik.errors.category?.[index]?.categoryName ? (<div className='error'>{formik.errors.category?.[index]?.categoryName}</div>) : null}
 
                 {/* Si hay productos en la categoría, se muestran dentro del FieldArray */}
                 <FieldArray name={`category.${index}.products`}>
@@ -590,48 +601,57 @@ return (
                                 <div className="w-[68%] ml-4 flex flex-col">
                                   {/* Input para la imagen del producto */}
                                   <input
-                                    onChange={(e) => handleImgProduct(index, productIndex, e)}
+                                    onChange={(e) => handleImgProduct(index, productIndex, e,formik.handleChange)}
                                     className="hidden"
                                     type="file"
-                                    name={`category.${index}.products.${productIndex}.productImg`}
-                                    id={`category.${index}.products.${productIndex}.productImg`}
+                                    accept="image/*"
+                                    name={`category.[${index}].products.[${productIndex}].productImg`}
+                                    id={`category.[${index}].products.[${productIndex}].productImg`}
+                                    onBlur={formik.handleBlur}
                                   />
-                                  <label htmlFor={`category.${index}.products.${productIndex}.productImg`} className='p-2 text-[17px] rounded-md my-3 w-[40%] text-center bg-light-blue text-white hover:bg-dark-blue'>agregar imagen</label>
+                                  <label htmlFor={`category.[${index}].products.[${productIndex}].productImg`} className='p-2 text-[17px] rounded-md my-3 w-[40%] text-center bg-light-blue text-white hover:bg-dark-blue'>agregar imagen</label>
                                   {/* Input para el nombre del producto */}
                                   <input
-                                    onChange={(e) => handleProductName(index, productIndex, e)}
+                                    onChange={(e) => handleProductName(index, productIndex, e,formik.handleChange)}
                                     className="mb-4 p-2 border rounded"
                                     type="text"
                                     placeholder="Product Name"
-                                    name={`category.${index}.products.${productIndex}.productName`}
+                                    name={`category.[${index}].products.[${productIndex}].productName`}
+                                    onBlur={formik.handleBlur}
                                   />
+                                  {formik.touched.category?.[index]?.products?.[productIndex]?.productName && formik.errors.category?.[index]?.products?.[productIndex]?.productName ? (<div className='error'>{ formik.errors.category?.[index]?.products?.[productIndex]?.productName}</div>) : null}
                                   {/* Input para la descripción del producto */}
                                   <input
-                                    onChange={(e) => handleProductDescription(index, productIndex, e)}
+                                    onChange={(e) => handleProductDescription(index, productIndex, e,formik.handleChange)}
                                     className="mb-4 p-2 border rounded"
                                     type="text"
                                     placeholder="Product Description"
-                                    name={`category.${index}.products.${productIndex}.productDescription`}
+                                    name={`category.[${index}].products.[${productIndex}].productDescription`}
+                                    onBlur={formik.handleBlur}
                                   />
+                                  {formik.touched.category?.[index]?.products?.[productIndex]?.productDescription && formik.errors.category?.[index]?.products?.[productIndex]?.productDescription ? (<div className='error'>{ formik.errors.category?.[index]?.products?.[productIndex]?.productDescription}</div>) : null}
                                   {/* Checkbox y input para el precio */}
                                   <div className="flex items-center">
                                     <div className="flex items-center mr-4">
                                       <label>Top</label>
                                       <input
-                                        onChange={(e)=>handleProductTop(index,productIndex,e)}
+                                        onChange={(e)=>handleProductTop(index,productIndex,e,formik.handleChange)}
                                         className="mx-2"
                                         type="checkbox"
-                                        name={`category.${index}.products.${productIndex}.top`}
+                                        name={`category.[${index}].products.[${productIndex}].top`}
+                                        onBlur={formik.handleBlur}
                                       />
                                     </div>
                                     <div className="flex items-center">
                                       <label className="mx-2">Price $</label>
                                       <input
-                                        onChange={(e) => handleProductPrice(index, productIndex, e)}
+                                        onChange={(e) => handleProductPrice(index, productIndex, e,formik.handleChange)}
                                         className="p-2 border rounded w-24 h-10"
                                         type="number"
-                                        name={`category.${index}.products.${productIndex}.price`}
+                                        name={`category.[${index}].products.[${productIndex}].price`}
+                                        onBlur={formik.handleBlur}
                                       />
+                                      {formik.touched.category?.[index]?.products?.[productIndex]?.price && formik.errors.category?.[index]?.products?.[productIndex]?.price ? (<div className='error'>{ formik.errors.category?.[index]?.products?.[productIndex]?.price}</div>) : null}
                                     </div>
                                   </div>
                                 </div>

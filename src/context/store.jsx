@@ -2,6 +2,7 @@ import { AuthProvider } from "./AuthContext";
 import { StepperProvider } from "./StepperContext";
 import { LoaderProvider } from './LoaderContext';
 import { QrProvider } from "./QrContext";
+import ValidateProvider from "./validateFormContext"
 import MenuProvider from "../components/Layout/qrContent/forms/menu/menuContext";
 
 /**
@@ -15,9 +16,11 @@ export const Store = ({ children }) => {
             <AuthProvider>
                 <StepperProvider>
                     <QrProvider>
-                        <MenuProvider>
-                            {children}
-                        </MenuProvider>
+                        <ValidateProvider>
+                            <MenuProvider>
+                                {children}
+                            </MenuProvider>
+                        </ValidateProvider>
                     </QrProvider>
                 </StepperProvider>
             </AuthProvider>

@@ -14,6 +14,7 @@ import { ImUpload2 } from "react-icons/im";
 import GradientColorPicker from 'react-gcolor-picker'; // Importamos el nuevo color picker
 import { IoIosClose } from "react-icons/io";
 import { useTranslation } from 'react-i18next';
+import { useValidate } from '../../../../context/validateFormContext';
 
 export const MusicForm = ({ onFormChangeMusic, location, musicFormValues }) => {
     const [title, setTitle] = useState('');
@@ -41,6 +42,8 @@ export const MusicForm = ({ onFormChangeMusic, location, musicFormValues }) => {
     const { t } = useTranslation();
     const isEditRoute = location.pathname.startsWith('/edit')
 
+    const {setValidateFormMusic,validateFormMusic}=useValidate();
+
     const validateForm = (values) => {
         const errors = {};
 
@@ -65,6 +68,16 @@ export const MusicForm = ({ onFormChangeMusic, location, musicFormValues }) => {
 
         return errors;
     };
+
+    const validateFormFields=()=>{
+        if (Object.keys(formErrors).length > 0) {
+            setValidateFormMusic(false);
+            return false;
+          } else {
+            setValidateFormMusic(true);
+            return true;
+          }
+    }
 
     const handleTitleChange = (e) => {
         setTitle(e.target.value);
@@ -321,6 +334,10 @@ export const MusicForm = ({ onFormChangeMusic, location, musicFormValues }) => {
         });
         setUpdatedSelectedOptions(updatedOptions);
     }, [selectedOptions]);
+
+    useEffect(()=>{
+        validateFormFields();
+    },[formErrors]);
 
     const handleRemoveImage = () => {
         setImage(null);

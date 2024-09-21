@@ -21,6 +21,8 @@ import CustomQr from './customQr';
 import Button from '@mui/material/Button';
 import './index.css'
 import { useTranslation } from 'react-i18next';
+import { useValidate } from '../../../context/validateFormContext';
+import { toast } from 'sonner';
 
 function TabPanel(props) {
     const { children, value, index, ...other } = props;
@@ -79,6 +81,8 @@ export default function ChangeFrame({ name, appFormValues, socialFormValues, mus
     const { t } = useTranslation()
     const contentTexts = UseContentTexts();
 
+    const {validateFormApp,validateFormMusic,validateFormSocial,validateFormWifi,validateFormLink,validateFormPdf}=useValidate();
+
     // console.log(contentName)
     // console.log("ChangeFrame - appFormValues:", appFormValues);
     // console.log("ChangeFrame - socialFormValues:", socialFormValues);
@@ -86,11 +90,11 @@ export default function ChangeFrame({ name, appFormValues, socialFormValues, mus
 
     React.useEffect(() => {
         if (isSmallScreen || isSpecialContent) {
-            setValue(1); // Cambia al tab de "QR" si la pantalla es pequeña o el contentName es especial
-            setIsTabClickable(false); // Hace el tab "QR" no clickeable
+            setValue(1);
+            setIsTabClickable(validateFormWifi);
         } else {
-            setValue(0); // Cambia al tab de "Phone" si la pantalla es grande y el contentName no es especial
-            setIsTabClickable(true); // Hace los tabs clickeables
+            setValue(0);
+            setIsTabClickable(true);
         }
     }, [isSmallScreen, isSpecialContent]);
 
@@ -100,8 +104,12 @@ export default function ChangeFrame({ name, appFormValues, socialFormValues, mus
     }, [name, isSmallScreen, isSpecialContent]);
 
     const handleChange = (event, newValue) => {
-        setValue(newValue);
-    };
+        if (validateFormApp==false || validateFormMusic==false || validateFormSocial==false || validateFormWifi==false || validateFormLink==false || validateFormPdf==false) {
+          toast.error("Please complete all fields to continue with the QR customization",{duration:3000});
+        } else {
+          setValue(newValue);
+        }
+      };
 
     const content = contentTexts[contentName.toLowerCase().replace(/\s+/g, '-')];
     if (!content) {
@@ -154,7 +162,10 @@ export default function ChangeFrame({ name, appFormValues, socialFormValues, mus
                         }}
                     >
                         {!(isSmallScreen || isSpecialContent) && <Tab label="Phone" />}  {/* Oculta el tab "Phone" en pantallas pequeñas o para contentName especial */}
-                        <Tab label="QR" disabled={!isTabClickable} />
+                            <Tab 
+                            label="QR" 
+                            disabled={!isTabClickable}
+                            />
                     </Tabs>
                 </AppBar>
                 {!(isSmallScreen || isSpecialContent) && (
@@ -173,7 +184,7 @@ export default function ChangeFrame({ name, appFormValues, socialFormValues, mus
                         </div>
                     </TabPanel>
                 )}
-                <TabPanel value={value} index={1} dir={theme.direction} className="w-full flex justify-center">
+                <TabPanel value={value} index={1} dir={theme.direction}  className="w-full flex justify-center">
                     <div className="w-[420px] max-w-[500px] px-5 relative">
                         <h2 className="text-center text-2xl font-bold mb-8">{t("Preview")} QRytogenia</h2>
                         <CustomQr 

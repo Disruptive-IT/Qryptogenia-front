@@ -170,7 +170,7 @@ const getLinkTemplate=async(id)=>{
             >
               {FormValues.category.map((element, index) => (
                 <Tab
-                  sx={{ color: 'white',fontWeight:'800'}}
+                  sx={{ color: FormValues.colorMenu,fontWeight:'800'}}
                   key={index}
                   label={element.categoryName!==""?element.categoryName:`category ${index+1}`}
                   value={index}
@@ -178,7 +178,7 @@ const getLinkTemplate=async(id)=>{
               ))}
               {topProducts.length>0 && (
                 <Tab
-                  sx={{ color: 'white' }}
+                  sx={{ color:FormValues.colorMenu,fontWeight:'800' }}
                   key={top}
                   label={"top"}
                   value={FormValues.category.length}

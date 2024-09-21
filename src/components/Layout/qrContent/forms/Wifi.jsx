@@ -1,8 +1,9 @@
 import { useFormik } from "formik";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import instance from "../../../../libs/axios";
 import Swal from "sweetalert2";
 import { useQr } from "../../../../context/QrContext";
+import { useValidate } from "../../../../context/validateFormContext";
 
 function FormWifi() {
     const [initialValues, setInitialValues] = useState({
@@ -12,12 +13,24 @@ function FormWifi() {
     });
 
     const { qrData, setQrData } = useQr();
+    const {validateFormWifi,setValidateFormWifi}=useValidate();
 
     const handleWifiLink = (link) => {
         setQrData(link);
     };
 
     let wifiLink;
+
+    const validateFormFields=()=>{
+        if (Object.keys(formik.errors).length > 0) {
+            setValidateFormWifi(false);
+            return false;
+          } else {
+            setValidateFormWifi(true);
+            return true;
+          }
+      }
+
 
     const getWifi = async () => {
         try {
@@ -118,6 +131,10 @@ function FormWifi() {
             }, 400);
         }
     });
+
+    useEffect(()=>{
+        validateFormFields();
+    },[formik.errors])
 
     return (
         <div>
