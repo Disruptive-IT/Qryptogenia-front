@@ -80,7 +80,7 @@ function FormWifi() {
             errors.ssid = "SSID is required";
         }
 
-        if (!values.security_type) {
+        if (values.security_type=='selecciona') {
             errors.security_type = "Security type is required";
         }
 

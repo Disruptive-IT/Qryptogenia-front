@@ -30,6 +30,13 @@ export default function MenuProvider({children}) {
         }))
     }
 
+    const usertemplateNull=()=>{
+        setFormData((prevValues)=>({
+            ...prevValues,
+            userTemplate:null
+        }))
+    }
+
     const handleLogo = (e,handler) => {
         const file = e.target.files[0];
     
@@ -55,7 +62,30 @@ export default function MenuProvider({children}) {
         if(handler) handler(e);
     };
     
+    const handleUserTemplate = (e,handler) => {
+        const file = e.target.files[0];
     
+        if (file && file.type.startsWith("image/")) {
+            const reader = new FileReader();
+            reader.addEventListener("load", (event) => {
+                const previewElement = document.getElementById("userTemplate");
+                if (previewElement) {
+                    previewElement.src = reader.result;
+                }
+            });
+            
+            setFormData((prevValues) => ({
+                ...prevValues,
+                userTemplate: file
+            }));
+    
+            reader.readAsDataURL(file); 
+        } else {
+            console.error("Por favor, selecciona un archivo de imagen válido.");
+        }
+
+        if(handler) handler(e);
+    };
 
     const handleBackgroundCard = (color) => {
         if (color) {
@@ -282,7 +312,9 @@ export default function MenuProvider({children}) {
             handleProductName,
             handleProductDescription,
             handleProductPrice,
-            handleProductTop
+            handleProductTop,
+            handleUserTemplate,
+            usertemplateNull
         }}>
             {children}
         </MenuContext.Provider>

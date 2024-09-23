@@ -56,10 +56,10 @@ const getLinkTemplate=async(id)=>{
 }
   
   const topProducts=FormValues.category.flatMap(category=>category.products.filter(product=>product.top==true));
-  console.log(topProducts);
+  // console.log(topProducts);
   
-  console.log("modal producto activo ",activeprod);
-  console.log("catgeoria activa: ",activeCategory);
+  // console.log("modal producto activo ",activeprod);
+  // console.log("catgeoria activa: ",activeCategory);
 
   const theme = createTheme({
     palette:{
@@ -124,8 +124,8 @@ const getLinkTemplate=async(id)=>{
           id="main-container"
           style={{
             backgroundColor: FormValues.imgTemplate!==null ? 'rgba(255, 255, 255, 0.8)': FormValues.backgroundCard,
-            backgroundImage: FormValues.imgTemplate == null ? '' : `url(${templateUrl?.image})`,
-            backgroundSize: 'cover',
+            backgroundImage: FormValues.imgTemplate == null  ? (FormValues.userTemplate !== null ? `url(${URL.createObjectURL(FormValues.userTemplate)})` : '') : `url(${templateUrl?.image})`,
+            backgroundSize: '340px 660px',
             backgroundPosition: 'center',
             backgroundRepeat: 'no-repeat',
             position: 'relative',

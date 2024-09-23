@@ -4,6 +4,7 @@ export const menuFormData={
     backgroundCard:"#000",
     colorMenu:'#fff',
     fontFamily:'38aaa491-5385-4ebf-b0a5-6d718ddf9052',
+    userTemplate:null,
     imgTemplate:null,
     category:[{
         categoryName:"",

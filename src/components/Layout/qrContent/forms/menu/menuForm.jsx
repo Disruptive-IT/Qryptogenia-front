@@ -23,7 +23,7 @@ function MenuForm(){
         handleColorDescriptionProduct,
         handleColorPriceProduct,
         isStyleCheck,setIsStyleCheck,
-        handleMenuColor
+        handleMenuColor,handleUserTemplate,usertemplateNull
     }=UseMenu();
 
 
@@ -106,6 +106,11 @@ function MenuForm(){
     
     const handleShowPricePicker=(value)=>{
         setShowPricePicker(value)
+    }
+
+    const resetUserTemplate=(e)=>{
+      const input=document.getElementById('userTemplate');
+      input.value='';
     }
     
     const validation=yup.object().shape({
@@ -280,6 +285,16 @@ return (
                             <img onClick={(e)=>{handleTemplate(e); setIndexTemplate(index)}} id={element.id} className={`w-full h-full object-cover rounded-lg hover:shadow-md hover:shadow-black ${indexTemplate==index ? 'brightness-50':''}`} src={element.image} alt="imagen" />
                           </motion.div>
                         ))}
+                        <div onClick={()=>{templateNull();setIndexTemplate(null)}} className={`w-1/5 flex-shrink-0 flex align-middle justify-center bg-white rounded-lg overflow-auto ${indexTemplate==null ? 'border-[2px] border-black':''}`}>
+                            <div className='w-ful h-full flex align-middle items-center'>
+                              <label className={` ${formData.userTemplate!==null ? 'hidden':'p-4 bg-light-blue hover:bg-dark-blue text-white rounded-md'}`} htmlFor="userTemplate">+</label>
+                              <input onChange={(e)=>handleUserTemplate(e,formik.handleChange)} className='hidden' name='userTemplate' id='userTemplate' type="file" accept='image/*' />
+                              <div className={`${formData.userTemplate!==null ? 'w-full h-full relative top-0 overflow-auto':'hidden'}`}>
+                                <span onClick={async()=>{await resetUserTemplate(); if(formData.userTemplate!==null){usertemplateNull();}}} className='z-50 absolute top-1 right-2 cursor-pointer text-red-600 font-bold'>x</span>
+                                <img src={formData.userTemplate!==null ? URL.createObjectURL(formData.userTemplate):''} className={`${formData.userTemplate!==null ? 'object-cover w-full h-full':''}`} alt="" id='userTemplate' />
+                              </div>
+                            </div>
+                        </div>
                       </div>
                       <button onClick={handlePrev} type='button' className="absolute left-0 top-1/2 transform -translate-y-1/2 bg-gray-700 text-white px-4 py-2 opacity-75 hover:opacity-100">‹</button>
                       <button onClick={handleNext} type='button' className="absolute right-0 top-1/2 transform -translate-y-1/2 bg-gray-700 text-white px-4 py-2 opacity-75 hover:opacity-100">›</button>
