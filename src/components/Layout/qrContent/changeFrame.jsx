@@ -69,7 +69,10 @@ const fabGreenStyle = {
     },
 };
 
-
+/*
+ * @UpdatedBy : Nicolas Barrios,   @date 2024-09-26 18:46:29
+ * @description : se agrego validacion formularios antes de cambiar de tab a qr
+ */
 
 export default function ChangeFrame({ name, appFormValues, socialFormValues, musicFormValues, location, qrId,menuFormValues }) {
     const { contentName } = useParams();
