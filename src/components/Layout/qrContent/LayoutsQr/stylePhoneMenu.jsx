@@ -120,7 +120,7 @@ const getLinkTemplate=async(id)=>{
   return (
       <div className='parent-container absolute left-0 w-full h-full'>
         <div
-          className="relative left-0 top-0 w-full h-full overflow-y-auto p-4"
+          className="relative left-0 top-0 w-full h-full  overflow-y-auto p-4"
           id="main-container"
           style={{
             backgroundColor: FormValues.imgTemplate!==null ? 'rgba(255, 255, 255, 0.8)': FormValues.backgroundCard,
@@ -135,11 +135,11 @@ const getLinkTemplate=async(id)=>{
           }}
         >
         <div
-          className="w-[60%] overflow-auto rounded-[10px] mx-auto my-6 bg-slate-500 flex justify-center items-center"
+          className="w-[60%] overflow-auto max-w-[196px] max-h-[196px] rounded-[10px] mx-auto my-6 bg-slate-500 flex justify-center items-center"
           id="logo-container"
         >
           <img
-            className={`w-full h-auto object-contain rounded-md ${FormValues.restaurantLogo!==null ? '':'hidden'}`}
+            className={`w-full h-auto  object-contain rounded-md ${FormValues.restaurantLogo!==null ? '':'hidden'}`}
             id="restaurantLogoPreview"
             alt="restaurantLogo"
             src={FormValues.restaurantLogo!==null ? URL.createObjectURL(FormValues.restaurantLogo):''}
@@ -151,7 +151,7 @@ const getLinkTemplate=async(id)=>{
           id="name-container"
         >
           <h1 style={{fontFamily:fontFamily?.fontName}} className="text-center font-semibold text-[25px] break-words">
-            {FormValues.restaurantName!==''?FormValues.restaurantName:'Restaurant name'}
+            {FormValues.restaurantName!==''? FormValues.restaurantName : 'Restaurant name'}
           </h1>
         </div>
         <div
@@ -235,7 +235,8 @@ const getLinkTemplate=async(id)=>{
           </Box>
           </ThemeProvider>
         </div>
-        <div className={`absolute w-full max-w-full max-h-full h-full bg-[rgba(0,0,0,0.5)] inset-0 text-white ${openModal ? '' : 'hidden'}`}>
+        {/*modal*/}
+        <div className={`absolute inset-0 w-full w-90 overflow-hidden bg-[rgba(0,0,0,0.5)] text-white ${openModal ? '' : 'hidden'}`}>
   <button onClick={() => { handleCloseModal(); setActiveprod(0); }} className='m-9 float-end'>
     <span className='text-red-600 font-bold text-[25px]'>x</span>
   </button>

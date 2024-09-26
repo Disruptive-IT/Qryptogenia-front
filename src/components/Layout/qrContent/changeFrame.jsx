@@ -81,7 +81,7 @@ export default function ChangeFrame({ name, appFormValues, socialFormValues, mus
     const { t } = useTranslation()
     const contentTexts = UseContentTexts();
 
-    const {validateFormApp,validateFormMusic,validateFormSocial,validateFormWifi,validateFormLink,validateFormPdf}=useValidate();
+    const {validateFormApp,validateFormMusic,validateFormSocial,validateFormMenu}=useValidate();
 
     // console.log(contentName)
     // console.log("ChangeFrame - appFormValues:", appFormValues);
@@ -91,7 +91,7 @@ export default function ChangeFrame({ name, appFormValues, socialFormValues, mus
     React.useEffect(() => {
         if (isSmallScreen || isSpecialContent) {
             setValue(1);
-            setIsTabClickable(validateFormWifi);
+            setIsTabClickable(false);
         } else {
             setValue(0);
             setIsTabClickable(true);
@@ -104,8 +104,8 @@ export default function ChangeFrame({ name, appFormValues, socialFormValues, mus
     }, [name, isSmallScreen, isSpecialContent]);
 
     const handleChange = (event, newValue) => {
-        if (validateFormApp==false || validateFormMusic==false || validateFormSocial==false || validateFormWifi==false || validateFormLink==false || validateFormPdf==false) {
-          toast.error("Please complete all fields to continue with the QR customization",{duration:3000});
+        if (validateFormApp==false || validateFormMusic==false || validateFormSocial==false || validateFormMenu==false) {
+          toast.warning("Please complete all fields to continue with the QR customization",{duration:3000});
         } else {
           setValue(newValue);
         }

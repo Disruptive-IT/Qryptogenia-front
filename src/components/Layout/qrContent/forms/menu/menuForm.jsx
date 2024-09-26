@@ -1,4 +1,4 @@
-import { FieldArray, Formik, useFormik,Field } from 'formik';
+import { FieldArray, Formik, useFormik,Field, ErrorMessage } from 'formik';
 import * as yup from 'yup';
 import { useEffect, useMemo, useState } from 'react';
 import { UseMenu } from './menuContext';
@@ -6,11 +6,13 @@ import GradientColorPicker from 'react-gcolor-picker';
 import { motion } from "framer-motion";
 import EjectIcon from '@mui/icons-material/Eject';
 import DeleteIcon from '@mui/icons-material/Delete';
-import { toast } from 'sonner';
 import CancelIcon from '@mui/icons-material/Cancel';
 import {Accordion,AccordionItem} from '@nextui-org/accordion'
 import './menu.css'
 import instance from '../../../../../libs/axios';
+import { toast } from 'sonner';
+import { duration } from '@mui/material';
+import { useValidate } from '../../../../../context/validateFormContext';
 
 function MenuForm(){
     const {formData,handleRestaurantName,handleLogo,handleBackgroundCard,addCategory,
@@ -30,6 +32,8 @@ function MenuForm(){
     const[activeCategory,setActiveCategory]=useState(0);
     const[activeProduct,setActiveProduct]=useState(0);
     const[initialValues,setInitialValues]=useState(formData);
+    const [confirmAddCategory,setConfirmAddCategory]=useState(false);
+    const [confirmAddProduct,setConfirmAddProduct]=useState(false);
     const[showBackgroundPicker,setShowBackgroundPicker]=useState(false);
     const[showMenuPicker,setShowMenuPicker]=useState(false);
     const[showBackCategoryPicker,setShowBackCategoryPicker]=useState(false);
@@ -42,11 +46,13 @@ function MenuForm(){
     const [currentTemplate, setCurrentTemplate] = useState(0);
     const [indexTemplate,setIndexTemplate]=useState(null);
 
+    const {validateFormMenu,setValidateFormMenu}=useValidate();
+
       console.log(formData);
-      console.log("categoria ",activeCategory);
-      console.log("producto ",activeProduct);
-      console.log("fonts",fonts);
-      console.log("templates: ",templates);
+      // console.log("categoria ",activeCategory);
+      // console.log("producto ",activeProduct);
+      // console.log("fonts",fonts);
+      // console.log("templates: ",templates);
 
     const getFonts=async()=>{
         try{
@@ -67,6 +73,16 @@ function MenuForm(){
             console.error("error fonts request: ",error.message);
         }
     }
+
+    const validateFormFields = () => {
+      if (Object.keys(formik.errors).length > 1) {
+        setValidateFormMenu(false);
+        return false;
+      } else {
+        setValidateFormMenu(true);
+        return true;
+      }
+    };
 
       const handlePrev = () => {
         setCurrentTemplate((prevIndex) => (prevIndex > 0 ? prevIndex - 1 : templates.length - 1));
@@ -113,41 +129,118 @@ function MenuForm(){
       input.value='';
     }
     
-    const validation=yup.object().shape({
-      restaurantName:yup.string().matches(/^[a-zA-Z0-9\s]+$/, 'restaurant name just can contain letters and numbers').required('restaurant name is required'),
-      restaurantLogo:yup.mixed()
-      .required('file is required')
-      .test('fileType', 'the file must be an image', value => {
-        return value && ['image/jpg', 'image/jpeg', 'image/png','image/webp'].includes(value.type);
-      }),
-      backgroundCard: yup.string().matches(/^(#([A-Fa-f0-9]{3}|[A-Fa-f0-9]{6})|rgb\((\s*\d{1,3}\s*,){2}\s*\d{1,3}\s*\))$/, 'invalid color format'),
-      colorMenu:yup.string().matches(/^(#([A-Fa-f0-9]{3}|[A-Fa-f0-9]{6})|rgb\((\s*\d{1,3}\s*,){2}\s*\d{1,3}\s*\))$/, 'invalid color format'),
-      category:yup.array().of(
-        yup.object().shape({
-          categoryName:yup.string().matches(/^[a-zA-Z0-9\s]+$/, 'category name just can contain letters and numbers').required('category name is required'),
-          products:yup.array().of(
-            yup.object().shape({
-              productImg:yup.mixed()
-              .required('image product is required')
-              .test('fileType', 'the file must be an image', value => {
-                return value && ['image/jpg', 'image/jpeg', 'image/png','image/webp'].includes(value.type);
-              }),
-              productName:yup.string().matches(/^[a-zA-Z0-9\s]+$/, 'product name just can contain letters and numbers').required('product name is required'),
-              productDescription:yup.string().matches(/^[a-zA-Z0-9\s]+$/, 'description name just can contain letters and numbers'),
-              price:yup.number().positive('price cant be negative').typeError('price must be a number').min(0,'the price must be greater than zero').required('price product is required'),
-            })
-          )
-        })
-      )
-    })
+    const validation = (values) => {
+      const errors = {};
+    
+      const specials = /(?=.*?[#?!@$ %^&*-<>])/;
+      const letters = /[a-zA-Z]/;
+    
+      // Validación del nombre del restaurante
+      if (!values.restaurantName) {
+        errors.restaurantName = 'Restaurant name is required';
+      } else if (specials.test(values.restaurantName)) {
+        errors.restaurantName = 'Restaurant name cannot contain special characters';
+      }
+
+    
+      // Validación del logo del restaurante
+      if (!values.restaurantLogo) {
+        errors.restaurantLogo = 'Restaurant logo is required';
+      }
+    
+      // Validación de las categorías y productos
+      values.category.forEach((category, indexCategory) => {
+        if (!errors.category) {
+          errors.category = [];
+        }
+    
+        // Validación del nombre de la categoría
+        if (!category.categoryName) {
+          if (!errors.category[indexCategory]) {
+            errors.category[indexCategory] = {};
+          }
+          errors.category[indexCategory].categoryName = 'Category name is required';
+        }
+    
+        // Validación de los productos dentro de la categoría
+        if (category.products.length > 0) {
+          category.products.forEach((prod, indexProd) => {
+            if (!errors.category[indexCategory]) {
+              errors.category[indexCategory] = {};
+            }
+            if (!errors.category[indexCategory].products) {
+              errors.category[indexCategory].products = [];
+            }
+    
+            // Validaciones de producto
+            if (!prod.productImg) {
+              errors.category[indexCategory].products[indexProd] = {
+                ...errors.category[indexCategory].products[indexProd],
+                productImg: 'Product image is required',
+              };
+            }
+    
+            if (!prod.productName) {
+              errors.category[indexCategory].products[indexProd] = {
+                ...errors.category[indexCategory].products[indexProd],
+                productName: 'Product name is required',
+              };
+            }
+    
+            if (!prod.productDescription) {
+              errors.category[indexCategory].products[indexProd] = {
+                ...errors.category[indexCategory].products[indexProd],
+                productDescription: 'Product description is required',
+              };
+            }
+    
+            if (!prod.price) {
+              errors.category[indexCategory].products[indexProd] = {
+                ...errors.category[indexCategory].products[indexProd],
+                price: 'Price is required',
+              };
+            } else if (letters.test(prod.price)) {
+              errors.category[indexCategory].products[indexProd] = {
+                ...errors.category[indexCategory].products[indexProd],
+                price: 'Price cannot contain letters',
+              };
+            } else if (prod.price <= 0) {
+              errors.category[indexCategory].products[indexProd] = {
+                ...errors.category[indexCategory].products[indexProd],
+                price: 'Price cannot be negative or zero',
+              };
+            }
+          });
+    
+          // Eliminar el array de productos si está vacío
+          if (errors.category[indexCategory].products.length === 0) {
+            delete errors.category[indexCategory].products;
+          }
+        }
+    
+        // Eliminar la categoría si no hay errores
+        if (Object.keys(errors.category[indexCategory] || {}).length === 0) {
+          delete errors.category[indexCategory];
+        }
+      });
+    
+      // Eliminar el array de categorías si está vacío
+      if (errors.category && errors.category.length === 0) {
+        delete errors.category;
+      }
+    
+      return errors;
+    };
+    
     
     const formik=useFormik({
         initialValues,
-        validationSchema:validation,
+        validate:validation,
         onsubmit:(values,{setSubmitting})=>{
             console.log(values);
-        }
+        },
     });
+    console.log("intial values ",formik.values);
 
     useEffect(()=>{
       const executeFunctions=async()=>{
@@ -158,16 +251,21 @@ function MenuForm(){
       executeFunctions();
     },[])
 
+    useEffect(()=>{
+      validateFormFields()
+    },[formik.errors])
+
     console.log("formik errors",formik.errors);
 
 return (
     <div className='p-4'>
         <Formik
             initialValues={formData}
-            validationSchema={validation}
+            validate={validation}
             onSubmit={(values) => {
                 console.log(values);
             }}
+            validateOnBlur={true}
         >
             {({ values }) => (
                 <form action="" className='w-full h-auto flex flex-col'>
@@ -177,32 +275,34 @@ return (
               <div className="flex flex-col p-4 mr-4">
                 <label className="my-1" htmlFor="restaurantName">Restaurant Name</label>
                 <input
-                  onChange={(e) => handleRestaurantName(e, formik.handleChange)}
-                  className="p-2 border rounded w-80"
+                  onChange={(e)=>handleRestaurantName(e,formik.handleChange)}
+                  className="mb-1 p-2 border rounded w-80"
                   type="text"
                   onBlur={formik.handleBlur}
                   name="restaurantName"
                   id="restaurantName"
                 />
-                {formik.touched.restaurantName && formik.errors.restaurantName ? (<div className='error'>{formik.errors.restaurantName}</div>) : null}
+                {formik.touched.restaurantName && formik.errors.restaurantName ? (<div className='text-red-600 my-1 text-[13px]'>{formik.errors.restaurantName}</div>):<div className='max-h-[13px] my-1'></div>}
               </div>
 
               {/* Contenedor del botón para subir el logo */}
               <div className="flex flex-col justify-center items-center p-4 mt-7 ml-6">
                 <label
                   htmlFor="restaurantLogo"
+                  onClick={(e)=>{formik.setTouched({ ...formik.touched, restaurantLogo: true });}}
                   className="cursor-pointer bg-light-blue hover:bg-dark-blue text-white py-2 px-4 rounded-md"
                 >
-                  Subir logo
+                  load logo
                 </label>
+                {formik.touched.restaurantLogo && formik.errors.restaurantLogo ? <div className='text-red-600 my-1 text-[13px]'>{formik.errors.restaurantLogo}</div>:null}
                 <input
-                  onChange={(e) => handleLogo(e, formik.handleChange)}
                   className="hidden"
                   type="file"
                   accept="image/*"
                   name="restaurantLogo"
                   id="restaurantLogo"
                   onBlur={formik.handleBlur}
+                  onChange={(e) => {handleLogo(e); formik.setFieldValue('restaurantLogo',e.target.files[0]);}}
                 />
               </div>
             </div>
@@ -449,7 +549,10 @@ return (
       {/* Botón para agregar nueva categoría */}
       <button
         onClick={() => {
-            push({
+          if(formik.errors.category?.length>0){
+            toast.warning('please complete all category fields',{duration:2000})
+          }else{
+             push({
               categoryName: "",
               products: [{
                 backgroundProductCard: "#fff",
@@ -461,7 +564,7 @@ return (
                 productDescription: "",
                 top: false,
                 price: null
-              }],
+              }]
             });
             addCategory({
               categoryName: "",
@@ -477,7 +580,24 @@ return (
                 price: null
               }],
             });
-        }}        
+            formik.setFieldValue('category', [
+              ...formik.values.category,
+              {
+                categoryName: "",
+                products: [{
+                  backgroundProductCard: "#fff",
+                  colorName: "#000",
+                  colorDescription: "#000",
+                  colorPrice: "#000",
+                  productImg: null,
+                  productName: "",
+                  productDescription: "",
+                  top: false,
+                  price: null
+                }]
+              }
+            ]);
+        }}}        
         className="mb-4 px-4 py-2 bg-light-blue hover:bg-dark-blue text-white rounded"
         type="button"
       >
@@ -508,6 +628,9 @@ return (
                         if (activeCategory === index) {
                           handleActiveCategory(index - 1);
                         }
+                        const updatedCategories=[...formik.values.category];
+                        updatedCategories.splice(index,1)
+                        formik.setFieldValue(`category`,updatedCategories);
                       }}
                       type="button"
                       className={`p-1 text-red-600 self-end font-semibold hover:underline ${values.category.length > 1 ? "" : "hidden"}`}
@@ -522,19 +645,23 @@ return (
                 onClick={() => setActiveCategory(index)}
                 className={`bg-gray-300 my-1 p-3 w-full rounded-2xl cursor-pointer`}
               >
-                {/* Input para el nombre de la categoría */}
-                <input
-                  onChange={(e) => handleChangeCategoryName(index, e,formik.handleChange)}
-                  className="p-2 border rounded w-full mb-3"
-                  type="text"
-                  name={`category.[${index}].categoryName`}
-                  placeholder="Enter category name"
-                  onBlur={formik.handleBlur}
-                />
-                {formik.touched.category?.[index]?.categoryName && formik.errors.category?.[index]?.categoryName ? (<div className='error'>{formik.errors.category?.[index]?.categoryName}</div>) : null}
-
+                <div className='flex flex-col'>
+                  {/* Input para el nombre de la categoría */}
+                  <input
+                    onChange={(e) => handleChangeCategoryName(index, e,formik.handleChange)}
+                    className="p-2 border rounded w-full"
+                    type="text"
+                    name={`category[${index}].categoryName`}
+                    placeholder="Enter category name"
+                    onBlur={formik.handleBlur}
+                  />
+                {formik.touched.category?.[index] && formik.errors.category?.[index]?.categoryName ? (
+                  <div className='text-[13px] text-red-600 my-2'>
+                    {formik.errors.category[index].categoryName}
+                  </div>) : (<div className='text-[13px] my-2 min-h-[20px]'></div>)}
+                </div>
                 {/* Si hay productos en la categoría, se muestran dentro del FieldArray */}
-                <FieldArray name={`category.${index}.products`}>
+                <FieldArray name={`category[${index}].products`}>
                   {({ push: pushProduct, remove: removeProduct }) => (
                     <div>
                       {/* Botón para agregar un nuevo producto */}
@@ -562,6 +689,20 @@ return (
                             top: false,
                             price: null,
                           });
+                          formik.setFieldValue(`category[${index}].products`,[
+                            ...formik.values.category[index]?.products,
+                            {
+                              backgroundProductCard:formData.category?.[index]?.products?.[0]?.backgroundProductCard || "#fff",
+                              colorName:formData.category?.[index]?.products?.[0]?.colorName || "#000",
+                              colorDescription:formData.category?.[index]?.products?.[0]?.colorDescription || "#000",
+                              colorPrice:formData.category?.[index]?.products?.[0]?.colorPrice || "#000",
+                              productImg: null,
+                              productName: "",
+                              productDescription: "",
+                              top: false,
+                              price: null,
+                            }
+                          ])
                         }}
                         className="mb-4 px-4 py-2 bg-light-blue hover:bg-dark-blue text-white rounded"
                         type="button"
@@ -586,6 +727,9 @@ return (
                                         handleActiveProduct(productIndex - 1);
                                         removeProduct(productIndex);
                                         removeProductToCategory(index, productIndex);
+                                        const updatedProducts=[...formik.values.category[index].products]
+                                        updatedProducts.splice(productIndex,1);
+                                        formik.setFieldValue(`category[${index}].products`,updatedProducts);
                                       }
                                     }}
                                     type="button"
@@ -614,59 +758,118 @@ return (
                                   />
                                 </div>
                                 <div className="w-[68%] ml-4 flex flex-col">
-                                  {/* Input para la imagen del producto */}
+                                  <div className='flex flex-row align-middle content-center'>
+                                    {/* Input para la imagen del producto */}
                                   <input
-                                    onChange={(e) => handleImgProduct(index, productIndex, e,formik.handleChange)}
+                                    onChange={(e) => {handleImgProduct(index, productIndex, e),formik.setFieldValue(`category[${index}].products[${productIndex}].productImg`,e.target.files[0])}}
                                     className="hidden"
                                     type="file"
                                     accept="image/*"
-                                    name={`category.[${index}].products.[${productIndex}].productImg`}
-                                    id={`category.[${index}].products.[${productIndex}].productImg`}
+                                    name={`category[${index}].products[${productIndex}].productImg`}
+                                    id={`category[${index}].products[${productIndex}].productImg`}
                                     onBlur={formik.handleBlur}
                                   />
-                                  <label htmlFor={`category.[${index}].products.[${productIndex}].productImg`} className='p-2 text-[17px] rounded-md my-3 w-[40%] text-center bg-light-blue text-white hover:bg-dark-blue'>agregar imagen</label>
-                                  {/* Input para el nombre del producto */}
-                                  <input
-                                    onChange={(e) => handleProductName(index, productIndex, e,formik.handleChange)}
-                                    className="mb-4 p-2 border rounded"
-                                    type="text"
-                                    placeholder="Product Name"
-                                    name={`category.[${index}].products.[${productIndex}].productName`}
-                                    onBlur={formik.handleBlur}
-                                  />
-                                  {formik.touched.category?.[index]?.products?.[productIndex]?.productName && formik.errors.category?.[index]?.products?.[productIndex]?.productName ? (<div className='error'>{ formik.errors.category?.[index]?.products?.[productIndex]?.productName}</div>) : null}
-                                  {/* Input para la descripción del producto */}
-                                  <input
-                                    onChange={(e) => handleProductDescription(index, productIndex, e,formik.handleChange)}
-                                    className="mb-4 p-2 border rounded"
-                                    type="text"
-                                    placeholder="Product Description"
-                                    name={`category.[${index}].products.[${productIndex}].productDescription`}
-                                    onBlur={formik.handleBlur}
-                                  />
-                                  {formik.touched.category?.[index]?.products?.[productIndex]?.productDescription && formik.errors.category?.[index]?.products?.[productIndex]?.productDescription ? (<div className='error'>{ formik.errors.category?.[index]?.products?.[productIndex]?.productDescription}</div>) : null}
+                                  <label onClick={() => {
+                                    const touched = { ...formik.touched };
+                                    
+                                    // Asegúrate de que 'category' y 'products' estén inicializados en touched
+                                    if (!touched.category) {
+                                      touched.category = [];
+                                    }
+                                    if (!touched.category[index]) {
+                                      touched.category[index] = { products: [] };
+                                    }
+                                    if (!touched.category[index].products) {
+                                      touched.category[index].products = [];
+                                    }
+                                    if (!touched.category[index].products[productIndex]) {
+                                      touched.category[index].products[productIndex] = {};
+                                    }
+
+                                    // Establece productImg como touched
+                                    touched.category[index].products[productIndex].productImg = true;
+
+                                    formik.setTouched(touched);
+                                  }}
+                                  htmlFor={`category[${index}].products[${productIndex}].productImg`} className='p-2 text-[17px] rounded-md my-3 w-[25%] text-center bg-light-blue text-white hover:bg-dark-blue'>add image</label>
+                                        {formik.touched?.category?.[index]?.products?.[productIndex]?.productImg &&
+                                      formik.errors?.category?.[index]?.products?.[productIndex]?.productImg ? (
+                                      <div className='text-[13px] text-red-600 mx-2 mt-6'>
+                                        {formik.errors.category[index].products[productIndex].productImg}
+                                      </div>
+                                    ) : (
+                                      <div className='mx-2 my-2 min-h-[20px]'></div>
+                                    )}
+                                  </div>
+                                    {/* Input para el nombre del producto */}
+                                    <input
+                                      className="mb-1 p-2 border rounded w-full"
+                                      type="text"
+                                      placeholder="Product Name"
+                                      name={`category[${index}].products[${productIndex}].productName`}
+                                      onBlur={formik.handleBlur}
+                                      onChange={(e) => {
+                                        handleProductName(index, productIndex, e);
+                                        formik.setFieldValue(`category[${index}].products[${productIndex}].productName`, e.target.value);
+                                      }}
+                                    />
+                                    {/* Mostrar mensaje de error para el nombre del producto */}
+                                    {formik.touched?.category?.[index]?.products?.[productIndex]?.productName &&
+                                      formik.errors?.category?.[index]?.products?.[productIndex]?.productName ? (
+                                      <div className='text-[13px] text-red-600 mx-2 my-2'>
+                                        {formik.errors.category[index].products[productIndex].productName}
+                                      </div>
+                                    ) : (
+                                      <div className='mx-2 my-2 min-h-[20px]'></div>
+                                    )}
+
+                                    {/* Input para la descripción del producto */}
+                                    <input
+                                      className="mb-1 p-2 border rounded w-full"
+                                      type="text"
+                                      placeholder="Product Description"
+                                      id={`category[${index}].products[${productIndex}].productDescription`}
+                                      name={`category[${index}].products[${productIndex}].productDescription`}
+                                      onBlur={formik.handleBlur}
+                                      onChange={(e) => {
+                                        handleProductDescription(index, productIndex, e);
+                                        formik.setFieldValue(`category[${index}].products[${productIndex}].productDescription`, e.target.value);
+                                      }}
+                                    />
+                                    {/* Mostrar mensaje de error para la descripción del producto */}
+                                    {formik.touched?.category?.[index]?.products?.[productIndex]?.productDescription &&
+                                      formik.errors?.category?.[index]?.products?.[productIndex]?.productDescription ? (
+                                      <div className='text-[13px] text-red-600 mx-2 my-2'>
+                                        {formik.errors.category[index].products[productIndex].productDescription}
+                                      </div>
+                                    ) : (
+                                      <div className='mx-2 my-2 min-h-[20px]'></div>
+                                    )}
                                   {/* Checkbox y input para el precio */}
                                   <div className="flex items-center">
                                     <div className="flex items-center mr-4">
                                       <label>Top</label>
                                       <input
-                                        onChange={(e)=>handleProductTop(index,productIndex,e,formik.handleChange)}
                                         className="mx-2"
                                         type="checkbox"
-                                        name={`category.[${index}].products.[${productIndex}].top`}
+                                        name={`category[${index}].products[${productIndex}].top`}
                                         onBlur={formik.handleBlur}
+                                        onChange={(e)=>{handleProductTop(index,productIndex,e); formik.setFieldValue(`category[${index}].products[${productIndex}].top`,e.target.checked)}}
                                       />
                                     </div>
                                     <div className="flex items-center">
                                       <label className="mx-2">Price $</label>
                                       <input
-                                        onChange={(e) => handleProductPrice(index, productIndex, e,formik.handleChange)}
                                         className="p-2 border rounded w-24 h-10"
                                         type="number"
-                                        name={`category.[${index}].products.[${productIndex}].price`}
+                                        name={`category[${index}].products[${productIndex}].price`}
                                         onBlur={formik.handleBlur}
+                                        onChange={(e) =>{handleProductPrice(index, productIndex, e); formik.setFieldValue(`category[${index}].products[${productIndex}].price`,e.target.value)}}
                                       />
-                                      {formik.touched.category?.[index]?.products?.[productIndex]?.price && formik.errors.category?.[index]?.products?.[productIndex]?.price ? (<div className='error'>{ formik.errors.category?.[index]?.products?.[productIndex]?.price}</div>) : null}
+                                      {formik.touched?.category?.[index]?.products?.[productIndex]?.price && 
+                                      formik.errors?.category?.[index]?.products?.[productIndex]?.price ? (
+                                      <div className='text-[13px] text-red-600 mx-2'>{formik.errors.category[index].products[productIndex].price}</div>
+                                ) : null}
                                     </div>
                                   </div>
                                 </div>

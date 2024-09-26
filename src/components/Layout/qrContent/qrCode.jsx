@@ -8,6 +8,7 @@ import Swal from 'sweetalert2';
 import { toPng } from 'html-to-image';
 import { useLocation } from 'react-router-dom';
 import html2canvas from 'html2canvas';
+import { useValidate } from '../../../context/validateFormContext';
 
 export const saveQrData = async (
     qrName, data, qrType, qrColor, qrBgColor, qrProps, qrImageInfo, qrTextProps, appFormValues, socialFormValues, musicFormValues, qrBase64, currentContentType, location, qrId
@@ -18,7 +19,6 @@ export const saveQrData = async (
             return rest; 
         });
     };
-
     console.log(qrType);
 
     const qrData = {

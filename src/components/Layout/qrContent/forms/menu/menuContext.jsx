@@ -8,11 +8,12 @@ export default function MenuProvider({children}) {
     const [formData, setFormData] = useState({...structuredClone(menuFormData)});
     const [isStyleCheck,setIsStyleCheck]=useState(false);
       
-    const handleRestaurantName =(e, handler) => {
+    const handleRestaurantName =(e,handler) => {
         setFormData(prevValues=>({
             ...prevValues,
             restaurantName:e.target.value
         }))
+
         handler(e);
     };
 
