@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Button from '@mui/material/Button';
 import Frame from './frame';
 import Logo from './logo';
@@ -11,11 +11,58 @@ import Swal from 'sweetalert2';
 import { useTranslation } from 'react-i18next';
 import { useValidate } from '../../../../context/validateFormContext';
 import { toast } from 'sonner';
+import { v4 as uuidv4 } from 'uuid';
+import axios from '../../../../libs/axios';
+
+/*
+ * @UpdatedBy : Cristian Escobar,   @date 2024-09-03 15:05:11
+ * @description : Se implemento una funcion para generar una llave unica y pasarla como prop a los componente saveQrData y QR
+ */
+
+const generateUniqueKey = async () => {
+    let uniquekey = uuidv4();
+    let isUnique = false;
+
+    while (!isUnique) {
+        try {
+            const response = await axios.get(`/qr/check-key/${uniquekey}`);
+            console.log(uniquekey);
+            if (!response.data.exists) {
+                isUnique = true;
+            } else {
+                uniquekey = uuidv4();  // Generar un nuevo uniquekey si ya existe
+            }
+        } catch (error) {
+            console.error('Error checking unique key:', error);
+            throw new Error('Failed to verify the unique key.');
+        }
+    }
+    return uniquekey;
+};
 
 const CustomQr = ({ location, qrId }) => {
     const [selectedOptionIndex, setSelectedOptionIndex] = useState(0);
+    const [uniqueKey, setUniqueKey] = useState('');
     const { qrType, qrData, qrColor, qrBgColor, qrProps, qrImageInfo, qrTextProps, appFormValues, socialFormValues, musicFormValues, qrBase64, currentContentType } = useQr();
-    console.log(musicFormValues)
+
+    useEffect(() => {
+        const fetchUniqueKey = async () => {
+            try {
+                const key = await generateUniqueKey();
+                setUniqueKey(key);
+            } catch (error) {
+                console.error('Error generating unique key:', error);
+            }
+        };
+
+        fetchUniqueKey();
+    }, [qrData, appFormValues, socialFormValues, musicFormValues]);
+
+    useEffect(() => {
+        console.log('Unique key updated:', uniqueKey);
+    }, [uniqueKey]); // Este useEffect se ejecutará cada vez que uniqueKey cambie
+
+
     const handleOptionSelect = (index) => {
         setSelectedOptionIndex(index);
     };
@@ -71,8 +118,8 @@ const CustomQr = ({ location, qrId }) => {
                 });
             } else {
                 console.log(musicFormValues)
-                console.log(qrType)
-                await saveQrData(qrName, qrData, qrType, qrColor, qrBgColor, qrProps, qrImageInfo, qrTextProps, appFormValues, socialFormValues, musicFormValues, qrBase64, currentContentType, location, qrId);
+                console.log(uniqueKey)
+                await saveQrData(qrName, qrData, qrType, qrColor, qrBgColor, qrProps, qrImageInfo, qrTextProps, appFormValues, socialFormValues, musicFormValues, qrBase64, currentContentType, location, qrId, uniqueKey);
             }
         } else {
             toast.info('QR code saving was cancelled.');
@@ -93,7 +140,7 @@ const CustomQr = ({ location, qrId }) => {
     return (
         <div className='w-full rounded-md flex flex-col justify-between pb-4 font-sans'>
             <div className={`flex relative mb-4 py-8 max-h-[400px] ${qrTextProps.qrText ? 'min-h-[380px]' : ''}`}>
-                <QR />
+                <QR uniqueKey={uniqueKey}/>
             </div>
             <div className='flex flex-col h-[400px] w-full px-8'>
                 <div className='space-x-3 mx-auto flex flex-row items-center overflow-x-auto'>

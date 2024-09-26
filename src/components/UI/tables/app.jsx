@@ -17,6 +17,40 @@ const formatDate = (isoDate) => {
   return date.toLocaleDateString('es-US');
 };
 
+/**
+ * @Author : Cristian Escobar, @date 2024-09-04 10:45:00
+ * @description : Este componente se encarga de mostrar una tabla de códigos QR, gestionando búsquedas, cambios de estado, vistas previas, descargas y edición. Además, maneja la interacción con la API mediante Axios y modales para ver detalles y gestionar los códigos QR.
+ * 
+ * @Props : Ninguna
+ * 
+ * @State : 
+ *   - qrCodes (Array): Lista de códigos QR obtenidos de la API.
+ *   - searchQuery (String): Texto de búsqueda ingresado.
+ *   - currentPage (Number): Página actual para paginación.
+ *   - error (String | null): Almacena errores que ocurren al obtener los códigos QR.
+ *   - selectedQRCode (Object | null): Código QR seleccionado para detalles.
+ *   - isDetailModalOpen (Boolean): Controla si la modal de detalles está abierta.
+ *   - selectedImage (String | null): Imagen seleccionada en base64 para previsualizar.
+ *   - modalOpen (Boolean): Controla si la modal de la tienda está abierta.
+ *   - storeData (Object | null): Datos de la tienda obtenidos.
+ *   - codeType (String | null): Tipo de código QR para la modal de la tienda.
+ * 
+ * @Methods :
+ *   - fetchQRCodes: Obtiene la lista de códigos QR desde la API.
+ *   - handleSearch: Filtra los códigos QR según la búsqueda.
+ *   - handleStateClick: Cambia el estado del código QR (activo/inactivo).
+ *   - handleImageClick: Muestra una imagen en base64 en una vista previa.
+ *   - handleDownloadClick: Permite seleccionar formato y tamaño de descarga.
+ *   - handleOpenModal: Abre la modal de la tienda con datos correspondientes.
+ *   - handleCloseModal: Cierra la modal de la tienda y resetea `storeData`.
+ *   - handleDetailModalClose: Cierra la modal de detalles y resetea `selectedQRCode`.
+ *   - handleDetailModalOpen: Abre la modal de detalles con información del QR seleccionado.
+ *   - handleActionClick: Realiza acción según sea `view` o `edit`.
+ * 
+ * @return : 
+ *   Renderiza una tabla de códigos QR, modales para detalles y gestión de tienda, y botones de acciones como ver, editar y descargar.
+ */
+
 const App = () => {
   const [qrCodes, setQRCodes] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
@@ -37,19 +71,27 @@ const App = () => {
         const response = await axios.get(`http://localhost:3000/api/qr/`, {
           withCredentials: true,
         });
-
-        const formattedData = response.data.map(qr => ({
+  
+        // Ordenar los QR codes por fecha de creación en orden descendente
+        const sortedQRCodes = response.data.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+  
+        // Formatear la fecha
+        const formattedQRCodes = sortedQRCodes.map((qr) => ({
           ...qr,
-          createdAt: formatDate(qr.createdAt),
+          createdAt: new Date(qr.createdAt).toLocaleDateString('es-ES', {
+            day: '2-digit',
+            month: '2-digit',
+            year: 'numeric',
+          }),
         }));
-
-        setQRCodes(formattedData);
+  
+        setQRCodes(formattedQRCodes);
       } catch (error) {
         console.error('Error fetching QR codes:', error);
         setError('Error fetching QR codes');
       }
     };
-
+  
     fetchQRCodes();
   }, []);
 
@@ -306,6 +348,20 @@ const App = () => {
       )
     },
     { header: t("Date"), accessor: 'createdAt' },
+    {
+      header: t("Scans"), accessor: 'scan_count', render: (item) => (
+        <span className="px-2 inline-flex text-xs leading-5 font-semibold text-gray-800">
+          {item.scan_count} {/* Mostrar 0 si scan_count es nulo o no está definido */}
+        </span>
+      )
+    },
+    {
+      header: t("Scans Restantes"), accessor: 'scan_qrs', render: (item) => (
+        <span className="px-2 inline-flex text-xs leading-5 font-semibold text-gray-800">
+          {item.scan_qrs} {/* Mostrar 0 si scan_count es nulo o no está definido */}
+        </span>
+      )
+    },
     {
       header: t("Actions"),
       accessor: 'actions',

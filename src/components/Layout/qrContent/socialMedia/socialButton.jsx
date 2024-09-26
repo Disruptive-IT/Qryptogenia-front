@@ -1,3 +1,17 @@
+/*
+ * @Author : Cristian Escobar, @date 2024-09-03 20:13:14
+ * @description: Componente que renderiza un conjunto de botones sociales con íconos personalizados y colores adaptables. 
+ *               Los botones cambian de color de fuente según el color de fondo del botón.
+ * @Props:
+ *   - data: Array de objetos que representan las opciones sociales, cada uno con las propiedades:
+ *     - url: Enlace asociado al botón social.
+ *     - icon: Identificador del icono de la red social.
+ *     - iconw: Icono en versión white o alternativa, según el color del botón.
+ *     - textBottom: Texto para mostrar en la parte inferior del botón.
+ *   - botonColor: Color de fondo para los botones, que también determina el color del texto.
+ * @return: Retorna un componente que renderiza botones sociales con íconos y texto.
+ */
+
 import React, { useEffect, useState} from 'react';
 import { FaApple } from "react-icons/fa";
 import { SocialIcon } from 'react-social-icons'

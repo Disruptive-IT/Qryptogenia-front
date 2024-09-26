@@ -1,3 +1,4 @@
+
 {
     "Home": "Home",
     "About us": "About us",
@@ -179,7 +180,17 @@
     "Sign": "Sign",
     "-In": "-In",
     "Sign-": "Sign-",
-    "Up": "Up"
+    "Up": "Up",
+    "Back Home": "Back Home",
+    "Send Email": "Send Email",
+    "Enter your email adress to send you a password recovery email":"Enter your email adress to send you a password recovery email",
+    "Forgot": "Forgot",
+    "Please enter a valid e-mail": "Please enter a valid e-mail",
+    "Recover Password": "Recover Password",
+    "Set your new password":"Set your new password",
+    "Recover":"Recover",
+    "Passwords don't match":"Passwords don't match"
+    
 
 
 

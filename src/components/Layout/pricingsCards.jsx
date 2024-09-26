@@ -11,7 +11,10 @@ import { useTranslation } from 'react-i18next';
 import axios from 'axios';
 import { toast } from 'sonner';
 import { useNavigate } from 'react-router-dom';
-
+/*
+ * @UpdatedBy : Cristian Escobar,   @date 2024-09-03 15:05:11
+ * @description : Se configuro para que se hiciera un mapeo de las membresias en orden de precio
+ */
 export const PricingsCards = ({ data, userId, isSelectionMode }) => {
   const { t } = useTranslation();
   const navigate = useNavigate();

@@ -99,10 +99,10 @@
     "Remember me": "Recuérdame",
     "Forgot your password?": "¿Olvidaste tu contraseña?",
     "Log In": "Iniciar sesión",
-    "Sign in with Google": "Iniciar sesión con Google",
+    "Sign in with Google": "Iniciar con Google",
     "Sign up with Google":"Registrarse con Google",
     "Enter your email address and you will receive a verification code to complete your registration.": "Ingresa tu dirección de correo electrónico y recibirás un código de verificación para completar tu registro.",
-    "Go to Login": "Ir a Iniciar sesión",
+    "Go to Login": "Iniciar sesión",
     "QR Code Name": "Nombre del Código QR",
     "QR Code Type": "Tipo de Código QR",
     "Date": "Fecha",
@@ -179,6 +179,15 @@
     "Sign": "Inicia",
     "-In": " sesión",
     "Sign-": "Úne",
-    "Up": "te"
+    "Up": "te",
+    "Back Home": "Volver a Inicio",
+    "Send Email": "Enviar Correo",
+    "Enter your email adress to send you a password recovery email":"Ingresa tu correo electrónico para enviarte un correo de recuperación de contraseña",
+    "Forgot": "Recuperar",
+    "Please enter a valid e-mail":"Por favor ingrese un correo electrónico válido",
+    "Recover Password": "Restablecer Contraseña",
+    "Set your new password": "Ingresa tu nueva contraseña",
+    "Recover":"Restablecer",
+    "Passwords don't match":"Las contraseñas no coinciden"
 
 }

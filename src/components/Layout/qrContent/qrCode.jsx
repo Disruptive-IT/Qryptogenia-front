@@ -5,29 +5,34 @@ import { useQr } from '../../../context/QrContext';
 import axios from "../../../libs/axios";
 import { toast } from 'sonner';
 import Swal from 'sweetalert2';
-import { toPng } from 'html-to-image';
-import { useLocation } from 'react-router-dom';
 import html2canvas from 'html2canvas';
 import { useValidate } from '../../../context/validateFormContext';
-
+/*
+ * @UpdatedBy : Cristian Escobar,   @date 2024-09-03 15:05:11
+ * @description : Se implemento la captura del qr con canvas y la transformacion a base64 para almacenarse en la base de datos.
+ */
 export const saveQrData = async (
-    qrName, data, qrType, qrColor, qrBgColor, qrProps, qrImageInfo, qrTextProps, appFormValues, socialFormValues, musicFormValues, qrBase64, currentContentType, location, qrId
+    qrName, data, qrType, qrColor, qrBgColor, qrProps, qrImageInfo, qrTextProps, appFormValues, socialFormValues, musicFormValues, qrBase64, currentContentType, location, qrId, uniqueKey
 ) => {
+    
+
     const removeIconFromSelectOptions = (options) => {
         return options.map(option => {
             const { url, ...rest } = option; 
             return rest; 
         });
     };
+
     console.log(qrType);
 
     const qrData = {
         qr: {
             qrName: qrName || '',
-            data,
+            data: uniqueKey,
             qrType,
             qrColor,
             qrBgColor,
+            url: data
         },
         qrPreview: {
             title: currentContentType === 'social-media' ? socialFormValues.title : currentContentType === 'music' ? musicFormValues.title : appFormValues.title,
@@ -81,16 +86,10 @@ export const saveQrData = async (
             url: isEditRoute ? `/qr/edit/${qrId}` : '/qr',
             data: isEditRoute ? { qrData } : qrData,
         });
-    
-        // Si el servidor devuelve un mensaje de error, mostrar la alerta y no redirigir
-        if (res.status !== 201) {
-            toast.error(res.data.msg);
-            return false; // Salir de la función sin redirigir
-        }
-    
-        // Si el código QR se crea exitosamente, redirigir
+
         window.location.href = 'http://localhost:5173/user/qr';
-        return true;
+        return false;
+
     } 
      catch (err) {
         const errorMessage = err.response && err.response.data && err.response.data.msg
@@ -118,12 +117,16 @@ export const saveQrData = async (
 };
 
 
-const QR = () => {
-    const { qrType, qrData, qrBgColor, qrProps, qrImageInfo, qrTextProps, qrBase64, setQrBase64 } = useQr();
+const QR = ({ uniqueKey }) => {
+    const { qrData, qrBgColor, qrProps, qrImageInfo, qrTextProps, qrBase64, setQrBase64 } = useQr();
     const qrRef = useRef(null);
     const qrCode = useRef(null);
     const mario = useRef(null);
 
+    useEffect(() => {
+        console.log('Unique key updated:', uniqueKey);
+    }, [uniqueKey]); // Este useEffect se ejecutará cada vez que uniqueKey cambie
+    
     const generateBase64FromDiv = async () => {
         if (!mario.current) {
             console.log('mario.current is null');
@@ -131,10 +134,9 @@ const QR = () => {
         }
 
         try {
-            const scaleFactor = 3; // Ajusta según sea necesario
+            const scaleFactor = 3;
             const rect = mario.current.getBoundingClientRect();
 
-            // Configura el canvas con las dimensiones escaladas
             const canvas = document.createElement('canvas');
             canvas.width = rect.width * scaleFactor;
             canvas.height = rect.height * scaleFactor;
@@ -161,9 +163,9 @@ const QR = () => {
         const createOrUpdateQRCode = () => {
             if (!qrCode.current) {
                 qrCode.current = new QRCodeStyling({
-                    width: 1000,  // Aumenta el tamaño del QR a 1000x1000 para mayor resolución
+                    width: 1000,
                     height: 1000,
-                    data: qrData || 'www.qryptogenia.com',
+                    data: `http://localhost:3000/qr/scan/${uniqueKey}`,
                     dotsOptions: {
                         color: qrProps.dotsColor,
                         type: qrProps.dotsType || 'rounded'
@@ -190,7 +192,7 @@ const QR = () => {
                 qrCode.current.append(qrRef.current);
             } else {
                 qrCode.current.update({
-                    data: qrData || 'www.qryptogenia.com',
+                    data: `http://localhost:3000/qr/scan/${uniqueKey}`,
                     margin: 10,
                     backgroundOptions: {
                         color: "transparent",
@@ -219,7 +221,6 @@ const QR = () => {
         };
 
         createOrUpdateQRCode();
-        console.log(qrBase64)
         const timeoutId = setTimeout(() => {
             generateBase64FromDiv();
         }, 100);
@@ -227,7 +228,7 @@ const QR = () => {
         return () => {
             clearTimeout(timeoutId);
         };
-    }, [qrData, qrProps, qrImageInfo, qrTextProps.qrText, qrBgColor, qrTextProps.qrTextPosition, qrTextProps.qrTextColor, qrTextProps.qrTextSize, qrTextProps.qrTextChip, qrTextProps.qrTextChipColor, qrTextProps.qrTextFontStyle]);
+    }, [qrData, qrProps, qrImageInfo, qrTextProps.qrText, qrBgColor, qrTextProps.qrTextPosition, qrTextProps.qrTextColor, qrTextProps.qrTextSize, qrTextProps.qrTextChip, qrTextProps.qrTextChipColor, qrTextProps.qrTextFontStyle, uniqueKey]);
 
     return (
         <div className='m-auto'>

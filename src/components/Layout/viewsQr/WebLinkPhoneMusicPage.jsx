@@ -5,6 +5,34 @@ import { useAuth } from '../../../hooks/useAuth';
 import { MusicLayout } from '../qrContent/LayoutsQr/stylePhoneMusicLayout';
 import { SocialLayout } from '../qrContent/LayoutsQr/stylePhoneSocialLayout';
 
+/*
+ * @Author : Cristian Escobar, @date 2024-09-03 21:00:00
+ * @description: Componentes para renderizar páginas de contenido en vista de teléfono móvil para música y redes sociales. Ambos componentes realizan una solicitud para obtener datos basados en un `id` de la URL y muestran un diseño específico según el tipo de contenido.
+ * 
+ * `WebLinkPhoneMusicPage`: 
+ *   - Obtiene datos de música utilizando el `id` de la URL.
+ *   - Muestra un componente `MusicLayout` con los datos de música obtenidos.
+ *   - Maneja estados de carga y error durante la solicitud de datos.
+ * 
+ * `WebLinkPhoneSocialPage`: 
+ *   - Obtiene datos de redes sociales utilizando el `id` de la URL.
+ *   - Muestra un componente `SocialLayout` con los datos de redes sociales obtenidos.
+ *   - Maneja estados de carga y error durante la solicitud de datos.
+ * 
+ * @Props:
+ *   - `id`: Parámetro de la URL que se utiliza para obtener los datos específicos.
+ * @State:
+ *   - `musicFormValues`: Estado para almacenar los datos de música en `WebLinkPhoneMusicPage`.
+ *   - `socialFormValues`: Estado para almacenar los datos de redes sociales en `WebLinkPhoneSocialPage`.
+ *   - `loading`: Estado para controlar la visualización del mensaje de carga.
+ *   - `error`: Estado para almacenar cualquier error que ocurra durante la solicitud de datos.
+ * @Effect:
+ *   - `fetchData`: Función asíncrona que solicita datos y actualiza los estados correspondientes.
+ * @Return:
+ *   - `WebLinkPhoneMusicPage`: Un div que muestra el estado de carga, error, o el componente `MusicLayout` con los datos de música.
+ *   - `WebLinkPhoneSocialPage`: Un div que muestra el estado de carga, error, o el componente `SocialLayout` con los datos de redes sociales.
+ */
+
 export const WebLinkPhoneMusicPage = () => {
     const { id } = useParams();
     const [musicFormValues, setMusicFormValues] = useState(null);
