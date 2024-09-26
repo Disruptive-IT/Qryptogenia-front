@@ -2,6 +2,25 @@ import React, { useState, useRef, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import Flag from 'react-world-flags';
 
+/*
+ * @Author : Jaider Cuartas   @Date : 2024-07-15
+ * @Description : Componente que permite seleccionar y cambiar el idioma de la aplicación. 
+ *                Muestra un menú desplegable con las opciones de idioma y actualiza tanto 
+ *                el frontend como el backend cuando se selecciona un nuevo idioma.
+ * @Props : 
+ *    - Sin props. El idioma seleccionado se maneja internamente.
+ * @State :
+ *    - isOpen: Booleano para controlar si el menú desplegable está abierto o cerrado.
+ *    - selectedLanguage: El idioma seleccionado por el usuario (por defecto es el guardado en localStorage o el del sistema).
+ * @Returns : 
+ *    - Un componente JSX que permite al usuario seleccionar entre "English" y "Español".
+ */
+
+/*
+ * @UpdatedBy : Nicolas Barrios   @Date : 2024-07-29 16:59:26
+ * @Description : Se añadió la lógica para enviar el idioma seleccionado al backend mediante una petición POST a una API.
+ */
+
 function LanguageSelector() {
   const { i18n } = useTranslation();
   const [isOpen, setIsOpen] = useState(false);

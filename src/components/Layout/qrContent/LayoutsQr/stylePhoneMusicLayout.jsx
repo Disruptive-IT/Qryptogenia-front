@@ -1,3 +1,22 @@
+/*
+ * @Author : Cristian Escobar, @date 2024-07-20 13:07:14
+ * @description : Componente para el diseño de la tienda de música. Muestra el título, descripción, logo, y botones sociales personalizados.
+ * @Props :
+ *   - musicFormValues: Objeto que contiene los valores para personalizar el diseño de la tienda de música.
+ *     - boxColor: Color del fondo de la caja que contiene el contenido.
+ *     - title: Título de la tienda de música.
+ *     - titleColor: Color del título.
+ *     - descriptionColor: Color del texto de la descripción.
+ *     - backgroundColor: Color de fondo de la página.
+ *     - description: Descripción de la tienda de música.
+ *     - image: Logo de la tienda de música.
+ *     - borderColor: Color del borde alrededor del logo.
+ *     - selectedOptions: Array de opciones seleccionadas para los botones sociales, cada una con:
+ *       - value: Identificador de la opción (e.g., 'youtube', 'spotify').
+ *       - url: Enlace asociado con la opción.
+ * @return : Retorna un componente que representa el diseño de una tienda de música con elementos personalizables y botones sociales.
+ */
+
 import React from 'react';
 import { SocialButtonM } from '../socialMedia/socialButtons';
 import logot from "../../../../assets/imgs/Captura.png";

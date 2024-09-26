@@ -1,3 +1,22 @@
+/*
+ * @Author : Cristian Escobar, @date 2024-07-24 09:45:14
+ * @description : Componente para el diseño de la tienda social. Muestra el título, descripción, logo, y botones sociales.
+ * @Props :
+ *   - socialFormValues: Objeto que contiene los valores para personalizar el diseño de la tienda social.
+ *     - boxColor: Color del fondo de la caja que contiene el contenido.
+ *     - title: Título de la tienda social.
+ *     - titleColor: Color del título.
+ *     - descriptionColor: Color del texto de la descripción.
+ *     - backgroundColor: Color de fondo de la página.
+ *     - description: Descripción de la tienda social.
+ *     - image: Logo de la tienda social en formato base64.
+ *     - borderColor: Color del borde alrededor del logo.
+ *     - selectedOptions: Array de opciones seleccionadas para los botones sociales, cada una con:
+ *       - value: Identificador de la opción (e.g., 'facebook', 'twitter').
+ *       - url: Enlace asociado con la opción.
+ * @return : Retorna un componente que representa el diseño de una tienda social con elementos personalizables y botones sociales.
+ */
+
 import react from 'react';
 import logot from "../../../../assets/imgs/google.png"
 import { SocialButtonM } from '../socialMedia/socialButtons';

@@ -57,6 +57,7 @@ export const PageRouter = () => {
                 <Route path="store/:id" element={<WebLinkPhoneStorePage />} />
                 <Route path="qr/scan" element={<QRScanPage />} />
                 <Route path="selectPlan" element={<PlansPricings />} />
+                <Route path="limitScans" element={<ShowAlert />} />
 
                 {/* Admin Routes */}
                 <Route path="/admin" element={<ProtectedRouteAdmin />}>

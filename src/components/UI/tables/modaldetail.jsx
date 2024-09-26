@@ -1,5 +1,17 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
+
+/**
+ * @Author : Cristian Escobar 
+ * @date : 2024-09-04
+ * @description : El componente `DetailModal` muestra un modal que presenta detalles de un código QR. Incluye una vista previa de la imagen del QR, el nombre del QR, el tipo de QR, el estado (activo/inactivo) y la fecha de creación. Utiliza `react-i18next` para la traducción de textos. El modal se cierra al hacer clic fuera del área del modal o al hacer clic en el botón de cerrar.
+ * @Props : 
+ *   - `isOpen` (boolean): Indica si el modal está abierto o cerrado.
+ *   - `data` (object): Contiene la información del código QR a mostrar, incluyendo `qr_image_base64`, `name_qr`, `qrType`, `state`, y `createdAt`.
+ *   - `onClose` (function): Función para cerrar el modal.
+ * @return : Renderiza un modal con una vista previa del código QR, nombre, tipo, estado y fecha de creación. El modal se cierra al hacer clic fuera del área del modal o al presionar el botón de cerrar.
+ */
+
 const DetailModal = ({ isOpen, data, onClose }) => {
   if (!isOpen || !data) return null;
 

@@ -38,7 +38,7 @@ export default function ShowAlert(){
           title={"You have exceeded the scan limit"}
           message={"please contact with the QR provider"}
           labelLink={"click to go to home page"}
-          path={"/user"}
+          path={"/"}
           />
      )
 }
