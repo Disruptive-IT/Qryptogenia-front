@@ -20,6 +20,7 @@ import apple from "../../../../../src/assets/imgs/apple.png";
 import huawei from "../../../../../src/assets/imgs/huawei.png";
 import microsoft from "../../../../../src/assets/imgs/microsoft.png";
 import { useTranslation } from 'react-i18next';
+import { MdOutlineCloudUpload } from "react-icons/md";
 
 export const AppForm = ({ onFormChangeApp, location, appFormValues }) => {
     const [title, setTitle] = useState('');
@@ -64,7 +65,7 @@ export const AppForm = ({ onFormChangeApp, location, appFormValues }) => {
         selectedOptions.forEach((option, index) => {
             console.log(option.url)
             if (!option.url) {
-                errors[`url_${index}`] = `URL is required`;
+                errors[`url_${index}`] = t("URL is required");
             }
         });
         console.log(errors)
@@ -366,13 +367,13 @@ export const AppForm = ({ onFormChangeApp, location, appFormValues }) => {
             {({ setFieldValue, handleSubmit }) => (
                 <Form className="max-w-4xl mx-auto mt-8 relative">
                     <div className="flex flex-col md:flex-row md:items-start md:mb-4">
-                        <div className="flex flex-col w-full md:w-2/3 mr-6 mb-4 md:mb-0">
+                        <div className="flex flex-col w-full md:w-3/4 mr-6 mb-4 md:mb-0">
                             <label htmlFor="title" className="mb-2">{t("Title")}:</label>
                             <Field
                                 type="text"
                                 id="title"
                                 placeholder={t("Title")}
-                                className="border w-full border-gray-300 rounded p-2"
+                                className="border w-full border-gray-300 rounded p-2 focus:ring-0 focus:outline-none"
                                 value={title}
                                 maxLength={maxTitle}
                                 onChange={(e) => {
@@ -385,16 +386,69 @@ export const AppForm = ({ onFormChangeApp, location, appFormValues }) => {
                             </div>
                             {formErrors.title && <div className="text-red-500 text-sm">{formErrors.title}</div>}
                         </div>
-                        <div className="flex flex-col relative">
+
+      <div className="flex flex-col relative">
+        {/* Flex para alinear ambos titulos {color y uploadimagen} */}
+        <div className="flex flex-wrap md:flex-nowrap items-start space-x-12 w-full">
+
+                                {/* Seccion del selector de color */}
+                            <div className="flex flex-col md:flex-nowrap items-start ">
                             <label htmlFor="colorTitle" className="mb-2">{t("Color")}</label>
-                            <div className="flex items-center">
                                 <div
-                                    className="w-20 md:w-10 h-10 border border-gray-300 rounded cursor-pointer"
+                                    className="w-20 h-10 md:w-10 border border-gray-300 rounded cursor-pointer "
                                     style={{ background: colorTitle }}
                                     onClick={() => setShowTitleColorPicker(!showTitleColorPicker)}
                                 ></div>
                                 {showTitleColorPicker && (
                                     <div className="absolute mt-2 left-0 top-full z-50" ref={titleColorPickerRef}>
+                                    {/* Color Picker */}
+                                    </div>
+                                )}
+                                </div>
+
+                                {/* seccion de subir imagen */}
+                                <div className="flex flex-col items-center ">
+                                <label className="mb-2 block">{t("Upload Image")}</label>
+
+                                {/* Icono de subir imagen */}
+                                <div className="flex items-center ">
+                                    <input
+                                    type="file"
+                                    className="hidden "
+                                    ref={fileInputRef}
+                                    accept="image/*"
+                                    onChange={handleImageChange}
+                                    />
+                                    <button
+                                    onClick={handleClick}
+                                    className="text-blue-500 hover:text-blue-600 focus:outline-none"
+                                    >
+                                    <MdOutlineCloudUpload size="40" /> 
+                                    </button>
+
+                                    {image && (
+                                    <div className="relative w-12 ml-2">
+                                        <img
+                                        src={isEditRoute ? `data:image/png;base64,${image}` : image}
+                                        width="30"
+                                        alt="Uploaded"
+                                        />
+                                        <button
+                                        onClick={handleRemoveImage}
+                                        className="absolute top-0 right-0 bg-white p-0.5 rounded-full "
+                                        >
+                                        <IoIosClose size="15" />
+                                        </button>
+                                    </div>
+                                    )}
+                                </div>
+                                </div>
+
+                                </div>
+
+                                        {/* Color Picker */}
+                                        {showTitleColorPicker && (
+                                                <div className="absolute mt-2 left-0 top-full z-50" ref={titleColorPickerRef}>
                                         <GradientColorPicker
                                             enableAlpha={true}
                                             disableHueSlider={false}
@@ -412,10 +466,8 @@ export const AppForm = ({ onFormChangeApp, location, appFormValues }) => {
                                 )}
                             </div>
                         </div>
-                    </div>
-
                     <div className="flex flex-col md:flex-row md:items-start md:mb-4 mt-4">
-                        <div className="flex flex-col w-full md:w-2/3 mr-6 mb-4 md:mb-0">
+                        <div className="flex flex-col w-full md:w-3/4 mr-6 mb-4 md:mb-0">
                             <label htmlFor="description" className="mb-2">{t("Description")}</label>
                             <Field
                                 as="textarea"
@@ -424,7 +476,7 @@ export const AppForm = ({ onFormChangeApp, location, appFormValues }) => {
                                 placeholder={t("Description")}
                                 maxLength={maxLength}
                                 id="description"
-                                className="w-full min-h-20 max-h-40 border border-gray-300 rounded p-2"
+                                className="w-full min-h-20 max-h-40 border border-gray-300 rounded p-2 focus:ring-0 focus:outline-none"
                                 value={description}
                                 onChange={handleDescriptionChange}
                             />
@@ -432,6 +484,7 @@ export const AppForm = ({ onFormChangeApp, location, appFormValues }) => {
                                 {description.length}/{maxLength} {t("Characters")}
                             </div>
                         </div>
+                        
                         <div className="flex flex-col relative">
                             <label htmlFor="descriptionColor" className="mb-2">{t("Color")}</label>
                             <div className="flex items-center">
@@ -457,70 +510,51 @@ export const AppForm = ({ onFormChangeApp, location, appFormValues }) => {
                                         />
                                     </div>
                                 )}
+                                
                             </div>
                         </div>
                     </div>
 
-                    <div className="flex flex-col md:flex-row md:items-start md:mb-4">
-                        <div className="w-full md:w-2/3 mr-6 mb-4 md:mb-0">
-                            <label htmlFor="backgroundColor" className="mb-2">{t("Background Color")}</label>
-                            <div className="flex items-center relative">
-                                <div
-                                    className="w-20 md:w-16 h-10 border border-gray-300 rounded cursor-pointer"
-                                    style={{ background: backgroundColor }}
-                                    onClick={() => setShowBackgroundColorPicker(!showBackgroundColorPicker)}
-                                ></div>
-                                {showBackgroundColorPicker && (
-                                    <div className="absolute mt-2 left-0 z-50" ref={backgroundColorPickerRef}>
-                                        <GradientColorPicker
-                                            enableAlpha={true}
-                                            disableHueSlider={false}
-                                            disableAlphaSlider={false}
-                                            disableInput={false}
-                                            disableHexInput={false}
-                                            disableRgbInput={false}
-                                            disableAlphaInput={false}
-                                            presetColors={[]}
-                                            gradient={true}
-                                            color={backgroundColor}
-                                            onChange={handleBackgroundColorChange}
-                                            style={{ width: "calc(100% + 2rem)" }} // Ajuste del ancho
-                                        />
+                    <div className="flex flex-col md:flex-row text-center gap-6 mr-20">
+                                    <div className="w-full md:w-1/4 flex flex-col items-center">
+                                        <label htmlFor="backgroundColor" className="mb-2">{t("Background Color")}</label>
+                                        <div className="flex items-center relative">
+                                        <div
+                                            className="w-10 h-10 border border-gray-300 rounded cursor-pointer"
+                                            style={{ background: backgroundColor }}
+                                            onClick={() => setShowBackgroundColorPicker(!showBackgroundColorPicker)}
+                                        ></div>
+                                        {showBackgroundColorPicker && (
+                                            <div className="absolute mt-2 left-0 z-50" ref={backgroundColorPickerRef}>
+                                            <GradientColorPicker
+                                                enableAlpha={true}
+                                                disableHueSlider={false}
+                                                disableAlphaSlider={false}
+                                                disableInput={false}
+                                                disableHexInput={false}
+                                                disableRgbInput={false}
+                                                disableAlphaInput={false}
+                                                presetColors={[]}
+                                                gradient={true}
+                                                color={backgroundColor}
+                                                onChange={handleBackgroundColorChange}
+                                                style={{ width: "calc(100% + 2rem)" }} // Ajuste del ancho
+                                            />
+                                            </div>
+                                        )}
+                                        </div>
                                     </div>
-                                )}
-                            </div>
-                            <div className="flex flex-col space-y-4 pt-4">
-                                <label>{t("Upload Image")}</label>
-                                <input type="file" className="hidden" ref={fileInputRef} accept="image/*" onChange={handleImageChange} />
-                                <button
-                                    onClick={handleClick}
-                                    className="text-blue-500 hover:text-blue-600 focus:outline-none"
-                                >
-                                    <ImUpload2 size="30" />
-                                </button>
-                                {image && (
-                                    <div className="relative w-12">
-                                        <img src={isEditRoute ? `data:image/png;base64,${image}` : image} width="30" alt="Uploaded" />
-                                        <button
-                                            onClick={handleRemoveImage}
-                                            className="absolute top-0 right-0 bg-white p-0.2 rounded-full hover:bg-gray-200"
-                                        >
-                                            <IoIosClose size="15" />
-                                        </button>
-                                    </div>
-                                )}
-                            </div>
-                        </div>
-                        <div className="w-full md:w-2/3 mt-4 md:mt-0">
-                            <label htmlFor="boxColor" className="mb-2">{t("Box Color")}</label>
-                            <div className="flex items-center relative">
-                                <div
-                                    className="w-20 md:w-16 h-10 border border-gray-300 rounded cursor-pointer"
+
+                                    <div className="w-full md:w-1/4 flex flex-col items-center">
+                                        <label htmlFor="boxColor" className="mb-2">{t("Box Color")}</label>
+                                        <div className="flex items-center relative">
+                                    <div
+                                    className="w-10 h-10 border border-gray-300 rounded cursor-pointer"
                                     style={{ background: boxColor }}
                                     onClick={() => setShowBoxColorPicker(!showBoxColorPicker)}
-                                ></div>
-                                {showBoxColorPicker && (
-                                    <div className="absolute mt-2 left-0 z-50" ref={boxColorPickerRef}>
+                                    ></div>
+                                    {showBoxColorPicker && (
+                                        <div className="absolute mt-2 left-0 z-50" ref={boxColorPickerRef}>
                                         <GradientColorPicker
                                             enableAlpha={true}
                                             disableHueSlider={false}
@@ -533,18 +567,18 @@ export const AppForm = ({ onFormChangeApp, location, appFormValues }) => {
                                             gradient={true}
                                             color={boxColor}
                                             onChange={handleBoxColorChange}
-                                            style={{ width: "calc(100% + 2rem)" }} // Ajuste del ancho
-                                        />
+                                                style={{ width: "calc(100% + 2rem)" }} // Ajuste del ancho
+                                            />
+                                            </div>
+                                        )}
+                                        </div>
                                     </div>
 
-                                )}
-
-                            </div>
-                            <div className='pt-4'>
+                                <div className="w-full md:w-1/4 flex flex-col items-center">
                                 <label htmlFor="borderImg" className="mb-2">{t("Border Profile Color")}</label>
                                 <div className="flex items-center relative">
-                                    <div
-                                        className="w-20 md:w-16 h-10 border border-gray-300 rounded cursor-pointer"
+                                <div 
+                                        className="w-10 h-10 border border-gray-300 rounded cursor-pointer"
                                         style={{ background: borderImg }}
                                         onClick={() => setShowBorderColorPicker(!showBorderColorPicker)}
                                     ></div>
@@ -569,17 +603,16 @@ export const AppForm = ({ onFormChangeApp, location, appFormValues }) => {
                                 </div>
                             </div>
                         </div>
-                    </div>
 
                     <div className="flex flex-col md:flex-row md:items-center mb-4 mt-4">
-                        <div className="w-full md:w-2/3">
+                        <div className="w-full md:w-3/4">
                             <label htmlFor="" className="mb-2">Multiselect:</label>
                             <Select
                                 id="selectedOptions"
                                 options={options}
                                 isMulti
-                                className="basic-multi-select w-full"
-                                classNamePrefix="select"
+                                className="basic-multi-select w-full" // Para el contenedor externo
+                                classNamePrefix="select" // Prefijo para los estilos internos
                                 value={updatedSelectedOptions.map(({ icon, ...rest }) => rest)}
                                 onChange={(selected) => {
                                     handleMultiSelectChange(selected);
@@ -587,46 +620,54 @@ export const AppForm = ({ onFormChangeApp, location, appFormValues }) => {
                                 }}
                                 getOptionLabel={(option) => (
                                     <div className="flex items-center">
-                                        {isOptionSelected(option) && <span className="mr-2">{option.icon}</span>}
-                                        {option.label}
+                                    {isOptionSelected(option) && <span className="mr-2">{option.icon}</span>}
+                                    {option.label}
                                     </div>
                                 )}
                                 getOptionValue={(option) => option.value}
-                            />
+                                />
+
+
                             {formErrors.selectedOptions && (
                                 <div className="text-red-500 text-sm">{formErrors.selectedOptions}</div>
                             )}
                         </div>
                     </div>
-    <div className='grid grid-cols-1 md:grid-cols-2 gap-4'>
-    {updatedSelectedOptions.map((option, index) => (
-        <div key={index} className="grid gap-3 mb-3">
-    <div className="grid grid-cols-[auto_1fr] gap-3 items-center">
-    <label htmlFor={`input_${option.value}`} className="mb-2">{option.icon}</label>
-        <Field
-            type="text"
-            id={`url_${index}`}
-            name={`url_${index}`}
-            placeholder={`URL for ${option.value}`}
-            className="border border-gray-300 rounded p-2 w-full"
-            value={option.url}
-            onChange={(e) => handleUrlChange(index, e.target.value)}
-        />
-    </div>
-    <div className="relative flex justify-center items-center">
-        {/* Mostrar mensaje de error para cada URL */}
-        {formErrors[`url_${index}`] && (
-            <div className="absolute text-red-500 text-xs">
-                {formErrors[`url_${index}`]}
-            </div>
-        )}
-    </div>
-</div>
+                    <div className='grid grid-cols-1 md:grid-cols-2 gap-4'>
+                    {updatedSelectedOptions.map((option, index) => (
+                        <div key={index} className="grid gap-3 mb-3">
+                    <div className="grid grid-cols-[auto_1fr] gap-3 items-center ">
+                    <label htmlFor={`input_${option.value}`} className="mb-2">{option.icon}</label>
+                        <Field
+                            type="text"
+                            id={`url_${index}`}
+                            name={`url_${index}`}
+                            placeholder={`URL for ${option.value}`}
+                            className="border border-gray-300 rounded p-2 w-full focus:ring-0 focus:outline-none"
+                            value={option.url}
+                            onChange={(e) => handleUrlChange(index, e.target.value)}
+                        />
+                    </div>
+                    <div className="relative flex justify-center items-center">
+                        {/* Mostrar mensaje de error para cada URL */}
+                        {formErrors[`url_${index}`] && (
+                            <div className="absolute text-red-500 text-xs">
+                                {formErrors[`url_${index}`]}
+                            </div>
+                        )}
+                    </div>
+                </div>
 
-    ))}
-</div>
+                    ))}
+                </div>
                     <div className="flex items-center mt-6 mb-4">
-                        <button type="submit" className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600">{t('Submit')}</button>
+                        <button type="submit" className="px-4 py-2 bg-blue-500 text-white rounded "
+                         style={{ backgroundColor: '#284B63', color: '' }}
+                         onMouseEnter={(e) => e.target.style.backgroundColor = '#3C6E71'} // Cambia el color al hacer hover
+                         onMouseLeave={(e) => e.target.style.backgroundColor = '#284B63'} // Vuelve al color original al salir del hoover
+
+                        >{t('Submit')}</button>
+                        
                     </div>
                 </Form>
             )}

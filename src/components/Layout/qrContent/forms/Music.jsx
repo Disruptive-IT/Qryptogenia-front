@@ -14,6 +14,7 @@ import { ImUpload2 } from "react-icons/im";
 import GradientColorPicker from 'react-gcolor-picker'; // Importamos el nuevo color picker
 import { IoIosClose } from "react-icons/io";
 import { useTranslation } from 'react-i18next';
+import { MdOutlineCloudUpload } from "react-icons/md";
 
 export const MusicForm = ({ onFormChangeMusic, location, musicFormValues }) => {
     const [title, setTitle] = useState('');
@@ -58,7 +59,7 @@ export const MusicForm = ({ onFormChangeMusic, location, musicFormValues }) => {
         selectedOptions.forEach((option, index) => {
             console.log(option.url)
             if (!option.url) {
-                errors[`url_${index}`] = `URL is required`;
+                errors[`url_${index}`] = t("URL is required");
             }
         });
         console.log(errors)
@@ -354,13 +355,13 @@ export const MusicForm = ({ onFormChangeMusic, location, musicFormValues }) => {
             {({ setFieldValue, handleSubmit }) => (
                 <Form className="max-w-4xl mx-auto mt-8 relative">
                     <div className="flex flex-col md:flex-row md:items-start md:mb-4">
-                        <div className="flex flex-col w-full md:w-2/3 mr-6 mb-4 md:mb-0">
+                        <div className="flex flex-col w-full md:w-3/4 mr-6 mb-4 md:mb-0">
                             <label htmlFor="title" className="mb-2">{t("Title")}</label>
                             <Field
                                 type="text"
                                 id="title"
                                 placeholder={t("Title")}
-                                className="border w-full border-gray-300 rounded p-2"
+                                className="border w-full border-gray-300 rounded p-2 focus:ring-0 focus:outline-none"
                                 value={title}
                                 maxLength={maxTitle}
                                 onChange={(e) => {
@@ -373,16 +374,69 @@ export const MusicForm = ({ onFormChangeMusic, location, musicFormValues }) => {
                             </div>
                             {formErrors.title && <div className="text-red-500 text-sm">{formErrors.title}</div>}
                         </div>
+                        
                         <div className="flex flex-col relative">
+                        {/* Flex para alinear ambos títulos {color e uploadimagen} */}
+                        <div className="flex flex-wrap md:flex-nowrap items-start space-x-12 w-full">
+
+                                {/* Seccion del selector de color */}
+                            <div className="flex flex-col md:flex-nowrap items-start ">
                             <label htmlFor="colorTitle" className="mb-2">{t("Color")}</label>
-                            <div className="flex items-center">
                                 <div
-                                    className="w-20 md:w-10 h-10 border border-gray-300 rounded cursor-pointer"
+                                    className="w-20 h-10 md:w-10 border border-gray-300 rounded cursor-pointer"
                                     style={{ background: colorTitle }}
                                     onClick={() => setShowTitleColorPicker(!showTitleColorPicker)}
                                 ></div>
                                 {showTitleColorPicker && (
                                     <div className="absolute mt-2 left-0 top-full z-50" ref={titleColorPickerRef}>
+                                    {/* Color Picker */}
+                                    </div>
+                                )}
+                                </div>
+
+                                {/* seccion de subir imagen */}
+                                <div className="flex flex-col items-center ">
+                                <label className="mb-2 block">{t("Upload Image")}</label>
+
+                                {/* Icono de subir imagen */}
+                                <div className="flex items-center ">
+                                    <input
+                                    type="file"
+                                    className="hidden "
+                                    ref={fileInputRef}
+                                    accept="image/*"
+                                    onChange={handleImageChange}
+                                    />
+                                    <button
+                                    onClick={handleClick}
+                                    className="text-blue-500 hover:text-blue-600 focus:outline-none"
+                                    >
+                                    <MdOutlineCloudUpload size="40" /> 
+                                    </button>
+
+                                    {image && (
+                                    <div className="relative w-12 ml-2">
+                                        <img
+                                        src={isEditRoute ? `data:image/png;base64,${image}` : image}
+                                        width="30"
+                                        alt="Uploaded"
+                                        />
+                                        <button
+                                        onClick={handleRemoveImage}
+                                        className="absolute top-0 right-0 bg-white p-0.5 rounded-full hover:bg-gray-200"
+                                        >
+                                        <IoIosClose size="15" />
+                                        </button>
+                                    </div>
+                                    )}
+                                </div>
+                                </div>
+
+                                </div>
+
+                                        {/* Color Picker */}
+                                        {showTitleColorPicker && (
+                                                <div className="absolute mt-2 left-0 top-full z-50" ref={titleColorPickerRef}>
                                         <GradientColorPicker
                                             enableAlpha={true}
                                             disableHueSlider={false}
@@ -400,10 +454,10 @@ export const MusicForm = ({ onFormChangeMusic, location, musicFormValues }) => {
                                 )}
                             </div>
                         </div>
-                    </div>
+
 
                     <div className="flex flex-col md:flex-row md:items-start md:mb-4 mt-4">
-                        <div className="flex flex-col w-full md:w-2/3 mr-6 mb-4 md:mb-0">
+                        <div className="flex flex-col w-full md:w-3/4 mr-6 mb-4 md:mb-0">
                             <label htmlFor="description" className="mb-2">{t("Description")}</label>
                             <Field
                                 as="textarea"
@@ -412,7 +466,7 @@ export const MusicForm = ({ onFormChangeMusic, location, musicFormValues }) => {
                                 placeholder={t("Description")}
                                 maxLength={maxLength}
                                 id="description"
-                                className="w-full min-h-20 max-h-40 border border-gray-300 rounded p-2"
+                                className="w-full min-h-20 max-h-40 border border-gray-300 rounded p-2 focus:ring-0 focus:outline-none"
                                 value={description}
                                 onChange={handleDescriptionChange}
                             />
@@ -449,12 +503,12 @@ export const MusicForm = ({ onFormChangeMusic, location, musicFormValues }) => {
                         </div>
                     </div>
 
-                    <div className="flex flex-col md:flex-row md:items-start md:mb-4">
-                        <div className="w-full md:w-2/3 mr-6 mb-4 md:mb-0">
-                            <label htmlFor="backgroundColor" className="mb-2">{t("Background Color")}</label>
-                            <div className="flex items-center relative">
+                    <div className="flex flex-col md:flex-row text-center gap-6 mr-20">
+                                    <div className="w-full md:w-1/4 flex flex-col items-center">
+                                        <label htmlFor="backgroundColor" className="mb-2">{t("Background Color")}</label>
+                                        <div className="flex items-center relative">
                                 <div
-                                    className="w-20 md:w-16 h-10 border border-gray-300 rounded cursor-pointer"
+                                    className="w-10 h-10 border border-gray-300 rounded cursor-pointer"
                                     style={{ background: backgroundColor }}
                                     onClick={() => setShowBackgroundColorPicker(!showBackgroundColorPicker)}
                                 ></div>
@@ -477,33 +531,15 @@ export const MusicForm = ({ onFormChangeMusic, location, musicFormValues }) => {
                                     </div>
                                 )}
                             </div>
-                            <div className="flex flex-col space-y-4 pt-4">
-                                <label>{t("Upload Image")}</label>
-                                <input type="file" className="hidden" ref={fileInputRef} accept="image/*" onChange={handleImageChange} />
-                                <button
-                                    onClick={handleClick}
-                                    className="text-blue-500 hover:text-blue-600 focus:outline-none"
-                                >
-                                    <ImUpload2 size="30" />
-                                </button>
-                                {image && (
-                                    <div className="relative w-12">
-                                        <img src={image} width="30" alt="Uploaded" />
-                                        <button
-                                            onClick={handleRemoveImage}
-                                            className="absolute top-0 right-0 bg-white p-0.2 rounded-full hover:bg-gray-200"
-                                        >
-                                            <IoIosClose size="15" />
-                                        </button>
-                                    </div>
-                                )}
-                            </div>
                         </div>
-                        <div className="w-full md:w-2/3 mt-4 md:mt-0">
-                            <label htmlFor="boxColor" className="mb-2">{t("Box Color")}</label>
-                            <div className="flex items-center relative">
+                        
+                            
+
+                        <div className="w-full md:w-1/4 flex flex-col items-center">
+                                        <label htmlFor="boxColor" className="mb-2">{t("Box Color")}</label>
+                                        <div className="flex items-center relative">
                                 <div
-                                    className="w-20 md:w-16 h-10 border border-gray-300 rounded cursor-pointer"
+                                    className="w-20 md:w-10 h-10 border border-gray-300 rounded cursor-pointer"
                                     style={{ background: boxColor }}
                                     onClick={() => setShowBoxColorPicker(!showBoxColorPicker)}
                                 ></div>
@@ -526,13 +562,14 @@ export const MusicForm = ({ onFormChangeMusic, location, musicFormValues }) => {
                                     </div>
 
                                 )}
+                    </div>
 
                             </div>
-                            <div className='pt-4'>
-                                <label htmlFor="boxColor" className="mb-2">{t("Border Profile Color")}</label>
+                            <div className="w-full md:w-1/4 flex flex-col items-center">
+                            <label htmlFor="boxColor" className="mb-2">{t("Border Profile Color")}</label>
                                 <div className="flex items-center relative">
                                     <div
-                                        className="w-20 md:w-16 h-10 border border-gray-300 rounded cursor-pointer"
+                                        className="w-20 md:w-10 h-10 border border-gray-300 rounded cursor-pointer"
                                         style={{ background: borderImg }}
                                         onClick={() => setShowBorderColorPicker(!showBorderColorPicker)}
                                     ></div>
@@ -554,13 +591,15 @@ export const MusicForm = ({ onFormChangeMusic, location, musicFormValues }) => {
                                             />
                                         </div>
                                     )}
-                                </div>
+                                
                             </div>
                         </div>
                     </div>
 
-                    <div className="flex flex-col md:flex-row md:items-start md:mb-4">
-                        <div className="w-full md:w-2/3">
+
+
+                    <div className="flex flex-col md:flex-row md:items-center mb-4 mt-4">
+                        <div className="w-full md:w-3/4">
                             <label htmlFor="multiselect" className="mb-2">Multiselect:</label>
                             <Select
                                 id="multiselect"
@@ -615,7 +654,12 @@ export const MusicForm = ({ onFormChangeMusic, location, musicFormValues }) => {
                     </div>
 
                     <div className="flex items-center mt-6  mb-4">
-                        <button type="submit" className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600">{t('Submit')}</button>
+                        <button type="submit" className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+                        style={{ backgroundColor: '#284B63', color: '#fff' }}
+                        onMouseEnter={(e) => e.target.style.backgroundColor = '#3C6E71'} // Cambia el color al hacer hover
+                        onMouseLeave={(e) => e.target.style.backgroundColor = '#284B63'} // Vuelve al color original al salir del hover
+
+                        >{t('Submit')}</button>
                     </div>
                 </Form>
             )}

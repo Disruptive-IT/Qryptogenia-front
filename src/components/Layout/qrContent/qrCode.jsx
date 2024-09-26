@@ -100,7 +100,11 @@ export const saveQrData = async (
                 icon: 'info',
                 showCancelButton: true,
                 confirmButtonText: 'Go to login',
-                cancelButtonText: 'Cancel'
+                cancelButtonText: 'Cancel',
+                customClass: {
+                    confirmButton: 'swal2-confirm',
+                    cancelButton: 'swal2-cancel'
+                  }
             }).then((result) => {
                 if (result.isConfirmed) {
                     window.location.href = 'http://localhost:5173/login';

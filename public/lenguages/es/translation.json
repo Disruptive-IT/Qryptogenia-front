@@ -188,6 +188,6 @@
     "Recover Password": "Restablecer Contraseña",
     "Set your new password": "Ingresa tu nueva contraseña",
     "Recover":"Restablecer",
-    "Passwords don't match":"Las contraseñas no coinciden"
-
+    "Passwords don't match": "Las contraseñas no coinciden",
+    "URL is required": "Url requerida"
 }

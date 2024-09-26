@@ -146,6 +146,7 @@ export default function ChangeFrame({ name, appFormValues, socialFormValues, mus
                         sx={{
                             '.MuiTabs-indicator': {
                                 display: 'block',
+                                backgroundColor : '#3C6E71' //Color linea scroll cambio PHONE - QR
                             },
                             '.MuiTab-root.Mui-selected': {
                                 color: '#284B63',

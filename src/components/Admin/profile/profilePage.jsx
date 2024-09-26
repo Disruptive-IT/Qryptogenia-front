@@ -5,46 +5,66 @@
  * @return : Un componente de perfil que muestra la información del usuario, permite cambiar la imagen de perfil y abrir un modal para cambiar la contraseña.
  */
 
+
+// Profile.jsx
 import React, { useState, useRef, useEffect, useContext } from "react";
-import EditIcon from "@mui/icons-material/Edit";
 import Button from "@mui/material/Button";
 import MyModal from "./modal";
 import UserInfo from "./userInfo";
 import ChangePasswordForm from "./changePasswordForm";
 import { AuthContext } from "../../../context/AuthContext";
 import { Toaster, toast } from 'sonner';
+import SubscriptionInfo from "./suscriptionInfo";
 
-
+const defaultAvatar = "https://www.w3schools.com/w3images/avatar2.png"; // URL imagen predeterminada
 
 const Profile = () => {
     const [modalIsOpen, setModalIsOpen] = useState(false);
     const formRef = useRef(null);
     const fileInputRef = useRef(null);
-    const { fetchUserData } = useContext(AuthContext);
+    const { fetchUserData, updateProfileImage } = useContext(AuthContext);
     const [user, setUser] = useState(null);
-    const { updateProfileImage, profileImage, changeProfilePicture } = useContext(AuthContext);
+    const [avatar, setAvatar] = useState(defaultAvatar);
 
-    // Cargar la imagen de perfil cuando el componente se monte
+    const [subscriptionInfo, setSubscriptionInfo] = useState({
+        plan: "Basic",
+        expirationDate: "2024-12-31",
+        benefits: ["Benefit 1", "Benefit 2"],
+    });
+
+
+    /**
+     @UpdatedBy : Cristian Rueda,   @date 2024-09-26 17:46:36
+     * @description :Apartado para traer la foto del perfil dado que el usuario se registre con Email (Traer iamgen predeterminada).
+                    SubscriptionInfo usado para traer en el perfil la informacion del plan que esta menejando el usuario
+     */
     useEffect(() => {
         async function fetchData() {
             try {
-              const userData = await fetchUserData();
-              setUser(userData);
-            } catch (error) {
-              console.error("Error fetching user data:", error);
-            }
-          }
-  
-          fetchData();
-        }, [fetchUserData]);
+                const userData = await fetchUserData();
+                setUser(userData);
+                setAvatar(userData.info.profile_picture || defaultAvatar);
 
-    // Manejar el cambio de imagen de perfil
+                if (userData.membership) {
+                    setSubscriptionInfo({
+                        plan: userData.membership.type_membership,
+                        expirationDate: userData.membership.limit_date,
+                        benefits: userData.membership.benefits || [],
+                    });
+                }
+            } catch (error) {
+                console.error("Error fetching user data:", error);
+            }
+        }
+
+        fetchData();
+    }, [fetchUserData]);
+
     const handleImageChange = async (event) => {
         const file = event.target.files[0];
         if (file) {
             const result = await changeProfilePicture(file);
             if (result.success) {
-                // Actualiza la imagen de perfil llamando a la función updateProfileImage
                 updateProfileImage();
                 toast.success('Profile picture successfully changed');
             } else {
@@ -53,24 +73,6 @@ const Profile = () => {
             }
         }
     };
-
-    const modalActions = [
-        {
-            label: "Confirm",
-            onClick: () => {
-                formRef.current.submitForm();
-            },
-        },
-        {
-            label: "Cancel",
-            onClick: () => {
-                setModalIsOpen(false);
-            },
-            color: "error",
-            variant: "contained",
-            style: { color: "white" },
-        },
-    ];
 
     return (
         <div className="bg-white flex justify-center items-center mt-10 mx-4 lg:mx-20 rounded-3xl">
@@ -85,15 +87,24 @@ const Profile = () => {
                         ref={fileInputRef}
                     />
                     <img
-                        src={profileImage}
+                        src={avatar}
                         className="mx-8 my-8 w-32 h-32 rounded-full cursor-pointer"
                         alt="Profile"
-                        onClick={() => fileInputRef.current.click()} // Abre el selector de archivo cuando se hace clic en la imagen
+                        onClick={() => fileInputRef.current.click()}
                     />
                 </div>
-                <div className="flex flex-col w-full lg:w-8/12">
-                    <div className="w-full p-4 lg:p-16 text-MyGray">
-                        <UserInfo setUser user />
+                <div className="flex flex-col lg:w-8/12">
+                    <div className="flex justify-between p-4 lg:p-16 text-MyGray"> {/* Alineación horizontal */}
+                        <div className="flex-1"> {/* Espacio flexible para UserInfo */}
+                            <UserInfo setUser user />
+                        </div>
+                        <div className="w-1/3 ml-4"> {/* Ajusta el ancho y el margen aquí */}
+                            <SubscriptionInfo 
+                                plan={subscriptionInfo.plan}
+                                expirationDate={subscriptionInfo.expirationDate}
+                                benefits={subscriptionInfo.benefits}
+                            />
+                        </div>
                     </div>
                     <div className="flex justify-center w-full h-2/6 pb-3 space-x-4">
                         <Button
@@ -104,7 +115,23 @@ const Profile = () => {
                             Edit Password
                         </Button>
                         <MyModal
-                            actions={modalActions}
+                            actions={[
+                                {
+                                    label: "Confirm",
+                                    onClick: () => {
+                                        formRef.current.submitForm();
+                                    },
+                                },
+                                {
+                                    label: "Cancel",
+                                    onClick: () => {
+                                        setModalIsOpen(false);
+                                    },
+                                    color: "error",
+                                    variant: "contained",
+                                    style: { color: "white" },
+                                },
+                            ]}
                             open={modalIsOpen}
                             title={<h1>EDIT PASSWORD</h1>}
                             onClose={() => setModalIsOpen(false)}

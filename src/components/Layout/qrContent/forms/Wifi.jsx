@@ -122,7 +122,11 @@ function FormWifi() {
     return (
         <div>
             <div className="flex items-center mt-6 mb-4">
-                <button type="button" onClick={getWifi} className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600" disabled={formik.isSubmitting}>
+                <button type="button" onClick={getWifi} className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600" 
+                            style={{ backgroundColor: '#284B63', color: '#fff' }}
+                            onMouseEnter={(e) => e.target.style.backgroundColor = '#3C6E71'} // Cambia el color al hacer hover
+                            onMouseLeave={(e) => e.target.style.backgroundColor = '#284B63'} // Vuelve al color original al salir del hoover
+                            disabled={formik.isSubmitting}>
                     Get Wifi Data
                 </button>
             </div>
@@ -178,9 +182,10 @@ function FormWifi() {
                         <div className="relative text-red-500 text-sm">{formik.errors.password}</div>
                     ) : null}
                 </div>
-                <button type="submit" className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600" disabled={formik.isSubmitting}>
-                    Submit
-                </button>
+                {/* Se usa el hidden para ocultar el boton de submit */}
+                <button type="submit" className="hidden px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"  disabled={formik.isSubmitting}> 
+                    Submit 
+                </button> 
             </form>
         </div>
     );

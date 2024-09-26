@@ -26,6 +26,9 @@ export const PdfUploadComponent = () => {
       <label
         htmlFor="pdf-upload"
         className="mt-4 px-6 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 focus:outline-none cursor-pointer"
+        style={{ backgroundColor: '#284B63', color: '' }}
+                         onMouseEnter={(e) => e.target.style.backgroundColor = '#3C6E71'} // Cambia el color al hacer hover
+                         onMouseLeave={(e) => e.target.style.backgroundColor = '#284B63'} // Vuelve al color original al salir del hoover
       >
         UPLOAD PDF
       </label>

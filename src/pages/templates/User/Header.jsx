@@ -8,6 +8,7 @@ import MenuDrawer from '../../../components/UI/menu/menuDrawer';
 import logo from "../../../../public/Logo.png";
 import { useTranslation } from 'react-i18next';
 import LenguageSelector from './../../../components/UI/lenguage/lenguageSelector'
+
 function Navbar() {
     const { user } = useAuthContext();
     const { t } = useTranslation();
@@ -15,27 +16,37 @@ function Navbar() {
         return location.pathname === path;
     };
     return (
-        <nav className="bg-white p-4">
-            <div className="flex items-center justify-between">
-                <Link to="/" className="text-black hover:text-black/70 items-center inline-flex font-bold text-2xl" title="Inicio">
-                    <img className='w-[60px]' src={logo} alt="Qryptogenia" />
-                    <span className='text-dark-blue ml-2'>Qry</span>ptogenia
+        <header className="relative md:top-4 inset-x-0 z-50">
+            <div className="relative h-20 flex w-full p-3 mx-auto bg-white md:rounded-lg items-center justify-between shadow-lg lg:w-[94%] ">
+                <Link to="/" className="text-black hover:text-black/70 items-center inline-flex font-bold ml-2 text-2xl w-2/6" title="Inicio">
+                <img className='w-[60px]' src={logo} alt="Qryptogenia" />
+                <span className='text-dark-blue ml-2 font-bold'>QR</span>yptogenia
                 </Link>
-                <ul className="md:flex hidden space-x-6 list-none text-sm text-black items-center justify-center ">
-                    <CustomLink to="/user/home" isActive={isActive('/user/home')}>{t("Home")}</CustomLink>
-                    <CustomLink to="#" isActive={isActive('/about')}>{t("About us")}</CustomLink>
-                    <CustomLink to="/pricings" isActive={isActive('/pricings')}>{t("My Plans")}</CustomLink>
-                </ul>
-                <div className="block md:hidden">
+
+                <nav className="md:flex hidden w-2/6 justify-center">
+                    <ul className="space-x-4 list-none text-sm text-black items-center inline-flex justify-center text-left gap-3">
+                        <CustomLink to="/" isActive={isActive('/')}>{t('Home')}</CustomLink>
+                        <CustomLink to="#" isActive={isActive('/about')}>{t('About us')}</CustomLink>
+                        <CustomLink to="/pricings" isActive={isActive('/pricings')}>{t('Plans')}</CustomLink>
+                        <CustomLink to="#" isActive={isActive('/faq')}>FAQ</CustomLink>
+                    </ul>
+                </nav>
+                
+                {/* <div className="block md:hidden">
                     <MenuDrawer />
-                </div>
-                <div className='hidden md:block'>
-                    <LenguageSelector/>
+                </div> 
+                                    <UserProfileMenu />*/}
+                <ul className='md:flex hidden gap-4 w-2/6 justify-end items-center pr-5'>
+                    <li className="transition-all duration-200 hover:scale-105 hover:ease-linear ">
+                        <LenguageSelector/>
+                    </li>
                     <UserProfileMenu />
-                    
-                </div>
+                                 
+                </ul>
+
+
             </div>
-        </nav>
+            </header>
     );
 }
 

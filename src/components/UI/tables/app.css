@@ -55,6 +55,23 @@ body {
     background-color: #1e70b8 !important;
 }
 
+.swal2-confirm {
+    background-color: #3C6E71 !important; 
+    
+    color: white; 
+  }
+  
+  .swal2-cancel {
+    background-color: #CC2905 !important; 
+    color: white; 
+  }
+
+  .swal2-confirm:hover {
+    background-color: #284B63 !important; 
+    
+    color: white; 
+  }
+  
 .content {
     flex: 1;
     padding: 20px;
