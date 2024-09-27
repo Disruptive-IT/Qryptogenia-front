@@ -25,6 +25,7 @@ const Profile = () => {
     const { fetchUserData, updateProfileImage } = useContext(AuthContext);
     const [user, setUser] = useState(null);
     const [avatar, setAvatar] = useState(defaultAvatar);
+    const [isGoogleUser, setIsGoogleUser] = useState(false); // Estado para verificar si es usuario de Google
 
     const [subscriptionInfo, setSubscriptionInfo] = useState({
         plan: "Basic",
@@ -32,17 +33,24 @@ const Profile = () => {
         benefits: ["Benefit 1", "Benefit 2"],
     });
 
-
-    /**
+        /**
      @UpdatedBy : Cristian Rueda,   @date 2024-09-26 17:46:36
      * @description :Apartado para traer la foto del perfil dado que el usuario se registre con Email (Traer iamgen predeterminada).
                     SubscriptionInfo usado para traer en el perfil la informacion del plan que esta menejando el usuario
      */
+
+                    
     useEffect(() => {
         async function fetchData() {
             try {
                 const userData = await fetchUserData();
                 setUser(userData);
+                console.log("User Data:", userData);
+                
+                // Establece isGoogleUser según el authProvider
+                setIsGoogleUser(userData.info.authProvider === 'google');
+                
+                // Cargar imagen de perfil o la imagen predeterminada
                 setAvatar(userData.info.profile_picture || defaultAvatar);
 
                 if (userData.membership) {
@@ -94,11 +102,11 @@ const Profile = () => {
                     />
                 </div>
                 <div className="flex flex-col lg:w-8/12">
-                    <div className="flex justify-between p-4 lg:p-16 text-MyGray"> {/* Alineación horizontal */}
-                        <div className="flex-1"> {/* Espacio flexible para UserInfo */}
+                    <div className="flex justify-between p-4 lg:p-16 text-MyGray">
+                        <div className="flex-1">
                             <UserInfo setUser user />
                         </div>
-                        <div className="w-1/3 ml-4"> {/* Ajusta el ancho y el margen aquí */}
+                        <div className="w-1/3 ml-4">
                             <SubscriptionInfo 
                                 plan={subscriptionInfo.plan}
                                 expirationDate={subscriptionInfo.expirationDate}
@@ -107,13 +115,16 @@ const Profile = () => {
                         </div>
                     </div>
                     <div className="flex justify-center w-full h-2/6 pb-3 space-x-4">
-                        <Button
-                            className="h-12 lg:w-48 mt-6 rounded-3xl"
-                            style={{ backgroundColor: "#3C6E71", color: "#D9D9D9" }}
-                            onClick={() => setModalIsOpen(true)}
-                        >
-                            Edit Password
-                        </Button>
+                        {/* Mostrar el botón de Editar Contraseña solo si el usuario no es de Google */}
+                        {!isGoogleUser && (
+                            <Button
+                                className="h-12 lg:w-48 mt-6 rounded-3xl"
+                                style={{ backgroundColor: "#3C6E71", color: "#D9D9D9" }}
+                                onClick={() => setModalIsOpen(true)}
+                            >
+                                Edit Password
+                            </Button>
+                        )}
                         <MyModal
                             actions={[
                                 {
