@@ -1,8 +1,9 @@
 import { useFormik } from "formik";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import instance from "../../../../libs/axios";
 import Swal from "sweetalert2";
 import { useQr } from "../../../../context/QrContext";
+import { useValidate } from "../../../../context/validateFormContext";
 
 function FormWifi() {
     const [initialValues, setInitialValues] = useState({
@@ -12,12 +13,24 @@ function FormWifi() {
     });
 
     const { qrData, setQrData } = useQr();
+    const {validateFormWifi,setValidateFormWifi}=useValidate();
 
     const handleWifiLink = (link) => {
         setQrData(link);
     };
 
     let wifiLink;
+
+    const validateFormFields=()=>{
+        if (Object.keys(formik.errors).length > 0) {
+            setValidateFormWifi(false);
+            return false;
+          } else {
+            setValidateFormWifi(true);
+            return true;
+          }
+      }
+
 
     const getWifi = async () => {
         try {
@@ -67,7 +80,7 @@ function FormWifi() {
             errors.ssid = "SSID is required";
         }
 
-        if (!values.security_type) {
+        if (values.security_type=='selecciona') {
             errors.security_type = "Security type is required";
         }
 
@@ -118,6 +131,10 @@ function FormWifi() {
             }, 400);
         }
     });
+
+    useEffect(()=>{
+        validateFormFields();
+    },[formik.errors])
 
     return (
         <div>
@@ -182,10 +199,9 @@ function FormWifi() {
                         <div className="relative text-red-500 text-sm">{formik.errors.password}</div>
                     ) : null}
                 </div>
-                {/* Se usa el hidden para ocultar el boton de submit */}
-                <button type="submit" className="hidden px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"  disabled={formik.isSubmitting}> 
-                    Submit 
-                </button> 
+                <button type="submit" className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600" disabled={formik.isSubmitting}>
+                    Submit
+                </button>
             </form>
         </div>
     );

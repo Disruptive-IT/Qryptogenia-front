@@ -10,6 +10,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Formik, Form, Field } from "formik";
 import Select from 'react-select';
+import { useValidate } from '../../../../context/validateFormContext';
 import { SocialIcon } from 'react-social-icons'
 import GradientColorPicker from 'react-gcolor-picker'; // Importamos el nuevo color picker
 import PropTypes from 'prop-types';
@@ -47,6 +48,20 @@ export const AppForm = ({ onFormChangeApp, location, appFormValues }) => {
     const [formErrors, setFormErrors] = useState({});
     const { t } = useTranslation();
     const isEditRoute = location.pathname.startsWith('/edit')
+    const {validateFormApp,setValidateFormApp}=useValidate();
+
+    console.log("validate from app",validateFormApp, formErrors);
+
+    const validateFormFields = () => {
+        if (Object.keys(formErrors).length > 0) {
+          setValidateFormApp(false);
+          return false;
+        } else {
+          setValidateFormApp(true);
+          return true;
+        }
+      };
+      
 
     const validateForm = (values) => {
         const errors = {};
@@ -55,6 +70,10 @@ export const AppForm = ({ onFormChangeApp, location, appFormValues }) => {
         if (!values.title) {
             errors.title = t("Title is required");
         }
+
+        // if(!values.description) {
+        //     errors.description=t("Description is required");
+        // }
 
         // Validar la selección de opciones
         if (selectedOptions.length === 0) {
@@ -181,6 +200,10 @@ export const AppForm = ({ onFormChangeApp, location, appFormValues }) => {
             document.removeEventListener('mousedown', handleBoxClickOutside);
         };
     }, []);
+
+    useEffect(()=>{
+        validateFormFields();
+    },[formErrors]);
 
     useEffect(() => {
         if (isEditRoute && appFormValues) {
