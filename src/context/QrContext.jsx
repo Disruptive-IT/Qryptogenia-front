@@ -8,6 +8,7 @@ export const QrProvider = ({ children }) => {
     const [appFormValues, setAppFormValues] = useState({});
     const [musicFormValues, setMusicFormValues] = useState({});
     const [socialFormValues, setSocialFormValues] = useState({});
+    const [menuFormValues,setMenuFormValues]=useState({});
     const [currentContentType, setCurrentContentType] = useState({});
     console.log(socialFormValues)
 
@@ -20,6 +21,8 @@ export const QrProvider = ({ children }) => {
             setMusicFormValues,
             socialFormValues, 
             setSocialFormValues,
+            menuFormValues,
+            setMenuFormValues,
             currentContentType,
             setCurrentContentType 
         }}>

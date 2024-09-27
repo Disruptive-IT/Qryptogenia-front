@@ -19,15 +19,17 @@ import { PdfUploadComponent, LinkInput } from "./forms/Pdf";
 import SocialForm from "./forms/Social";
 import MusicForm from "./forms/Music";
 import { WebLinkPhoneMusic } from "./socialMedia/stylePhoneMusic";
+import MenuForm from "./forms/menu/menuForm";
 import FormWifi from "./forms/Wifi";
-export const QrContentSwitch = ({contentName, onFormChangeApp, onFormChange, onFormChangeMusic, onSocialFormSubmit, location, appFormValues, musicFormValues, socialFormValues}) => {
+import WebLinkMenuFood from "./LayoutsQr/stylePhoneMenu";
+export const QrContentSwitch = ({contentName, onFormChangeApp, onFormChange, onFormChangeMusic, onSocialFormSubmit, location, appFormValues, musicFormValues, socialFormValues,menuFormValues}) => {
 
     let qrContent;
     switch (contentName) {
         case "app store":
             qrContent = (
                 <div>
-                    <AppForm onFormChangeApp={onFormChangeApp} location={location} appFormValues={appFormValues}/>
+                    <AppForm onFormChangeApp={onFormChangeApp} location={location} appFormValues={appFormValues} />
                 </div>
             );
             break;
@@ -83,7 +85,7 @@ export const QrContentSwitch = ({contentName, onFormChangeApp, onFormChange, onF
         case "food menu":
             qrContent = (
                 <div>
-                    <p>ACÁ EL MENU DEL NEGOCIO</p>
+                    <MenuForm />
                 </div>
             );
             break;
@@ -93,7 +95,7 @@ export const QrContentSwitch = ({contentName, onFormChangeApp, onFormChange, onF
 };
 
 
-export const PhoneContentSwitch = ({contentName, appFormValues, socialFormValues, musicFormValues}) => {
+export const PhoneContentSwitch = ({contentName, appFormValues, socialFormValues, musicFormValues,menuFormValues}) => {
 console.log(contentName);
 let phoneContent;
 switch (contentName) {
@@ -156,7 +158,7 @@ switch (contentName) {
         case "food menu":
             phoneContent = (
                 <div>
-                    <p>ACÁ EL MENU DEL NEGOCIO</p>
+                    <WebLinkMenuFood FormValues={menuFormValues}  ContentName={contentName} />
                 </div>
             );
             break;

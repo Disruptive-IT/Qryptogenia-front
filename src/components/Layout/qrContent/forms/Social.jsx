@@ -15,6 +15,7 @@ import GradientColorPicker from 'react-gcolor-picker'; // Importamos el nuevo co
 import { IoIosClose } from "react-icons/io";
 import { useTranslation } from 'react-i18next';
 import { MdOutlineCloudUpload } from "react-icons/md";
+import { useValidate } from '../../../../context/validateFormContext';
 
 export const SocialForm = ({ onFormChange, location, socialFormValues }) => {
   const [title, setTitle] = useState('');
@@ -41,6 +42,8 @@ export const SocialForm = ({ onFormChange, location, socialFormValues }) => {
   const [formErrors, setFormErrors] = useState({});
   const { t } = useTranslation();
   const isEditRoute = location.pathname.startsWith('/edit')
+  
+  const {validateFormSocial,setValidateFormSocial}=useValidate();
 
   const validateForm = (values) => {
     const errors = {};
@@ -66,6 +69,16 @@ export const SocialForm = ({ onFormChange, location, socialFormValues }) => {
 
     return errors;
   };
+
+  const validateFormFields=()=>{
+    if (Object.keys(formErrors).length > 0) {
+        setValidateFormSocial(false);
+        return false;
+      } else {
+        setValidateFormSocial(true);
+        return true;
+      }
+  }
 
   const handleTitleChange = (e) => {
     setTitle(e.target.value);
@@ -346,7 +359,9 @@ export const SocialForm = ({ onFormChange, location, socialFormValues }) => {
     return selectedOptions.some(selected => selected.value === option.value);
   };
 
-
+  useEffect(()=>{
+    validateFormFields();
+  },[formErrors])
 
   return (
     <Formik

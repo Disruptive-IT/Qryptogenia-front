@@ -6,6 +6,7 @@ import axios from "../../../libs/axios";
 import { toast } from 'sonner';
 import Swal from 'sweetalert2';
 import html2canvas from 'html2canvas';
+import { useValidate } from '../../../context/validateFormContext';
 /*
  * @UpdatedBy : Cristian Escobar,   @date 2024-09-03 15:05:11
  * @description : Se implemento la captura del qr con canvas y la transformacion a base64 para almacenarse en la base de datos.
@@ -21,6 +22,8 @@ export const saveQrData = async (
             return rest; 
         });
     };
+
+    console.log(qrType);
 
     const qrData = {
         qr: {

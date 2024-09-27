@@ -8,9 +8,10 @@ import '../../../../../src/assets/style/index.css'
 import '../../styles/qrCode.css'
 import { useQr } from '../../../../context/QrContext';
 import Swal from 'sweetalert2';
-import { toast } from 'sonner';
 import { useTranslation } from 'react-i18next';
 import { createTheme, ThemeProvider } from '@mui/material';
+import { useValidate } from '../../../../context/validateFormContext';
+import { toast } from 'sonner';
 import { v4 as uuidv4 } from 'uuid';
 import axios from '../../../../libs/axios';
 

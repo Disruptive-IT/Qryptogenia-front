@@ -21,6 +21,8 @@ import CustomQr from './customQr';
 import Button from '@mui/material/Button';
 import './index.css'
 import { useTranslation } from 'react-i18next';
+import { useValidate } from '../../../context/validateFormContext';
+import { toast } from 'sonner';
 
 function TabPanel(props) {
     const { children, value, index, ...other } = props;
@@ -67,9 +69,12 @@ const fabGreenStyle = {
     },
 };
 
+/*
+ * @UpdatedBy : Nicolas Barrios,   @date 2024-09-26 18:46:29
+ * @description : se agrego validacion formularios antes de cambiar de tab a qr
+ */
 
-
-export default function ChangeFrame({ name, appFormValues, socialFormValues, musicFormValues, location, qrId }) {
+export default function ChangeFrame({ name, appFormValues, socialFormValues, musicFormValues, location, qrId,menuFormValues }) {
     const { contentName } = useParams();
     const theme = useTheme();
     const isSmallScreen = useMediaQuery(theme.breakpoints.down(1023)); // Detecta si la pantalla es pequeña
@@ -79,18 +84,20 @@ export default function ChangeFrame({ name, appFormValues, socialFormValues, mus
     const { t } = useTranslation()
     const contentTexts = UseContentTexts();
 
-    console.log(contentName)
-    console.log("ChangeFrame - appFormValues:", appFormValues);
-    console.log("ChangeFrame - socialFormValues:", socialFormValues);
-    console.log("ChangeFrame - musicFormValues:", musicFormValues);
+    const {validateFormApp,validateFormMusic,validateFormSocial,validateFormMenu}=useValidate();
+
+    // console.log(contentName)
+    // console.log("ChangeFrame - appFormValues:", appFormValues);
+    // console.log("ChangeFrame - socialFormValues:", socialFormValues);
+    // console.log("ChangeFrame - musicFormValues:", musicFormValues);
 
     React.useEffect(() => {
         if (isSmallScreen || isSpecialContent) {
-            setValue(1); // Cambia al tab de "QR" si la pantalla es pequeña o el contentName es especial
-            setIsTabClickable(false); // Hace el tab "QR" no clickeable
+            setValue(1);
+            setIsTabClickable(false);
         } else {
-            setValue(0); // Cambia al tab de "Phone" si la pantalla es grande y el contentName no es especial
-            setIsTabClickable(true); // Hace los tabs clickeables
+            setValue(0);
+            setIsTabClickable(true);
         }
     }, [isSmallScreen, isSpecialContent]);
 
@@ -100,8 +107,12 @@ export default function ChangeFrame({ name, appFormValues, socialFormValues, mus
     }, [name, isSmallScreen, isSpecialContent]);
 
     const handleChange = (event, newValue) => {
-        setValue(newValue);
-    };
+        if (validateFormApp==false || validateFormMusic==false || validateFormSocial==false || validateFormMenu==false) {
+          toast.warning("Please complete all fields to continue with the QR customization",{duration:3000});
+        } else {
+          setValue(newValue);
+        }
+      };
 
     const content = contentTexts[contentName.toLowerCase().replace(/\s+/g, '-')];
     if (!content) {
@@ -155,7 +166,10 @@ export default function ChangeFrame({ name, appFormValues, socialFormValues, mus
                         }}
                     >
                         {!(isSmallScreen || isSpecialContent) && <Tab label="Phone" />}  {/* Oculta el tab "Phone" en pantallas pequeñas o para contentName especial */}
-                        <Tab label="QR" disabled={!isTabClickable} />
+                            <Tab 
+                            label="QR" 
+                            disabled={!isTabClickable}
+                            />
                     </Tabs>
                 </AppBar>
                 {!(isSmallScreen || isSpecialContent) && (
@@ -168,12 +182,13 @@ export default function ChangeFrame({ name, appFormValues, socialFormValues, mus
                                     appFormValues={appFormValues}
                                     socialFormValues={socialFormValues}
                                     musicFormValues={musicFormValues}
+                                    menuFormValues={menuFormValues}
                                 />
                             </CellBox>
                         </div>
                     </TabPanel>
                 )}
-                <TabPanel value={value} index={1} dir={theme.direction} className="w-full flex justify-center">
+                <TabPanel value={value} index={1} dir={theme.direction}  className="w-full flex justify-center">
                     <div className="w-[420px] max-w-[500px] px-5 relative">
                         <h2 className="text-center text-2xl font-bold mb-8">{t("Preview")} QRytogenia</h2>
                         <CustomQr 

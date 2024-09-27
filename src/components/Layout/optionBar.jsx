@@ -12,6 +12,7 @@ import { useQr } from "../../context/QrContext";
 import './styles/qr-animation.css'
 import { motion } from "framer-motion";
 import { useTranslation } from "react-i18next";
+import { useValidate } from "../../context/validateFormContext";
 
 /**
  * @UpdatedBy : Nicolas Barrios,   @date 2024-07-25 11:51:05
@@ -81,6 +82,34 @@ export const OptionBarTwo = ({ contentName, name }) => {
   const navigate = useNavigate();
   const dataTypeQr = UseDataTypeQr();
   const { t } = useTranslation();
+
+  const {validateFormApp,
+    setValidateFormApp,
+    validateFormSocial,
+    setValidateFormSocial,
+    validateFormMusic,
+    setValidateFormMusic,
+    validateFormWifi,
+    setValidateFormWifi,
+    validateFormLink,
+    setValidateFormLink,
+    validateFormPdf,
+    setValidateFormPdf,
+    validateFormMenu,
+    setValidateFormMenu}=useValidate();
+
+
+  //funcion que limpia las varibales de validacion de todos los formularios al cambiar de formulario
+  const setNullableFormErrors=()=>{
+    if(validateFormApp!==null) setValidateFormApp(null);
+    if(validateFormSocial!==null) setValidateFormSocial(null);
+    if(validateFormMusic!==null) setValidateFormMusic(null);
+    if(validateFormLink!==null) setValidateFormLink(null);
+    if(validateFormWifi!==null) setValidateFormWifi(null);
+    if(validateFormPdf!==null) setValidateFormPdf(null);
+    if(validateFormMenu!==null) setValidateFormMenu(null);
+  }
+
   const handleItemClick = (item) => {
     Swal.fire({
       title: t("Alert"),
@@ -93,6 +122,7 @@ export const OptionBarTwo = ({ contentName, name }) => {
       cancelButtonText: t("Cancel")
     }).then((result) => {
       if (result.isConfirmed) {
+        setNullableFormErrors();
         let direcc = item.name.toLowerCase().replace(/\s+/g, '-')
         setQrType(direcc)
         navigate(`/qr/${direcc}`);
