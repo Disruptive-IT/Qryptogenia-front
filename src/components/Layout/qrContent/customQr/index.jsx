@@ -51,6 +51,7 @@ const CustomQr = ({ location, qrId }) => {
     const [uniqueKey, setUniqueKey] = useState('');
     const { qrType, qrData, qrColor, qrBgColor, qrProps, qrImageInfo, qrTextProps, appFormValues, socialFormValues, musicFormValues, qrBase64, currentContentType } = useQr();
 
+    
     useEffect(() => {
         const fetchUniqueKey = async () => {
             try {
