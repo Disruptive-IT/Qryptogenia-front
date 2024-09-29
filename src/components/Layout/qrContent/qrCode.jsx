@@ -12,7 +12,7 @@ import { useValidate } from '../../../context/validateFormContext';
  * @description : Se implemento la captura del qr con canvas y la transformacion a base64 para almacenarse en la base de datos.
  */
 export const saveQrData = async (
-    qrName, data, qrType, qrColor, qrBgColor, qrProps, qrImageInfo, qrTextProps, appFormValues, socialFormValues, musicFormValues, qrBase64, currentContentType, location, qrId, uniqueKey
+    qrName, data, qrType, qrColor, qrBgColor, qrProps, qrImageInfo, qrTextProps, appFormValues, socialFormValues, musicFormValues, menuFormValues, qrBase64, currentContentType, location, qrId, uniqueKey
 ) => {
     
 
@@ -34,7 +34,18 @@ export const saveQrData = async (
             qrBgColor,
             url: data
         },
-        qrPreview: {
+        qrPreview:currentContentType==='food-menu' ? {
+            restaurantName:menuFormValues.restaurantName,
+            restaurantLogo:menuFormValues.restaurantLogo,
+            backgroundCard:menuFormValues.backgroundCard,
+            colorMenu:menuFormValues.colorMenu,
+            idFontFamily:menuFormValues.idFontFamily,
+            idUserTemplate:menuFormValues.idUserTemplate,
+            idImgTemplate:menuFormValues.idImgTemplate,
+            category:menuFormValues.category
+        } 
+        : 
+        {
             title: currentContentType === 'social-media' ? socialFormValues.title : currentContentType === 'music' ? musicFormValues.title : appFormValues.title,
             colorTitle: currentContentType === 'social-media' ? socialFormValues.colorTitle : currentContentType === 'music' ? musicFormValues.colorTitle : appFormValues.colorTitle,
             description: currentContentType === 'social-media' ? socialFormValues.description : currentContentType === 'music' ? musicFormValues.description : appFormValues.description,

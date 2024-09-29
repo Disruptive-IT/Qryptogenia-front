@@ -20,21 +20,21 @@ export default function MenuProvider({children}) {
     const handleTemplate=(e)=>{
         setFormData(prevValues=>({
             ...prevValues,
-            imgTemplate:e.target.id
+            idImgTemplate:e.target.id
         }))
     }
 
     const templateNull=()=>{
         setFormData((prevValues)=>({
             ...prevValues,
-            imgTemplate:null
+            idImgTemplate:null
         }))
     }
 
     const usertemplateNull=()=>{
         setFormData((prevValues)=>({
             ...prevValues,
-            userTemplate:null
+            idUserTemplate:null
         }))
     }
 
@@ -77,7 +77,7 @@ export default function MenuProvider({children}) {
             
             setFormData((prevValues) => ({
                 ...prevValues,
-                userTemplate: file
+                idUserTemplate: file
             }));
     
             reader.readAsDataURL(file); 
@@ -118,7 +118,7 @@ export default function MenuProvider({children}) {
     function handleFontFamily(e){
         setFormData((prevValues)=>({
             ...prevValues,
-            fontFamily:e.target.value
+            idFontFamily:e.target.value
         }))
     }
 

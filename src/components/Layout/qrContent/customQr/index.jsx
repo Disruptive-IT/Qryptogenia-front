@@ -14,6 +14,7 @@ import { useValidate } from '../../../../context/validateFormContext';
 import { toast } from 'sonner';
 import { v4 as uuidv4 } from 'uuid';
 import axios from '../../../../libs/axios';
+import { UseMenu } from '../forms/menu/menuContext';
 
 /*
  * @UpdatedBy : Cristian Escobar,   @date 2024-09-03 15:05:11
@@ -50,6 +51,7 @@ const CustomQr = ({ location, qrId }) => {
     const [selectedOptionIndex, setSelectedOptionIndex] = useState(0);
     const [uniqueKey, setUniqueKey] = useState('');
     const { qrType, qrData, qrColor, qrBgColor, qrProps, qrImageInfo, qrTextProps, appFormValues, socialFormValues, musicFormValues, qrBase64, currentContentType } = useQr();
+    const {formData}=UseMenu();
 
     useEffect(() => {
         const fetchUniqueKey = async () => {
@@ -62,7 +64,7 @@ const CustomQr = ({ location, qrId }) => {
         };
 
         fetchUniqueKey();
-    }, [qrData, appFormValues, socialFormValues, musicFormValues]);
+    }, [qrData, appFormValues, socialFormValues, musicFormValues,formData]);
 
     useEffect(() => {
         console.log('Unique key updated:', uniqueKey);
@@ -137,7 +139,7 @@ const CustomQr = ({ location, qrId }) => {
             } else {
                 console.log(musicFormValues)
                 console.log(uniqueKey)
-                await saveQrData(qrName, qrData, qrType, qrColor, qrBgColor, qrProps, qrImageInfo, qrTextProps, appFormValues, socialFormValues, musicFormValues, qrBase64, currentContentType, location, qrId, uniqueKey);
+                await saveQrData(qrName, qrData, qrType, qrColor, qrBgColor, qrProps, qrImageInfo, qrTextProps, appFormValues, socialFormValues, musicFormValues,formData, qrBase64, currentContentType, location, qrId, uniqueKey);
             }
         } else {
             toast.info('QR code saving was cancelled.');

@@ -144,9 +144,9 @@ function MenuForm(){
 
     
       // Validación del logo del restaurante
-      if (!values.restaurantLogo) {
-        errors.restaurantLogo = 'Restaurant logo is required';
-      }
+      // if (!values.restaurantLogo) {
+      //   errors.restaurantLogo = 'Restaurant logo is required';
+      // }
     
       // Validación de las categorías y productos
       values.category.forEach((category, indexCategory) => {
@@ -294,7 +294,7 @@ return (
                 >
                   load logo
                 </label>
-                {formik.touched.restaurantLogo && formik.errors.restaurantLogo ? <div className='text-red-600 my-1 text-[13px]'>{formik.errors.restaurantLogo}</div>:null}
+                {/* {formik.touched.restaurantLogo && formik.errors.restaurantLogo ? <div className='text-red-600 my-1 text-[13px]'>{formik.errors.restaurantLogo}</div>:null} */}
                 <input
                   className="hidden"
                   type="file"
@@ -387,11 +387,11 @@ return (
                         ))}
                         <div onClick={()=>{templateNull();setIndexTemplate(null)}} className={`w-1/5 flex-shrink-0 flex align-middle justify-center bg-white rounded-lg overflow-auto ${indexTemplate==null ? 'border-[2px] border-black':''}`}>
                             <div className='w-ful h-full flex align-middle items-center'>
-                              <label className={` ${formData.userTemplate!==null ? 'hidden':'p-4 bg-light-blue hover:bg-dark-blue text-white rounded-md'}`} htmlFor="userTemplate">+</label>
+                              <label className={` ${formData.idUserTemplate!==null ? 'hidden':'p-4 bg-light-blue hover:bg-dark-blue text-white rounded-md'}`} htmlFor="userTemplate">+</label>
                               <input onChange={(e)=>handleUserTemplate(e,formik.handleChange)} className='hidden' name='userTemplate' id='userTemplate' type="file" accept='image/*' />
-                              <div className={`${formData.userTemplate!==null ? 'w-full h-full relative top-0 overflow-auto':'hidden'}`}>
-                                <span onClick={async()=>{await resetUserTemplate(); if(formData.userTemplate!==null){usertemplateNull();}}} className='z-50 absolute top-1 right-2 cursor-pointer text-red-600 font-bold'>x</span>
-                                <img src={formData.userTemplate!==null ? URL.createObjectURL(formData.userTemplate):''} className={`${formData.userTemplate!==null ? 'object-cover w-full h-full':''}`} alt="" id='userTemplate' />
+                              <div className={`${formData.idUserTemplate!==null ? 'w-full h-full relative top-0 overflow-auto':'hidden'}`}>
+                                <span onClick={async()=>{await resetUserTemplate(); if(formData.idUserTemplate!==null){usertemplateNull();}}} className='z-50 absolute top-1 right-2 cursor-pointer text-red-600 font-bold'>x</span>
+                                <img src={formData.idUserTemplate!==null ? URL.createObjectURL(formData.idUserTemplate):''} className={`${formData.idUserTemplate!==null ? 'object-cover w-full h-full':''}`} alt="" id='userTemplate' />
                               </div>
                             </div>
                         </div>
@@ -667,31 +667,15 @@ return (
                       {/* Botón para agregar un nuevo producto */}
                       <button
                         onClick={() => {
-                          pushProduct({
-                            backgroundProductCard:formData.category?.[index]?.products?.[0]?.backgroundProductCard || "#fff",
-                            colorName:formData.category?.[index]?.products?.[0]?.colorName || "#000",
-                            colorDescription:formData.category?.[index]?.products?.[0]?.colorDescription || "#000",
-                            colorPrice:formData.category?.[index]?.products?.[0]?.colorPrice || "#000",
-                            productImg: null,
-                            productName: "",
-                            productDescription: "",
-                            top: false,
-                            price: null,
-                          });
-                          addProductToCategory(index, {
-                            backgroundProductCard:formData.category?.[index]?.products?.[0]?.backgroundProductCard || "#fff",
-                            colorName:formData.category?.[index]?.products?.[0]?.colorName || "#000",
-                            colorDescription:formData.category?.[index]?.products?.[0]?.colorDescription || "#000",
-                            colorPrice:formData.category?.[index]?.products?.[0]?.colorPrice || "#000",
-                            productImg: null,
-                            productName: "",
-                            productDescription: "",
-                            top: false,
-                            price: null,
-                          });
-                          formik.setFieldValue(`category[${index}].products`,[
-                            ...formik.values.category[index]?.products,
-                            {
+                          if(
+                            formik.errors.category &&
+                            formik.errors.category[index] &&
+                            formik.errors.category[index].products &&
+                            formik.errors.category[index].products.length > 0
+                          ){
+                            toast.warning('please complete the previous product')
+                          }else{
+                            pushProduct({
                               backgroundProductCard:formData.category?.[index]?.products?.[0]?.backgroundProductCard || "#fff",
                               colorName:formData.category?.[index]?.products?.[0]?.colorName || "#000",
                               colorDescription:formData.category?.[index]?.products?.[0]?.colorDescription || "#000",
@@ -701,9 +685,34 @@ return (
                               productDescription: "",
                               top: false,
                               price: null,
-                            }
-                          ])
-                        }}
+                            });
+                            addProductToCategory(index, {
+                              backgroundProductCard:formData.category?.[index]?.products?.[0]?.backgroundProductCard || "#fff",
+                              colorName:formData.category?.[index]?.products?.[0]?.colorName || "#000",
+                              colorDescription:formData.category?.[index]?.products?.[0]?.colorDescription || "#000",
+                              colorPrice:formData.category?.[index]?.products?.[0]?.colorPrice || "#000",
+                              productImg: null,
+                              productName: "",
+                              productDescription: "",
+                              top: false,
+                              price: null,
+                            });
+                            formik.setFieldValue(`category[${index}].products`,[
+                              ...formik.values.category[index]?.products,
+                              {
+                                backgroundProductCard:formData.category?.[index]?.products?.[0]?.backgroundProductCard || "#fff",
+                                colorName:formData.category?.[index]?.products?.[0]?.colorName || "#000",
+                                colorDescription:formData.category?.[index]?.products?.[0]?.colorDescription || "#000",
+                                colorPrice:formData.category?.[index]?.products?.[0]?.colorPrice || "#000",
+                                productImg: null,
+                                productName: "",
+                                productDescription: "",
+                                top: false,
+                                price: null,
+                              }
+                            ])
+                          }
+                          }}
                         className="mb-4 px-4 py-2 bg-light-blue hover:bg-dark-blue text-white rounded"
                         type="button"
                       >

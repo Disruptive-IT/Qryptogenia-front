@@ -107,15 +107,15 @@ const getLinkTemplate=async(id)=>{
   }
 
   useEffect(()=>{
-    if(FormValues.imgTemplate!=null){
-      getLinkTemplate(FormValues.imgTemplate);
+    if(FormValues.idImgTemplate!=null){
+      getLinkTemplate(FormValues.idImgTemplate);
     }
-  },[FormValues.imgTemplate])
+  },[FormValues.idImgTemplate])
 
   useEffect(()=>{
-    getNameFont(FormValues.fontFamily);
+    getNameFont(FormValues.idFontFamily);
     console.log(fontFamily);
-  },[FormValues.fontFamily]);
+  },[FormValues.idFontFamily]);
 
   return (
       <div className='parent-container absolute left-0 w-full h-full'>
@@ -123,8 +123,8 @@ const getLinkTemplate=async(id)=>{
           className="relative left-0 top-0 w-full h-full  overflow-y-auto p-4"
           id="main-container"
           style={{
-            backgroundColor: FormValues.imgTemplate!==null ? 'rgba(255, 255, 255, 0.8)': FormValues.backgroundCard,
-            backgroundImage: FormValues.imgTemplate == null  ? (FormValues.userTemplate !== null ? `url(${URL.createObjectURL(FormValues.userTemplate)})` : '') : `url(${templateUrl?.image})`,
+            backgroundColor: FormValues.idImgTemplate!==null ? 'rgba(255, 255, 255, 0.8)': FormValues.backgroundCard,
+            backgroundImage: FormValues.idImgTemplate == null  ? (FormValues.idUserTemplate !== null ? `url(${URL.createObjectURL(FormValues.idUserTemplate)})` : '') : `url(${templateUrl?.image})`,
             backgroundSize: '340px 660px',
             backgroundPosition: 'center',
             backgroundRepeat: 'no-repeat',
