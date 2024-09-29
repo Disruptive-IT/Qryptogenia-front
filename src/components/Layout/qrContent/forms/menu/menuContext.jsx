@@ -1,6 +1,6 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import { menuFormData } from "./menuData.jsx";
-import instance from "../../../../../libs/axios.jsx";
+import serverCloud from "../../../../../libs/cloudConfig.jsx";
 
 const MenuContext=createContext();
 
@@ -16,6 +16,50 @@ export default function MenuProvider({children}) {
 
         handler(e);
     };
+
+    const loadFormDataImgs=async(data)=>{
+        try{
+            const loadLogo=await serverCloud.upload.load(data.restaurantLogo);
+            const urlLogo=loadLogo.secure_url;
+            if (urlLogo) setFormData((prevValues)=>({...prevValues,restaurantLogo:urlLogo}));
+
+            const updatedCategories = await Promise.all(
+                data.category.map(async (category) => {
+                    // Iterar sobre los productos de cada categoría
+                    const updatedProducts = await Promise.all(
+                        category.products.map(async (product) => {
+                            if (product.productImg) {
+                                // Subir la imagen del producto
+                                const loadProductImage = await serverCloud.upload.load(product.productImg);
+                                const urlProductImage = loadProductImage.secure_url;
+    
+                                // Retornar el producto con la URL de la imagen actualizada
+                                return {
+                                    ...product,
+                                    productImg: urlProductImage,
+                                };
+                            }
+                            return product; // Si no tiene imagen, retornar el producto sin cambios
+                        })
+                    );
+    
+                    // Retornar la categoría con los productos actualizados
+                    return {
+                        ...category,
+                        products: updatedProducts,
+                    };
+                })
+            );
+    
+            // Actualizar el estado con las categorías y sus productos
+            setFormData((prevValues) => ({
+                ...prevValues,
+                category: updatedCategories,
+            }));
+        }catch(error){
+            console.error(error.message);
+        }
+    }
 
     const handleTemplate=(e)=>{
         setFormData(prevValues=>({
@@ -315,7 +359,8 @@ export default function MenuProvider({children}) {
             handleProductPrice,
             handleProductTop,
             handleUserTemplate,
-            usertemplateNull
+            usertemplateNull,
+            loadFormDataImgs
         }}>
             {children}
         </MenuContext.Provider>
