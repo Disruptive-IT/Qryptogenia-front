@@ -138,8 +138,6 @@ function MenuForm(){
       // Validación del nombre del restaurante
       if (!values.restaurantName) {
         errors.restaurantName = 'Restaurant name is required';
-      } else if (specials.test(values.restaurantName)) {
-        errors.restaurantName = 'Restaurant name cannot contain special characters';
       }
 
     

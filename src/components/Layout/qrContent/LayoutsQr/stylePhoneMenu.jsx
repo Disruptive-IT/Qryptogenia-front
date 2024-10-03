@@ -113,9 +113,9 @@ const getLinkTemplate=async(id)=>{
   },[FormValues.idImgTemplate])
 
   useEffect(()=>{
-    getNameFont(FormValues.idFontFamily);
+    getNameFont(FormValues.idFontPreview);
     console.log(fontFamily);
-  },[FormValues.idFontFamily]);
+  },[FormValues.idFontPreview]);
 
   return (
       <div className='parent-container absolute left-0 w-full h-full'>

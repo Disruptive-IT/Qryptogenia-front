@@ -6,6 +6,7 @@ import './scroll.css'
 import Modal from 'react-modal';
 import { PhoneContentSwitch } from '../../Layout/qrContent';
 import { animate, motion } from 'framer-motion';
+import StoreMenuFood from '../../Layout/qrContent/storeLayout/storeFoodMenu';
 
 /**
  * @Author : Cristian Escobar
@@ -38,18 +39,27 @@ const StoreModal = ({ open, handleClose, storeData, codeType }) => {
         className="fixed inset-0 flex items-center justify-center p-4 bg-transparent"
         overlayClassName="fixed inset-0 bg-black bg-opacity-50 overflow-auto"
       >
-        <div onClick={handleClose} className="bg-transparent p-0 rounded-lg border-none shadow-none flex justify-center items-center w-full h-full">
+        <div onClick={codeType!=="food-menu" && (handleClose)} className="bg-transparent p-0 rounded-lg border-none shadow-none flex justify-center items-center w-full h-full">
         <div className="relative flex justify-center items-start" style={{ maxHeight: 'calc(100vh - 40px)', maxWidth: 'calc(100vw - 40px)' }}>
           <motion.button whileTap={{scale:0}} onClick={handleClose} className="absolute bg-white p-1 tracking-wider rounded-[10px] hover:bg-red-600 hover:text-white top-0 left-50 text-red-500">Cerrar</motion.button>
             <div className="relative scale-wrapper" style={{ marginTop: '40px' }}>
-              <CellBox>
+              {codeType=='food-menu' ? (
+                <CellBox>
+                  <StoreMenuFood 
+                    menuFormValues={storeData}
+                  />
+                </CellBox>
+              ):(
+                <CellBox>
                 <PhoneContentSwitch
                   contentName={contentName}
                   appFormValues={storeData}
                   socialFormValues={storeData}
                   musicFormValues={storeData}
+                  menuFormValues={storeData}
                 />
               </CellBox>
+              )}
             </div>
           </div>
         </div>

@@ -39,7 +39,7 @@ export const saveQrData = async (
             restaurantLogo:menuFormValues.restaurantLogo,
             backgroundCard:menuFormValues.backgroundCard,
             colorMenu:menuFormValues.colorMenu,
-            idFontFamily:menuFormValues.idFontFamily,
+            idFontPreview:menuFormValues.idFontPreview,
             idUserTemplate:menuFormValues.idUserTemplate,
             idImgTemplate:menuFormValues.idImgTemplate,
             category:menuFormValues.category

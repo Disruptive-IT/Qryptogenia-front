@@ -1,6 +1,5 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import { menuFormData } from "./menuData.jsx";
-import serverCloud from "../../../../../libs/cloudConfig.jsx";
 
 const MenuContext=createContext();
 
@@ -17,49 +16,100 @@ export default function MenuProvider({children}) {
         handler(e);
     };
 
-    const loadFormDataImgs=async(data)=>{
-        try{
-            const loadLogo=await serverCloud.upload.load(data.restaurantLogo);
-            const urlLogo=loadLogo.secure_url;
-            if (urlLogo) setFormData((prevValues)=>({...prevValues,restaurantLogo:urlLogo}));
+    const uploadImageToCloudinary = async (file) => {
+        const url = `https://api.cloudinary.com/v1_1/${import.meta.env.VITE_CLOUD_NAME}/image/upload`;
+      
+        const formData = new FormData();
+        formData.append('file', file); // El archivo de imagen a subir
+        formData.append('upload_preset', import.meta.env.VITE_UPLOAD_PRESET); // Upload preset
+      
+        try {
+          const response = await fetch(url, {
+            method: 'POST',
+            body: formData,
+          });
+      
+          const data = await response.json();
+      
+          if (response.ok) {
+            return data.secure_url; // Retorna la URL de la imagen subida
+          } else {
+            console.error('Error al subir la imagen:', data.error.message);
+          }
+        } catch (error) {
+          console.error('Error en la petición:', error);
+        }
+    }
 
+    const handleFileUpload = async () => {
+        try {
+            // Inicializa la URL del logo
+            let logoUrl = null;
+            let userTemplateUrl=null;
+    
+            // Subir el logo si existe
+            if (formData.restaurantLogo) {
+                logoUrl = await uploadImageToCloudinary(formData.restaurantLogo);
+                if (logoUrl) {
+                    console.log('Logo subido.');
+                }
+            }
+
+            if(formData.idUserTemplate){
+                userTemplateUrl=await uploadImageToCloudinary(formData.idUserTemplate);
+                if(userTemplateUrl){
+                    console.log("template subido");
+                }
+            }
+    
+            // Manejo de la carga de imágenes para todos los productos
             const updatedCategories = await Promise.all(
-                data.category.map(async (category) => {
-                    // Iterar sobre los productos de cada categoría
+                formData.category.map(async (category) => {
                     const updatedProducts = await Promise.all(
                         category.products.map(async (product) => {
-                            if (product.productImg) {
-                                // Subir la imagen del producto
-                                const loadProductImage = await serverCloud.upload.load(product.productImg);
-                                const urlProductImage = loadProductImage.secure_url;
+                            const file = product.productImg; // Asegúrate de que este sea un objeto File
     
-                                // Retornar el producto con la URL de la imagen actualizada
+                            if (file) {
+                                const imageUrl = await uploadImageToCloudinary(file);
                                 return {
                                     ...product,
-                                    productImg: urlProductImage,
+                                    productImg: imageUrl, // Actualiza con la URL de la imagen
                                 };
                             }
-                            return product; // Si no tiene imagen, retornar el producto sin cambios
+                            return product; // Devuelve el producto sin cambios si no hay imagen
                         })
                     );
     
-                    // Retornar la categoría con los productos actualizados
                     return {
                         ...category,
-                        products: updatedProducts,
+                        products: updatedProducts, // Actualiza la lista de productos
                     };
                 })
             );
     
-            // Actualizar el estado con las categorías y sus productos
-            setFormData((prevValues) => ({
-                ...prevValues,
-                category: updatedCategories,
-            }));
-        }catch(error){
+            // Crear el objeto actualizado de formData
+            const updatedFormData = {
+                ...formData,
+                restaurantLogo: logoUrl,
+                idUserTemplate:userTemplateUrl, // Actualiza con la URL del logo
+                category: updatedCategories, // Actualiza la lista de categorías
+            };
+    
+            // Actualiza el estado con el objeto actualizado
+            setFormData(updatedFormData);
+    
+            console.log('Todas las imágenes fueron subidas y el estado actualizado.');
+    
+            // Retorna el objeto formData actualizado
+            return updatedFormData; 
+        } catch (error) {
             console.error(error.message);
+            // También puedes retornar un valor predeterminado o lanzar el error si es necesario
+            return formData; // O puedes lanzar el error si prefieres
         }
-    }
+    };
+    
+    
 
     const handleTemplate=(e)=>{
         setFormData(prevValues=>({
@@ -162,7 +212,7 @@ export default function MenuProvider({children}) {
     function handleFontFamily(e){
         setFormData((prevValues)=>({
             ...prevValues,
-            idFontFamily:e.target.value
+            idFontPreview:e.target.value
         }))
     }
 
@@ -360,7 +410,7 @@ export default function MenuProvider({children}) {
             handleProductTop,
             handleUserTemplate,
             usertemplateNull,
-            loadFormDataImgs
+            handleFileUpload
         }}>
             {children}
         </MenuContext.Provider>

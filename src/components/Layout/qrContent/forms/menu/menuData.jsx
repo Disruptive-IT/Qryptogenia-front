@@ -3,7 +3,7 @@ export const menuFormData={
     restaurantLogo:null,
     backgroundCard:"#000",
     colorMenu:'#fff',
-    idFontFamily:null,
+    idFontPreview:null,
     idUserTemplate:null,
     idImgTemplate:null,
     category:[{
