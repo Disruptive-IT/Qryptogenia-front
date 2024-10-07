@@ -8,20 +8,21 @@ import React from 'react';
 
 const SubscriptionInfo = ({ plan, expirationDate, benefits }) => {
     return (
-        <div className="subscription-info bg-gray-100 p-4 rounded-lg shadow-md mb-4 "
-        style={{ backgroundColor: "#3C6E71", color: "#D9D9D9"
-
-            
-         }}>
-            <h2 className="text-lg font-semibold">Subscription Plan</h2>
-            <p><strong>Plan:</strong> {plan}</p>
-            <p><strong>Expiration Date:</strong> {expirationDate}</p>
-            <p><strong>Benefits:</strong></p>
-            <ul>
+        <div className=" bg-my-gray p-8 rounded-lg shadow-md mb-4 text-black max-w-90 mx-auto">
+            <h2 className="text-3xl font-bold mb-4">
+                Tu suscripción expira {expirationDate}
+            </h2>
+            <p className="mb-4">
+                Los códigos QR se pueden escanear durante 30 días. Reactive su suscripción para:
+            </p>
+            <ul className="list-disc list-inside mb-4">
                 {benefits.map((benefit, index) => (
-                    <li key={index}>• {benefit}</li>
+                    <li key={index} className="mb-2"> {benefit}</li>
                 ))}
             </ul>
+            <button className="bg-dark-blue text-white py-2 px-4 rounded-full hover:bg-light-blue">
+                SELECCIONAR PLAN
+            </button>
         </div>
     );
 };

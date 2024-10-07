@@ -32,10 +32,10 @@ function Navbar() {
                     </ul>
                 </nav>
                 
-                {/* <div className="block md:hidden">
+                <div className="block md:hidden">
                     <MenuDrawer />
                 </div> 
-                                    <UserProfileMenu />*/}
+                                    
                 <ul className='md:flex hidden gap-4 w-2/6 justify-end items-center pr-5'>
                     <li className="transition-all duration-200 hover:scale-105 hover:ease-linear ">
                         <LenguageSelector/>

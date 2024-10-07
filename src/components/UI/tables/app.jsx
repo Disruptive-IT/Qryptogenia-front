@@ -325,7 +325,7 @@ const App = () => {
         <img
           src={`data:image/png;base64,${item.qr_image_base64}`}
           alt="QR Code Preview"
-          className="w-16 h-16 object-contain cursor-pointer"
+          className="w-16 h-16 object-contain cursor-pointer items-center"
           onClick={() => handleActionClick('view', item)}
         />
       )
@@ -366,7 +366,7 @@ const App = () => {
       header: t("Actions"),
       accessor: 'actions',
       render: (item) => (
-        <div className="flex space-x-2">
+        <div className="flex space-x-2 ">
           <motion.div  
             whileHover={{scale:"1.2"}}
           >
@@ -400,13 +400,13 @@ const App = () => {
   ];
 
   return (
-    <div className="flex h-screen overflow-hidden">
-  <div className="w-full sm:w-64 bg-gray-800 text-white flex flex-col p-6">
+    
+<div className="flex h-screen overflow-hidden mt-10 ">
+  <div className="w-full sm:w-64 bg-gray-800 text-white flex flex-col p-6 shadow-lg">
     <h2 className="text-xl font-semibold mb-6">QR codes</h2>
     <ul className="flex-grow">
-      <li className="mb-4 cursor-pointer hover:text-teal-400">My QR Codes</li>
-      <li className="mb-4 cursor-pointer hover:text-teal-400">Analytics</li>
-      <li className="cursor-pointer hover:text-teal-400">Settings</li>
+      <li className="mb-4 cursor-pointer hover:text-teal-400 ">My QR Codes</li>
+      <li className="mb-4 cursor-pointer hover:text-teal-400 ">Analytics</li>
     </ul>
   </div>
   <div className="flex-grow p-6 bg-gray-100 overflow-auto">
@@ -414,7 +414,7 @@ const App = () => {
     <div className="mb-4">
       <input
         type="text"
-        className="p-2 border border-gray-300 rounded w-full"
+        className="p-2 border border-gray-300 rounded w-full md:w-96"
         placeholder={t("Search QR codes")}
         value={searchQuery}
         onChange={handleSearch}

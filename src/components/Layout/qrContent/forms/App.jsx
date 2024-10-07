@@ -22,6 +22,7 @@ import huawei from "../../../../../src/assets/imgs/huawei.png";
 import microsoft from "../../../../../src/assets/imgs/microsoft.png";
 import { useTranslation } from 'react-i18next';
 import { MdOutlineCloudUpload } from "react-icons/md";
+import instance from '../../../../libs/axios';
 
 export const AppForm = ({ onFormChangeApp, location, appFormValues }) => {
     const [title, setTitle] = useState('');
@@ -62,6 +63,20 @@ export const AppForm = ({ onFormChangeApp, location, appFormValues }) => {
         }
       };
       
+
+      const [fonts, setFonts] = useState([]);
+
+const getFonts = async () => {
+    try {
+        const response = await instance.get('getFonts'); 
+        setFonts(response.data);
+    } catch (error) {
+        console.error("Error fetching fonts: ", error.message);
+    }
+};
+useEffect(() => {
+    getFonts();
+}, []); 
 
     const validateForm = (values) => {
         const errors = {};
@@ -415,13 +430,15 @@ export const AppForm = ({ onFormChangeApp, location, appFormValues }) => {
         <div className="flex flex-wrap md:flex-nowrap items-start space-x-12 w-full">
 
                                 {/* Seccion del selector de color */}
-                            <div className="flex flex-col md:flex-nowrap items-start ">
+                            <div className="flex flex-col md:flex-nowrap items-start mb-4 ">
                             <label htmlFor="colorTitle" className="mb-2">{t("Color")}</label>
+                                <div className="flex items-center">
                                 <div
-                                    className="w-20 h-10 md:w-10 border border-gray-300 rounded cursor-pointer "
+                                    className="w-10 h-10 border border-gray-300 rounded cursor-pointer"
                                     style={{ background: colorTitle }}
                                     onClick={() => setShowTitleColorPicker(!showTitleColorPicker)}
                                 ></div>
+                            </div>
                                 {showTitleColorPicker && (
                                     <div className="absolute mt-2 left-0 top-full z-50" ref={titleColorPickerRef}>
                                     {/* Color Picker */}
@@ -508,14 +525,14 @@ export const AppForm = ({ onFormChangeApp, location, appFormValues }) => {
                             </div>
                         </div>
                         
-                        <div className="flex flex-col relative">
-                            <label htmlFor="descriptionColor" className="mb-2">{t("Color")}</label>
-                            <div className="flex items-center">
-                                <div
-                                    className="w-20 md:w-10 h-10 border border-gray-300 rounded cursor-pointer"
-                                    style={{ background: descriptionColor }}
-                                    onClick={() => setShowDescriptionColorPicker(!showDescriptionColorPicker)}
-                                ></div>
+                        <div className="flex flex-col md:flex-nowrap items-start mb-4">
+                        <label htmlFor="descriptionColor" className="mb-2">{t("Color")}</label>
+                        <div className="flex items-center">
+                            <div
+                                className="w-10 h-10 border border-gray-300 rounded cursor-pointer"
+                                style={{ background: descriptionColor }}
+                                onClick={() => setShowDescriptionColorPicker(!showDescriptionColorPicker)}
+                            ></div>
                                 {showDescriptionColorPicker && (
                                     <div className="absolute mt-2 left-0 top-full z-50" ref={descriptionColorPickerRef}>
                                         <GradientColorPicker
@@ -626,6 +643,18 @@ export const AppForm = ({ onFormChangeApp, location, appFormValues }) => {
                                 </div>
                             </div>
                         </div>
+
+                        <div className='flex flex-col md:flex-row md:items-center mb-4 mt-4'>
+                          <h1 className='mt-3 text-lg font-semibold mr-6'>Font style:</h1>
+                          <select className='p-4 rounded-[10px] bg-gray-300' name="fontFamily" id="" onChange={(e)=>handleFontFamily(e)}>
+                          {fonts?.map((item, index) => (
+                            <option style={{ fontFamily: item.fontName }} key={index} id={item.id} value={item.id}>
+                              {item.fontName}
+                            </option>
+                          ))}
+                          </select>
+                  </div>
+
 
                     <div className="flex flex-col md:flex-row md:items-center mb-4 mt-4">
                         <div className="w-full md:w-3/4">
