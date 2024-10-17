@@ -401,20 +401,13 @@ const App = () => {
 
   return (
     
-<div className="flex h-screen overflow-hidden mt-10 ">
-  <div className="w-full sm:w-64 bg-gray-800 text-white flex flex-col p-6 shadow-lg">
-    <h2 className="text-xl font-semibold mb-6">QR codes</h2>
-    <ul className="flex-grow">
-      <li className="mb-4 cursor-pointer hover:text-teal-400 ">My QR Codes</li>
-      <li className="mb-4 cursor-pointer hover:text-teal-400 ">Analytics</li>
-    </ul>
-  </div>
-  <div className="flex-grow p-6 bg-gray-100 overflow-auto">
+<div className="flex h-screen overflow-hidden mt-10 shadow-lg lg:w-[94%] items-cent md:rounded-lg lg:ml-14">
+  <div className="flex-grow p-6 bg-gray-100 overflow-auto ">
     {error && <div className="mb-4 text-red-500">{error}</div>}
     <div className="mb-4">
       <input
         type="text"
-        className="p-2 border border-gray-300 rounded w-full md:w-96"
+        className="p-2 border border-gray-300 rounded w-full md:w-96 "
         placeholder={t("Search QR codes")}
         value={searchQuery}
         onChange={handleSearch}
