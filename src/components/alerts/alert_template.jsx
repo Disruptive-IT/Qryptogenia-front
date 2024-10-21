@@ -14,6 +14,7 @@ function Alert({image,message,title,labelLink,path}){
     return(
 <>
 <div className="bg-fixed bg-[url('./../../../public/fondo-alert.png')] bg-cover bg-center w-full h-full min-h-screen flex items-center justify-center flex-col pt-[4%] px-4 md:px-8 lg:px-16">
+
     <div className="w-[60%] md:w-[40%] lg:w-[20%] h-[20%] my-4">
         <img src={image} alt="alerta" className="max-w-full h-auto" />
     </div>       

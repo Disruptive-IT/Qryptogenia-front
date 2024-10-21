@@ -17,6 +17,10 @@ export default function WebLinkMenuFood({ FormValues, ContentName }) {
   const [activeprod,setActiveprod]=useState(0);
   const [activeCategory,setActiveCategory]=useState(0);
 
+  const isEditRoute = location.pathname.startsWith('/edit');
+  const validateLink=/.webp/
+
+
   const handleOpenModal=()=>{
     setOpenModal(true)
   }
@@ -124,7 +128,7 @@ const getLinkTemplate=async(id)=>{
           id="main-container"
           style={{
             backgroundColor: FormValues.idImgTemplate!==null ? 'rgba(255, 255, 255, 0.8)': FormValues.backgroundCard,
-            backgroundImage: FormValues.idImgTemplate == null  ? (FormValues.idUserTemplate !== null ? `url(${URL.createObjectURL(FormValues.idUserTemplate)})` : '') : `url(${templateUrl?.image})`,
+            backgroundImage: FormValues.idImgTemplate == null ? (FormValues.idUserTemplate !== null ? `url(${URL.createObjectURL(FormValues.idUserTemplate)})` : ''): (isEditRoute ? `url(${templateUrl?.image})` : `url(${templateUrl?.image})`),
             backgroundSize: '340px 660px',
             backgroundPosition: 'center',
             backgroundRepeat: 'no-repeat',
@@ -142,7 +146,7 @@ const getLinkTemplate=async(id)=>{
             className={`w-full h-auto  object-contain rounded-md ${FormValues.restaurantLogo!==null ? '':'hidden'}`}
             id="restaurantLogoPreview"
             alt="restaurantLogo"
-            src={FormValues.restaurantLogo!==null ? URL.createObjectURL(FormValues.restaurantLogo):''}
+            src={validateLink.test(FormValues?.restaurantLogo)  ? (isEditRoute ? FormValues?.restaurantLogo : '') : (FormValues?.restaurantLogo instanceof File ? URL.createObjectURL(FormValues?.restaurantLogo) : '')}
           />
         </div>
 
@@ -191,7 +195,9 @@ const getLinkTemplate=async(id)=>{
       category.products.map((element, productIndex) => (
         <div key={productIndex} className='w-full h-[135px] flex flex-row rounded-[10px] overflow-auto mb-4' onClick={() => {setActiveprod(productIndex); handleOpenModal();}}>
           <div style={{backgroundColor:element.backgroundProductCard}} className='w-[40%] h-full bg-slate-500 overflow-auto'>
-            <img className='object-cover w-full h-full' src={element.productImg ? URL.createObjectURL(element.productImg) : 'jajajaja'} alt={element.productName} />
+          <img className='w-full h-full' src={element.productImg && validateLink.test(FormValues?.category?.[index]?.products?.[productIndex]?.productImg)  ? (isEditRoute ? element.productImg : '') : (element?.productImg instanceof File ? URL.createObjectURL(element.productImg) : '')} alt={element.productName || 'Producto'}
+/>
+
           </div>
           <div style={{backgroundColor:element.backgroundProductCard}} className='w-[60%] h-full bg-red-300 px-1 py-1  flex flex-col self-center'>
             <span className='flex w-full items-end justify-end hover:cursor-pointer'>+</span>
@@ -214,7 +220,7 @@ const getLinkTemplate=async(id)=>{
       topProducts.map((element, index) => (
         <div key={index} className='w-full h-[135px] flex flex-row rounded-[10px] overflow-auto mb-4' onClick={() => { setActiveprod(index); handleOpenModal(); }}>
           <div style={{backgroundColor:element.backgroundProductCard}} className='w-[40%] h-full bg-slate-500 overflow-auto'>
-            <img className='object-cover w-full h-full' src={element.productImg ? URL.createObjectURL(element.productImg) : 'jajaja'} alt={element.productName} />
+            <img className='w-full h-full' src={validateLink.test(element.productImg)  ? (isEditRoute ? element.productImg : '') : (element.productImg instanceof File ? URL.createObjectURL(element.productImg) : '')} alt={element.productName} />
           </div>
           <div style={{backgroundColor:element.backgroundProductCard}} className='w-[60%] h-full bg-red-300 px-1 py-1  flex flex-col self-center'>
             <span className='flex w-full items-end justify-end hover:cursor-pointer'>+</span>
@@ -245,7 +251,7 @@ const getLinkTemplate=async(id)=>{
     // Si estás en una categoría normal
     FormValues.category[activeCategory]?.products?.[activeprod] && (
       <div style={{backgroundColor: FormValues.category[activeCategory].products[activeprod].backgroundProductCard}} className={`absolute bg-orange-400 top-[25%] w-[80%] left-[10%] h-auto rounded-[10px] p-4`}>
-        <img className='rounded-2xl border-[4px] border-black' src={FormValues.category[activeCategory].products[activeprod].productImg ? URL.createObjectURL(FormValues.category[activeCategory].products[activeprod].productImg) : 'jajaja'} alt={FormValues.category[activeCategory].products[activeprod].productName} />
+        <img className='rounded-2xl border-[4px] border-black' src={validateLink.test(FormValues?.category?.[activeCategory]?.products?.[activeprod]?.productImg)  ? (isEditRoute ? FormValues?.category?.[activeCategory]?.products?.[activeprod]?.productImg : '') : (FormValues?.category?.[activeCategory]?.products?.[activeprod]?.productImg instanceof File ? URL.createObjectURL(FormValues?.category?.[activeCategory]?.products?.[activeprod]?.productImg) : '')} />
         <div className='flex flex-row w-full h-auto justify-between p-2 mb-1'>
           <h1 className='mx-3 my-4 font-bold text-[20px] text-black'>{FormValues.category[activeCategory].products[activeprod].productName}</h1>
           <h1 className='mx-3 my-4 font-bold text-[20px] text-black'>{FormValues.category[activeCategory].products[activeprod].price}$</h1>
@@ -262,7 +268,7 @@ const getLinkTemplate=async(id)=>{
     // Si estás en la pestaña "top" y quieres mostrar los productos destacados
     topProducts[activeprod] && (
       <div style={{backgroundColor: topProducts[activeprod].backgroundProductCard}} className={`absolute bg-orange-400 top-[25%] w-[80%] left-[10%] h-auto rounded-[10px] p-4`}>
-        <img className='rounded-2xl border-[4px] border-black' src={topProducts[activeprod].productImg ? URL.createObjectURL(topProducts[activeprod].productImg) : 'jajaja'} alt={topProducts[activeprod].productName} />
+        <img className='rounded-2xl border-[4px] border-black' src={validateLink.test(topProducts[activeprod].productImg)  ? (isEditRoute ? topProducts[activeprod].productImg : '') : (topProducts[activeprod].productImg instanceof File ? URL.createObjectURL(topProducts[activeprod].productImg) : '')} alt={topProducts[activeprod].productName} />
         <div className='flex flex-row w-full h-auto justify-between p-2 mb-1'>
           <h1 className='mx-3 my-4 font-bold text-[20px] text-black'>{topProducts[activeprod].productName}</h1>
           <h1 className='mx-3 my-4 font-bold text-[20px] text-black'>{topProducts[activeprod].price}$</h1>

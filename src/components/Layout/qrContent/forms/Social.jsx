@@ -16,6 +16,7 @@ import { IoIosClose } from "react-icons/io";
 import { useTranslation } from 'react-i18next';
 import { MdOutlineCloudUpload } from "react-icons/md";
 import { useValidate } from '../../../../context/validateFormContext';
+import ColorPicker from './form-helpers/picker';
 
 export const SocialForm = ({ onFormChange, location, socialFormValues }) => {
   const [title, setTitle] = useState('');
@@ -461,25 +462,11 @@ export const SocialForm = ({ onFormChange, location, socialFormValues }) => {
                                     )}
                                 </div>
                                 </div>
-
                                 </div>
-
                                         {/* Color Picker */}
                                         {showTitleColorPicker && (
-                                                <div className="absolute mt-2 left-0 top-full z-50" ref={titleColorPickerRef}>
-                                        <GradientColorPicker
-                                            enableAlpha={true}
-                                            disableHueSlider={false}
-                                            disableAlphaSlider={false}
-                                            disableInput={false}
-                                            disableHexInput={false}
-                                            disableRgbInput={false}
-                                            disableAlphaInput={false}
-                                            presetColors={[]}
-                                            gradient={true}
-                                            color={colorTitle}
-                                            onChange={handleTitleColorChange}
-                                        />
+                                        <div className="absolute mt-2 left-0 top-full z-50" ref={titleColorPickerRef}>
+                                        <ColorPicker handlerFunction={handleTitleColorChange} pickerColor={colorTitle}/>
                                     </div>
                                 )}
                             </div>
@@ -513,19 +500,7 @@ export const SocialForm = ({ onFormChange, location, socialFormValues }) => {
                 ></div>
                 {showDescriptionColorPicker && (
                   <div className="absolute mt-2 left-0 top-full z-50" ref={descriptionColorPickerRef}>
-                    <GradientColorPicker
-                      enableAlpha={true}
-                      disableHueSlider={false}
-                      disableAlphaSlider={false}
-                      disableInput={false}
-                      disableHexInput={false}
-                      disableRgbInput={false}
-                      disableAlphaInput={false}
-                      presetColors={[]}
-                      gradient={true}
-                      color={descriptionColor}
-                      onChange={handleDescriptionColorChange}
-                    />
+                    <ColorPicker handlerFunction={handleDescriptionColorChange} pickerColor={descriptionColor}/>
                   </div>
                 )}
               </div>
@@ -543,20 +518,8 @@ export const SocialForm = ({ onFormChange, location, socialFormValues }) => {
                 ></div>
                 {showBackgroundColorPicker && (
                   <div className="absolute mt-2 left-0 z-50" ref={backgroundColorPickerRef}>
-                    <GradientColorPicker
-                      enableAlpha={true}
-                      disableHueSlider={false}
-                      disableAlphaSlider={false}
-                      disableInput={false}
-                      disableHexInput={false}
-                      disableRgbInput={false}
-                      disableAlphaInput={false}
-                      presetColors={[]}
-                      gradient={true}
-                      color={backgroundColor}
-                      onChange={handleBackgroundColorChange}
-                      style={{ width: "calc(100% + 2rem)" }} // Ajuste del ancho
-                    />
+                    <ColorPicker handlerFunction={handleBackgroundColorChange} pickerColor={backgroundColor}/>
+                    {/* style={{ width: "calc(100% + 2rem)" }} // Ajuste del ancho */}
                   </div>
                 )}
               </div>
@@ -572,25 +535,10 @@ export const SocialForm = ({ onFormChange, location, socialFormValues }) => {
                 ></div>
                 {showBoxColorPicker && (
                   <div className="absolute mt-2 left-0 z-50" ref={boxColorPickerRef}>
-                    <GradientColorPicker
-                      enableAlpha={true}
-                      disableHueSlider={false}
-                      disableAlphaSlider={false}
-                      disableInput={false}
-                      disableHexInput={false}
-                      disableRgbInput={false}
-                      disableAlphaInput={false}
-                      presetColors={[]}
-                      gradient={true}
-                      color={boxColor}
-                      onChange={handleBoxColorChange}
-                      style={{ width: "calc(100% + 2rem)" }} // Ajuste del ancho
-                    />
+                    <ColorPicker handlerFunction={handleBoxColorChange} pickerColor={boxColor}/>
                   </div>
-
                 )}
             </div>
-
               </div>
               <div className="w-full md:w-1/4 flex flex-col items-center">
               <label htmlFor="boxColor" className="mb-2">{t("Border Profile Color")}</label>
@@ -602,27 +550,12 @@ export const SocialForm = ({ onFormChange, location, socialFormValues }) => {
                   ></div>
                   {showBorderColorPicker && (
                     <div className="absolute mt-2 left-0 z-50" ref={borderColorPickerRef}>
-                      <GradientColorPicker
-                        enableAlpha={true}
-                        disableHueSlider={false}
-                        disableAlphaSlider={false}
-                        disableInput={false}
-                        disableHexInput={false}
-                        disableRgbInput={false}
-                        disableAlphaInput={false}
-                        presetColors={[]}
-                        gradient={true}
-                        color={borderImg}
-                        onChange={handleBorderColorChange}
-                        style={{ width: "calc(100% + 2rem)" }} // Ajuste del ancho
-                      />
+                      <ColorPicker handlerFunction={handleBorderColorChange} pickerColor={borderImg}/>
                     </div>
                   )}
                 </div>
               </div>
           </div>
-
-
           <div className="flex flex-col md:flex-row md:items-center mb-4 mt-4">
             <div className="w-full md:w-3/4">
               <label htmlFor="multiselect" className="mb-2">Multiselect:</label>
@@ -677,7 +610,6 @@ export const SocialForm = ({ onFormChange, location, socialFormValues }) => {
               </div>
             ))}
           </div>
-
           <div className="flex items-center mb-4 mt-6">
             <button 
               type="submit" 

@@ -1,78 +1,25 @@
-import { FieldArray, Formik, useFormik,Field, ErrorMessage } from 'formik';
-import * as yup from 'yup';
-import { useEffect, useMemo, useState } from 'react';
+import { FieldArray, Formik, useFormik} from 'formik';
+import { useEffect } from 'react';
 import { UseMenu } from './menuContext';
-import GradientColorPicker from 'react-gcolor-picker';
 import { motion } from "framer-motion";
 import EjectIcon from '@mui/icons-material/Eject';
 import DeleteIcon from '@mui/icons-material/Delete';
 import CancelIcon from '@mui/icons-material/Cancel';
 import {Accordion,AccordionItem} from '@nextui-org/accordion'
 import './menu.css'
-import instance from '../../../../../libs/axios';
 import { toast } from 'sonner';
-import { duration } from '@mui/material';
 import { useValidate } from '../../../../../context/validateFormContext';
+import ColorPicker from '../form-helpers/picker';
 
 function MenuForm(){
-    const {formData,handleRestaurantName,handleLogo,handleBackgroundCard,addCategory,
-        addProductToCategory,removeCategory,removeProductToCategory,handleProductName,handleProductDescription,
-        handleProductTop,handleProductPrice,handleChangeCategoryName,handleImgProduct,handleBackgroundProduct,
-        handleColorNameProduct,
-        handleFontFamily,
-        handleTemplate,
-        templateNull,
-        handleColorDescriptionProduct,
-        handleColorPriceProduct,
-        isStyleCheck,setIsStyleCheck,
-        handleMenuColor,handleUserTemplate,usertemplateNull
+    const { formData,editFormdata,activeCategory,currentTemplate,indexTemplate,setIndexTemplate,showBackgroundPicker,showMenuPicker,showBackCategoryPicker,backgroundPickerRef,menuPickerRef,backgroundProductPickerRef,namePickerRef,descriptionPickerRef,pricePickerRef,setShowBackgroundPicker,setShowBackCategoryPicker,setShowMenuPicker,setShowNamePicker,setShowDescriptionPicker,setShowPricePicker,
+            showNamePicker,showDescriptionPicker,showPricePicker,fonts,templates,isEditRoute,initialFormDataRef,validateLink,getFonts,getTemplates,handlePrev,handleNext,handleActiveCategory,handleRestaurantName,handleActiveProduct,handleShowBackgroundPicker,handleShowMenuPicker,handleShowBackCategoryPicker,handleShowNamePicker,handleShowDescriptionPicker,handleShowPricePicker,resetUserTemplate,validation,getDataToEdit,handleTemplate,
+            templateNull,usertemplateNull,handleLogo,handleUserTemplate,handleBackgroundCard,handleMenuColor,addCategory,handleFontFamily,removeCategory,handleChangeCategoryName,addProductToCategory,removeProductToCategory,handleProductField,handleImgProduct,handleBackgroundProduct,handleColorNameProduct,handleColorDescriptionProduct,handleColorPriceProduct,handleProductName,handleProductDescription,handleProductTop,handleProductPrice
     }=UseMenu();
 
+    const{setValidateFormMenu}=useValidate();
+    let initialValues;
 
-    const[activeCategory,setActiveCategory]=useState(0);
-    const[activeProduct,setActiveProduct]=useState(0);
-    const[initialValues,setInitialValues]=useState(formData);
-    const [confirmAddCategory,setConfirmAddCategory]=useState(false);
-    const [confirmAddProduct,setConfirmAddProduct]=useState(false);
-    const[showBackgroundPicker,setShowBackgroundPicker]=useState(false);
-    const[showMenuPicker,setShowMenuPicker]=useState(false);
-    const[showBackCategoryPicker,setShowBackCategoryPicker]=useState(false);
-    const[showNamePicker,setShowNamePicker]=useState(false);
-    const[showDescriptionPicker,setShowDescriptionPicker]=useState(false);
-    const[showPricePicker,setShowPricePicker]=useState(false);
-    const[fonts,setFonts]=useState([]);
-    const[templates,setTemplates]=useState([]);
-
-    const [currentTemplate, setCurrentTemplate] = useState(0);
-    const [indexTemplate,setIndexTemplate]=useState(null);
-
-    const {validateFormMenu,setValidateFormMenu}=useValidate();
-
-      console.log(formData);
-      // console.log("categoria ",activeCategory);
-      // console.log("producto ",activeProduct);
-      // console.log("fonts",fonts);
-      // console.log("templates: ",templates);
-
-    const getFonts=async()=>{
-        try{
-            const getFontsArray=await instance.get('getFonts');
-            setFonts(getFontsArray.data);
-            return getFontsArray.data;
-        }catch(error){
-            console.error("error fonts request: ",error.message);
-        }
-    }
-
-    const getTemplates=async()=>{
-        try{
-            const getTemplatesArray=await instance.get('getTemplates');
-            setTemplates(getTemplatesArray.data);
-            return getTemplatesArray.data;
-        }catch(error){
-            console.error("error fonts request: ",error.message);
-        }
-    }
 
     const validateFormFields = () => {
       if (Object.keys(formik.errors).length > 1) {
@@ -83,153 +30,6 @@ function MenuForm(){
         return true;
       }
     };
-
-      const handlePrev = () => {
-        setCurrentTemplate((prevIndex) => (prevIndex > 0 ? prevIndex - 1 : templates.length - 1));
-      };
-      
-      const handleNext = () => {
-        setCurrentTemplate((prevIndex) => (prevIndex < templates.length - 1 ? prevIndex + 1 : 0));
-      };
-
-    const handleActiveCategory = (index) => {
-        setActiveCategory(index);
-    };
-    
-    const handleActiveProduct = (index) => {
-        setActiveProduct(index);
-    };
-
-    const handleShowBackgroundPicker=(value)=>{
-        setShowBackgroundPicker(value)
-    }
-
-    const handleShowMenuPicker=(value)=>{
-        setShowMenuPicker(value)
-    }
-
-    const handleShowBackCategoryPicker=(value)=>{
-        setShowBackCategoryPicker(value)
-    }
-
-    const handleShowNamePicker=(value)=>{
-        setShowNamePicker(value)
-    }
-
-    const handleShowDescriptionPicker=(value)=>{
-        setShowDescriptionPicker(value)
-    }
-    
-    const handleShowPricePicker=(value)=>{
-        setShowPricePicker(value)
-    }
-
-    const resetUserTemplate=(e)=>{
-      const input=document.getElementById('userTemplate');
-      input.value='';
-    }
-    
-    const validation = (values) => {
-      const errors = {};
-    
-      const specials = /(?=.*?[#?!@$ %^&*-<>])/;
-      const letters = /[a-zA-Z]/;
-    
-      // Validación del nombre del restaurante
-      if (!values.restaurantName) {
-        errors.restaurantName = 'Restaurant name is required';
-      }
-
-    
-      // Validación del logo del restaurante
-      // if (!values.restaurantLogo) {
-      //   errors.restaurantLogo = 'Restaurant logo is required';
-      // }
-    
-      // Validación de las categorías y productos
-      values.category.forEach((category, indexCategory) => {
-        if (!errors.category) {
-          errors.category = [];
-        }
-    
-        // Validación del nombre de la categoría
-        if (!category.categoryName) {
-          if (!errors.category[indexCategory]) {
-            errors.category[indexCategory] = {};
-          }
-          errors.category[indexCategory].categoryName = 'Category name is required';
-        }
-    
-        // Validación de los productos dentro de la categoría
-        if (category.products.length > 0) {
-          category.products.forEach((prod, indexProd) => {
-            if (!errors.category[indexCategory]) {
-              errors.category[indexCategory] = {};
-            }
-            if (!errors.category[indexCategory].products) {
-              errors.category[indexCategory].products = [];
-            }
-    
-            // Validaciones de producto
-            if (!prod.productImg) {
-              errors.category[indexCategory].products[indexProd] = {
-                ...errors.category[indexCategory].products[indexProd],
-                productImg: 'Product image is required',
-              };
-            }
-    
-            if (!prod.productName) {
-              errors.category[indexCategory].products[indexProd] = {
-                ...errors.category[indexCategory].products[indexProd],
-                productName: 'Product name is required',
-              };
-            }
-    
-            if (!prod.productDescription) {
-              errors.category[indexCategory].products[indexProd] = {
-                ...errors.category[indexCategory].products[indexProd],
-                productDescription: 'Product description is required',
-              };
-            }
-    
-            if (!prod.price) {
-              errors.category[indexCategory].products[indexProd] = {
-                ...errors.category[indexCategory].products[indexProd],
-                price: 'Price is required',
-              };
-            } else if (letters.test(prod.price)) {
-              errors.category[indexCategory].products[indexProd] = {
-                ...errors.category[indexCategory].products[indexProd],
-                price: 'Price cannot contain letters',
-              };
-            } else if (prod.price <= 0) {
-              errors.category[indexCategory].products[indexProd] = {
-                ...errors.category[indexCategory].products[indexProd],
-                price: 'Price cannot be negative or zero',
-              };
-            }
-          });
-    
-          // Eliminar el array de productos si está vacío
-          if (errors.category[indexCategory].products.length === 0) {
-            delete errors.category[indexCategory].products;
-          }
-        }
-    
-        // Eliminar la categoría si no hay errores
-        if (Object.keys(errors.category[indexCategory] || {}).length === 0) {
-          delete errors.category[indexCategory];
-        }
-      });
-    
-      // Eliminar el array de categorías si está vacío
-      if (errors.category && errors.category.length === 0) {
-        delete errors.category;
-      }
-    
-      return errors;
-    };
-    
     
     const formik=useFormik({
         initialValues,
@@ -238,7 +38,7 @@ function MenuForm(){
             console.log(values);
         },
     });
-    console.log("intial values ",formik.values);
+    console.log(" values ",formik.values);
 
     useEffect(()=>{
       const executeFunctions=async()=>{
@@ -253,8 +53,49 @@ function MenuForm(){
       validateFormFields()
     },[formik.errors])
 
-    console.log("formik errors",formik.errors);
+    useEffect(()=>{
+        initialValues={
+        restaurantName:isEditRoute && formData ? formData.restaurantName:'',
+        restaurantLogo:isEditRoute && formData ? formData.restaurantLogo :null,
+        backgroundCard:isEditRoute && formData ? formData.backgroundCard : '#000',
+        colorMenu:isEditRoute && formData ? formData.colorMenu : '#fff',
+        idFontPreview:isEditRoute && formData ? formData.idFontPreview : null,
+        iduserTemplate:isEditRoute && formData ? formData.idUserTemplate : null,
+        idImgTemplate:isEditRoute && formData ? formData.idImgTemplate : null,
+        category:isEditRoute && formData ? formData.category : [{categoryName:"",products:[{ backgroundProductCard:"#fff",colorName:"#000",colorDescription:"#000",colorPrice:"#000",productImg:null, productName:"", productDescription:"", top:false,price:null}]}]
+    }
+    },[])
 
+    useEffect(()=>{
+      document.addEventListener("mousedown",handleShowBackgroundPicker);
+      document.addEventListener("mousedown",handleShowMenuPicker);
+      document.addEventListener("mousedown",handleShowBackCategoryPicker);
+      document.addEventListener("mousedown",handleShowNamePicker);
+      document.addEventListener("mousedown",handleShowDescriptionPicker);
+      document.addEventListener("mousedown",handleShowPricePicker);
+      return()=>{
+        document.addEventListener("mousedown",handleShowBackgroundPicker);
+        document.addEventListener("mousedown",handleShowMenuPicker);
+        document.addEventListener("mousedown",handleShowBackCategoryPicker);
+        document.addEventListener("mousedown",handleShowNamePicker);
+        document.addEventListener("mousedown",handleShowDescriptionPicker);
+        document.addEventListener("mousedown",handleShowPricePicker);
+      }
+    },[])
+
+    useEffect(()=>{
+      if(isEditRoute){
+        formik.setValues((prevValues)=>({
+          ...prevValues,
+          restaurantName:formData.restaurantName,
+          category:formData.category
+        }))
+      }
+    },[])
+    // console.log("isss ",editFormdata);
+    // console.log("fomik values: ",formik.values);
+    // console.log("intial values: ",formik.initialValues);
+    // console.log("formik errors",formik.errors);
 return (
     <div className='p-4'>
         <Formik
@@ -264,111 +105,85 @@ return (
                 console.log(values);
             }}
             validateOnBlur={true}
+            enableReinitialize={true}
         >
             {({ values }) => (
                 <form action="" className='w-full h-auto flex flex-col'>
             {/* Sección de Nombre del Restaurante y Logo */}
-            <div className="flex flex-row mb-6">
-              {/* Contenedor del input para el nombre del restaurante */}
-              <div className="flex flex-col p-4 mr-4">
-                <label className="my-1" htmlFor="restaurantName">Restaurant Name</label>
-                <input
-                  onChange={(e)=>handleRestaurantName(e,formik.handleChange)}
-                  className="mb-1 p-2 border rounded w-80"
-                  type="text"
-                  onBlur={formik.handleBlur}
-                  name="restaurantName"
-                  id="restaurantName"
-                />
-                {formik.touched.restaurantName && formik.errors.restaurantName ? (<div className='text-red-600 my-1 text-[13px]'>{formik.errors.restaurantName}</div>):<div className='max-h-[13px] my-1'></div>}
-              </div>
-
-              {/* Contenedor del botón para subir el logo */}
-              <div className="flex flex-col justify-center items-center p-4 mt-7 ml-6">
-                <label
-                  htmlFor="restaurantLogo"
-                  onClick={(e)=>{formik.setTouched({ ...formik.touched, restaurantLogo: true });}}
-                  className="cursor-pointer bg-light-blue hover:bg-dark-blue text-white py-2 px-4 rounded-md"
-                >
-                  load logo
-                </label>
-                {/* {formik.touched.restaurantLogo && formik.errors.restaurantLogo ? <div className='text-red-600 my-1 text-[13px]'>{formik.errors.restaurantLogo}</div>:null} */}
-                <input
-                  className="hidden"
-                  type="file"
-                  accept="image/*"
-                  name="restaurantLogo"
-                  id="restaurantLogo"
-                  onBlur={formik.handleBlur}
-                  onChange={(e) => {handleLogo(e); formik.setFieldValue('restaurantLogo',e.target.files[0]);}}
-                />
-              </div>
+            <div className="flex flex-col md:flex-row flex-wrap sm:mx-3 md:mx-3 mb-6">
+            {/* Contenedor del input para el nombre del restaurante */}
+            <div className="flex flex-col p-4 sm:mr-0 md:mr-4 w-full md:w-auto">
+              <label className="my-1" htmlFor="restaurantName">Restaurant Name</label>
+              <input
+                onChange={(e) => { handleRestaurantName(e, formik.handleChange); }}
+                className="mb-1 p-2 border rounded w-full md:w-80"
+                type="text"
+                value={formData.restaurantName}
+                onBlur={formik.handleBlur}
+                name="restaurantName"
+                id="restaurantName"
+              />
+              {formik.touched.restaurantName && formik.errors.restaurantName ? (
+                <div className='text-red-600 my-1 text-[13px]'>{formik.errors.restaurantName}</div>
+              ) : (
+                <div className='max-h-[13px] my-1'></div>
+              )}
             </div>
-                    {/* Sección del Color de Fondo */}
-                    <div className="flex flex-col md:flex-row justify-start items-center space-x-6 py-4">
-                    {/* Background Section */}
-                    <div className="flex items-center space-x-4 mx-3">
-                    <label htmlFor="">Background color:</label>
-                    <button></button>
-                      <div 
-                        className="w-10 h-10 border border-gray-300 rounded cursor-pointer"
-                        onClick={() =>indexTemplate==null && (handleShowBackgroundPicker(!showBackgroundPicker))}
-                        aria-disabled={indexTemplate!=null ? false:true}
-                        style={{ backgroundColor: formData.backgroundCard || "#000" }}
-                      />
-                      {showBackgroundPicker && (
-                        <div className="colorPickerr z-50">
-                          <GradientColorPicker
-                            enableAlpha
-                            disableHueSlider={false}
-                            disableAlphaSlider={false}
-                            disableInput={false}
-                            disableHexInput={false}
-                            disableRgbInput={false}
-                            disableAlphaInput={false}
-                            presetColors={[]}
-                            gradient={true}
-                            color={formik.values.backgroundCard}
-                            value={formik.values.backgroundCard}
-                            onChange={(color) => {
-                              handleBackgroundCard(color);
-                              formik.setFieldValue("backgroundCard", color);
-                            }}
-                          />
-                        </div>
-                      )}
-                    </div>
 
-                    {/* Menu Color Section */}
-                    <div className="flex items-center space-x-4">
-                      <label className="text-[17px]">Color navbar:</label>
-                      <div 
-                        className="w-10 h-10 border border-gray-300 rounded cursor-pointer"
-                        onClick={() => handleShowMenuPicker(!showMenuPicker)}
-                        style={{ backgroundColor: formData.colorMenu || "#000" }}
-                      />
-                      {showMenuPicker && (
-                        <div className="menuPicker z-50">
-                          <GradientColorPicker
-                            enableAlpha
-                            disableHueSlider={false}
-                            disableAlphaSlider={false}
-                            disableInput={false}
-                            disableHexInput={false}
-                            disableRgbInput={false}
-                            disableAlphaInput={false}
-                            presetColors={[]}
-                            gradient={true}
-                            value={formData.colorMenu}
-                            color={formData.colorMenu}
-                            onChange={(color) => handleMenuColor(color)}
-                          />
-                        </div>
-                      )}
-                    </div>
-                  </div>
+            {/* Contenedor del botón para subir el logo */}
+            <div className="flex flex-col md:flex-row justify-center items-center p-4 mt-2 sm:mt-1 md:mt-0 w-full md:w-auto">
+              <label
+                htmlFor="restaurantLogo"
+                onClick={(e) => { formik.setTouched({ ...formik.touched, restaurantLogo: true }); }}
+                className="cursor-pointer bg-light-blue hover:bg-dark-blue text-white py-2 px-4 rounded-md"
+              >
+                Load Logo
+              </label>
+              <input
+                className="hidden"
+                type="file"
+                accept="image/*"
+                name="restaurantLogo"
+                id="restaurantLogo"
+                onBlur={formik.handleBlur}
+                onChange={(e) => { handleLogo(e); formik.setFieldValue('restaurantLogo', e.target.files[0]); }}
+              />
+            </div>
+          </div>
+
+          {/* Sección del Color de Fondo */}
+          <div className="flex flex-col md:flex-row justify-start items-start space-y-4 md:space-y-0 md:space-x-6 py-4">
+            {/* Background Section */}
+            <div className="flex items-center space-x-6 mx-3">
+              <label htmlFor="backgroundColor">Background color:</label>
+              <button></button>
+              <div 
+                className="w-10 h-10 border border-gray-300 rounded cursor-pointer"
+                onClick={() => indexTemplate == null && (setShowBackgroundPicker(!showBackgroundPicker))}
+                aria-disabled={indexTemplate != null ? false : true}
+                style={{ backgroundColor: formData.backgroundCard || "#000" }}
+              />
+              {showBackgroundPicker && (
+                <div className="colorPickerr z-50" ref={backgroundPickerRef}>
+                  <ColorPicker handlerFunction={(color) => { handleBackgroundCard(color); }} pickerValue={formData.backgroundCard} pickerColor={formData.backgroundCard} />
+                </div>
+              )}
+            </div>
+
+            {/* Menu Color Section */}
+            <div className="flex items-center space-x-12 mx-3">
+              <label htmlFor="menuColor" className="text-[17px]">Color navbar:</label>
+              <div className="w-10 h-10 border border-gray-300 rounded cursor-pointer" onClick={() => setShowMenuPicker(!showMenuPicker)} style={{ backgroundColor: formData.colorMenu || "#000" }}
+              />
+              {showMenuPicker && (
+                <div className="menuPicker z-50" ref={menuPickerRef}>
+                  <ColorPicker handlerFunction={(color) => { handleMenuColor(color); }} pickerValue={formData.colorMenu} pickerColor={formData.colorMenu} />
+                </div>
+              )}
+            </div>
+          </div>
                   <Accordion>
-                    <AccordionItem className='bg-gray-300 px-3 rounded-[10px] my-3' aria-label='Background Templates' key={'1'} title='Background templates'>
+                    <AccordionItem className='bg-gray-300 px-3 rounded-[10px] my-3 mx-0' aria-label='Background Templates' key={'1'} title='Background templates'>
                     <div className='flex flex-col my-2'>
                     <div className="relative w-full overflow-hidden">
                       <div
@@ -380,7 +195,8 @@ return (
                         </div>
                         {templates?.length > 0 && templates.map((element, index) => (
                           <motion.div whileHover={{translateY:'-1px',transition:'.4s'}}  key={index} className="w-1/5 px-2 flex-shrink-0">
-                            <img onClick={(e)=>{handleTemplate(e); setIndexTemplate(index)}} id={element.id} className={`w-full h-full object-cover rounded-lg hover:shadow-md hover:shadow-black ${indexTemplate==index ? 'brightness-50':''}`} src={element.image} alt="imagen" />
+                            <img onClick={(e)=>{
+                              setIndexTemplate(formData.idImgTemplate); handleTemplate(e); setIndexTemplate(index)}} id={element.id} className={`w-full h-full object-cover rounded-lg hover:shadow-md hover:shadow-black ${indexTemplate==element.id ? 'brightness-50':''}`} src={element.image} alt="imagen" />
                           </motion.div>
                         ))}
                         <div onClick={()=>{templateNull();setIndexTemplate(null)}} className={`w-1/5 flex-shrink-0 flex align-middle justify-center bg-white rounded-lg overflow-auto ${indexTemplate==null ? 'border-[2px] border-black':''}`}>
@@ -389,7 +205,7 @@ return (
                               <input onChange={(e)=>handleUserTemplate(e,formik.handleChange)} className='hidden' name='userTemplate' id='userTemplate' type="file" accept='image/*' />
                               <div className={`${formData.idUserTemplate!==null ? 'w-full h-full relative top-0 overflow-auto':'hidden'}`}>
                                 <span onClick={async()=>{await resetUserTemplate(); if(formData.idUserTemplate!==null){usertemplateNull();}}} className='z-50 absolute top-1 right-2 cursor-pointer text-red-600 font-bold'>x</span>
-                                <img src={formData.idUserTemplate!==null ? URL.createObjectURL(formData.idUserTemplate):''} className={`${formData.idUserTemplate!==null ? 'object-cover w-full h-full':''}`} alt="" id='userTemplate' />
+                                <img src={validateLink.test(formData?.idUserTemplate)  ? (isEditRoute ? formData?.idUserTemplate : '') : (formData?.idUserTemplate instanceof File ? URL.createObjectURL(formData?.idUserTemplate) : '')} className={`${formData?.idUserTemplate!==null ? 'object-cover w-full h-full':''}`} alt="" id='userTemplate' />
                               </div>
                             </div>
                         </div>
@@ -400,138 +216,76 @@ return (
                     </div>
                     </AccordionItem>
                   </Accordion>
-                  <div className='my-3 mb-4 flex flex-row justify-start align-middle'>
-                          <h1 className='mt-3 text-lg font-semibold mr-6'>Font style:</h1>
-                          <select className='p-4 rounded-[10px] bg-gray-300' name="fontFamily" id="" onChange={(e)=>handleFontFamily(e)}>
-                          {fonts?.map((item, index) => (
-                            <option style={{ fontFamily: item.fontName }} key={index} id={item.id} value={item.id}>
-                              {item.fontName}
-                            </option>
-                          ))}
-                          </select>
+                  <div className='my-3 mb-4 flex flex-col sm:flex-col md:flex-col lg:flex-row flex-wrap justify-start items-center lg:items-start'>
+                    <h1 className='mt-3 text-lg font-semibold mb-3 lg:mr-6 lg:mb-0'>Font style:</h1>
+                    <select 
+                      value={isEditRoute ? formData.idFontPreview : ''} 
+                      className='p-4 rounded-[10px] bg-gray-300 w-full lg:w-auto'
+                      name="fontFamily" 
+                      id="fontFamily" 
+                      onChange={(e) => handleFontFamily(e)}
+                    >
+                      {fonts?.map((item, index) => (
+                        <option style={{ fontFamily: item.fontName }} key={index} id={item.id} value={item.id}>
+                          {item.fontName}
+                        </option>
+                      ))}
+                    </select>
                   </div>
                     {/* Sección de Personalización de la Tarjeta de Producto */}
-                    <div className='flex flex-col mb-6 '>
-                        <h1 className='mb-2 text-lg font-semibold'>Customize your product card</h1>
-                        <div className='flex flex-row w-[80%] p-4 justify-around'>
-                            {/* Color de Fondo */}
-                            <div className='flex flex-col items-center'>
-                                <label className='my-2' htmlFor="">Background</label>
-                                <div 
-                                    className='w-10 h-10 border-2 border-gray-300 rounded  cursor-pointer'
-                                    onClick={()=>handleShowBackCategoryPicker(!showBackCategoryPicker)}
-                                    style={{ backgroundColor:formData.category?.[activeCategory]?.products[0]?.backgroundProductCard || "#000" }}
-                                ></div>
-                                {showBackCategoryPicker && (
-                                    <div className='colorPicker'>
-                                <GradientColorPicker
-                                    enableAlpha
-                                    disableHueSlider={false}
-                                    disableAlphaSlider={false}
-                                    disableInput={false}
-                                    disableHexInput={false}
-                                    disableRgbInput={false}
-                                    disableAlphaInput={false}
-                                    presetColors={[]}
-                                    gradient={true}
-                                    color={formData.category?.[activeCategory]?.products[0]?.backgroundProductCard || '#FFFFFF'}
-                                    value={formData.category?.[activeCategory]?.products[0]?.backgroundProductCard || '#FFFFFF'}
-                                    onChange={(color) => {
-                                        if (activeCategory !== null) {
-                                          handleBackgroundProduct(activeCategory, color);
-                                      }
-                                      }}
-                                />
-                                    </div>
-                                )}
+                    <div className='flex flex-col mb-6'>
+                      <h1 className='mb-2 text-lg font-semibold'>Customize your product card</h1>
+                      <div className='flex flex-col sm:flex-row flex-wrap w-full sm:w-[80%] p-4 justify-around gap-4'>
+                        {/* Color de Fondo */}
+                        <div className='flex flex-col items-center'>
+                          <label className='my-2' htmlFor="background">Background</label>
+                          <div className='w-10 h-10 border-2 border-gray-300 rounded cursor-pointer' onClick={() =>setShowBackCategoryPicker(!showBackCategoryPicker)} style={{backgroundColor:formData.category?.[activeCategory]?.products[0]?.backgroundProductCard || "#000" }}
+                          ></div>
+                          {showBackCategoryPicker && (
+                            <div className='colorPicker' ref={backgroundProductPickerRef}>
+                              <ColorPicker handlerFunction={(color) => { if (activeCategory !== null) {handleBackgroundProduct(activeCategory, color); }}}   pickerValue={formData.category?.[activeCategory]?.products[0]?.backgroundProductCard || '#FFFFFF'}  pickerColor={formData.category?.[activeCategory]?.products[0]?.backgroundProductCard || '#FFFFFF'} 
+                              />
                             </div>
-
-                            {/* Color del Nombre */}
-                            <div className='flex flex-col items-center'>
-                                <label className='my-2' htmlFor="">Name-Color</label>
-                                <div 
-                                    className='w-10 h-10 border border-gray-300 rounded cursor-pointer'
-                                    onClick={()=>handleShowNamePicker(!showNamePicker)}
-                                    style={{ backgroundColor:formData.category?.[activeCategory]?.products[0]?.colorName || '#000' }}
-                                ></div>
-                                {showNamePicker && (
-                                    <div className='colorPicker'>
-                                        <GradientColorPicker
-                                            enableAlpha
-                                            disableHueSlider={false}
-                                            disableAlphaSlider={false}
-                                            disableInput={false}
-                                            disableHexInput={false}
-                                            disableRgbInput={false}
-                                            disableAlphaInput={false}
-                                            presetColors={[]}
-                                            gradient
-                                            color={formData.category?.[activeCategory]?.products?.colorName || "#FFFFF"}
-                                            value={formData.category?.[activeCategory]?.products?.colorName || "#FFFFF"}
-                                            onChange={(color) =>{handleColorNameProduct(activeCategory,color)}}
-                                        />
-                                    </div>
-                                )}
-                            </div>
-
-                            {/* Color de la Descripción */}
-                            <div className='flex flex-col items-center'>
-                                <label className='my-2' htmlFor="">Description-Color</label>
-                                <div 
-                                    className='w-10 h-10 border border-gray-300 rounded cursor-pointer'
-                                    onClick={()=>handleShowDescriptionPicker(!showDescriptionPicker)}
-                                    style={{ backgroundColor:formData.category?.[activeCategory]?.products[0]?.colorDescription || '#000' }}
-                                ></div>
-                                {showDescriptionPicker && (
-                                    <div className='colorPicker'>
-                                        <GradientColorPicker
-                                            enableAlpha
-                                            disableHueSlider={false}
-                                            disableAlphaSlider={false}
-                                            disableInput={false}
-                                            disableHexInput={false}
-                                            disableRgbInput={false}
-                                            disableAlphaInput={false}
-                                            presetColors={[]}
-                                            gradient={true}
-                                            color={formData.category?.[activeCategory]?.products?.colorDescription || "#FFFFF"}
-                                            value={formData.category?.[activeCategory]?.products?.colorDescription || "#FFFFF"}
-                                            onChange={(color) =>{handleColorDescriptionProduct(activeCategory,color)}}
-                                        />
-                                    </div>
-                                )}
-                            </div>
-
-                            {/* Color del Precio */}
-                            <div className='flex flex-col items-center'>
-                                <label className='my-2' htmlFor="">Price-Color</label>
-                                <div 
-                                    className='w-10 h-10 border border-gray-300 rounded cursor-pointer'
-                                    onClick={()=>handleShowPricePicker(!showPricePicker)}
-                                    style={{ backgroundColor:formData.category?.[activeCategory]?.products[0]?.colorPrice || '#000' }}
-                                ></div>
-                                {showPricePicker && (
-                                    <div className='colorPicker'>
-                                        <GradientColorPicker
-                                            enableAlpha
-                                            disableHueSlider={false}
-                                            disableAlphaSlider={false}
-                                            disableInput={false}
-                                            disableHexInput={false}
-                                            disableRgbInput={false}
-                                            disableAlphaInput={false}
-                                            presetColors={[]}
-                                            gradient={true}
-                                            color={formData.category?.[activeCategory]?.products?.colorPrice || "#FFFFF"}
-                                            value={formData.category?.[activeCategory]?.products?.colorPrice || "#FFFFF"}
-                                            onChange={(color) =>{ handleColorPriceProduct(activeCategory,color)}}
-                                        />
-                                    </div>
-                                )}
-                            </div>
+                          )}
                         </div>
-                    </div>
 
+                        {/* Color del Nombre */}
+                        <div className='flex flex-col items-center'>
+                          <label className='my-2' htmlFor="nameColor">Name-Color</label>
+                          <div className='w-10 h-10 border border-gray-300 rounded cursor-pointer'  onClick={() => setShowNamePicker(!showNamePicker)}   style={{ backgroundColor: formData.category?.[activeCategory]?.products[0]?.colorName || '#000' }}
+                          ></div>
+                          {showNamePicker && (
+                            <div className='colorPicker' ref={namePickerRef}>
+                              <ColorPicker handlerFunction={(color) =>{handleColorNameProduct(activeCategory, color); }} pickerValue={formData.category?.[activeCategory]?.products?.colorName || "#FFFFFF"} pickerColor={formData.category?.[activeCategory]?.products?.colorName || "#FFFFFF"} />
+                            </div>
+                          )}
+                        </div>
+
+                        {/* Color de la Descripción */}
+                        <div className='flex flex-col items-center'>
+                          <label className='my-2' htmlFor="descriptionColor">Description-Color</label>
+                          <div  className='w-10 h-10 border border-gray-300 rounded cursor-pointer'  onClick={() => setShowDescriptionPicker(!showDescriptionPicker)}  style={{ backgroundColor: formData.category?.[activeCategory]?.products[0]?.colorDescription || '#000' }}></div>
+                          {showDescriptionPicker && (
+                            <div className='colorPicker' ref={descriptionPickerRef}>
+                              <ColorPicker  handlerFunction={(color) => { handleColorDescriptionProduct(activeCategory, color); }} pickerValue={formData.category?.[activeCategory]?.products?.colorDescription || "#FFFFFF"} pickerColor={formData.category?.[activeCategory]?.products?.colorDescription || "#FFFFFF"} />
+                            </div>
+                          )}
+                        </div>
+
+                        {/* Color del Precio */}
+                        <div className='flex flex-col items-center'>
+                          <label className='my-2' htmlFor="priceColor">Price-Color</label>
+                          <div  className='w-10 h-10 border border-gray-300 rounded cursor-pointer'  onClick={() => setShowPricePicker(!showPricePicker)}  style={{ backgroundColor: formData.category?.[activeCategory]?.products[0]?.colorPrice || '#000' }}
+                          ></div>
+                          {showPricePicker && (
+                            <div className='colorPicker' ref={pricePickerRef}>
+                              <ColorPicker handlerFunction={(color) => { handleColorPriceProduct(activeCategory, color); }} pickerValue={formData.category?.[activeCategory]?.products?.colorPrice || "#FFFFFF"} pickerColor={formData.category?.[activeCategory]?.products?.colorPrice || "#FFFFFF"} 
+                              />
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                    </div>
                     {/* Sección para Agregar Nueva Categoría y Productos */}
                     <div className='flex flex-col mt-6'>
                         {values.category && values.category.length <= 0 ? (
@@ -540,11 +294,6 @@ return (
 <FieldArray name="category">
   {({ remove, push }) => (
     <div>
-      {/* <div className='flex flex-row py-1 justify-start mx-1 mb-2'>
-        <input onClick={()=>setIsStyleCheck(!isStyleCheck)} className='mr-4 p-3 text-blue-500 text-[16px]' type="checkbox" name='productStyle' id='productStyle' />
-        <label htmlFor="">Apply a same style on all categories</label>
-      </div> */}
-      {/* Botón para agregar nueva categoría */}
       <button
         onClick={() => {
           if(formik.errors.category?.length>0){
@@ -641,7 +390,7 @@ return (
             >
               <div
                 onClick={() => setActiveCategory(index)}
-                className={`bg-gray-300 my-1 p-3 w-full rounded-2xl cursor-pointer`}
+                className={`bg-gray-300 my-1 p-3 sm:p-1 md:p-1 w-full rounded-2xl cursor-pointer`}
               >
                 <div className='flex flex-col'>
                   {/* Input para el nombre de la categoría */}
@@ -649,6 +398,7 @@ return (
                     onChange={(e) => handleChangeCategoryName(index, e,formik.handleChange)}
                     className="p-2 border rounded w-full"
                     type="text"
+                    value={formData?.category[index]?.categoryName}
                     name={`category[${index}].categoryName`}
                     placeholder="Enter category name"
                     onBlur={formik.handleBlur}
@@ -755,132 +505,150 @@ return (
                             {/* Contenedor de cada producto */}
                             <div>
                               {/* Contenedor de la imagen y detalles del producto */}
-                              <div className="flex flex-row m-0">
-                                <div className="w-[30%] rounded-[10px] bg-slate-600">
+                              <div className="flex flex-col lg:flex-row m-0">
+                                <div className="lg:w-[30%] w-full rounded-[10px] bg-slate-600 sm:mb-4 lg:relative md:relative">
                                   <img
                                     id={`imgProductPreview-${index}-${productIndex}`}
                                     className="object-cover w-full h-full rounded-[10px]"
-                                    src=""
+                                    src={validateLink.test(formData?.category[index]?.products[productIndex]?.productImg)
+                                      ? (isEditRoute ? formData?.category[index]?.products[productIndex]?.productImg : '')
+                                      : (formData?.category[index]?.products[productIndex]?.productImg instanceof File
+                                        ? URL.createObjectURL(formData?.category[index]?.products[productIndex]?.productImg)
+                                        : '')}
                                     alt=""
                                   />
                                 </div>
-                                <div className="w-[68%] ml-4 flex flex-col">
-                                  <div className='flex flex-row align-middle content-center'>
+
+                                <div className="lg:w-[68%] w-full ml-4 lg:ml-6 flex flex-col">
+                                  <div className="flex flex-col sm:flex-row sm:items-center mb-4">
                                     {/* Input para la imagen del producto */}
-                                  <input
-                                    onChange={(e) => {handleImgProduct(index, productIndex, e),formik.setFieldValue(`category[${index}].products[${productIndex}].productImg`,e.target.files[0])}}
-                                    className="hidden"
-                                    type="file"
-                                    accept="image/*"
-                                    name={`category[${index}].products[${productIndex}].productImg`}
-                                    id={`category[${index}].products[${productIndex}].productImg`}
-                                    onBlur={formik.handleBlur}
-                                  />
-                                  <label onClick={() => {
-                                    const touched = { ...formik.touched };
-                                    
-                                    // Asegúrate de que 'category' y 'products' estén inicializados en touched
-                                    if (!touched.category) {
-                                      touched.category = [];
-                                    }
-                                    if (!touched.category[index]) {
-                                      touched.category[index] = { products: [] };
-                                    }
-                                    if (!touched.category[index].products) {
-                                      touched.category[index].products = [];
-                                    }
-                                    if (!touched.category[index].products[productIndex]) {
-                                      touched.category[index].products[productIndex] = {};
-                                    }
+                                    <input
+                                      onChange={(e) => {
+                                        handleImgProduct(index, productIndex, e);
+                                        formik.setFieldValue(`category[${index}].products[${productIndex}].productImg`, e.target.files[0]);
+                                      }}
+                                      className="hidden"
+                                      type="file"
+                                      accept="image/*"
+                                      name={`category[${index}].products[${productIndex}].productImg`}
+                                      id={`category[${index}].products[${productIndex}].productImg`}
+                                      onBlur={formik.handleBlur}
+                                    />
+                                    <label
+                                      onClick={() => {
+                                        const touched = { ...formik.touched };
+                                        if (!touched.category) touched.category = [];
+                                        if (!touched.category[index]) touched.category[index] = { products: [] };
+                                        if (!touched.category[index].products) touched.category[index].products = [];
+                                        if (!touched.category[index].products[productIndex]) touched.category[index].products[productIndex] = {};
 
-                                    // Establece productImg como touched
-                                    touched.category[index].products[productIndex].productImg = true;
-
-                                    formik.setTouched(touched);
-                                  }}
-                                  htmlFor={`category[${index}].products[${productIndex}].productImg`} className='p-2 text-[17px] rounded-md my-3 w-[25%] text-center bg-light-blue text-white hover:bg-dark-blue'>add image</label>
-                                        {formik.touched?.category?.[index]?.products?.[productIndex]?.productImg &&
+                                        touched.category[index].products[productIndex].productImg = true;
+                                        formik.setTouched(touched);
+                                      }}
+                                      htmlFor={`category[${index}].products[${productIndex}].productImg`}
+                                      className="p-2 text-[17px] rounded-md my-3 w-[50%] sm:w-[25%] text-center bg-light-blue text-white hover:bg-dark-blue"
+                                    >
+                                      Add Image
+                                    </label>
+                                    {formik.touched?.category?.[index]?.products?.[productIndex]?.productImg &&
                                       formik.errors?.category?.[index]?.products?.[productIndex]?.productImg ? (
-                                      <div className='text-[13px] text-red-600 mx-2 mt-6'>
+                                      <div className="text-[13px] text-red-600 mx-2 mt-6">
                                         {formik.errors.category[index].products[productIndex].productImg}
                                       </div>
                                     ) : (
-                                      <div className='mx-2 my-2 min-h-[20px]'></div>
+                                      <div className="mx-2 my-2 min-h-[20px]"></div>
                                     )}
                                   </div>
-                                    {/* Input para el nombre del producto */}
-                                    <input
-                                      className="mb-1 p-2 border rounded w-full"
-                                      type="text"
-                                      placeholder="Product Name"
-                                      name={`category[${index}].products[${productIndex}].productName`}
-                                      onBlur={formik.handleBlur}
-                                      onChange={(e) => {
-                                        handleProductName(index, productIndex, e);
-                                        formik.setFieldValue(`category[${index}].products[${productIndex}].productName`, e.target.value);
-                                      }}
-                                    />
-                                    {/* Mostrar mensaje de error para el nombre del producto */}
-                                    {formik.touched?.category?.[index]?.products?.[productIndex]?.productName &&
-                                      formik.errors?.category?.[index]?.products?.[productIndex]?.productName ? (
-                                      <div className='text-[13px] text-red-600 mx-2 my-2'>
-                                        {formik.errors.category[index].products[productIndex].productName}
-                                      </div>
-                                    ) : (
-                                      <div className='mx-2 my-2 min-h-[20px]'></div>
-                                    )}
 
-                                    {/* Input para la descripción del producto */}
+                                  {/* Input para el nombre del producto */}
+                                  <input
+                                    className="mb-1 p-2 border rounded w-full mx-1"
+                                    type="text"
+                                    placeholder="Product Name"
+                                    value={formData?.category[index]?.products[productIndex]?.productName}
+                                    name={`category[${index}].products[${productIndex}].productName`}
+                                    onBlur={formik.handleBlur}
+                                    onChange={(e) => {
+                                      handleProductName(index, productIndex, e);
+                                      formik.setFieldValue(`category[${index}].products[${productIndex}].productName`, e.target.value);
+                                    }}
+                                  />
+                                  {formik.touched?.category?.[index]?.products?.[productIndex]?.productName &&
+                                    formik.errors?.category?.[index]?.products?.[productIndex]?.productName ? (
+                                    <div className="text-[13px] text-red-600 mx-2 my-2">
+                                      {formik.errors.category[index].products[productIndex].productName}
+                                    </div>
+                                  ) : (
+                                    <div className="mx-2 my-2 min-h-[20px]"></div>
+                                  )}
+
+                                  {/* Input para la descripción del producto */}
+                                  <input
+                                    className="mb-1 p-2 border rounded w-full mx-1"
+                                    type="text"
+                                    value={formData?.category[index]?.products[productIndex]?.productDescription}
+                                    placeholder="Product Description"
+                                    id={`category[${index}].products[${productIndex}].productDescription`}
+                                    name={`category[${index}].products[${productIndex}].productDescription`}
+                                    onBlur={formik.handleBlur}
+                                    onChange={(e) => {
+                                      handleProductDescription(index, productIndex, e);
+                                      formik.setFieldValue(`category[${index}].products[${productIndex}].productDescription`, e.target.value);
+                                    }}
+                                  />
+                                  {formik.touched?.category?.[index]?.products?.[productIndex]?.productDescription &&
+                                    formik.errors?.category?.[index]?.products?.[productIndex]?.productDescription ? (
+                                    <div className="text-[13px] text-red-600 mx-2 my-2">
+                                      {formik.errors.category[index].products[productIndex].productDescription}
+                                    </div>
+                                  ) : (
+                                    <div className="mx-2 my-2 min-h-[20px]"></div>
+                                  )}
+
+                                  {/* Checkbox y input para el precio */}
+                                  <div className="flex flex-wrap sm:flex-col md:flex-col lg:flex-row sm:items-center lg:items-start lg:justify-between w-full">
+                                  {/* Checkbox "Top" */}
+                                  <div className="flex items-center sm:mb-2 lg:mb-0 lg:mr-4">
+                                    <label>Top</label>
                                     <input
-                                      className="mb-1 p-2 border rounded w-full"
-                                      type="text"
-                                      placeholder="Product Description"
-                                      id={`category[${index}].products[${productIndex}].productDescription`}
-                                      name={`category[${index}].products[${productIndex}].productDescription`}
+                                      className="mx-2"
+                                      type="checkbox"
+                                      defaultChecked={isEditRoute ? formData?.category[index]?.products[productIndex]?.top : false}
+                                      name={`category[${index}].products[${productIndex}].top`}
                                       onBlur={formik.handleBlur}
                                       onChange={(e) => {
-                                        handleProductDescription(index, productIndex, e);
-                                        formik.setFieldValue(`category[${index}].products[${productIndex}].productDescription`, e.target.value);
+                                        handleProductTop(index, productIndex, e);
+                                        formik.setFieldValue(`category[${index}].products[${productIndex}].top`, e.target.checked);
                                       }}
                                     />
-                                    {/* Mostrar mensaje de error para la descripción del producto */}
-                                    {formik.touched?.category?.[index]?.products?.[productIndex]?.productDescription &&
-                                      formik.errors?.category?.[index]?.products?.[productIndex]?.productDescription ? (
-                                      <div className='text-[13px] text-red-600 mx-2 my-2'>
-                                        {formik.errors.category[index].products[productIndex].productDescription}
-                                      </div>
-                                    ) : (
-                                      <div className='mx-2 my-2 min-h-[20px]'></div>
-                                    )}
-                                  {/* Checkbox y input para el precio */}
-                                  <div className="flex items-center">
-                                    <div className="flex items-center mr-4">
-                                      <label>Top</label>
-                                      <input
-                                        className="mx-2"
-                                        type="checkbox"
-                                        name={`category[${index}].products[${productIndex}].top`}
-                                        onBlur={formik.handleBlur}
-                                        onChange={(e)=>{handleProductTop(index,productIndex,e); formik.setFieldValue(`category[${index}].products[${productIndex}].top`,e.target.checked)}}
-                                      />
-                                    </div>
-                                    <div className="flex items-center">
-                                      <label className="mx-2">Price $</label>
-                                      <input
-                                        className="p-2 border rounded w-24 h-10"
-                                        type="number"
-                                        name={`category[${index}].products[${productIndex}].price`}
-                                        onBlur={formik.handleBlur}
-                                        onChange={(e) =>{handleProductPrice(index, productIndex, e); formik.setFieldValue(`category[${index}].products[${productIndex}].price`,e.target.value)}}
-                                      />
-                                      {formik.touched?.category?.[index]?.products?.[productIndex]?.price && 
+                                  </div>
+
+                                  {/* Input "Price" */}
+                                  <div className="flex items-center sm:w-full lg:w-auto">
+                                    <label className="mx-2">Price $</label>
+                                    <input
+                                      className="p-2 border rounded w-full sm:w-[50%] lg:w-24 h-10"
+                                      type="number"
+                                      value={formData.category[index]?.products[productIndex]?.price}
+                                      name={`category[${index}].products[${productIndex}].price`}
+                                      onBlur={formik.handleBlur}
+                                      min={0}
+                                      onChange={(e) => {
+                                        handleProductPrice(index, productIndex, e);
+                                        formik.setFieldValue(`category[${index}].products[${productIndex}].price`, e.target.value);
+                                      }}
+                                    />
+                                    {formik.touched?.category?.[index]?.products?.[productIndex]?.price &&
                                       formik.errors?.category?.[index]?.products?.[productIndex]?.price ? (
-                                      <div className='text-[13px] text-red-600 mx-2'>{formik.errors.category[index].products[productIndex].price}</div>
-                                ) : null}
-                                    </div>
+                                      <div className="text-[13px] text-red-600 mx-2">
+                                        {formik.errors.category[index].products[productIndex].price}
+                                      </div>
+                                    ) : null}
                                   </div>
                                 </div>
+                                </div>
                               </div>
+
                             </div>
                           </AccordionItem>
                         ))}

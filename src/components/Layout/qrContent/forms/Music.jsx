@@ -16,6 +16,7 @@ import { IoIosClose } from "react-icons/io";
 import { useTranslation } from 'react-i18next';
 import { MdOutlineCloudUpload } from "react-icons/md";
 import { useValidate } from '../../../../context/validateFormContext';
+import ColorPicker from './form-helpers/picker';
 
 export const MusicForm = ({ onFormChangeMusic, location, musicFormValues }) => {
     const [title, setTitle] = useState('');
@@ -450,24 +451,11 @@ export const MusicForm = ({ onFormChangeMusic, location, musicFormValues }) => {
                                 </div>
 
                                 </div>
-
                                         {/* Color Picker */}
                                         {showTitleColorPicker && (
-                                                <div className="absolute mt-2 left-0 top-full z-50" ref={titleColorPickerRef}>
-                                        <GradientColorPicker
-                                            enableAlpha={true}
-                                            disableHueSlider={false}
-                                            disableAlphaSlider={false}
-                                            disableInput={false}
-                                            disableHexInput={false}
-                                            disableRgbInput={false}
-                                            disableAlphaInput={false}
-                                            presetColors={[]}
-                                            gradient={true}
-                                            color={colorTitle}
-                                            onChange={handleTitleColorChange}
-                                        />
-                                    </div>
+                                            <div className="absolute mt-2 left-0 top-full z-50" ref={titleColorPickerRef}>
+                                                <ColorPicker handlerFunction={handleTitleColorChange} pickerColor={colorTitle}/>
+                                            </div>
                                 )}
                             </div>
                         </div>
@@ -501,19 +489,7 @@ export const MusicForm = ({ onFormChangeMusic, location, musicFormValues }) => {
                                 ></div>
                                 {showDescriptionColorPicker && (
                                     <div className="absolute mt-2 left-0 top-full z-50" ref={descriptionColorPickerRef}>
-                                        <GradientColorPicker
-                                            enableAlpha={true}
-                                            disableHueSlider={false}
-                                            disableAlphaSlider={false}
-                                            disableInput={false}
-                                            disableHexInput={false}
-                                            disableRgbInput={false}
-                                            disableAlphaInput={false}
-                                            presetColors={[]}
-                                            gradient={true}
-                                            color={descriptionColor}
-                                            onChange={handleDescriptionColorChange}
-                                        />
+                                        <ColorPicker handlerFunction={handleDescriptionColorChange} pickerColor={descriptionColor}/>
                                     </div>
                                 )}
                             </div>
@@ -531,20 +507,7 @@ export const MusicForm = ({ onFormChangeMusic, location, musicFormValues }) => {
                                 ></div>
                                 {showBackgroundColorPicker && (
                                     <div className="absolute mt-2 left-0 z-50" ref={backgroundColorPickerRef}>
-                                        <GradientColorPicker
-                                            enableAlpha={true}
-                                            disableHueSlider={false}
-                                            disableAlphaSlider={false}
-                                            disableInput={false}
-                                            disableHexInput={false}
-                                            disableRgbInput={false}
-                                            disableAlphaInput={false}
-                                            presetColors={[]}
-                                            gradient={true}
-                                            color={backgroundColor}
-                                            onChange={handleBackgroundColorChange}
-                                            style={{ width: "calc(100% + 2rem)" }} // Ajuste del ancho
-                                        />
+                                        <ColorPicker handlerFunction={handleBackgroundColorChange} pickerColor={backgroundColor}/>
                                     </div>
                                 )}
                             </div>
@@ -562,20 +525,8 @@ export const MusicForm = ({ onFormChangeMusic, location, musicFormValues }) => {
                                 ></div>
                                 {showBoxColorPicker && (
                                     <div className="absolute mt-2 left-0 z-50" ref={boxColorPickerRef}>
-                                        <GradientColorPicker
-                                            enableAlpha={true}
-                                            disableHueSlider={false}
-                                            disableAlphaSlider={false}
-                                            disableInput={false}
-                                            disableHexInput={false}
-                                            disableRgbInput={false}
-                                            disableAlphaInput={false}
-                                            presetColors={[]}
-                                            gradient={true}
-                                            color={boxColor}
-                                            onChange={handleBoxColorChange}
-                                            style={{ width: "calc(100% + 2rem)" }} // Ajuste del ancho
-                                        />
+                                        <ColorPicker handlerFunction={handleBoxColorChange} pickerColor={boxColor}/>
+                                        {/* style={{ width: "calc(100% + 2rem)" }} // Ajuste del ancho */}
                                     </div>
 
                                 )}
@@ -592,20 +543,7 @@ export const MusicForm = ({ onFormChangeMusic, location, musicFormValues }) => {
                                     ></div>
                                     {showBorderColorPicker && (
                                         <div className="absolute mt-2 left-0 z-50" ref={borderColorPickerRef}>
-                                            <GradientColorPicker
-                                                enableAlpha={true}
-                                                disableHueSlider={false}
-                                                disableAlphaSlider={false}
-                                                disableInput={false}
-                                                disableHexInput={false}
-                                                disableRgbInput={false}
-                                                disableAlphaInput={false}
-                                                presetColors={[]}
-                                                gradient={true}
-                                                color={borderImg}
-                                                onChange={handleBorderColorChange}
-                                                style={{ width: "calc(100% + 2rem)" }} // Ajuste del ancho
-                                            />
+                                            <ColorPicker handlerFunction={handleBorderColorChange} pickerColor={borderImg}/>
                                         </div>
                                     )}
                                 
@@ -659,13 +597,13 @@ export const MusicForm = ({ onFormChangeMusic, location, musicFormValues }) => {
                                 />
                                 </div>
                                 <div className="relative flex justify-center items-center">
-        {/* Mostrar mensaje de error para cada URL */}
-        {formErrors[`url_${index}`] && (
-            <div className="absolute text-red-500 text-xs">
-                {formErrors[`url_${index}`]}
-            </div>
-        )}
-    </div>
+                                    {/* Mostrar mensaje de error para cada URL */}
+                                    {formErrors[`url_${index}`] && (
+                                        <div className="absolute text-red-500 text-xs">
+                                            {formErrors[`url_${index}`]}
+                                        </div>
+                                    )}
+                                </div>
                             </div>
                         ))}
                     </div>

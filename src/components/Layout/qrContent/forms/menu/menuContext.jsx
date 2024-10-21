@@ -1,11 +1,242 @@
-import { createContext, useContext, useEffect, useState } from "react";
+import { createContext, useContext, useEffect, useState,useRef } from "react";
 import { menuFormData } from "./menuData.jsx";
+import axios from "axios";
+import instance from "../../../../../libs/axios.jsx";
 
 const MenuContext=createContext();
 
 export default function MenuProvider({children}) {
     const [formData, setFormData] = useState({...structuredClone(menuFormData)});
-    const [isStyleCheck,setIsStyleCheck]=useState(false);
+    const[editFormdata,setEditFormData]=useState(null); //guarda el objeto de datos a editar
+    const[activeCategory,setActiveCategory]=useState(0);
+    const[activeProduct,setActiveProduct]=useState(0);
+    const[showBackgroundPicker,setShowBackgroundPicker]=useState(false);
+    const[showMenuPicker,setShowMenuPicker]=useState(false);
+    const[showBackCategoryPicker,setShowBackCategoryPicker]=useState(false);
+    const[showNamePicker,setShowNamePicker]=useState(false);
+    const[showDescriptionPicker,setShowDescriptionPicker]=useState(false);
+    const[showPricePicker,setShowPricePicker]=useState(false);
+    const backgroundPickerRef=useRef(null);
+    const menuPickerRef=useRef(null);
+    const backgroundProductPickerRef=useRef(null);
+    const namePickerRef=useRef(null);
+    const descriptionPickerRef=useRef(null);
+    const pricePickerRef=useRef(null);
+    const[fonts,setFonts]=useState([]);
+    const[templates,setTemplates]=useState([]);
+    const isEditRoute = location.pathname.startsWith('/edit');
+    const initialFormDataRef=useRef();
+    const validateLink=/.webp/
+
+    const [currentTemplate, setCurrentTemplate] = useState(0);
+    const [indexTemplate,setIndexTemplate]=useState(null);
+
+    const initialValues={
+        restaurantName:isEditRoute && formData ? formData.restaurantName:'',
+        restaurantLogo:isEditRoute && formData ? formData.restaurantLogo :null,
+        backgroundCard:isEditRoute && formData ? formData.backgroundCard : '#000',
+        colorMenu:isEditRoute && formData ? formData.colorMenu : '#fff',
+        idFontPreview:isEditRoute && formData ? formData.idFontPreview : null,
+        iduserTemplate:isEditRoute && formData ? formData.idUserTemplate : null,
+        idImgTemplate:isEditRoute && formData ? formData.idImgTemplate : null,
+        category:isEditRoute && formData ? formData.category : [{categoryName:"",products:[{ backgroundProductCard:"#fff",colorName:"#000",colorDescription:"#000",colorPrice:"#000",productImg:null, productName:"", productDescription:"", top:false,price:null}]}]
+    }
+
+    const getFonts=async()=>{
+        try{
+            const getFontsArray=await instance.get('getFonts');
+            setFonts(getFontsArray.data);
+            return getFontsArray.data;
+        }catch(error){
+            console.error("error fonts request: ",error.message);
+        }
+    }
+
+    const getTemplates=async()=>{
+        try{
+            const getTemplatesArray=await instance.get('getTemplates');
+            setTemplates(getTemplatesArray.data);
+            return getTemplatesArray.data;
+        }catch(error){
+            console.error("error fonts request: ",error.message);
+        }
+    }
+
+    const handlePrev = () => {
+        setCurrentTemplate((prevIndex) => (prevIndex > 0 ? prevIndex - 1 : templates.length - 1));
+      };
+      
+      const handleNext = () => {
+        setCurrentTemplate((prevIndex) => (prevIndex < templates.length - 1 ? prevIndex + 1 : 0));
+      };
+
+    const handleActiveCategory = (index) => {
+        setActiveCategory(index);
+    };
+    
+    const handleActiveProduct = (index) => {
+        setActiveProduct(index);
+    };
+
+    const handleShowBackgroundPicker=(e)=>{
+        if(backgroundPickerRef.current && !backgroundPickerRef.current.contains(e.target)){
+        setShowBackgroundPicker(false)
+        }
+    }
+
+    const handleShowMenuPicker=(e)=>{
+        if(menuPickerRef.current && !menuPickerRef.current.contains(e.target)){
+        setShowMenuPicker(false)
+        }
+    }
+
+    const handleShowBackCategoryPicker=(e)=>{
+        if(backgroundProductPickerRef.current && !backgroundProductPickerRef.current.contains(e.target)){
+        setShowBackCategoryPicker(false)
+        }
+    }
+
+    const handleShowNamePicker=(e)=>{
+        if(namePickerRef.current && !namePickerRef.current.contains(e.target)){
+        setShowNamePicker(false)
+        }
+    }
+
+    const handleShowDescriptionPicker=(e)=>{
+        if(descriptionPickerRef.current && !descriptionPickerRef.current.contains(e.target)){
+        setShowDescriptionPicker(false)
+        }
+    }
+    
+    const handleShowPricePicker=(e)=>{
+        if(pricePickerRef.current && !pricePickerRef.current.contains(e.target)){
+        setShowPricePicker(false)
+        }
+    }
+
+    const resetUserTemplate=(e)=>{
+      const input=document.getElementById('userTemplate');
+      input.value='';
+    }
+
+    const validation = (values) => {
+        const errors = {};
+      
+        const specials = /(?=.*?[#?!@$ %^&*-<>])/;
+        const letters = /[a-zA-Z]/;
+      
+        // Validación del nombre del restaurante
+        if (!values.restaurantName) {
+          errors.restaurantName = 'Restaurant name is required';
+        }
+  
+      
+        // Validación del logo del restaurante
+        // if (!values.restaurantLogo) {
+        //   errors.restaurantLogo = 'Restaurant logo is required';
+        // }
+      
+        // Validación de las categorías y productos
+        values.category.forEach((category, indexCategory) => {
+          if (!errors.category) {
+            errors.category = [];
+          }
+      
+          // Validación del nombre de la categoría
+          if (!category.categoryName) {
+            if (!errors.category[indexCategory]) {
+              errors.category[indexCategory] = {};
+            }
+            errors.category[indexCategory].categoryName = 'Category name is required';
+          }
+      
+          // Validación de los productos dentro de la categoría
+          if (category.products.length > 0) {
+            category.products.forEach((prod, indexProd) => {
+              if (!errors.category[indexCategory]) {
+                errors.category[indexCategory] = {};
+              }
+              if (!errors.category[indexCategory].products) {
+                errors.category[indexCategory].products = [];
+              }
+      
+              // Validaciones de producto
+              if (!prod.productImg) {
+                errors.category[indexCategory].products[indexProd] = {
+                  ...errors.category[indexCategory].products[indexProd],
+                  productImg: 'Product image is required',
+                };
+              }
+      
+              if (!prod.productName) {
+                errors.category[indexCategory].products[indexProd] = {
+                  ...errors.category[indexCategory].products[indexProd],
+                  productName: 'Product name is required',
+                };
+              }
+      
+              if (!prod.productDescription) {
+                errors.category[indexCategory].products[indexProd] = {
+                  ...errors.category[indexCategory].products[indexProd],
+                  productDescription: 'Product description is required',
+                };
+              }
+      
+              if (!prod.price) {
+                errors.category[indexCategory].products[indexProd] = {
+                  ...errors.category[indexCategory].products[indexProd],
+                  price: 'Price is required',
+                };
+              } else if (letters.test(prod.price)) {
+                errors.category[indexCategory].products[indexProd] = {
+                  ...errors.category[indexCategory].products[indexProd],
+                  price: 'Price cannot contain letters',
+                };
+              } else if (prod.price <= 0) {
+                errors.category[indexCategory].products[indexProd] = {
+                  ...errors.category[indexCategory].products[indexProd],
+                  price: 'Price cannot be negative or zero',
+                };
+              }
+            });
+      
+            // Eliminar el array de productos si está vacío
+            if (errors.category[indexCategory].products.length === 0) {
+              delete errors.category[indexCategory].products;
+            }
+          }
+      
+          // Eliminar la categoría si no hay errores
+          if (Object.keys(errors.category[indexCategory] || {}).length === 0) {
+            delete errors.category[indexCategory];
+          }
+        });
+      
+        // Eliminar el array de categorías si está vacío
+        if (errors.category && errors.category.length === 0) {
+          delete errors.category;
+        }
+      
+        return errors;
+      };
+
+    const getDataToEdit = async () => {
+      try {
+          if (isEditRoute) {
+              if (!initialFormDataRef.current) {
+                  initialFormDataRef.current = await structuredClone(formData);
+              }
+              setEditFormData(initialFormDataRef.current);
+          }
+      } catch (error) {
+          console.error("Error al obtener los datos para editar:", error);
+          setLoading(false);
+      }finally{
+        setTimeout(() => {
+          setLoading(false);
+        }, 4000);
+      }
+  };
       
     const handleRestaurantName =(e,handler) => {
         setFormData(prevValues=>({
@@ -41,13 +272,84 @@ export default function MenuProvider({children}) {
         }
     }
 
+    const getPublicIdImage=(url)=>{
+        const parts = url.split('/');
+        const indexOfUpload = parts.indexOf('upload');
+        const publicIdWithExtension = parts.slice(indexOfUpload + 1).join('/');
+        const publicId = publicIdWithExtension.replace(/\.[^/.]+$/, '');
+        return publicId;
+    }
+
+    const deleteImageCloudinary=async(idImg)=>{
+        try{
+            const encodedPublicId =encodeURIComponent(idImg);
+            const response=await instance.delete(`/qr/imgCloudinary/${encodedPublicId}`);
+            if (response.status === 200) {
+                console.log("Imagen eliminada exitosamente:", response.data);
+                return true;
+            }
+        }catch(error){
+            console.error("error deleting image: ",error.message);
+            return false;
+        }
+    }
+
+    const editUploadFiles = async () => {
+        try {
+            console.log("Iniciando editUploadFiles");
+        
+            let updatedFormData = { ...formData }; // Crear una copia para manipular los datos
+    
+            // Manejo del logo del restaurante
+            if (updatedFormData.restaurantLogo instanceof File) {
+                const newLogoUrl = await uploadImageToCloudinary(updatedFormData.restaurantLogo);
+                if (newLogoUrl) {
+                    updatedFormData.restaurantLogo = newLogoUrl;
+                } else {
+                    console.error("Error al subir el logo del restaurante.");
+                    return null;
+                }
+            }
+    
+            // Manejo de imágenes de productos en las categorías
+            for (let i = 0; i < updatedFormData.category.length; i++) {
+                const newCategory = updatedFormData.category[i];
+    
+                // Procesar productos de la categoría actual
+                if (newCategory.products) {
+                    for (let j = 0; j < newCategory.products.length; j++) {
+                        const newProduct = newCategory.products[j];
+    
+                        // Subir la nueva imagen solo si es un archivo (File)
+                        if (newProduct.productImg instanceof File) {
+                            const newProductImgUrl = await uploadImageToCloudinary(newProduct.productImg);
+                            if (newProductImgUrl) {
+                                newProduct.productImg = newProductImgUrl; // Actualizar la imagen del producto
+                            } else {
+                                console.error("Error al subir la nueva imagen del producto.");
+                                return null; // Retornar null si no se pudo subir la imagen
+                            }
+                        }
+                    }
+                }
+            }
+    
+            // Actualizar el estado de formData de una sola vez, después de procesar todas las imágenes
+            setFormData(updatedFormData);
+    
+            console.log("Valores actualizados en editUploadFiles:", updatedFormData);
+            return updatedFormData; // Retornar siempre los datos actualizados
+        } catch (error) {
+            console.error("Error en editUploadFiles:", error.message);
+            return null; // Retorna null si algo falla
+        }
+    };
+
     const handleFileUpload = async () => {
         try {
-            // Inicializa la URL del logo
             let logoUrl = null;
             let userTemplateUrl=null;
-    
-            // Subir el logo si existe
+
             if (formData.restaurantLogo) {
                 logoUrl = await uploadImageToCloudinary(formData.restaurantLogo);
                 if (logoUrl) {
@@ -91,11 +393,10 @@ export default function MenuProvider({children}) {
             const updatedFormData = {
                 ...formData,
                 restaurantLogo: logoUrl,
-                idUserTemplate:userTemplateUrl, // Actualiza con la URL del logo
-                category: updatedCategories, // Actualiza la lista de categorías
+                idUserTemplate:userTemplateUrl,
+                category: updatedCategories,
             };
     
-            // Actualiza el estado con el objeto actualizado
             setFormData(updatedFormData);
     
             console.log('Todas las imágenes fueron subidas y el estado actualizado.');
@@ -104,8 +405,7 @@ export default function MenuProvider({children}) {
             return updatedFormData; 
         } catch (error) {
             console.error(error.message);
-            // También puedes retornar un valor predeterminado o lanzar el error si es necesario
-            return formData; // O puedes lanzar el error si prefieres
+            return error.message
         }
     };
     
@@ -381,37 +681,87 @@ export default function MenuProvider({children}) {
 
     return(
         <MenuContext.Provider value={{
+            //variables use state
             formData,
+            editFormdata,
+            activeCategory,
+            activeProduct,
+            currentTemplate,
+            indexTemplate,
+            initialValues,
+            showBackgroundPicker,
+            showMenuPicker,
+            showBackCategoryPicker,
+            showNamePicker,
+            showDescriptionPicker,
+            showPricePicker,
+            fonts,
+            templates,
+            isEditRoute,
+            initialFormDataRef,
+            validateLink,
+            backgroundPickerRef,
+            menuPickerRef,
+            backgroundProductPickerRef,
+            namePickerRef,
+            descriptionPickerRef,
+            pricePickerRef,
+            //funciones use state
             setFormData,
-            isStyleCheck,
-            setIsStyleCheck,
-            setFormData,
-            handleRestaurantName,
+            setEditFormData,
+            setFonts,
+            setTemplates,
+            setIndexTemplate,
+            setShowBackgroundPicker,
+            setShowBackCategoryPicker,
+            setShowMenuPicker,
+            setShowNamePicker,
+            setShowDescriptionPicker,
+            setShowPricePicker,
+            //funciones axios
+            getFonts,
+            getTemplates,
+            //funciones handler,
+            handlePrev,
+            handleNext,
+            handleActiveCategory,
+            handleActiveProduct,
+            handleShowBackgroundPicker,
+            handleShowMenuPicker,
+            handleShowBackCategoryPicker,
+            handleShowNamePicker,
+            handleShowDescriptionPicker,
+            handleShowPricePicker,
+            resetUserTemplate,
+            validation,
+            getDataToEdit,
+            editUploadFiles,
+            handleFileUpload,
             handleTemplate,
             templateNull,
+            usertemplateNull,
             handleLogo,
+            handleRestaurantName,
+            handleUserTemplate,
             handleBackgroundCard,
             handleMenuColor,
-            handleFontFamily,
-            handleChangeCategoryName,
             addCategory,
+            handleFontFamily,
             removeCategory,
+            handleChangeCategoryName,
             addProductToCategory,
             removeProductToCategory,
             handleProductField,
+            handleImgProduct,
             handleBackgroundProduct,
             handleColorNameProduct,
             handleColorDescriptionProduct,
             handleColorPriceProduct,
-            handleImgProduct,
             handleProductName,
             handleProductDescription,
-            handleProductPrice,
             handleProductTop,
-            handleUserTemplate,
-            usertemplateNull,
-            handleFileUpload
-        }}>
+            handleProductPrice
+            }}>
             {children}
         </MenuContext.Provider>
     )

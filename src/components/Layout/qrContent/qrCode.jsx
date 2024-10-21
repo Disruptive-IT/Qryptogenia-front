@@ -29,7 +29,7 @@ export const saveQrData = async (
         qr: {
             qrName: qrName || '',
             data: uniqueKey,
-            qrType,
+            qrType:currentContentType,
             qrColor,
             qrBgColor,
             url: data
@@ -180,7 +180,7 @@ const QR = ({ uniqueKey }) => {
                 qrCode.current = new QRCodeStyling({
                     width: 1000,
                     height: 1000,
-                    data: `http://localhost:3000/qr/scan/${uniqueKey}`,
+                    data: `https://mesadoko.com/fractal.html`, //modificar aqui para crear url directa
                     dotsOptions: {
                         color: qrProps.dotsColor,
                         type: qrProps.dotsType || 'rounded'
@@ -207,7 +207,7 @@ const QR = ({ uniqueKey }) => {
                 qrCode.current.append(qrRef.current);
             } else {
                 qrCode.current.update({
-                    data: `http://localhost:3000/qr/scan/${uniqueKey}`,
+                    data: `https://mesadoko.com/fractal.html`, //modificar aqui para crear url directa
                     margin: 10,
                     backgroundOptions: {
                         color: "transparent",

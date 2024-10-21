@@ -22,6 +22,7 @@ import huawei from "../../../../../src/assets/imgs/huawei.png";
 import microsoft from "../../../../../src/assets/imgs/microsoft.png";
 import { useTranslation } from 'react-i18next';
 import { MdOutlineCloudUpload } from "react-icons/md";
+import ColorPicker from './form-helpers/picker';
 
 export const AppForm = ({ onFormChangeApp, location, appFormValues }) => {
     const [title, setTitle] = useState('');
@@ -469,22 +470,10 @@ export const AppForm = ({ onFormChangeApp, location, appFormValues }) => {
 
                                 </div>
 
-                                        {/* Color Picker */}
-                                        {showTitleColorPicker && (
-                                                <div className="absolute mt-2 left-0 top-full z-50" ref={titleColorPickerRef}>
-                                        <GradientColorPicker
-                                            enableAlpha={true}
-                                            disableHueSlider={false}
-                                            disableAlphaSlider={false}
-                                            disableInput={false}
-                                            disableHexInput={false}
-                                            disableRgbInput={false}
-                                            disableAlphaInput={false}
-                                            presetColors={[]}
-                                            gradient={true}
-                                            color={colorTitle}
-                                            onChange={handleTitleColorChange}
-                                        />
+                                {/* Color Picker */}
+                                {showTitleColorPicker && (
+                                    <div className="absolute mt-2 left-0 top-full z-50" ref={titleColorPickerRef}>
+                                        <ColorPicker handlerFunction={handleTitleColorChange} pickerColor={colorTitle}/>
                                     </div>
                                 )}
                             </div>
@@ -518,19 +507,7 @@ export const AppForm = ({ onFormChangeApp, location, appFormValues }) => {
                                 ></div>
                                 {showDescriptionColorPicker && (
                                     <div className="absolute mt-2 left-0 top-full z-50" ref={descriptionColorPickerRef}>
-                                        <GradientColorPicker
-                                            enableAlpha={true}
-                                            disableHueSlider={false}
-                                            disableAlphaSlider={false}
-                                            disableInput={false}
-                                            disableHexInput={false}
-                                            disableRgbInput={false}
-                                            disableAlphaInput={false}
-                                            presetColors={[]}
-                                            gradient={true}
-                                            color={descriptionColor}
-                                            onChange={handleDescriptionColorChange}
-                                        />
+                                        <ColorPicker handlerFunction={handleDescriptionColorChange} pickerColor={descriptionColor}/>
                                     </div>
                                 )}
                                 
@@ -549,20 +526,8 @@ export const AppForm = ({ onFormChangeApp, location, appFormValues }) => {
                                         ></div>
                                         {showBackgroundColorPicker && (
                                             <div className="absolute mt-2 left-0 z-50" ref={backgroundColorPickerRef}>
-                                            <GradientColorPicker
-                                                enableAlpha={true}
-                                                disableHueSlider={false}
-                                                disableAlphaSlider={false}
-                                                disableInput={false}
-                                                disableHexInput={false}
-                                                disableRgbInput={false}
-                                                disableAlphaInput={false}
-                                                presetColors={[]}
-                                                gradient={true}
-                                                color={backgroundColor}
-                                                onChange={handleBackgroundColorChange}
-                                                style={{ width: "calc(100% + 2rem)" }} // Ajuste del ancho
-                                            />
+                                            <ColorPicker handlerFunction={handleBackgroundColorChange} pickerColor={backgroundColor}/>
+                                            {/* style={{ width: "calc(100% + 2rem)" }} // Ajuste del ancho */}
                                             </div>
                                         )}
                                         </div>
@@ -578,20 +543,7 @@ export const AppForm = ({ onFormChangeApp, location, appFormValues }) => {
                                     ></div>
                                     {showBoxColorPicker && (
                                         <div className="absolute mt-2 left-0 z-50" ref={boxColorPickerRef}>
-                                        <GradientColorPicker
-                                            enableAlpha={true}
-                                            disableHueSlider={false}
-                                            disableAlphaSlider={false}
-                                            disableInput={false}
-                                            disableHexInput={false}
-                                            disableRgbInput={false}
-                                            disableAlphaInput={false}
-                                            presetColors={[]}
-                                            gradient={true}
-                                            color={boxColor}
-                                            onChange={handleBoxColorChange}
-                                                style={{ width: "calc(100% + 2rem)" }} // Ajuste del ancho
-                                            />
+                                        <ColorPicker handlerFunction={handleBoxColorChange} pickerColor={boxColor}/>
                                             </div>
                                         )}
                                         </div>
@@ -607,20 +559,7 @@ export const AppForm = ({ onFormChangeApp, location, appFormValues }) => {
                                     ></div>
                                     {showBorderColorPicker && (
                                         <div className="absolute mt-2 left-0 z-50" ref={borderColorPickerRef}>
-                                            <GradientColorPicker
-                                                enableAlpha={true}
-                                                disableHueSlider={false}
-                                                disableAlphaSlider={false}
-                                                disableInput={false}
-                                                disableHexInput={false}
-                                                disableRgbInput={false}
-                                                disableAlphaInput={false}
-                                                presetColors={[]}
-                                                gradient={true}
-                                                color={borderImg}
-                                                onChange={handleBorderColorChange}
-                                                style={{ width: "calc(100% + 2rem)" }} // Ajuste del ancho
-                                            />
+                                            <ColorPicker handlerFunction={handleBorderColorChange} pickerColor={borderImg}/>
                                         </div>
                                     )}
                                 </div>

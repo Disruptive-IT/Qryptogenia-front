@@ -52,7 +52,8 @@ const CustomQr = ({ location, qrId }) => {
     const [selectedOptionIndex, setSelectedOptionIndex] = useState(0);
     const [uniqueKey, setUniqueKey] = useState('');
     const { qrType, qrData, qrColor, qrBgColor, qrProps, qrImageInfo, qrTextProps, appFormValues, socialFormValues, musicFormValues, qrBase64, currentContentType } = useQr();
-    const {formData,handleFileUpload}=UseMenu();
+    const {formData,handleFileUpload,editFormData,editUploadFiles}=UseMenu();
+    const isEditRoute=location.pathname.startsWith("/edit");
 
 
     useEffect(() => {
@@ -128,10 +129,10 @@ const CustomQr = ({ location, qrId }) => {
                 actions: 'swal2-actions-no-margin'
             }
         });
-
         if (isConfirmed) {
-            console.log("Data: ", qrData + " Type: ", qrType)
-            if ((qrType === 'website-url' || qrType === 'pdf' || qrType==="wifi") && qrData === "") {
+            console.log("Data: ", qrData + " Type: ", qrType);
+            
+            if ((qrType === 'website-url' || qrType === 'pdf' || qrType === "wifi") && qrData === "") {
                 await Swal.fire({
                     icon: 'error',
                     title: 'Incomplete QR Information',
@@ -139,18 +140,38 @@ const CustomQr = ({ location, qrId }) => {
                     confirmButtonText: 'OK'
                 });
             } else {
-                console.log(musicFormValues)
-                console.log(uniqueKey)
-                if(currentContentType=="food-menu"){
-                    const menuFormValues=await handleFileUpload();
-                    await saveQrData(qrName, qrData, qrType, qrColor, qrBgColor, qrProps, qrImageInfo, qrTextProps, appFormValues, socialFormValues, musicFormValues,menuFormValues, qrBase64, currentContentType, location, qrId, uniqueKey);
-                }else{
-                    await saveQrData(qrName, qrData, qrType, qrColor, qrBgColor, qrProps, qrImageInfo, qrTextProps, appFormValues, socialFormValues, musicFormValues,formData, qrBase64, currentContentType, location, qrId, uniqueKey);
+                console.log(musicFormValues);
+                console.log(uniqueKey);
+        
+                let menuFormValues;
+        
+                if (currentContentType === "food-menu") {
+                    if (isEditRoute) {
+                        menuFormValues = await editUploadFiles();
+                        if (!menuFormValues) {
+                            console.error("Error: menuFormValues es undefined o null en editUploadFiles.");
+                            return; // detener el flujo si algo falla
+                        }
+                    } else {
+                        menuFormValues = await handleFileUpload();
+                        if (!menuFormValues) {
+                            console.error("Error: menuFormValues es undefined o null en handleFileUpload.");
+                            return; // detener el flujo si algo falla
+                        }
+                    }
                 }
+        
+                // Guardar los datos de QR
+                await saveQrData(
+                    qrName, qrData, qrType, qrColor, qrBgColor, qrProps, qrImageInfo, qrTextProps,
+                    appFormValues, socialFormValues, musicFormValues, menuFormValues, qrBase64,
+                    currentContentType, location, qrId, uniqueKey
+                );
             }
         } else {
             toast.info('QR code saving was cancelled.');
-        }
+        }        
+        
     }
 
     const style = document.createElement('style');
@@ -170,7 +191,7 @@ const CustomQr = ({ location, qrId }) => {
                 <QR uniqueKey={uniqueKey}/>
             </div>
             <div className='flex flex-col h-[400px] w-full px-8'>
-                <div className='space-x-3 mx-auto flex flex-row items-center overflow-x-auto'>
+                <div className='space-x-3 mx-auto flex flex-row items-center overflow-x-auto z-0'>
                     {options.map((option, index) => (
                         <Button
                             variant="outlined"
@@ -180,6 +201,7 @@ const CustomQr = ({ location, qrId }) => {
                             sx={{
                                 fontFamily: 'Arial',
                                 fontSize: '14px',
+                                zIndex:'10',
                                 fontWeight: selectedOptionIndex === index ? 'bold' : 'bold',
                                 color: selectedOptionIndex === index ? '#ffffff' : '#284B63', // Color del texto
                                 backgroundColor: selectedOptionIndex === index ? '#284B63' : '', // Color del fondo
@@ -208,7 +230,7 @@ const CustomQr = ({ location, qrId }) => {
                 onClick={Dowload}
                 className='absolute bottom-0 left-8 w-4/5 md:left-0 md:w-full'
             >
-                   {t("CREATE MY QR")}
+                   {!isEditRoute ? t("CREATE MY QR"): "SAVE CHANGES"}
                    </Button>
             </ThemeProvider>
 

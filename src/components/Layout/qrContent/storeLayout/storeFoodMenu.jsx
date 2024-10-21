@@ -95,7 +95,7 @@ export default function StoreMenuFood({ menuFormValues }) {
             className="relative left-0 top-0 w-full h-full  overflow-y-auto p-4"
             id="main-container"
             style={{
-              backgroundColor: menuFormValues.imgTemplate!==null ? 'rgba(255, 255, 255, 0.8)': menuFormValues.backgroundCard,
+              backgroundColor: menuFormValues.backgroundCard,
               backgroundImage: menuFormValues.imgTemplate == null  ? (menuFormValues.userTemplate !== null ? `url(${menuFormValues.userTemplate})` : '') : `url(${menuFormValues.imgTemplate})`,
               backgroundSize: '340px 660px',
               backgroundPosition: 'center',
@@ -163,7 +163,7 @@ export default function StoreMenuFood({ menuFormValues }) {
         category.products.map((element, productIndex) => (
           <div key={productIndex} className='w-full h-[135px] flex flex-row rounded-[10px] overflow-auto mb-4' onClick={() => {setActiveprod(productIndex); handleOpenModal();}}>
             <div style={{backgroundColor:element.backgroundProductCard}} className='w-[40%] h-full bg-slate-500 overflow-auto'>
-              <img className='object-cover w-full h-full' src={element.productImg} alt={element.productName} />
+              <img className='w-full h-full' src={element.productImg} alt={element.productName} />
             </div>
             <div style={{backgroundColor:element.backgroundProductCard}} className='w-[60%] h-full bg-red-300 px-1 py-1  flex flex-col self-center'>
               <span className='flex w-full items-end justify-end hover:cursor-pointer'>+</span>
@@ -186,7 +186,7 @@ export default function StoreMenuFood({ menuFormValues }) {
         topProducts.map((element, index) => (
           <div key={index} className='w-full h-[135px] flex flex-row rounded-[10px] overflow-auto mb-4' onClick={() => { setActiveprod(index); handleOpenModal(); }}>
             <div style={{backgroundColor:element.backgroundProductCard}} className='w-[40%] h-full bg-slate-500 overflow-auto'>
-              <img className='object-cover w-full h-full' src={element.productImg} alt={element.productName} />
+              <img className='w-full h-full' src={element.productImg} alt={element.productName} />
             </div>
             <div style={{backgroundColor:element.backgroundProductCard}} className='w-[60%] h-full bg-red-300 px-1 py-1  flex flex-col self-center'>
               <span className='flex w-full items-end justify-end hover:cursor-pointer'>+</span>
