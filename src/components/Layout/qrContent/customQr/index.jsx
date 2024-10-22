@@ -56,6 +56,7 @@ const CustomQr = ({ location, qrId }) => {
     const isEditRoute=location.pathname.startsWith("/edit");
 
 
+    
     useEffect(() => {
         const fetchUniqueKey = async () => {
             try {

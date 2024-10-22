@@ -8,8 +8,12 @@ import * as Yup from 'yup'
 
 export const PdfUploadComponent = () => {
   const { setQrData,qrProps } = useQr();
+  const { validateFormPdf, setValidateFormPdf } = useValidate();
 
-  const {validateFormPdf,setValidateFormPdf}=useValidate();
+  // Estado para manejar la URL del archivo PDF y su nombre
+  const [pdfUrl, setPdfUrl] = useState('');
+  const [pdfName, setPdfName] = useState('');  // Para guardar el nombre del archivo
+  const [qrCodeUrl, setQrCodeUrl] = useState(''); // Estado para la URL del QR
 
   // Formik hook con validación usando Yup
   const formik = useFormik({
@@ -44,8 +48,18 @@ export const PdfUploadComponent = () => {
 
   const handleFileChange = (event) => {
     const file = event.target.files[0];
+    if (file) {
     formik.setFieldValue('pdfFile', file); // Setea el archivo en Formik
     setQrData(file); // Actualiza el estado en tu contexto personalizado
+
+      // Crear una URL temporal para la vista previa
+      const url = URL.createObjectURL(file);
+      setPdfUrl(url); // Guardar la URL para la vista previa
+      setPdfName(file.name); 
+      
+      // Generar URL para el QR (se pued cambiar esta URL a una que aloje el archivo en un servidor)
+      setQrCodeUrl(url); // Usamos la URL del PDF para el QR
+    }
   };
 
   useEffect(() => {
@@ -69,17 +83,39 @@ export const PdfUploadComponent = () => {
         <label
           htmlFor="pdf-upload"
           className="mt-4 px-6 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 focus:outline-none cursor-pointer"
-        style={{ backgroundColor: '#284B63', color: '' }}
-                         onMouseEnter={(e) => e.target.style.backgroundColor = '#3C6E71'} // Cambia el color al hacer hover
-                         onMouseLeave={(e) => e.target.style.backgroundColor = '#284B63'} // Vuelve al color original al salir del hoover
+          style={{ backgroundColor: '#284B63', color: '' }}
+          onMouseEnter={(e) => e.target.style.backgroundColor = '#3C6E71'}
+          onMouseLeave={(e) => e.target.style.backgroundColor = '#284B63'}
         >
           UPLOAD PDF
         </label>
-        {formik.errors.pdfFile ? (
+        {formik.errors.pdfFile && (
           <div className="text-red-600 text-sm mt-2">{formik.errors.pdfFile}</div>
-        ) : null}
+        )}
       </form>
-    </div>
+
+      {/* Mostrar el nombre del archivo PDF seleccionado */}
+      {pdfName && (
+        <div className="mt-2 text-gray-600">
+          <strong>Archivo seleccionado:</strong> {pdfName}
+        </div>
+      )}
+
+      {/* Vista previa del PDF */}
+      {pdfUrl && (
+        <div className="mt-4">
+          <h4 className="text-lg font-semibold">Vista previa:</h4>
+          <iframe
+            src={`${pdfUrl}#toolbar=0`} // Agrega #toolbar=0 al final de la URL para ocuktar la barra de herramientas
+            width="850" 
+            height="600" 
+            title="Vista previa del PDF"
+            style={{ border: '10px solid #353535' }} // COLOR Y BORDE
+          />
+        </div>
+      )}
+    </div>  
+    
   );
 };
 

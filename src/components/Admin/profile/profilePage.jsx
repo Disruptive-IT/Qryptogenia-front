@@ -30,7 +30,7 @@ const Profile = () => {
     const [subscriptionInfo, setSubscriptionInfo] = useState({
         plan: "Basic",
         expirationDate: "2024-12-31",
-        benefits: ["Benefit 1", "Benefit 2"],
+        benefits: ["Escaneos de Qrs/Mes 10000", "5 Qrs activos"],
     });
 
         /**
@@ -38,35 +38,38 @@ const Profile = () => {
      * @description :Apartado para traer la foto del perfil dado que el usuario se registre con Email (Traer iamgen predeterminada).
                     SubscriptionInfo usado para traer en el perfil la informacion del plan que esta menejando el usuario
      */
-
+                    useEffect(() => {
+                        async function fetchData() {
+                            try {
+                                const userData = await fetchUserData();
+                                setUser(userData);
+                                console.log("User Data:", userData);
                     
-    useEffect(() => {
-        async function fetchData() {
-            try {
-                const userData = await fetchUserData();
-                setUser(userData);
-                console.log("User Data:", userData);
-                
-                // Establece isGoogleUser según el authProvider
-                setIsGoogleUser(userData.info.authProvider === 'google');
-                
-                // Cargar imagen de perfil o la imagen predeterminada
-                setAvatar(userData.info.profile_picture || defaultAvatar);
-
-                if (userData.membership) {
-                    setSubscriptionInfo({
-                        plan: userData.membership.type_membership,
-                        expirationDate: userData.membership.limit_date,
-                        benefits: userData.membership.benefits || [],
-                    });
-                }
-            } catch (error) {
-                console.error("Error fetching user data:", error);
-            }
-        }
-
-        fetchData();
-    }, [fetchUserData]);
+                                // Verifica si el usuario es de Google y tiene una foto
+                                if (userData.info.authProvider === 'google') {
+                                    setIsGoogleUser(true);
+                                    // Si es usuario de Google, usa la imagen de Google
+                                    setAvatar(userData.info.profile_picture || defaultAvatar);
+                                } else {
+                                    setIsGoogleUser(false);
+                                    // Si no es usuario de Google, usa su imagen o la predeterminada si no tiene
+                                    setAvatar(userData.info.profile_picture || defaultAvatar);
+                                }
+                    
+                                if (userData.membership) {
+                                    setSubscriptionInfo({
+                                        plan: userData.membership.type_membership,
+                                        expirationDate: userData.membership.limit_date,
+                                        benefits: userData.membership.benefits || [],
+                                    });
+                                }
+                            } catch (error) {
+                                console.error("Error fetching user data:", error);
+                            }
+                        }
+                    
+                        fetchData();
+                    }, [fetchUserData]);
 
     const handleImageChange = async (event) => {
         const file = event.target.files[0];
@@ -83,10 +86,8 @@ const Profile = () => {
     };
 
     return (
-        <div className="bg-white flex justify-center items-center mt-10 mx-4 lg:mx-20 rounded-3xl">
+        <div className=" flex justify-center items-center mt-10 mx-4 lg:mx-20 rounded-3xl ">
             <div className="flex flex-col lg:flex-row lg:w-11/12 mx-2 lg:mx-8 my-8 lg:my-16 rounded-3xl bg-MyBlack lg:min-h-[30vh] sm:min-h-[40vh]">
-                <div className="border-solid lg:border-MyGray lg:border-r flex flex-col lg:w-4/12 justify-center items-center">
-                    <a className="mt-0 text-xl p-2">{user?.info?.rol === 'CLIENT' ? 'User Settings' : 'Admin Settings'}</a>
                     <input
                         type="file"
                         accept="image/*"
@@ -94,31 +95,34 @@ const Profile = () => {
                         onChange={handleImageChange}
                         ref={fileInputRef}
                     />
-                    <img
-                        src={avatar}
-                        className="mx-8 my-8 w-32 h-32 rounded-full cursor-pointer"
-                        alt="Profile"
-                        onClick={() => fileInputRef.current.click()}
-                    />
-                </div>
-                <div className="flex flex-col lg:w-8/12">
-                    <div className="flex justify-between p-4 lg:p-16 text-MyGray">
-                        <div className="flex-1">
-                            <UserInfo setUser user />
-                        </div>
-                        <div className="w-1/3 ml-4">
+                      
+
                             <SubscriptionInfo 
+                                className="subscription-info w-full p-8 rounded-lg "
                                 plan={subscriptionInfo.plan}
                                 expirationDate={subscriptionInfo.expirationDate}
                                 benefits={subscriptionInfo.benefits}
                             />
-                        </div>
-                    </div>
-                    <div className="flex justify-center w-full h-2/6 pb-3 space-x-4">
-                        {/* Mostrar el botón de Editar Contraseña solo si el usuario no es de Google */}
+                        
+    <div className="flex flex-col items-center lg:w-8/12 lg:items-start">
+            <div className="flex flex-col lg:flex-row lg:justify-between p-4 lg:p-16 text-MyGray items-center lg:items-start">
+                
+                {/* Foto de perfil */}
+                <img
+                    src={avatar}
+                    className="mx-20 my-8 w-32 h-32 rounded-full cursor-pointer"
+                    alt="Profile"
+                    onClick={() => fileInputRef.current.click()}
+                />
+
+                <div className="w-full mt-4 lg:ml-8 lg:mt-0 lg:w-3/6">
+                    <UserInfo setUser={setUser} user={user} />
+
+                    <div className="items-center mt-6 w-full h-2/6 pb-3 space-x-4">
+                        {/* Mostrar el botn de Editar Contraseña solo si el usuario no es de Google*/}
                         {!isGoogleUser && (
                             <Button
-                                className="h-12 lg:w-48 mt-6 rounded-3xl"
+                                className="h-12 lg:w-48 mt-4 rounded-3xl"
                                 style={{ backgroundColor: "#3C6E71", color: "#D9D9D9" }}
                                 onClick={() => setModalIsOpen(true)}
                             >
@@ -150,6 +154,9 @@ const Profile = () => {
                             <ChangePasswordForm formRef={formRef} setModalIsOpen={setModalIsOpen} />
                         </MyModal>
                     </div>
+                </div>
+            </div>
+                   
                 </div>
             </div>
         </div>
