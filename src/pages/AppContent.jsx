@@ -191,6 +191,7 @@ const AppContent = () => {
     const handleTabChange = (newTab) => {
         setSelectedTab(newTab);
     };
+    const isWifiRoute = location.pathname === '/qr/wifi'; //funcion para ocultar el boton Show Preview en la ruta wifi
 
     const isQrRoute = location.pathname.startsWith('/qr/');
     console.log(name)
@@ -198,11 +199,12 @@ const AppContent = () => {
         <>
             {isQrRoute && <OptionBarTwo contentName={contentName} name={name} />}
             <section id='qr-content'>
-                <div className='pl-14 flex flex-col gap-1'>
-                    <h1 className='font-bold text-dark-blue text-3xl'>{name.toUpperCase()}</h1>
+                <div className='pl-14 flex flex-col gap-1;
+'>
+                    <h1 className='font-bold text-dark-blue text-3xl '>{name.toUpperCase()}</h1>
                     <p className='text-sm text-slate-400'>{content}</p>
                 </div>
-                <div className='grid grid-cols-1 lg:grid-cols-5 gap-10 w-11/12 m-auto py-10'>
+                <div className='grid grid-cols-1 lg:grid-cols-5 gap-10 w-11/12 m-auto py-10 '>
                     <div className='col-span-1 lg:col-span-3 bg-white shadow-xl rounded-xl p-6'>
                         <QrContentSwitch
                             contentName={name}
@@ -235,9 +237,12 @@ const AppContent = () => {
                 </div>
             </section>
             {/* Hidden para ocultal el boton */}
-            <button onClick={openModal} className='hidden block lg:hidden px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 fixed bottom-16 right-4 z-50'> 
+            
+            <button 
+                onClick={openModal} 
+                className={`block lg:hidden px-4 py-2 bg-dark-blue text-white rounded hover:bg-light-blue fixed bottom-16 right-4 z-50 ${isWifiRoute ? 'hidden' : ''}`}>
                 {t("Show Preview")} 
-            </button> 
+            </button>
             
 
             <Modal
@@ -250,7 +255,7 @@ const AppContent = () => {
                 <div className="bg-transparent p-0 rounded-lg border-none shadow-none flex justify-center items-center w-full h-full">
                     <div className="relative flex justify-center items-start" style={{ maxHeight: 'calc(100vh - 40px)', maxWidth: 'calc(100vw - 40px)' }}>
                         <button onClick={closeModal} className="absolute top-4 right-4 text-red-500 z-10">Cerrar</button>
-                        <div className="relative scale-wrapper" style={{ marginTop: '40px' }}>
+                        <div className="relative scale-wrapper" style={{ marginTop: '40px', }}>
                             <CellBox>
                                 <PhoneContentSwitch
                                     contentName={name}

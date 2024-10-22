@@ -410,10 +410,11 @@ export const SocialForm = ({ onFormChange, location, socialFormValues }) => {
         <div className="flex flex-wrap md:flex-nowrap items-start space-x-12 w-full">
 
                                 {/* Seccion del selector de color */}
-                            <div className="flex flex-col md:flex-nowrap items-start ">
-                            <label htmlFor="colorTitle" className="mb-2">{t("Color")}</label>
+                                <div className="flex flex-col md:flex-nowrap items-start mb-4">
+                                <label htmlFor="colorTitle" className="mb-2">{t("Color")}</label>
+                                <div className="flex items-center">
                                 <div
-                                    className="w-20 h-10 md:w-10 border border-gray-300 rounded cursor-pointer"
+                                    className="w-10 h-10 md:w-10 border border-gray-300 rounded cursor-pointer"
                                     style={{ background: colorTitle }}
                                     onClick={() => setShowTitleColorPicker(!showTitleColorPicker)}
                                 ></div>
@@ -423,7 +424,7 @@ export const SocialForm = ({ onFormChange, location, socialFormValues }) => {
                                     </div>
                                 )}
                                 </div>
-
+                                </div>
                                 {/* seccion de subir imagen */}
                                 <div className="flex flex-col items-center ">
                                 <label className="mb-2 block">{t("Upload Image")}</label>
@@ -507,7 +508,7 @@ export const SocialForm = ({ onFormChange, location, socialFormValues }) => {
               <label htmlFor="descriptionColor" className="mb-2">{t("Color")}</label>
               <div className="flex items-center">
                 <div
-                  className="w-20 md:w-10 h-10 border border-gray-300 rounded cursor-pointer"
+                  className="w-10 md:w-10 h-10 border border-gray-300 rounded cursor-pointer"
                   style={{ background: descriptionColor }}
                   onClick={() => setShowDescriptionColorPicker(!showDescriptionColorPicker)}
                 ></div>
@@ -537,7 +538,7 @@ export const SocialForm = ({ onFormChange, location, socialFormValues }) => {
               <label htmlFor="backgroundColor" className="mb-2">{t("Background Color")}</label>
               <div className="flex items-center relative">
                 <div
-                  className="w-20 md:w-10 h-10 border border-gray-300 rounded cursor-pointer"
+                  className="w-10 md:w-10 h-10 border border-gray-300 rounded cursor-pointer"
                   style={{ background: backgroundColor }}
                   onClick={() => setShowBackgroundColorPicker(!showBackgroundColorPicker)}
                 ></div>
@@ -566,7 +567,7 @@ export const SocialForm = ({ onFormChange, location, socialFormValues }) => {
                 <label htmlFor="boxColor" className="mb-2">{t("Box Color")}</label>
                 <div className="flex items-center relative">
                 <div
-                  className="w-20 md:w-10 h-10 border border-gray-300 rounded cursor-pointer"
+                  className="w-10 md:w-10 h-10 border border-gray-300 rounded cursor-pointer"
                   style={{ background: boxColor }}
                   onClick={() => setShowBoxColorPicker(!showBoxColorPicker)}
                 ></div>
@@ -596,7 +597,7 @@ export const SocialForm = ({ onFormChange, location, socialFormValues }) => {
               <label htmlFor="boxColor" className="mb-2">{t("Border Profile Color")}</label>
                 <div className="flex items-center relative">
                   <div
-                    className="w-20 md:w-10 h-10 border border-gray-300 rounded cursor-pointer"
+                    className="w-10 md:w-10 h-10 border border-gray-300 rounded cursor-pointer"
                     style={{ background: borderImg }}
                     onClick={() => setShowBorderColorPicker(!showBorderColorPicker)}
                   ></div>

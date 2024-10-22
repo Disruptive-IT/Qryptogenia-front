@@ -16,6 +16,7 @@ import { IoIosClose } from "react-icons/io";
 import { useTranslation } from 'react-i18next';
 import { MdOutlineCloudUpload } from "react-icons/md";
 import { useValidate } from '../../../../context/validateFormContext';
+import instance from '../../../../libs/axios';
 
 export const MusicForm = ({ onFormChangeMusic, location, musicFormValues }) => {
     const [title, setTitle] = useState('');
@@ -44,6 +45,19 @@ export const MusicForm = ({ onFormChangeMusic, location, musicFormValues }) => {
     const isEditRoute = location.pathname.startsWith('/edit')
 
     const {setValidateFormMusic,validateFormMusic}=useValidate();
+    const [fonts, setFonts] = useState([]);
+    const getFonts = async () => {
+        try {
+            const response = await instance.get('getFonts'); 
+            setFonts(response.data);
+        } catch (error) {
+            console.error("Error fetching fonts: ", error.message);
+        }
+    };
+
+    useEffect(() => {
+        getFonts();
+    }, []);
 
     const validateForm = (values) => {
         const errors = {};
@@ -613,6 +627,24 @@ export const MusicForm = ({ onFormChangeMusic, location, musicFormValues }) => {
                         </div>
                     </div>
 
+                    {/* Select de fuentes */}
+                    <div className='my-3 mb-4 flex flex-row justify-start align-middle'>
+                    <h1 className='mt-3 text-lg font-semibold mr-6'>Font style:</h1>
+                    <select 
+                className='p-4 rounded-[10px] bg-gray-300' 
+                name="fontFamily" 
+                id="" 
+                onChange={(e) => {
+                    setSelectedFont(e.target.value); // Actualiza el estado con la fuente seleccionada
+                }}
+            >
+                          {fonts?.map((item, index) => (
+                            <option style={{ fontFamily: item.fontName }} key={index} id={item.id} value={item.id}>
+                              {item.fontName}
+                            </option>
+                          ))}
+                          </select>
+                  </div>
 
 
                     <div className="flex flex-col md:flex-row md:items-center mb-4 mt-4">
