@@ -51,7 +51,7 @@ const generateUniqueKey = async () => {
 const CustomQr = ({ location, qrId }) => {
     const [selectedOptionIndex, setSelectedOptionIndex] = useState(0);
     const [uniqueKey, setUniqueKey] = useState('');
-    const { qrType, qrData, qrColor, qrBgColor, qrProps, qrImageInfo, qrTextProps, appFormValues, socialFormValues, musicFormValues, qrBase64, currentContentType } = useQr();
+    const { qrType, qrData, qrColor, qrBgColor, qrProps, qrImageInfo, qrTextProps, appFormValues, socialFormValues, musicFormValues, qrBase64, currentContentType,setQrData,pdfFormValues} = useQr();
     const {formData,handleFileUpload,editFormData,editUploadFiles}=UseMenu();
     const isEditRoute=location.pathname.startsWith("/edit");
 
@@ -78,6 +78,65 @@ const CustomQr = ({ location, qrId }) => {
     const handleOptionSelect = (index) => {
         setSelectedOptionIndex(index);
     };
+
+    const uploadPdfToCloudinary = async (file) => {
+        const url = `https://api.cloudinary.com/v1_1/${import.meta.env.VITE_CLOUD_NAME}/raw/upload`;
+    
+        const formData = new FormData();
+        formData.append('file', file);
+        formData.append('upload_preset', import.meta.env.VITE_UPLOAD_PRESET_PDF);
+    
+        try {
+            const response = await fetch(url, {
+                method: 'POST',
+                body: formData,
+            });
+    
+            const data = await response.json();
+            console.log('Response from Cloudinary:', data); // Añade esta línea
+    
+            if (response.ok) {
+                return data.secure_url;
+            } else {
+                console.error('Error al subir la imagen:', data);
+            }
+        } catch (error) {
+            console.error('Error en la petición:', error);
+        }
+    };
+    
+    
+    function addAttachmentParameter (url) {
+        // Agrega el parámetro `fl_attachment` para forzar la descarga desde Cloudinary
+        if (url.includes('upload/')) {
+            // Inserta `fl_attachment` antes del nombre del archivo en la URL
+            return url.replace('/upload/', '/upload/fl_attachment/');
+        }
+        return url;
+    }
+
+    const PdfUpdateQrData = async (data) => {
+        const { pdfFile, loadType } = pdfFormValues;
+      
+          try {
+            const pdfUrl = await uploadPdfToCloudinary(pdfFile);
+            if (loadType === 'view') {
+                return pdfUrl; 
+            }
+            else if (loadType === 'download') {
+                const qrCodeUrl = addAttachmentParameter(pdfUrl);
+                return qrCodeUrl;
+            }
+            else {
+            console.log('No se puede subir el archivo:'); }
+            return pdfUrl;
+          } catch (error) {
+            console.error('Error updating QR data:', error);
+          }
+        
+      
+        }
+
     const { t } = useTranslation();
     const options = [
         { name: t("FRAME"), component: Frame },
@@ -132,7 +191,8 @@ const CustomQr = ({ location, qrId }) => {
         });
         if (isConfirmed) {
             console.log("Data: ", qrData + " Type: ", qrType);
-            
+        
+            // Validación de información requerida para ciertos tipos de QR
             if ((qrType === 'website-url' || qrType === 'pdf' || qrType === "wifi") && qrData === "") {
                 await Swal.fire({
                     icon: 'error',
@@ -140,38 +200,84 @@ const CustomQr = ({ location, qrId }) => {
                     text: 'Please provide the URL or corresponding information for the QR code.',
                     confirmButtonText: 'OK'
                 });
-            } else {
-                console.log(musicFormValues);
-                console.log(uniqueKey);
+                return; // Detener el flujo si falta la información requerida
+            }
         
-                let menuFormValues;
+            console.log(musicFormValues);
+            console.log(uniqueKey);
         
-                if (currentContentType === "food-menu") {
-                    if (isEditRoute) {
-                        menuFormValues = await editUploadFiles();
-                        if (!menuFormValues) {
-                            console.error("Error: menuFormValues es undefined o null en editUploadFiles.");
-                            return; // detener el flujo si algo falla
-                        }
-                    } else {
-                        menuFormValues = await handleFileUpload();
-                        if (!menuFormValues) {
-                            console.error("Error: menuFormValues es undefined o null en handleFileUpload.");
-                            return; // detener el flujo si algo falla
-                        }
+            let menuFormValues;
+            let urlpdf;
+        
+            // Lógica para `food-menu`
+            if (currentContentType === "food-menu") {
+                if (isEditRoute) {
+                    menuFormValues = await editUploadFiles();
+                    if (!menuFormValues) {
+                        console.error("Error: menuFormValues es undefined o null en editUploadFiles.");
+                        return;
+                    }
+                } else {
+                    menuFormValues = await handleFileUpload();
+                    if (!menuFormValues) {
+                        console.error("Error: menuFormValues es undefined o null en handleFileUpload.");
+                        return;
                     }
                 }
+            } 
+            
+            // Lógica para `pdf`
+            if (currentContentType === 'pdf') {
+                try {
+                    urlpdf = await PdfUpdateQrData(qrData); // Asegúrate de que qrData sea un File
+                    setQrData(urlpdf);
+                } catch (error) {
+                    console.error('Error al subir el PDF:', error);
+                    await Swal.fire({
+                        icon: 'error',
+                        title: 'Upload Failed',
+                        text: 'There was an error uploading the PDF. Please try again.',
+                        confirmButtonText: 'OK'
+                    });
+                    return; // Detener el flujo si hay un error al subir el PDF
+                }
+            }
         
-                // Guardar los datos de QR
+            // Guardado final de datos de QR
+            try {
                 await saveQrData(
-                    qrName, qrData, qrType, qrColor, qrBgColor, qrProps, qrImageInfo, qrTextProps,
-                    appFormValues, socialFormValues, musicFormValues, menuFormValues, qrBase64,
-                    currentContentType, location, qrId, uniqueKey
+                    qrName, 
+                    currentContentType === 'pdf' ? urlpdf : qrData, // Usar urlPdf solo para PDFs
+                    qrType, 
+                    qrColor, 
+                    qrBgColor, 
+                    qrProps, 
+                    qrImageInfo, 
+                    qrTextProps,
+                    appFormValues, 
+                    socialFormValues, 
+                    musicFormValues, 
+                    menuFormValues, 
+                    qrBase64,
+                    currentContentType, 
+                    location, 
+                    qrId, 
+                    uniqueKey
                 );
+                console.log("Datos del QR guardados exitosamente.");
+            } catch (error) {
+                console.error('Error al guardar los datos del QR:', error);
+                await Swal.fire({
+                    icon: 'error',
+                    title: 'Save Failed',
+                    text: 'There was an error saving the QR data. Please try again.',
+                    confirmButtonText: 'OK'
+                });
             }
         } else {
             toast.info('QR code saving was cancelled.');
-        }        
+        }
+        
         
     }
 
