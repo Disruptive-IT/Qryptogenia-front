@@ -4,6 +4,11 @@ import instance from "../../../../libs/axios";
 import Swal from "sweetalert2";
 import { useQr } from "../../../../context/QrContext";
 import { useValidate } from "../../../../context/validateFormContext";
+import Skeleton from 'react-loading-skeleton';
+import 'react-loading-skeleton/dist/skeleton.css';
+import SkeletonWifi from "./Skeleton/SkeletonWifi";
+
+
 
 function FormWifi() {
     const [initialValues, setInitialValues] = useState({
@@ -14,6 +19,7 @@ function FormWifi() {
 
     const { qrData, setQrData } = useQr();
     const {validateFormWifi,setValidateFormWifi}=useValidate();
+    const [loading, setLoading] = useState(true); // Por defecto está cargando
 
     const handleWifiLink = (link) => {
         setQrData(link);
@@ -136,7 +142,22 @@ function FormWifi() {
         validateFormFields();
     },[formik.errors])
 
+        // Skeleton Loader
+        useEffect(() => {
+            setTimeout(() => {
+              setLoading(false); // Cambia a false una vez que los datos hayan cargado
+            }, 10000); // Tiempo simulado de carga
+          }, []);   
+
     return (
+        <div>
+                {/* Mostrar el Skeleton mientras loading sea verdadero */}
+                {loading ? (
+
+                    <SkeletonWifi />
+        
+                ) : (
+                  <div>
         <div>
             <div className="flex items-center mt-6 mb-4">
                 <button type="button" onClick={getWifi} className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600" 
@@ -203,6 +224,9 @@ function FormWifi() {
                     Submit
                 </button>
             </form>
+        </div>
+    </div>
+                )}
         </div>
     );
 }

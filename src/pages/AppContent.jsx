@@ -27,6 +27,7 @@ const initialAppFormValues = Valuesjson.appFormValues;
 const initialSocialFormValues = Valuesjson.socialFormValues;
 const initialMusicFormValues = Valuesjson.musicFormValues;
 const initialMenuValues=menuFormData;
+const initialPdfValues=Valuesjson.pdfFormValues;
 
 const AppContent = () => {
     const { contentName, id } = useParams(); // Asegúrate de que qrId está presente en la ruta

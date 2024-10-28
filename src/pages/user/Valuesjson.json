@@ -42,5 +42,10 @@
       {"value": "youtube"},
       {"value": "soundcloud"}
     ]
+  },
+
+  "pdfFormValues": {
+    "pdfFile": null,
+    "loadPdf": ""
   }
 }

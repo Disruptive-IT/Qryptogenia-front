@@ -23,6 +23,9 @@ import microsoft from "../../../../../src/assets/imgs/microsoft.png";
 import { useTranslation } from 'react-i18next';
 import { MdOutlineCloudUpload } from "react-icons/md";
 import instance from '../../../../libs/axios';
+import Skeleton from 'react-loading-skeleton';
+import 'react-loading-skeleton/dist/skeleton.css';
+import SkeletonLoader from './Skeleton/Skeleton';
 
 export const AppForm = ({ onFormChangeApp, location, appFormValues }) => {
     const [title, setTitle] = useState('');
@@ -50,6 +53,7 @@ export const AppForm = ({ onFormChangeApp, location, appFormValues }) => {
     const { t } = useTranslation();
     const isEditRoute = location.pathname.startsWith('/edit')
     const {validateFormApp,setValidateFormApp}=useValidate();
+    const [loading, setLoading] = useState(true); // Por defecto está cargando
 
     console.log("validate from app",validateFormApp, formErrors);
 
@@ -386,44 +390,56 @@ useEffect(() => {
         return selectedOptions.some(selected => selected.value === option.value);
     };
 
+    // Skeleton Loader
+            useEffect(() => {
+              setTimeout(() => {
+                setLoading(false); // Cambia a false una vez que los datos hayan cargado
+              }, 10000); // Tiempo simulado de carga
+            }, []);            
     return (
         <Formik
             initialValues={initialValues}
             onSubmit={(values, actions) => {
                 const errors = validateForm(values);
                 if (Object.keys(errors).length > 0) {
-                    setFormErrors(errors);
-                    actions.setSubmitting(false);
+                setFormErrors(errors);
+                actions.setSubmitting(false);
                 } else {
-                    setFormErrors({});
-                    // Call the onSubmit function passed from the parent component
-                    onSubmit(values);
-                    actions.setSubmitting(false);
+                setFormErrors({});
+                onSubmit(values);
+                actions.setSubmitting(false);
                 }
             }}
-        >
-            {({ setFieldValue, handleSubmit }) => (
-                <Form className="max-w-4xl mx-auto mt-8 relative">
-                    <div className="flex flex-col md:flex-row md:items-start md:mb-4">
-                        <div className="flex flex-col w-full md:w-3/4 mr-6 mb-4 md:mb-0">
-                            <label htmlFor="title" className="mb-2">{t("Title")}:</label>
-                            <Field
-                                type="text"
-                                id="title"
-                                placeholder={t("Title")}
-                                className="border w-full border-gray-300 rounded p-2 focus:ring-0 focus:outline-none"
-                                value={title}
-                                maxLength={maxTitle}
-                                onChange={(e) => {
-                                    handleTitleChange(e);
-                                    setFieldValue('title', e.target.value);
-                                }}
-                            />
-                            <div className="text-right text-sm text-gray-900">
-                                {title.length}/{maxTitle} {t("Characters")}
-                            </div>
-                            {formErrors.title && <div className="text-red-500 text-sm">{formErrors.title}</div>}
-                        </div>
+            >
+           {({ setFieldValue, handleSubmit }) => (
+      <Form className="max-w-4xl mx-auto mt-8 relative">
+        {/* Mostrar el Skeleton mientras loading sea verdadero */}
+        {loading ? (
+
+            <SkeletonLoader />
+
+        ) : (
+          <div>
+            <div className="flex flex-col md:flex-row md:items-start md:mb-4">
+              <div className="flex flex-col w-full md:w-3/4 mr-6 mb-4 md:mb-0">
+                <label htmlFor="title" className="mb-2">{t("Title")}:</label>
+                <Field
+                  type="text"
+                  id="title"
+                  placeholder={t("Title")}
+                  className="border w-full border-gray-300 rounded p-2 focus:ring-0 focus:outline-none"
+                  value={title}
+                  maxLength={maxTitle}
+                  onChange={(e) => {
+                    handleTitleChange(e);
+                    setFieldValue('title', e.target.value);
+                  }}
+                />
+                <div className="text-right text-sm text-gray-900">
+                  {title.length}/{maxTitle} {t("Characters")}
+                </div>
+                {formErrors.title && <div className="text-red-500 text-sm">{formErrors.title}</div>}
+              </div>
 
       <div className="flex flex-col relative">
         {/* Flex para alinear ambos titulos {color y uploadimagen} */}
@@ -720,11 +736,13 @@ useEffect(() => {
 
                         >{t('Submit')}</button>
                         
-                    </div>
-                </Form>
-            )}
-        </Formik>
-    );
-};
+            </div>
+          </div>
+        )}
+      </Form>
+    )}
+  </Formik>
+);
+}
 
 export default AppForm;
