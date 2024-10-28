@@ -12,6 +12,10 @@ import { useNavigate } from 'react-router-dom'; // Importa useNavigate
 import { useAuth } from '../../../hooks/useAuth';
 import { motion } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
+import Skeleton from 'react-loading-skeleton';
+import 'react-loading-skeleton/dist/skeleton.css';
+import SkeletonQrs from '../../Layout/qrContent/forms/Skeleton/SkeletonQrs';
+
 const formatDate = (isoDate) => {
   const date = new Date(isoDate);
   return date.toLocaleDateString('es-US');
@@ -50,8 +54,8 @@ const formatDate = (isoDate) => {
  * @return : 
  *   Renderiza una tabla de códigos QR, modales para detalles y gestión de tienda, y botones de acciones como ver, editar y descargar.
  */
-
-const App = () => {
+const App = ({ id }) => {
+  const [loading, setLoading] = useState(true);
   const [qrCodes, setQRCodes] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
@@ -66,39 +70,42 @@ const App = () => {
   const navigate = useNavigate(); // Usa useNavigate
   const { t } = useTranslation();
   useEffect(() => {
-    const fetchQRCodes = async () => {
-      try {
-        const response = await axios.get(`http://localhost:3000/api/qr/`, {
-          withCredentials: true,
-        });
-  
-        // Ordenar los QR codes por fecha de creación en orden descendente
-        const sortedQRCodes = response.data.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
-  
-        // Formatear la fecha
-        const formattedQRCodes = sortedQRCodes.map((qr) => ({
-          ...qr,
-          createdAt: new Date(qr.createdAt).toLocaleDateString('es-ES', {
-            day: '2-digit',
-            month: '2-digit',
-            year: 'numeric',
-          }),
-        }));
-  
-        setQRCodes(formattedQRCodes);
-      } catch (error) {
-        console.error('Error fetching QR codes:', error);
-        setError('Error fetching QR codes');
-      }
-    };
-  
-    fetchQRCodes();
-  }, []);
+  const fetchQRCodes = async () => {
+    try {
+      const response = await axios.get(`http://localhost:3000/api/qr/`, {
+        withCredentials: true,
+      });
 
-  const handleSearch = (event) => {
-    setSearchQuery(event.target.value);
-    setCurrentPage(1); // Reiniciar la página actual a 1 en una nueva búsqueda
+      const sortedQRCodes = response.data.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+      const formattedQRCodes = sortedQRCodes.map((qr) => ({
+        ...qr,
+        createdAt: new Date(qr.createdAt).toLocaleDateString('es-ES', {
+          day: '2-digit',
+          month: '2-digit',
+          year: 'numeric',
+        }),
+      }));
+
+      setQRCodes(formattedQRCodes);
+    } catch (error) {
+      console.error('Error fetching QR codes:', error);
+      setError('Error fetching QR codes');
+    }
   };
+
+  fetchQRCodes();
+}, []);
+
+
+  const handleSearch = (e) => {
+    setSearchQuery(e.target.value);
+    const filtered = qrCodes.filter(code =>
+      code.name_qr.toLowerCase().includes(e.target.value.toLowerCase()) ||
+      (code.qrType && code.qrType.type.toLowerCase().includes(e.target.value.toLowerCase())) ||
+      code.state.toString().toLowerCase().includes(e.target.value.toLowerCase())
+    );
+    filteredQRCodes(filtered);
+  }; 
 
   const handleStateClick = async (item) => {
     const newState = !item.state;
@@ -274,7 +281,6 @@ const App = () => {
     const result = await getStoreData(id);
     if (result.success) {
       setStoreData(result.data);
-      console.log(result.data);
       setModalOpen(true);
       setCodeType(codeType)
     }
@@ -398,37 +404,77 @@ const App = () => {
       )
     }
   ];
+  
+  // Skeleton Loader
+          useEffect(() => {
+            const fetchData = async () => {
+              setLoading(true); // Cambia a true mientras se cargan los datos
+              try {
+                  const result = await getStoreData(id);
+                  if (result.success) {
+                      setStoreData(result.data);
+                      filteredQRCodes(result.data.qrCodes || []);
+                      setError(null);
+                  } 
+              } catch (error) {
+                  console.error('Error fetching QR codes:', error);
+                  setError('Error fetching QR codes');
+              } finally {
+                  setLoading(false);
+              }
+          };
+          
+            fetchData(); // Llamar a la función cuando cambie el `id`
+          }, [id]);
 
-  return (
+        
+          return (
+            <div className="flex flex-col h-screen overflow-hidden mt-10 shadow-lg lg:w-[94%] w-full items-center md:rounded-lg lg:ml-14">
+              <div className="flex-grow p-6 bg-gray-100 overflow-auto w-full">
+                {loading ? (
+                  <SkeletonQrs />
+                ) : (
+                  <>
+                    {qrCodes.length === 0 ? ( // Verifica si no hay códigos QR
+                      <div className="text-center p-4 relative">
+                      <img src="/public/Qr Border.png" alt="No QR codes" className="mx-auto" style={{ width: '300px', height: 'auto' }} />
+                      <p className="absolute inset-0 flex items-center justify-center text-center">
+                        {t("No QR codes found")}
+                      </p>
+                    </div>
+
+                    ) : (
+                      <>
+                        <div className="mb-4 w-full">
+                          <input
+                            type="text"
+                            className="p-2 border border-gray-300 rounded w-full md:w-96"
+                            placeholder={t("Search QR codes")}
+                            value={searchQuery}
+                            onChange={handleSearch}
+                          />
+                        </div>
+                        <QRTable
+                          data={filteredQRCodes}
+                          columns={columns}
+                          currentPage={currentPage}
+                          totalPages={totalPages}
+                          onPageChange={handlePageChange}
+                        />
+                      </>
+                    )}
+                  </>
+                )}
+              </div>
+              <StoreModal open={modalOpen} handleClose={handleCloseModal} storeData={storeData} codeType={codeType} />
+              <DetailModal
+                isOpen={isDetailModalOpen}
+                data={selectedQRCode}
+                onClose={handleDetailModalClose}
+              />
+            </div>
+          );
+        }
     
-<div className="flex h-screen overflow-hidden mt-10 shadow-lg lg:w-[94%] items-cent md:rounded-lg lg:ml-14">
-  <div className="flex-grow p-6 bg-gray-100 overflow-auto ">
-    {error && <div className="mb-4 text-red-500">{error}</div>}
-    <div className="mb-4">
-      <input
-        type="text"
-        className="p-2 border border-gray-300 rounded w-full md:w-96 "
-        placeholder={t("Search QR codes")}
-        value={searchQuery}
-        onChange={handleSearch}
-      />
-    </div>
-    <QRTable
-      data={filteredQRCodes}
-      columns={columns}
-      currentPage={currentPage}
-      totalPages={totalPages}
-      onPageChange={handlePageChange}
-    />
-  </div>
-  <StoreModal open={modalOpen} handleClose={handleCloseModal} storeData={storeData} codeType={codeType} />
-  <DetailModal
-    isOpen={isDetailModalOpen}
-    data={selectedQRCode}
-    onClose={handleDetailModalClose}
-  />
-</div>
-  );
-};
-
-export default App;
+      
+      export default App;

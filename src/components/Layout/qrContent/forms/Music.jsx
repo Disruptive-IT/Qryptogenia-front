@@ -18,6 +18,9 @@ import { MdOutlineCloudUpload } from "react-icons/md";
 import { useValidate } from '../../../../context/validateFormContext';
 import ColorPicker from './form-helpers/picker';
 import instance from '../../../../libs/axios';
+import Skeleton from 'react-loading-skeleton';
+import 'react-loading-skeleton/dist/skeleton.css';
+import SkeletonLoader from './Skeleton/Skeleton';
 
 export const MusicForm = ({ onFormChangeMusic, location, musicFormValues }) => {
     const [title, setTitle] = useState('');
@@ -44,6 +47,7 @@ export const MusicForm = ({ onFormChangeMusic, location, musicFormValues }) => {
     const [formErrors, setFormErrors] = useState({});
     const { t } = useTranslation();
     const isEditRoute = location.pathname.startsWith('/edit')
+    const [loading, setLoading] = useState(true); // Por defecto está cargando
 
     const {setValidateFormMusic,validateFormMusic}=useValidate();
     const [fonts, setFonts] = useState([]);
@@ -367,7 +371,13 @@ export const MusicForm = ({ onFormChangeMusic, location, musicFormValues }) => {
         return selectedOptions.some(selected => selected.value === option.value);
     };
 
-
+    // Skeleton Loader
+    useEffect(() => {
+        setTimeout(() => {
+          setLoading(false); // Cambia a false una vez que los datos hayan cargado
+        }, 1500); // Tiempo simulado de carga
+      }, []); 
+    
     return (
         <Formik
             initialValues={initialValues}
@@ -386,6 +396,13 @@ export const MusicForm = ({ onFormChangeMusic, location, musicFormValues }) => {
         >
             {({ setFieldValue, handleSubmit }) => (
                 <Form className="max-w-4xl mx-auto mt-8 relative">
+                            {/* Mostrar el Skeleton mientras loading sea verdadero */}
+        {loading ? (
+
+<SkeletonLoader />
+
+) : (
+                <div>
                     <div className="flex flex-col md:flex-row md:items-start md:mb-4">
                         <div className="flex flex-col w-full md:w-3/4 mr-6 mb-4 md:mb-0">
                             <label htmlFor="title" className="mb-2">{t("Title")}</label>
@@ -648,6 +665,8 @@ export const MusicForm = ({ onFormChangeMusic, location, musicFormValues }) => {
 
                         >{t('Submit')}</button>
                     </div>
+                </div>
+                )}
                 </Form>
             )}
         </Formik>
