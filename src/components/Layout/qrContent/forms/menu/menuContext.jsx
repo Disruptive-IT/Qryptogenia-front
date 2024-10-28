@@ -10,6 +10,7 @@ export default function MenuProvider({children}) {
     const[editFormdata,setEditFormData]=useState(null); //guarda el objeto de datos a editar
     const[activeCategory,setActiveCategory]=useState(0);
     const[activeProduct,setActiveProduct]=useState(0);
+    const [userTemplate,setUserTemplate]=useState(null);
     const[showBackgroundPicker,setShowBackgroundPicker]=useState(false);
     const[showMenuPicker,setShowMenuPicker]=useState(false);
     const[showBackCategoryPicker,setShowBackCategoryPicker]=useState(false);
@@ -614,7 +615,15 @@ export default function MenuProvider({children}) {
         });
     }
 
-    
+    // const getUsertemplate=async(id)=>{
+    //     try{
+    //         const usertemplate=await instance.get(`/getUserTemplate/${id}`);
+    //         const response=await usertemplate.data;
+    //         setUserTemplate(response);
+    //     }catch(error){
+    //         console.error("error getting user template: ",error.message);
+    //     }
+    // }
 
     const handleProductField = (indexOne, indexTwo, field, value,handler,e) => {
         setFormData((prevValues) => {
@@ -741,6 +750,7 @@ export default function MenuProvider({children}) {
             showPricePicker,
             fonts,
             templates,
+            userTemplate,
             isEditRoute,
             initialFormDataRef,
             validateLink,
@@ -762,6 +772,7 @@ export default function MenuProvider({children}) {
             setShowNamePicker,
             setShowDescriptionPicker,
             setShowPricePicker,
+            setUserTemplate,
             //funciones axios
             getFonts,
             getTemplates,

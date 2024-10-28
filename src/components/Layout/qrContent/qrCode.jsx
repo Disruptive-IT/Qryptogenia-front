@@ -18,7 +18,7 @@ export const saveQrData = async (
 
     const removeIconFromSelectOptions = (options) => {
         return options.map(option => {
-            const { url, ...rest } = option; 
+            const { icon, ...rest } = option; 
             return rest; 
         });
     };

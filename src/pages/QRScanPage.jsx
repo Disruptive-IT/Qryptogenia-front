@@ -9,8 +9,12 @@ import Box from '@mui/material/Box';
 import Tab from '@mui/material/Tab';
 import Tabs from '@mui/material/Tabs';
 import StarIcon from '@mui/icons-material/Star';
+import { motion } from 'framer-motion';
 import ModalComponent from '../components/discounts/form/modal';
 import './../components/Layout/qrContent/forms/menu/menu.css';
+import { SocialButton, SocialButtonS } from '../components/Layout/qrContent/socialMedia/socialButton';
+import { extractColorFromGradient, isDarkColor } from '../components/Layout/qrContent/preview-helpers/handlerColor';
+import { mapNetworkName, options } from '../components/Layout/qrContent/preview-helpers/handlePreviewButtons';
 
 
 /**
@@ -25,8 +29,6 @@ const QRScanPage = () => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [qrData, setQrData] = useState(null);
-    const [hasMenuPreview,setHasMenuPreview]=useState(false);
-    const [hasQrPreview,setHasQrPreview]=useState(false);
     const [tabValue, setTabValue] = useState(0);
     const [openModal,setOpenModal]=useState(false);
     const [closeModal,setCloseModal]=useState(false);
@@ -35,6 +37,8 @@ const QRScanPage = () => {
     const [scrollY, setScrollY] = useState(0); // Estado para guardar la posición del scroll
     const [marginValue, setMarginValue] = useState('0%');
     const qrId = searchParams.get('q');
+    const [dataBtn,setDataBtn]=useState(null);
+    const [isDark, setIsDark] = useState('#000000');
     
     const fetchData = async () => {
         try {
@@ -49,28 +53,50 @@ const QRScanPage = () => {
     };
 
     useEffect(() => {
-        const handleScroll = () => {
-          const scrollPosition = window.scrollY;
-          setScrollY(scrollPosition);
+      if (qrData && "QrPreview" in qrData) {
+          const updatedDataBtn = Array.isArray(qrData.QrPreview?.SelectOptions)
+              ? qrData.QrPreview.SelectOptions.map(option => {
+                  const originalOption = options.find(opt => opt.value === option.value);
+                  return {
+                      name: mapNetworkName(option.value),
+                      icon: originalOption ? originalOption.icon : null,
+                      iconw: originalOption ? originalOption.iconw : null,
+                      url: option.url,
+                      textTop: originalOption ? originalOption.textTop : '',
+                      textBottom: originalOption ? originalOption.textBottom : '',
+                  };
+              })
+              : [];
+          setDataBtn(updatedDataBtn);
+      }
+  }, [qrData]);
+  
+
+    // console.log(dataBtn);
+
+    // useEffect(() => {
+    //     const handleScroll = () => {
+    //       const scrollPosition = window.scrollY;
+    //       setScrollY(scrollPosition);
     
-          // Aquí actualizamos el margen dinámicamente según la posición del scroll
-          if (scrollPosition < 100) {
-            setMarginValue('5%'); // Margen inicial
-          } else if (scrollPosition >= 100 && scrollPosition < 300) {
-            setMarginValue('10%'); // Ajusta el margen según el scroll
-          } else {
-            setMarginValue('20%'); // Margen máximo cuando el scroll es alto
-          }
-        };
+    //       // Aquí actualizamos el margen dinámicamente según la posición del scroll
+    //       if (scrollPosition < 100) {
+    //         setMarginValue('5%'); // Margen inicial
+    //       } else if (scrollPosition >= 100 && scrollPosition < 300) {
+    //         setMarginValue('10%'); // Ajusta el margen según el scroll
+    //       } else {
+    //         setMarginValue('20%'); // Margen máximo cuando el scroll es alto
+    //       }
+    //     };
     
-        // Escuchar el evento de scroll
-        window.addEventListener('scroll', handleScroll);
+    //     // Escuchar el evento de scroll
+    //     window.addEventListener('scroll', handleScroll);
     
-        // Limpieza del listener cuando el componente se desmonta
-        return () => {
-          window.removeEventListener('scroll', handleScroll);
-        };
-      }, []);
+    //     // Limpieza del listener cuando el componente se desmonta
+    //     return () => {
+    //       window.removeEventListener('scroll', handleScroll);
+    //     };
+    //   }, []);
 
     useEffect(() => {
         const executeFunction=async()=>{
@@ -93,43 +119,21 @@ const QRScanPage = () => {
             </div>
         );
     }
-
-    const mapNetworkName = (value) => {
-        const formattedValue = value.toLowerCase();
-        if (formattedValue.includes('samsung galaxy store')) {
-            return 'Galaxy Store';
-        } else if (formattedValue.includes('app store')) {
-            return 'Apple Store';
-        } else if (formattedValue.includes('google play store')) {
-            return 'Google Play';
+  
+    useEffect(() => {
+      const backgroundColor = qrData?.Qrpreview?.backgroundColor;
+      if (backgroundColor) {
+        if (backgroundColor.startsWith('linear-gradient')) {
+          // Extrae el color en el 30% desde abajo hacia arriba
+          const colorAt30FromBottom = extractColorFromGradient(backgroundColor, 30);
+          // Actualiza el estado basado en si el color es oscuro
+          setIsDark(isDarkColor(colorAt30FromBottom) ? '#ffffff' : '#000000');
         } else {
-            return value.split(' ')[0].charAt(0).toUpperCase() + value.split(' ')[0].slice(1).toLowerCase();
+          // Si es un color sólido, usa la misma función para verificar si es oscuro
+          setIsDark(isDarkColor(backgroundColor) ? '#ffffff' : '#000000');
         }
-    };
-
-    const dataBtns = Array.isArray(qrData?.QrPreview?.SelectOptions) ? qrData?.QrPreview?.SelectOptions.map(option => ({
-        name: mapNetworkName(option.value),
-        url: option.url
-    })) : [];
-
-    const handlerHasMenupreview = () => {
-        if (qrData && typeof qrData === 'object') {
-            // Verificar si existe 'MenuPreview'
-            if ("MenuPreview" in qrData) {
-                setHasMenuPreview(true);
-            } else {
-                setHasMenuPreview(false);
-            }
-
-            if ("QrPreview" in qrData) {
-                setHasQrPreview(true);
-            } else {
-                setHasQrPreview(false);
-            }
-        } else {
-            console.log("qrData no es un objeto válido o no está definido");
-        }
-    };
+      }
+    }, [qrData?.QrPreview.backgroundColor]);
     
     const handleOpenModal=()=>{
         setOpenModal(true)
@@ -180,7 +184,23 @@ const QRScanPage = () => {
           }
         }
       });
-    
+
+      const cardVariants = {
+        offscreen: {
+          y: 300,
+          visibility:'hidden'
+        },
+        onscreen: {
+          visibility:'visible',
+          y: 0,
+          transition: {
+            type: "spring",
+            bounce: 0.4,
+            duration: 0.4
+          }
+        }
+      };
+      
       function TabPanel(props) {
         const { children, value, index, ...other } = props;
     
@@ -222,18 +242,16 @@ const QRScanPage = () => {
             backgroundRepeat:'no-repeat',
             margin:'0',
             overflowY:'hidden',
-            overflowX:'hidden',
-            padding:'0',
           }}>
             {qrData?.QrPreview && (
                 <div className='flex items-center justify-center min-h-screen'>
                 <div className='flex flex-col min-h-screen w-full items-center justify-center' style={{ background: qrData?.QrPreview?.backgroudColor || '#f0f0f0' }}>
                     <div className='flex flex-col items-center mt-10 md:mt-28 bg-white rounded-2xl w-[90%] sm:w-[400px] md:w-[600px] h-auto max-h-[600px] p-6 shadow-lg' style={{ background: qrData?.QrPreview?.boxColor || '#ffffff' }}>
-                        <div className='relative bg-white rounded-2xl -mt-14 border-4 shadow-md p-1 transition-shadow hover:shadow-xl' style={{ borderColor: qrData?.QrPreview?.borderImg || '#e0e0e0' }}>
+                        <div className={`${qrData?.QrPreview?.imgBoxBackgroundBase64==null ? 'hidden':''} relative bg-white rounded-2xl -mt-14 border-4 shadow-md p-1 transition-shadow hover:shadow-xl`} style={{ borderColor: qrData?.QrPreview?.borderImg || '#e0e0e0' }}>
                             {loading ? (
                                 <Skeleton variant="rectangular" width={80} height={80} />
                             ) : (
-                                <img className='w-20' src={`data:image/png;base64,${qrData.QrPreview.imgBoxBackgroundBase64}`} alt="img" />
+                                <img className={`w-20 ${qrData?.QrPreview?.imgBoxBackgroundBase64==null ? 'hidden':''}`} src={`data:image/png;base64,${qrData.QrPreview.imgBoxBackgroundBase64}`} alt="img" />
                             )}
                         </div>
                         <div className="mt-4 mb-2 w-[90%] text-center">
@@ -255,12 +273,16 @@ const QRScanPage = () => {
                         </div>
                     </div>
                     <div className="mt-5">
-                        {loading ? (
-                            <Skeleton variant="rectangular" width={400} height={50} />
-                        ) : (
-                            <SocialButtonM data={dataBtns} />
-                        )}
-                    </div>
+                      {loading ? (
+                          <Skeleton variant="rectangular" width={400} height={50} />
+                      ) : (
+                          <>
+                              {qrData?.qrType === 'app-store' && <SocialButton data={dataBtn} botonColor={isDark} />}
+                              {qrData?.qrType === 'music' && <SocialButtonM data={dataBtn} botonColor={isDark} />}
+                              {qrData?.qrType === 'social-media' && <SocialButtonS data={dataBtn} botonColor={isDark} />}
+                          </>
+                      )}
+                  </div>
                 </div>
             </div>
             )}
@@ -290,7 +312,7 @@ const QRScanPage = () => {
                       </div>
                   </div>
                     {/* Categorías y productos */}
-                    <div className="lg:w-[90%] sm:w-full p-1 md:w-[90%] h-auto overflow-scroll">
+                    <div className="lg:w-[90%] sm:w-full p-1 md:w-[90%] min-h-90 h-auto overflow-scroll">
                         <ThemeProvider theme={theme}>
                         <Box>
                             <Tabs
@@ -342,8 +364,11 @@ const QRScanPage = () => {
                                <div className='flex flex-wrap justify-center px-10 '>
                             {category.products && category.products.length > 0 ? (
                                 category.products.map((product, indexProduct) => (
-                            <div
+                            <motion.div
                                 key={indexProduct}
+                                initial={cardVariants.offscreen}
+                                whileInView={cardVariants.onscreen}
+                                viewport={{ once: true, amount: 0.3 }}
                                 style={{ boxShadow: '3px 5px 5px 0px rgb(0,0,0,1)' }}
                                 className="lg:w-[30%] md:w-[45%] sm:w-[341px] sm:h-[116px] min-w-[320px] max-w-[400px] min-h-[116px] max-h-[180px] mx-4 my-3 flex flex-row rounded-md overflow-hidden"
                                 onClick={() => {setActiveprod({activeCat:indexCategory,activeProd:indexProduct}); handleOpenModal();}}
@@ -363,7 +388,7 @@ const QRScanPage = () => {
                                     </div>
                                     {product.top && <span className="text-end"><StarIcon className="text-yellow-300 text-2xl" /></span>}
                                 </div>
-                            </div>
+                            </motion.div>
                                 ))
                             ) : (
                                 <div>No products available</div>
@@ -378,7 +403,11 @@ const QRScanPage = () => {
                             <div className='flex flex-wrap justify-center px-10 '>
                             {topProducts?.length > 0 ? (
                                 topProducts.map((element, index) => (
-                                <div style={{ boxShadow: '3px 5px 5px 0px rgb(0,0,0,1)' }} key={index} className="lg:w-[30%] md:w-[30%] sm:min-w-[20%] sm:max-w-[132px] sm:min-h-[116px] mx-4 my-3  flex flex-row rounded-md overflow-hidden" onClick={() => { setActiveprod(index); handleOpenModal(); }}>
+                                <motion.div                                 
+                                initial={cardVariants.offscreen}
+                                whileInView={cardVariants.onscreen}
+                                viewport={{ once: true, amount: 0.4 }}
+                                style={{ boxShadow: '3px 5px 5px 0px rgb(0,0,0,1)' }} key={index} className="lg:w-[30%] md:w-[30%] sm:min-w-[20%] sm:max-w-[132px] sm:min-h-[116px] mx-4 my-3  flex flex-row rounded-md overflow-hidden" onClick={() => { setActiveprod(index); handleOpenModal(); }}>
                                     <div style={{ backgroundColor: element.backgroundProductCard }} className="w-[40%] h-full bg-slate-500 overflow-auto">
                                     <img className="w-full h-full" src={element.productImg} alt={element.productName} />
                                     </div>
@@ -394,7 +423,7 @@ const QRScanPage = () => {
                                     </div>
                                     {element.top && <span className="text-end"><StarIcon className="text-yellow-300 text-2xl" /></span>}
                                     </div>
-                                </div>
+                                </motion.div>
                                 ))
                             ) : (
                                 'There are no top products'
@@ -452,20 +481,20 @@ const QRScanPage = () => {
       </button>
       <div 
         style={{ backgroundColor: topProducts[activeprod].backgroundProductCard, fontFamily: qrData?.MenuPreview?.fontPreview || 'sans-serif' }} 
-        className="flex flex-col items-center p-4 rounded-lg"
+        className="lg:mt-[5%] lg:ml-[40%]  flex lg:w-[20%] flex-col items-center p-4 rounded-lg my-[10%]"
       >
         {/* Imagen del producto destacado */}
         <img 
-          className="w-full h-[200px] object-cover rounded-lg border-[4px] border-black" 
+          className="w-[200px] h-[200px] rounded-lg border-[2px] border-black" 
           src={topProducts[activeprod]?.productImg} 
           alt={topProducts[activeprod]?.productName || 'Producto'} 
         />
 
         {/* Información del producto destacado */}
         <div className="w-full mt-4 flex flex-col items-center text-center">
-          <h1 className="text-2xl font-bold">{topProducts[activeprod]?.productName}</h1>
-          <h2 className="text-xl font-bold text-gray-700">{topProducts[activeprod]?.price}$</h2>
-          <p className="text-lg mt-2">{topProducts[activeprod]?.productDescription}</p>
+          <h1 style={{color:topProducts[activeprod].colorName}} className="text-2xl font-bold mb-2">{topProducts[activeprod]?.productName}</h1>
+          <h2 style={{color:topProducts[activeprod].colorDescription}} className="text-xl font-bold mb-2 text-gray-700">{topProducts[activeprod]?.price}$</h2>
+          <p style={{color:topProducts[activeprod].colorPrice}} className="text-lg mt-2">{topProducts[activeprod]?.productDescription}</p>
         </div>
 
         {/* Indicador de producto destacado */}
