@@ -53,6 +53,16 @@ export default function MenuProvider({children}) {
         }
     }
 
+    const getNameFont=async(id,setter)=>{
+        try{
+            const getFontsArray=await instance.get(`/getFonts/${id}`);
+           setter(getFontsArray.data);
+            return getFontsArray.data;
+        }catch(error){
+            console.error("error fonts request: ",error.message);
+        }
+    }
+
     const getTemplates=async()=>{
         try{
             const getTemplatesArray=await instance.get('getTemplates');
@@ -88,6 +98,15 @@ export default function MenuProvider({children}) {
     const handleShowMenuPicker=(e)=>{
         if(menuPickerRef.current && !menuPickerRef.current.contains(e.target)){
         setShowMenuPicker(false)
+        }
+    }
+
+    const getFontsPreview = async (setter) => {
+        try {
+            const response = await instance.get('/getFonts'); 
+            setter(response.data);
+        } catch (error) {
+            console.error("Error fetching fonts: ", error.message);
         }
     }
 
@@ -776,6 +795,8 @@ export default function MenuProvider({children}) {
             //funciones axios
             getFonts,
             getTemplates,
+            getFontsPreview,
+            getNameFont,
             //funciones handler,
             handlePrev,
             handleNext,

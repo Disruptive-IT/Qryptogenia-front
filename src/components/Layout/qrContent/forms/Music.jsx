@@ -9,18 +9,14 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Formik, Form, Field } from "formik";
 import Select from 'react-select';
-import { SocialIcon } from 'react-social-icons'
-import { ImUpload2 } from "react-icons/im";
-import GradientColorPicker from 'react-gcolor-picker'; // Importamos el nuevo color picker
 import { IoIosClose } from "react-icons/io";
 import { useTranslation } from 'react-i18next';
 import { MdOutlineCloudUpload } from "react-icons/md";
 import { useValidate } from '../../../../context/validateFormContext';
 import ColorPicker from './form-helpers/picker';
-import instance from '../../../../libs/axios';
-import Skeleton from 'react-loading-skeleton';
 import 'react-loading-skeleton/dist/skeleton.css';
 import SkeletonLoader from './Skeleton/Skeleton';
+import { UseMenu } from './menu/menuContext';
 
 export const MusicForm = ({ onFormChangeMusic, location, musicFormValues }) => {
     const [title, setTitle] = useState('');
@@ -37,6 +33,7 @@ export const MusicForm = ({ onFormChangeMusic, location, musicFormValues }) => {
     const [showDescriptionColorPicker, setShowDescriptionColorPicker] = useState(false);
     const [showBackgroundColorPicker, setShowBackgroundColorPicker] = useState(false);
     const [showBoxColorPicker, setShowBoxColorPicker] = useState(false);
+    const [fontPreview,setFontPreview]=useState('');
     const titleColorPickerRef = useRef(null);
     const borderColorPickerRef = useRef(null);
     const descriptionColorPickerRef = useRef(null);
@@ -50,18 +47,11 @@ export const MusicForm = ({ onFormChangeMusic, location, musicFormValues }) => {
     const [loading, setLoading] = useState(true); // Por defecto está cargando
 
     const {setValidateFormMusic,validateFormMusic}=useValidate();
-    const [fonts, setFonts] = useState([]);
-    const getFonts = async () => {
-        try {
-            const response = await instance.get('getFonts'); 
-            setFonts(response.data);
-        } catch (error) {
-            console.error("Error fetching fonts: ", error.message);
-        }
-    };
+    const [fontsMusicPreview, setFontsMusicPreview] = useState([]);
+    const {getFontsPreview}=UseMenu();
 
     useEffect(() => {
-        getFonts();
+        getFontsPreview(setFontsMusicPreview);
     }, []);
 
     const validateForm = (values) => {
@@ -107,6 +97,11 @@ export const MusicForm = ({ onFormChangeMusic, location, musicFormValues }) => {
             setTitle(value);
         }
     };
+
+    const handleSelectedFont=(e)=>{
+        setFontPreview(e.target.value);
+        onFormChangeMusic((prevValues)=>({...prevValues,idFontPreview:e.target.value}))
+    }
 
     const handleDescriptionChange = (e) => {
         setDescription(e.target.value);
@@ -586,14 +581,14 @@ export const MusicForm = ({ onFormChangeMusic, location, musicFormValues }) => {
                     <div className='my-3 mb-4 flex flex-row justify-start align-middle'>
                     <h1 className='mt-3 text-lg font-semibold mr-6'>Font style:</h1>
                     <select 
-                className='p-4 rounded-[10px] bg-gray-300' 
-                name="fontFamily" 
-                id="" 
-                onChange={(e) => {
-                    setSelectedFont(e.target.value); // Actualiza el estado con la fuente seleccionada
-                }}
-            >
-                          {fonts?.map((item, index) => (
+                        className='p-4 rounded-[10px] bg-gray-300' 
+                        name="fontFamily" 
+                        id="" 
+                        onChange={(e) => {
+                            handleSelectedFont(e);
+                        }}
+                    >
+                          {fontsMusicPreview?.map((item, index) => (
                             <option style={{ fontFamily: item.fontName }} key={index} id={item.id} value={item.id}>
                               {item.fontName}
                             </option>

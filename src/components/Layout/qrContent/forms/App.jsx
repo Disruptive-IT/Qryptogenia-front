@@ -11,11 +11,6 @@ import React, { useState, useRef, useEffect } from 'react';
 import { Formik, Form, Field } from "formik";
 import Select from 'react-select';
 import { useValidate } from '../../../../context/validateFormContext';
-import { SocialIcon } from 'react-social-icons'
-import GradientColorPicker from 'react-gcolor-picker'; // Importamos el nuevo color picker
-import PropTypes from 'prop-types';
-import { ImUpload2, ImCancelCircle } from "react-icons/im";
-import { FaApple, FaGooglePlay } from "react-icons/fa";
 import { IoIosClose } from "react-icons/io";
 import apple from "../../../../../src/assets/imgs/apple.png";
 import huawei from "../../../../../src/assets/imgs/huawei.png";
@@ -23,9 +18,9 @@ import microsoft from "../../../../../src/assets/imgs/microsoft.png";
 import { useTranslation } from 'react-i18next';
 import { MdOutlineCloudUpload } from "react-icons/md";
 import ColorPicker from './form-helpers/picker';
-import Skeleton from 'react-loading-skeleton';
 import 'react-loading-skeleton/dist/skeleton.css';
 import SkeletonLoader from './Skeleton/Skeleton';
+import { UseMenu } from './menu/menuContext';
 
 export const AppForm = ({ onFormChangeApp, location, appFormValues }) => {
     const [title, setTitle] = useState('');
@@ -36,7 +31,8 @@ export const AppForm = ({ onFormChangeApp, location, appFormValues }) => {
     const [boxColor, setBoxColor] = useState('rgb(216, 61, 34)');
     const [colorTitle, setTitleColor] = useState('rgb(6, 35, 254)');
     const [descriptionColor, setDescriptionColor] = useState('rgb(42, 40, 40)');
-    const [borderImg, setBorderColor] = useState('#ffffff')
+    const [borderImg, setBorderColor] = useState('#ffffff');
+    const [fontPreview,setFontPreview]=useState('');
     const [showBorderColorPicker, setShowBorderColorPicker] = useState(false);
     const [showTitleColorPicker, setShowTitleColorPicker] = useState(false);
     const [showDescriptionColorPicker, setShowDescriptionColorPicker] = useState(false);
@@ -54,6 +50,8 @@ export const AppForm = ({ onFormChangeApp, location, appFormValues }) => {
     const isEditRoute = location.pathname.startsWith('/edit')
     const {validateFormApp,setValidateFormApp}=useValidate();
     const [loading, setLoading] = useState(true); // Por defecto está cargando
+    const [appFontsPreview, setAppFontsPreview] = useState([]);
+    const {getFontsPreview}=UseMenu();
 
     console.log("validate from app",validateFormApp, formErrors);
 
@@ -66,21 +64,10 @@ export const AppForm = ({ onFormChangeApp, location, appFormValues }) => {
           return true;
         }
       };
-      
 
-      const [fonts, setFonts] = useState([]);
-
-const getFonts = async () => {
-    try {
-        const response = await instance.get('getFonts'); 
-        setFonts(response.data);
-    } catch (error) {
-        console.error("Error fetching fonts: ", error.message);
-    }
-};
-useEffect(() => {
-    getFonts();
-}, []); 
+    useEffect(() => {
+       getFontsPreview(setAppFontsPreview);
+    }, []);
 
 console.log("these are the selected options: ",appFormValues.selectedOptions);
 
@@ -123,6 +110,11 @@ console.log("these are the selected options: ",appFormValues.selectedOptions);
         }
 
     };
+
+    const handleSelectedFont=(e)=>{
+        setFontPreview(e.target.value);
+        onFormChangeApp((prevValues)=>({...prevValues,idFontPreview:e.target.value}))
+    }
 
     const handleDescriptionChange = (e) => {
         setDescription(e.target.value);
@@ -617,10 +609,10 @@ console.log("these are the selected options: ",appFormValues.selectedOptions);
                             </div>
                         </div>
 
-                        <div className='flex flex-col md:flex-row md:items-center mb-4 mt-4'>
+                        <div className='flex flex-col md:flex-row md:items-center mb-4 mt-10'>
                           <h1 className='mt-3 text-lg font-semibold mr-6'>Font style:</h1>
-                          <select className='p-4 rounded-[10px] bg-gray-300' name="fontFamily" id="" onChange={(e)=>handleFontFamily(e)}>
-                          {fonts?.map((item, index) => (
+                          <select className='p-4 rounded-[10px] bg-gray-300' name="fontFamily" id="" value={appFormValues.idFontPreview} onChange={(e)=>handleSelectedFont(e)}>
+                          {appFontsPreview?.map((item, index) => (
                             <option style={{ fontFamily: item.fontName }} key={index} id={item.id} value={item.id}>
                               {item.fontName}
                             </option>
@@ -691,8 +683,7 @@ console.log("these are the selected options: ",appFormValues.selectedOptions);
                          onMouseEnter={(e) => e.target.style.backgroundColor = '#3C6E71'} // Cambia el color al hacer hover
                          onMouseLeave={(e) => e.target.style.backgroundColor = '#284B63'} // Vuelve al color original al salir del hoover
 
-                        >{t('Submit')}</button>
-                        
+                        >{t('Submit')}</button>   
             </div>
           </div>
         )}

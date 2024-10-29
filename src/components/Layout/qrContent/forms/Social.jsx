@@ -10,16 +10,14 @@ import React, { useState, useRef, useEffect } from 'react';
 import { Formik, Form, Field } from "formik";
 import Select from 'react-select';
 import { SocialIcon } from 'react-social-icons'
-import { ImUpload2 } from "react-icons/im";
-import GradientColorPicker from 'react-gcolor-picker'; // Importamos el nuevo color picker
 import { IoIosClose } from "react-icons/io";
 import { useTranslation } from 'react-i18next';
 import { MdOutlineCloudUpload } from "react-icons/md";
 import { useValidate } from '../../../../context/validateFormContext';
-import Skeleton from 'react-loading-skeleton';
 import 'react-loading-skeleton/dist/skeleton.css';
 import SkeletonLoader from './Skeleton/Skeleton';
 import ColorPicker from './form-helpers/picker';
+import { UseMenu } from './menu/menuContext';
 
 export const SocialForm = ({ onFormChange, location, socialFormValues }) => {
   const [title, setTitle] = useState('');
@@ -31,6 +29,7 @@ export const SocialForm = ({ onFormChange, location, socialFormValues }) => {
   const [boxColor, setBoxColor] = useState('#F0F0F0')
   const [colorTitle, setTitleColor] = useState('#820e0e');
   const [descriptionColor, setDescriptionColor] = useState('#E7473C');
+  const [fontPreview,setFontPreview]=useState('');
   const [showTitleColorPicker, setShowTitleColorPicker] = useState(false);
   const [showBorderColorPicker, setShowBorderColorPicker] = useState(false);
   const [showDescriptionColorPicker, setShowDescriptionColorPicker] = useState(false);
@@ -49,6 +48,12 @@ export const SocialForm = ({ onFormChange, location, socialFormValues }) => {
   
   const {validateFormSocial,setValidateFormSocial}=useValidate();
   const [loading, setLoading] = useState(true); // Por defecto está cargando
+  const {getFontsPreview}=UseMenu();
+  const [socialFontPreview, setSocialFontpreview] = useState([]);
+
+useEffect(() => {
+    getFontsPreview(setSocialFontpreview);
+}, []);
 
   const validateForm = (values) => {
     const errors = {};
@@ -94,6 +99,11 @@ export const SocialForm = ({ onFormChange, location, socialFormValues }) => {
     }
 
   };
+
+  const handleSelectedFont=(e)=>{
+    setFontPreview(e.target.value);
+    onFormChange((prevValues)=>({...prevValues,idFontPreview:e.target.value}))
+  }
 
   const handleDescriptionChange = (e) => {
     setDescription(e.target.value);
@@ -575,6 +585,26 @@ export const SocialForm = ({ onFormChange, location, socialFormValues }) => {
                 </div>
               </div>
           </div>
+
+          {/* Select de fuentes */}
+          <div className='my-3 mb-4 flex flex-row justify-start align-middle'>
+                    <h1 className='mt-3 text-lg font-semibold mr-6'>Font style:</h1>
+                    <select 
+                className='p-4 rounded-[10px] bg-gray-300' 
+                name="fontFamily" 
+                id="" 
+                onChange={(e) => {
+                  handleSelectedFont(e);
+                }}
+            >
+                          {socialFontPreview?.map((item, index) => (
+                            <option style={{ fontFamily: item.fontName }} key={index} id={item.id} value={item.id}>
+                              {item.fontName}
+                            </option>
+                          ))}
+                          </select>
+                  </div>
+
           <div className="flex flex-col md:flex-row md:items-center mb-4 mt-4">
             <div className="w-full md:w-3/4">
               <label htmlFor="multiselect" className="mb-2">Multiselect:</label>

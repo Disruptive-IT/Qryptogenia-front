@@ -15,6 +15,7 @@ import './../components/Layout/qrContent/forms/menu/menu.css';
 import { SocialButton, SocialButtonS } from '../components/Layout/qrContent/socialMedia/socialButton';
 import { extractColorFromGradient, isDarkColor } from '../components/Layout/qrContent/preview-helpers/handlerColor';
 import { mapNetworkName, options } from '../components/Layout/qrContent/preview-helpers/handlePreviewButtons';
+import { UseMenu } from '../components/Layout/qrContent/forms/menu/menuContext';
 
 
 /**
@@ -39,6 +40,8 @@ const QRScanPage = () => {
     const qrId = searchParams.get('q');
     const [dataBtn,setDataBtn]=useState(null);
     const [isDark, setIsDark] = useState('#000000');
+    const [fontPreview,setFontPreview]=useState({});
+    const {getNameFont}=UseMenu();
     
     const fetchData = async () => {
         try {
@@ -70,6 +73,7 @@ const QRScanPage = () => {
           setDataBtn(updatedDataBtn);
       }
   }, [qrData]);
+
   
 
     // console.log(dataBtn);
@@ -102,7 +106,6 @@ const QRScanPage = () => {
         const executeFunction=async()=>{
             if (qrId) {
                 await fetchData();
-                handlerHasMenupreview();
             } else {
                 setError('No se proporcionó ningún ID de QR');
                 setLoading(false);
@@ -111,6 +114,11 @@ const QRScanPage = () => {
 
         executeFunction();
     }, [qrId]);
+
+    useEffect(()=>{
+      getNameFont(qrData?.QrPreview?.idFontPreview,setFontPreview);
+      console.log("font preview: ",fontPreview);
+    },[qrData?.QrPreview])
 
     if (error) {
         return (
@@ -133,7 +141,7 @@ const QRScanPage = () => {
           setIsDark(isDarkColor(backgroundColor) ? '#ffffff' : '#000000');
         }
       }
-    }, [qrData?.QrPreview.backgroundColor]);
+    }, [qrData?.QrPreview?.backgroundColor]);
     
     const handleOpenModal=()=>{
         setOpenModal(true)
@@ -155,11 +163,6 @@ const QRScanPage = () => {
             category?.products?.filter(product => product.top === true) || []
             ) 
         : [];
-
-      // console.log(topProducts);
-      
-      // console.log("modal producto activo ",activeprod);
-      // console.log("catgeoria activa: ",activeCategory);
     
       const theme = createTheme({
         palette:{
@@ -244,7 +247,7 @@ const QRScanPage = () => {
             overflowY:'hidden',
           }}>
             {qrData?.QrPreview && (
-                <div className='flex items-center justify-center min-h-screen'>
+                <div style={{fontFamily:fontPreview?.fontName}} className='flex items-center justify-center min-h-screen'>
                 <div className='flex flex-col min-h-screen w-full items-center justify-center' style={{ background: qrData?.QrPreview?.backgroudColor || '#f0f0f0' }}>
                     <div className='flex flex-col items-center mt-10 md:mt-28 bg-white rounded-2xl w-[90%] sm:w-[400px] md:w-[600px] h-auto max-h-[600px] p-6 shadow-lg' style={{ background: qrData?.QrPreview?.boxColor || '#ffffff' }}>
                         <div className={`${qrData?.QrPreview?.imgBoxBackgroundBase64==null ? 'hidden':''} relative bg-white rounded-2xl -mt-14 border-4 shadow-md p-1 transition-shadow hover:shadow-xl`} style={{ borderColor: qrData?.QrPreview?.borderImg || '#e0e0e0' }}>

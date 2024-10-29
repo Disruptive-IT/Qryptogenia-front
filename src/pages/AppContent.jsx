@@ -121,6 +121,7 @@ const AppContent = () => {
                             image,
                             backgroundColor,
                             selectedOptions,
+                            idFontPreview,
                             frame,
                             frameColor,
                             dots,
@@ -200,6 +201,7 @@ const AppContent = () => {
                             image,
                             backgroundColor,
                             selectedOptions,
+                            idFontPreview
                         };
                 
                     // Verificar que los valores no sean undefined antes de actualizar los estados del formulario

@@ -17,20 +17,27 @@
  * @return : Retorna un componente que representa el diseño de una tienda social con elementos personalizables y botones sociales.
  */
 
-import react from 'react';
+import react, { useState } from 'react';
 import logot from "../../../../assets/imgs/google.png"
 import { SocialButtonM } from '../socialMedia/socialButtons';
+import { UseMenu } from '../forms/menu/menuContext';
 
 
 export const SocialLayout = ({socialFormValues}) => {
+    const [fontPreview,setFontPreview]=useState({});
+    const {getNameFont}=UseMenu();
     console.log(socialFormValues)
     const data = Array.isArray(socialFormValues.selectedOptions) ? socialFormValues.selectedOptions.map(option => ({
         name: option.value.charAt(0).toUpperCase() + option.value.slice(1),
         url: option.url // Include URL
     })) : [];
+
+    useEffect(()=>{
+      getNameFont(socialFormValues.idFontPreview,setFontPreview);
+    },[socialFormValues.idFontPreview])
+
     return(
-        <div className='flex flex-col min-h-screen w-full items-center justify-center' style={{ background: socialFormValues.backgroundColor }}>
-            
+        <div className='flex flex-col min-h-screen w-full items-center justify-center' style={{ background: socialFormValues.backgroundColor,fontFamily:fontPreview?.fontName }}>
             <div className='flex flex-col items-center mt-10 md:mt-28 bg-white rounded-2xl w-[90%] sm:w-[400px] md:w-[600px] min-h-[400px] max-h-[600px] p-6 shadow-lg' style={{ background: socialFormValues.boxColor }}>
                 <div className='relative bg-white rounded-2xl -mt-14 border-4 shadow-md p-1 transition-shadow hover:shadow-xl' style={{borderColor:socialFormValues.borderColor}}>
                     <img className='w-20' src={`data:image/png;base64,${socialFormValues.image}`} alt="" />

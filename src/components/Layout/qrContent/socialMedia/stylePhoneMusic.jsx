@@ -5,6 +5,7 @@ import mesadoko from "../../../../assets/imgs/mesadoko.png";
 import google from "../../../../assets/imgs/google.png";
 
 import { SocialButton, SocialButtonS } from './socialButton';
+import { UseMenu } from '../forms/menu/menuContext';
 /*
  * @Author : Cristian Escobar, @date 2024-09-03 20:13:14
  * @description: Componente que renderiza una vista de enlace web en la preview del movil. 
@@ -27,6 +28,8 @@ export const WebLinkPhoneMusic = ({ FormValues, contentName }) => {
   const [showDesc, setShowDesc] = useState(true);
   const initialValues = useRef(FormValues);
   const [isDark, setIsDark] = useState('#000000');
+  const [fontPreview,setFontPreview]=useState({});
+  const {getNameFont}=UseMenu();
   console.log(contentName)
   console.log(FormValues.backgroundColor)
 
@@ -60,17 +63,17 @@ export const WebLinkPhoneMusic = ({ FormValues, contentName }) => {
       console.log('New image provided, setting showImage to true');
       setShowImage(true);
     }
-
-    // Update initialValues ref
     initialValues.current = FormValues;
   }, [FormValues]);
 
   useEffect(() => {
-    // Reset showImage when contentName changes
     setShowImage(true);
-    // Reset description visibility when contentName changes
     setShowDesc(true);
   }, [contentName]);
+
+  useEffect(()=>{
+    getNameFont(FormValues.idFontPreview,setFontPreview);
+  },[FormValues.idFontPreview])
 
 
   const options = [
@@ -226,7 +229,7 @@ export const WebLinkPhoneMusic = ({ FormValues, contentName }) => {
   console.log(FormValues)
 
   return (
-    <div className='relative flex flex-col w-[100%] h-[100%] items-center rounded-t-[52px] rounded-b-[50px]  p-4 overflow-y-auto custom-scrollbarphone' style={{ background:FormValues.backgroundColor, minHeight: '670px', maxHeight: '670px', minWidth: '350px', maxWidth: '350px'}}>
+    <div  className='relative flex flex-col w-[100%] h-[100%] items-center rounded-t-[52px] rounded-b-[50px]  p-4 overflow-y-auto custom-scrollbarphone' style={{fontFamily:fontPreview?.fontName, background:FormValues.backgroundColor, minHeight: '670px', maxHeight: '670px', minWidth: '350px', maxWidth: '350px'}}>
         <div className='flex flex-col items-center mt-28 w-[97%] bg-white rounded-2xl' style={{ background:FormValues.boxColor }}>
             {showImage && (
                 <div className='relative bg-white rounded-2xl -mt-14 border-4 shadow-lg' style={{ borderColor: FormValues.borderImg }}>

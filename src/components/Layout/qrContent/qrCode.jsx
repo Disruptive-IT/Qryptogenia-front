@@ -55,6 +55,7 @@ export const saveQrData = async (
             imgBoxBackgroud: currentContentType === 'social-media' ? socialFormValues.image : currentContentType === 'music' ? musicFormValues.image : appFormValues.image,
             backgroudColor: currentContentType === 'social-media' ? socialFormValues.backgroundColor : currentContentType === 'music' ? musicFormValues.backgroundColor : appFormValues.backgroundColor,
             SelectOptions: currentContentType === 'social-media' ? removeIconFromSelectOptions(socialFormValues.selectedOptions) : currentContentType === 'music' ? removeIconFromSelectOptions(musicFormValues.selectedOptions) : removeIconFromSelectOptions(appFormValues.selectedOptions),
+            idFontPreview: currentContentType === 'social-media' ? socialFormValues.idFontPreview : currentContentType === 'music' ? musicFormValues.idFontPreview : appFormValues.idFontPreview
         },
         qrText: {
             text: qrTextProps.qrText || '', 
