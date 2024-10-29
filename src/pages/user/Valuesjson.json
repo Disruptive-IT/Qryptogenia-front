@@ -8,7 +8,7 @@
     "descriptionColor": "rgb(42, 40, 40)",
     "borderImg": "rgb(250, 248, 247)",
     "imgBoxBackground": "",
-    "idFontPreview":"",
+    "idFontPreview":null,
     "selectedOptions": [
       { "value": "Google Play Store", "url": "https://play.google.com" },
       { "value": "Apple", "url": "https://apple.com" }
@@ -23,7 +23,7 @@
     "colorTitle": "#820e0e",
     "descriptionColor": "#E7473C",
     "imgBoxBackground": "",
-    "idFontPreview":"",
+    "idFontPreview":null,
     "selectedOptions": [
       {"value": "facebook"},
       {"value": "instagram"},
