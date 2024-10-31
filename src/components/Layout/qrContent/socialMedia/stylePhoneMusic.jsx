@@ -35,36 +35,34 @@ export const WebLinkPhoneMusic = ({ FormValues, contentName }) => {
 
 
   useEffect(() => {
-    // Function to compare if current values differ from initial values
+    // Función para comparar si los valores actuales difieren de los valores iniciales
     const hasChanged = (current, initial) => {
       const keysToCompare = ['title', 'description', 'backgroundColor', 'boxColor', 'titleColor', 'descriptionColor', 'selectedOptions'];
       return keysToCompare.some(key => {
         if (key === 'selectedOptions') {
-          return current[key].length !== initial[key].length ||
-            current[key].some((opt, index) => opt.value !== initial[key][index].value);
+          const currentOptions = current[key]?.map(opt => opt.value).sort().join() || '';
+          const initialOptions = initial[key]?.map(opt => opt.value).sort().join() || '';
+          return currentOptions !== initialOptions;
         }
         return current[key] !== initial[key];
       });
     };
-
-    if(hasChanged(FormValues, initialValues.current)){
+  
+    // Realiza las acciones necesarias según los cambios detectados
+    if (hasChanged(FormValues, initialValues.current)) {
       setShowImage(false);
       setShowDesc(FormValues.description !== initialValues.current.description);
-    }
-
-    // Check if any of the values (excluding image) have changed from initial values
-    if (hasChanged(FormValues, initialValues.current)) {
       console.log('Values have changed, setting showImage to false');
-      setShowImage(false);
     }
-
-    // If a new image is provided, show the image
+  
+    // Si se proporciona una nueva imagen, muestra la imagen
     if (FormValues.image && FormValues.image !== logot) {
       console.log('New image provided, setting showImage to true');
       setShowImage(true);
     }
-    initialValues.current = FormValues;
-  }, [FormValues]);
+  
+  }, [FormValues, logot]);
+  
 
   useEffect(() => {
     setShowImage(true);
