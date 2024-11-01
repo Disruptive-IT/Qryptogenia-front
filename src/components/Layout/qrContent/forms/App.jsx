@@ -549,7 +549,7 @@ console.log("these are the selected options: ",appFormValues.selectedOptions);
                                 onClick={() => setShowDescriptionColorPicker(!showDescriptionColorPicker)}
                             ></div>
                                 {showDescriptionColorPicker && (
-                                    <div className="absolute mt-2 left-0 top-full z-50" ref={descriptionColorPickerRef}>
+                                    <div className="absolute mt-2 top-20 z-50" ref={descriptionColorPickerRef}>
                                         <ColorPicker handlerFunction={handleDescriptionColorChange} pickerColor={descriptionColor}/>
                                     </div>
                                 )}
@@ -569,8 +569,7 @@ console.log("these are the selected options: ",appFormValues.selectedOptions);
                                         ></div>
                                         {showBackgroundColorPicker && (
                                             <div className="absolute mt-2 left-0 z-50" ref={backgroundColorPickerRef}>
-                                            <ColorPicker handlerFunction={handleBackgroundColorChange} pickerColor={backgroundColor}/>
-                                            {/* style={{ width: "calc(100% + 2rem)" }} // Ajuste del ancho */}
+                                            <ColorPicker handlerFunction={handleBackgroundColorChange} pickerColor={backgroundColor} style={{ width: "calc(100% + 2rem)" }}/>
                                             </div>
                                         )}
                                         </div>

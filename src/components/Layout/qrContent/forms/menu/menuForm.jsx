@@ -39,6 +39,7 @@ function MenuForm(){
         },
     });
     console.log(" values ",formik.values);
+    console.log("formdata: ",formData);
 
     useEffect(()=>{
       const executeFunctions=async()=>{
@@ -95,7 +96,7 @@ function MenuForm(){
     // console.log("isss ",editFormdata);
     // console.log("fomik values: ",formik.values);
     // console.log("intial values: ",formik.initialValues);
-    // console.log("formik errors",formik.errors);
+    console.log("formik errors",formik.errors);
 return (
     <div className='p-4'>
         <Formik

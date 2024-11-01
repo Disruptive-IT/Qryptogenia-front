@@ -155,7 +155,6 @@ const CustomQr = ({ location, qrId }) => {
         }
       });
 
-
     const Dowload = async () => {
         const { value: qrName, isConfirmed } = await Swal.fire({
             title: t("Save QR Code"),
