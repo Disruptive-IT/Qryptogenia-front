@@ -27,7 +27,7 @@ jobs:
 
     - name: Copiar archivo de variables de entorno
       run: |
-        cp -r /home/env_variables/.env_qryptogenia_front /home/QRyptogenia/FRONT/actions-runner/Qryptogenia-front/Qryptogenia-front/Qryptogenia-front.env
+        cp -r /home/env_variables/.env_qryptogenia_front /home/QRyptogenia/FRONT/actions-runner/Qryptogenia-front/Qryptogenia-front/Qryptogenia-front/.env
 
     - name: Build the website (ReactJS) (run npm build)
       run: |
