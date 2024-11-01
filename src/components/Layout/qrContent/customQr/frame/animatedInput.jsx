@@ -7,6 +7,8 @@ import { motion } from 'framer-motion';
  * @Props : ID del campo de entrada, Texto del placeholder, Longitud máxima del texto,  Función para manejar el cambio del texto, Texto de la etiqueta, Valor del campo de entrada
  * @return : Elemento JSX del componente AnimatedInput
 **/
+
+
 const AnimatedInput = ({ id, maxLength, onChange, label, value }) => {
     return (
         <div className="relative w-full">
@@ -21,8 +23,8 @@ const AnimatedInput = ({ id, maxLength, onChange, label, value }) => {
                     padding: '10px',
                     paddingTop: '15px',
                     borderRadius: '5px',
-                    border: '1px solid #ccc',
-                    backgroundColor: '#fff',
+                    border: '1px solid #ccc', // Borde caja de texto
+                    backgroundColor: '#fff', // Fondo color texto
                     outline: 'none',
                     boxSizing: 'border-box'
                 }}

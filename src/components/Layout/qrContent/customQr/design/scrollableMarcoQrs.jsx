@@ -13,6 +13,11 @@
  * @description : Mejor implementacion del color picker, sus estados y responsive
 **/
 
+/**
+ @UpdatedBy : Cristian Rueda,   @date 2024-09-17 15:44:17
+ * @description : Cambio de color de la lina de scroll, borde y QR
+ */
+
 import * as React from 'react';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
@@ -100,15 +105,15 @@ export default function ScrollableMarcoQrs({ onStyleClick, value, onChange }) {
     scrollButtons="auto"
     TabIndicatorProps={{
         style: {
-            backgroundColor: "",
+            backgroundColor: "#CC2905", // Color barra scroll DESIGN
             height: '4px'
         }
     }}
     aria-label="scrollable auto tabs example"
     sx={{
-        '& .MuiTabs-scrollButtons': {
+        '& .MuiTabs-scrollButtons': { //Color flechas scroll
             width: '20px',
-            color: '#284B63',
+            color: '',
         },
     }}
 >
@@ -125,9 +130,11 @@ export default function ScrollableMarcoQrs({ onStyleClick, value, onChange }) {
                         borderWidth: style.shape !== 'none' ? '2px' : '0px',
                         borderStyle: 'solid',
                         padding: '20px',
-                        display: 'flex',       // Ensure the div takes full space
+                        display: 'flex',       // Ensure the div takes full space 
                         alignItems: 'center',  // Center content vertically
-                        justifyContent: 'center' // Center content horizontally
+                        justifyContent: 'center', // Center content horizontally
+                        color : '#000000', // Color QRs
+                        borderColor: '#000000' // Color borde QRs
                     }}
                 >
                     <style.icon size={35} />

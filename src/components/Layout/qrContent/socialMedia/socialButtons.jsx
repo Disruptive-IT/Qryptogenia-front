@@ -1,5 +1,6 @@
 
 import React, { useEffect } from 'react';
+import { motion } from 'framer-motion';
 /*
  * @Author : Cristian Escobar, @date 2024-09-03 20:13:14
  * @description: Función utilitaria que capitaliza la primera letra de una cadena de texto.
@@ -26,7 +27,8 @@ export const SocialButton = ({ data }) => {
   return (
     <div className='flex gap-3 justify-center flex-wrap w-full mt-8 mb-5 relative'>
       {data && data.map((social, index) => (
-        <a
+        <motion.a
+          whileHover={{scale:1.1}} initial={{translateY:'500px'}} animate={{translateY:'0px'}} transition={{duration:'.3s',type:'spring',bounce:'0.5'}} whileTap={{scale:0.9}}
           key={index}
           href={social.url}
           target="_blank"
@@ -36,7 +38,7 @@ export const SocialButton = ({ data }) => {
         >
           {social.icon}
           <span className="hidden lg:inline ml-2">{capitalizeFirstLetter(social.name)}</span>
-        </a>
+        </motion.a>
       ))}
     </div>
   );
@@ -56,12 +58,13 @@ export const SocialButton = ({ data }) => {
  */
 
 export const SocialButtonM = ({ data, botonColor }) => {
+  console.log("data button ",data)
   return (
     <div className='flex gap-3 justify-center mt-8 flex-wrap w-full mb-5'>
       {data && data.map((social, index) => (
-        <a target="_blank" rel="noopener noreferrer" href={social.url} key={index} type="button" className="relative p-2 min-w-16 h-16 rounded-lg flex gap-2 items-center" style={{ cursor: "pointer", verticalAlign: 'middle'}}>
+        <motion.a whileHover={{scale:1.1}} initial={{translateY:'500px'}} animate={{translateY:'0px'}} transition={{duration:'.3s',type:'spring',bounce:'0.5'}} whileTap={{scale:0.9}} target="_blank" rel="noopener noreferrer" href={social.url} key={index} type="button" className="relative p-2 min-w-16 h-16 rounded-lg flex gap-2 items-center" style={{ cursor: "pointer", verticalAlign: 'middle'}}>
             {botonColor === '#000000' ? social.icon : social.iconw}
-        </a>
+        </motion.a>
       ))}
     </div>
   );

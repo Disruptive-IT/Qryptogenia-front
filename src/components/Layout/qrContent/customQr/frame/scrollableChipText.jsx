@@ -12,6 +12,14 @@ import { useEffect, useRef, useState } from 'react';
  * @description : Componente de la seccion frame o texto. El contenido es dedicado a establecer las burbujas para el texto y su color
  * @return : Retorna los tabs para seleccion de las formas o burbujas y su color picker
 **/
+/**
+ @UpdatedBy : Cristian Rueda,   @date 2024-09-17 12:05:48
+ * @description : Se cambian los colores del color de la letra, linea scroll y cuadro seleccionado acorde al formato manejado
+ */
+
+ 
+
+ 
 
 const bubbleStyles = [
     { borderRadius: '0', padding: '0', backgroundColor: "transparent" },
@@ -70,12 +78,16 @@ export default function ScrollableChipText() {
                 sx={{
                     '&.MuiTabs-scrollButtons': {
                         width: '20px',
-                        color: '#284B63',
+                        color: '',
                     },
+                    '& .Mui-selected': {
+                        color: '#CC2905', // Cambia el color del texto del Tab seleccionado
+                    },
+                    
                 }}
                 TabIndicatorProps={{
                     style: {
-                        backgroundColor: "",
+                        backgroundColor: "#CC2905", // Color linea scroll Bubbles
                         height: '4px'
                     }
                 }}

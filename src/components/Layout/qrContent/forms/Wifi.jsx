@@ -1,8 +1,14 @@
 import { useFormik } from "formik";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import instance from "../../../../libs/axios";
 import Swal from "sweetalert2";
 import { useQr } from "../../../../context/QrContext";
+import { useValidate } from "../../../../context/validateFormContext";
+import Skeleton from 'react-loading-skeleton';
+import 'react-loading-skeleton/dist/skeleton.css';
+import SkeletonWifi from "./Skeleton/SkeletonWifi";
+
+
 
 function FormWifi() {
     const [initialValues, setInitialValues] = useState({
@@ -12,12 +18,25 @@ function FormWifi() {
     });
 
     const { qrData, setQrData } = useQr();
+    const {validateFormWifi,setValidateFormWifi}=useValidate();
+    const [loading, setLoading] = useState(true); // Por defecto está cargando
 
     const handleWifiLink = (link) => {
         setQrData(link);
     };
 
     let wifiLink;
+
+    const validateFormFields=()=>{
+        if (Object.keys(formik.errors).length > 0) {
+            setValidateFormWifi(false);
+            return false;
+          } else {
+            setValidateFormWifi(true);
+            return true;
+          }
+      }
+
 
     const getWifi = async () => {
         try {
@@ -67,7 +86,7 @@ function FormWifi() {
             errors.ssid = "SSID is required";
         }
 
-        if (!values.security_type) {
+        if (values.security_type=='selecciona') {
             errors.security_type = "Security type is required";
         }
 
@@ -119,10 +138,33 @@ function FormWifi() {
         }
     });
 
+    useEffect(()=>{
+        validateFormFields();
+    },[formik.errors])
+
+        // Skeleton Loader
+        useEffect(() => {
+            setTimeout(() => {
+              setLoading(false); // Cambia a false una vez que los datos hayan cargado
+            }, 10000); // Tiempo simulado de carga
+          }, []);   
+
     return (
         <div>
+                {/* Mostrar el Skeleton mientras loading sea verdadero */}
+                {loading ? (
+
+                    <SkeletonWifi />
+        
+                ) : (
+                  <div>
+        <div>
             <div className="flex items-center mt-6 mb-4">
-                <button type="button" onClick={getWifi} className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600" disabled={formik.isSubmitting}>
+                <button type="button" onClick={getWifi} className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600" 
+                            style={{ backgroundColor: '#284B63', color: '#fff' }}
+                            onMouseEnter={(e) => e.target.style.backgroundColor = '#3C6E71'} // Cambia el color al hacer hover
+                            onMouseLeave={(e) => e.target.style.backgroundColor = '#284B63'} // Vuelve al color original al salir del hoover
+                            disabled={formik.isSubmitting}>
                     Get Wifi Data
                 </button>
             </div>
@@ -178,10 +220,13 @@ function FormWifi() {
                         <div className="relative text-red-500 text-sm">{formik.errors.password}</div>
                     ) : null}
                 </div>
-                <button type="submit" className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600" disabled={formik.isSubmitting}>
+                <button type="submit" className="px-4 py-2 bg-dark-blue text-white rounded hover:bg-light-blue" disabled={formik.isSubmitting}>
                     Submit
                 </button>
             </form>
+        </div>
+    </div>
+                )}
         </div>
     );
 }

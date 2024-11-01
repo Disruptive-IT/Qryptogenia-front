@@ -6,32 +6,46 @@ import axios from "../../../libs/axios";
 import { toast } from 'sonner';
 import Swal from 'sweetalert2';
 import html2canvas from 'html2canvas';
+import { useValidate } from '../../../context/validateFormContext';
 /*
  * @UpdatedBy : Cristian Escobar,   @date 2024-09-03 15:05:11
  * @description : Se implemento la captura del qr con canvas y la transformacion a base64 para almacenarse en la base de datos.
  */
 export const saveQrData = async (
-    qrName, data, qrType, qrColor, qrBgColor, qrProps, qrImageInfo, qrTextProps, appFormValues, socialFormValues, musicFormValues, qrBase64, currentContentType, location, qrId, uniqueKey
+    qrName, data, qrType, qrColor, qrBgColor, qrProps, qrImageInfo, qrTextProps, appFormValues, socialFormValues, musicFormValues, menuFormValues, qrBase64, currentContentType, location, qrId, uniqueKey, pdfFormValues
 ) => {
     
 
     const removeIconFromSelectOptions = (options) => {
         return options.map(option => {
-            const { url, ...rest } = option; 
+            const { icon, ...rest } = option; 
             return rest; 
         });
     };
+
+    console.log(qrType);
 
     const qrData = {
         qr: {
             qrName: qrName || '',
             data: uniqueKey,
-            qrType,
+            qrType:currentContentType,
             qrColor,
             qrBgColor,
             url: data
         },
-        qrPreview: {
+        qrPreview:currentContentType==='food-menu' ? {
+            restaurantName:menuFormValues.restaurantName,
+            restaurantLogo:menuFormValues.restaurantLogo,
+            backgroundCard:menuFormValues.backgroundCard,
+            colorMenu:menuFormValues.colorMenu,
+            idFontPreview:menuFormValues.idFontPreview,
+            idUserTemplate:menuFormValues.idUserTemplate,
+            idImgTemplate:menuFormValues.idImgTemplate,
+            category:menuFormValues.category
+        } 
+        : 
+        {
             title: currentContentType === 'social-media' ? socialFormValues.title : currentContentType === 'music' ? musicFormValues.title : appFormValues.title,
             colorTitle: currentContentType === 'social-media' ? socialFormValues.colorTitle : currentContentType === 'music' ? musicFormValues.colorTitle : appFormValues.colorTitle,
             description: currentContentType === 'social-media' ? socialFormValues.description : currentContentType === 'music' ? musicFormValues.description : appFormValues.description,
@@ -41,6 +55,7 @@ export const saveQrData = async (
             imgBoxBackgroud: currentContentType === 'social-media' ? socialFormValues.image : currentContentType === 'music' ? musicFormValues.image : appFormValues.image,
             backgroudColor: currentContentType === 'social-media' ? socialFormValues.backgroundColor : currentContentType === 'music' ? musicFormValues.backgroundColor : appFormValues.backgroundColor,
             SelectOptions: currentContentType === 'social-media' ? removeIconFromSelectOptions(socialFormValues.selectedOptions) : currentContentType === 'music' ? removeIconFromSelectOptions(musicFormValues.selectedOptions) : removeIconFromSelectOptions(appFormValues.selectedOptions),
+            idFontPreview: currentContentType === 'social-media' ? socialFormValues.idFontPreview : currentContentType === 'music' ? musicFormValues.idFontPreview : appFormValues.idFontPreview
         },
         qrText: {
             text: qrTextProps.qrText || '', 
@@ -100,7 +115,11 @@ export const saveQrData = async (
                 icon: 'info',
                 showCancelButton: true,
                 confirmButtonText: 'Go to login',
-                cancelButtonText: 'Cancel'
+                cancelButtonText: 'Cancel',
+                customClass: {
+                    confirmButton: 'swal2-confirm',
+                    cancelButton: 'swal2-cancel'
+                  }
             }).then((result) => {
                 if (result.isConfirmed) {
                     window.location.href = 'http://localhost:5173/login';
@@ -162,7 +181,7 @@ const QR = ({ uniqueKey }) => {
                 qrCode.current = new QRCodeStyling({
                     width: 1000,
                     height: 1000,
-                    data: `http://localhost:3000/qr/scan/${uniqueKey}`,
+                    data: `https://mesadoko.com/fractal.html`, //modificar aqui para crear url directa
                     dotsOptions: {
                         color: qrProps.dotsColor,
                         type: qrProps.dotsType || 'rounded'
@@ -189,7 +208,7 @@ const QR = ({ uniqueKey }) => {
                 qrCode.current.append(qrRef.current);
             } else {
                 qrCode.current.update({
-                    data: `http://localhost:3000/qr/scan/${uniqueKey}`,
+                    data: `https://mesadoko.com/fractal.html`, //modificar aqui para crear url directa
                     margin: 10,
                     backgroundOptions: {
                         color: "transparent",

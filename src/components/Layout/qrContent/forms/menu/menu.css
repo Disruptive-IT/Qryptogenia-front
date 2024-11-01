@@ -1,0 +1,44 @@
+input{
+    border: 1px solid #000;
+}
+
+.colorPicker{
+    position: absolute;
+    width: 8%;
+    transform: translateY(20%);
+}
+.colorPickerr {
+    position: absolute;
+    width: 6%;
+    transform: translateX(220%);
+}
+.menuPicker{
+  position:absolute;
+  width:6%;
+  transform:translateX(170%);
+}
+.scroll-container::-webkit-scrollbar {
+    width: 12px;
+  }
+  
+  .scroll-container::-webkit-scrollbar-track {
+    background: #f1f1f1;
+  }
+  
+  .scroll-container::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 10px;
+  }
+  
+  .scroll-container::-webkit-scrollbar-thumb:hover {
+    background: #555;
+  }
+.scroll-container {
+    scrollbar-width: thin;
+    scrollbar-color: #888 #f1f1f1;
+  }
+.error{
+  color:red;
+  margin: 4px;
+}
+  

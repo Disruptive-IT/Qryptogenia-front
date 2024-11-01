@@ -1,0 +1,101 @@
+*   [33m62efda68[m[33m ([m[1;36mHEAD -> [m[1;32mbotones-cambio-color[m[33m)[m Merge branch 'dev' of https://github.com/Disruptive-IT/Qryptogenia-front into dev
+[31m|[m[32m\[m  
+[31m|[m *   [33m932fa1b6[m Merge remote-tracking branch 'origin/CrudMember' into dev
+[31m|[m [33m|[m[34m\[m  
+[31m|[m [33m|[m * [33m35a6f3ac[m[33m ([m[1;31morigin/CrudMember[m[33m)[m CreateQrUpgrade
+[31m|[m * [34m|[m [33m6125ef8c[m se ajustan los formularios de auth en los iconos
+[31m|[m * [34m|[m [33m6b79d6f6[m se realizan ajustes al paginador en estilos
+[31m|[m * [34m|[m [33m6aeb7a79[m Se corrige que los links se chocan con el celular en home page
+[31m|[m * [34m|[m [33m0e2c2041[m se corrige un devorde que tenia el contenedor que generaba scroll horizontal
+[31m|[m * [34m|[m [33mb1ecdcd4[m se realiza adit fix para las dependencias que estaban generando hight vulneravility
+[31m|[m * [34m|[m [33me7584238[m se ajusta tamaño de las cards en español para que no se desborden
+[31m|[m * [34m|[m   [33m9827e6f9[m Merge branch 'modal' into dev
+[31m|[m [35m|[m[36m\[m [34m\[m  
+[31m|[m [35m|[m * [34m|[m [33mf5375808[m form wifi actualizado logica de envio
+[31m|[m [35m|[m * [34m|[m [33mde96713d[m wifi funcional
+[31m|[m [35m|[m * [34m|[m [33mf5a957c8[m 123
+[31m|[m [35m|[m * [34m|[m [33m6cee7306[m correcion de migracion merge
+[31m|[m [35m|[m * [34m|[m   [33ma95e7bb2[m Merge branch 'dev' into modal
+[31m|[m [35m|[m [1;31m|[m[1;32m\[m [34m\[m  
+[31m|[m [35m|[m * [1;32m|[m [34m|[m [33m78c76540[m se cuadro form de wifi y parte de descuentos
+[31m|[m [35m|[m * [1;32m|[m [34m|[m [33mcdb756ad[m se hizo formulario de wifi
+[31m|[m * [1;32m|[m [1;32m|[m [34m|[m   [33m13d18b75[m Merge branch 'dev' of https://github.com/Disruptive-IT/Qryptogenia-front into dev
+[31m|[m [1;32m|[m[34m\[m [1;32m\[m [1;32m\[m [34m\[m  
+[31m|[m [1;32m|[m [34m|[m[1;32m_[m[1;32m|[m[1;32m/[m [34m/[m  
+[31m|[m [1;32m|[m[1;32m/[m[34m|[m [1;32m|[m [34m/[m   
+[31m|[m [1;32m|[m [34m|[m [1;32m|[m[34m/[m    
+[31m|[m [1;32m|[m [34m|[m[34m/[m[1;32m|[m     
+[31m|[m [1;32m|[m * [1;32m|[m [33m2cbd2f82[m translate
+[31m|[m * [1;34m|[m [1;32m|[m [33mc533cf07[m Merge branch 'dev' of https://github.com/Disruptive-IT/Qryptogenia-front into dev
+[31m|[m [1;32m|[m[1;34m\[m[1;34m|[m [1;32m|[m 
+[31m|[m [1;32m|[m [1;34m|[m[1;32m/[m  
+[31m|[m [1;32m|[m[1;32m/[m[1;34m|[m   
+[31m|[m [1;32m|[m * [33m441e078c[m DiscountMember
+[31m|[m [1;32m|[m *   [33m5d703286[m Merge remote-tracking branch 'origin/modal' into FormEdit2
+[31m|[m [1;32m|[m [31m|[m[32m\[m  
+[31m|[m [1;32m|[m * [32m|[m [33m2201b618[m EditTable
+[31m|[m [1;32m|[m * [32m|[m   [33m067db0ca[m Merge remote-tracking branch 'origin/dev' into FormEdit2
+[31m|[m [1;32m|[m [33m|[m[34m\[m [32m\[m  
+[31m|[m [1;32m|[m [33m|[m * [32m|[m [33m22cc4930[m Documentacion restante
+[31m|[m [1;32m|[m [33m|[m * [32m|[m [33m0a76bd10[m Ajustes estados y envio del data del qr
+[31m|[m [1;32m|[m [33m|[m * [32m|[m   [33m101d5d51[m Merge branch 'router_validation' into dev
+[31m|[m [1;32m|[m [33m|[m [35m|[m[36m\[m [32m\[m  
+[31m|[m [1;32m|[m [33m|[m [35m|[m * [32m|[m [33m77745e56[m Ajustes estados logo y envio de qrData
+[31m|[m [1;32m|[m [33m|[m [35m|[m * [32m|[m [33md4f69ca8[m Unificacion del menu responsive y posicionar btn finish
+[31m|[m [1;32m|[m [33m|[m * [36m|[m [32m|[m [33m9294ce6f[m se implementa cambio de fuente en y se adecuan algunos estilos
+[31m|[m [1;32m|[m [33m|[m [36m|[m[36m/[m [32m/[m  
+[31m|[m [1;32m|[m * [36m|[m [32m|[m [33m3a11068c[m TableMemberships
+[31m|[m [1;32m|[m * [36m|[m [32m|[m [33ma2643d6f[m Merge remote-tracking branch 'origin/main' into FormEdit2
+[31m|[m [1;32m|[m [1;31m|[m[36m\[m[36m|[m [32m|[m 
+[31m|[m [1;32m|[m * [36m|[m [32m|[m [33m23182563[m editForm
+[31m|[m * [1;32m|[m [36m|[m [32m|[m [33m526abce7[m se arregla renderizado al actualizar descuento
+[31m|[m [32m|[m [1;32m|[m[32m_[m[36m|[m[32m/[m  
+[31m|[m [32m|[m[32m/[m[1;32m|[m [36m|[m   
+[31m|[m * [1;32m|[m [36m|[m [33m5863c0b5[m se arreglo renderizado , crud de descuentos
+[31m|[m * [1;32m|[m [36m|[m [33m1dbf85f5[m se coriijieron estilos en componente discount
+[31m|[m * [1;32m|[m [36m|[m [33m9854e3cc[m se cuadraron estilos y responsive del modal
+[31m|[m * [1;32m|[m [36m|[m [33m21069a53[m se cuadro vistas de discount y de formularios
+[31m|[m * [1;32m|[m [36m|[m [33m25335144[m modal con formulario de descuento hecha
+[31m|[m * [1;32m|[m [36m|[m [33m57b22cc2[m se modificaron unos estilos en los formularios de qr y se quito titulo del form
+[31m|[m * [1;32m|[m [36m|[m   [33mfa61d202[m Merge branch 'main' into modal
+[31m|[m [1;33m|[m[1;34m\[m [1;32m\[m [36m\[m  
+[31m|[m * [1;34m|[m [1;32m|[m [36m|[m [33mc09e33f7[m se comento por ahora componente de barra de busqueda
+[31m|[m * [1;34m|[m [1;32m|[m [36m|[m [33m53cf5818[m se hizo datatable de los descuentos
+[31m|[m * [1;34m|[m [1;32m|[m [36m|[m [33m09067f37[m se agregaron u8nas pequeñas animaciones en el datatata
+[31m|[m * [1;34m|[m [1;32m|[m [36m|[m [33m012d74a6[m se acomodo boton cerrar y handleclose del modal
+* [1;34m|[m [1;34m|[m [1;32m|[m [36m|[m [33m21c58149[m[33m ([m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m, [m[1;32mmain[m[33m)[m se implenta audit fix para las dependecias que se actualizaron
+[36m|[m [1;34m|[m[36m_[m[1;34m|[m[36m_[m[1;32m|[m[36m/[m  
+[36m|[m[36m/[m[1;34m|[m [1;34m|[m [1;32m|[m   
+* [1;34m|[m [1;34m|[m [1;32m|[m [33m1032dd60[m se ajustan estilos
+[1;34m|[m [1;34m|[m[1;34m/[m [1;32m/[m  
+[1;34m|[m[1;34m/[m[1;34m|[m [1;32m|[m   
+* [1;34m|[m [1;32m|[m [33m44a949f5[m Modificacion Skeleton qrScan
+* [1;34m|[m [1;32m|[m [33m52ab4f30[m Correccion del responsive QrCustom
+* [1;34m|[m [1;32m|[m [33m18ffbfff[m Correccion del los estados y responsive del color picker: color de texto, burbuja y marco
+* [1;34m|[m [1;32m|[m [33m0502ee7b[m Modificacion sidebar responsive
+* [1;34m|[m [1;32m|[m [33m03ba8eba[m Ajustes header y rutas de los elemntos
+[1;32m|[m [1;34m|[m[1;32m/[m  
+[1;32m|[m[1;32m/[m[1;34m|[m   
+* [1;34m|[m [33m258d65d5[m Agregar codigo social button
+[1;34m|[m[1;34m/[m  
+* [33m53a7c6d5[m Eliminacion del console log de qrscan
+* [33m0d82de82[m Ajustes planes
+*   [33m0f4745ee[m Merge branch 'main' of https://github.com/Disruptive-IT/Qryptogenia-front
+[1;35m|[m[1;36m\[m  
+[1;35m|[m * [33mee8bab3d[m se cambia el nombre en el navegado a Qryptogenia
+* [1;36m|[m [33mf2435081[m ButtonsPreview
+* [1;36m|[m [33m59afbb79[m Merge branch 'main' of https://github.com/Disruptive-IT/Qryptogenia-front
+[31m|[m[1;36m\[m[1;36m|[m 
+[31m|[m *   [33m4962e229[m Merge branch 'main' of https://github.com/Disruptive-IT/Qryptogenia-front
+[31m|[m [33m|[m[34m\[m  
+[31m|[m [33m|[m *   [33maa30b632[m Merge branch 'alert-design'
+[31m|[m [33m|[m [35m|[m[36m\[m  
+[31m|[m [33m|[m [35m|[m * [33m1c890cac[m index actualizado
+[31m|[m [33m|[m [35m|[m *   [33me7d69a25[m Merge branch 'main' into alert-design
+[31m|[m [33m|[m [35m|[m [1;31m|[m[1;32m\[m  
+[31m|[m [33m|[m [35m|[m * [1;32m|[m [33me10ead53[m reutilizar compinete preview celphone
+[31m|[m [33m|[m [35m|[m * [1;32m|[m [33m5e366696[m cambios de estilo modal y preview celular en forms
+[31m|[m [33m|[m [35m|[m * [1;32m|[m [33mcadc3af6[m modal respoonsive y imagen del celular configurada, estilo boton save arreglado
+[31m|[m * [35m|[m [1;32m|[m [1;32m|[m [33m1cbeeb3a[m se crea y se agrega al menu la nueva vista de precios y planes
+* [1;32m|[m [35m|[m [1;32m|[m [1;32m|[m [33m931f1409[m responsiveCel
+[35m|[m [1;32m|[m[35m/[m [1;32m/[m [1;

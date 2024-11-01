@@ -5,46 +5,77 @@
  * @return : Un componente de perfil que muestra la información del usuario, permite cambiar la imagen de perfil y abrir un modal para cambiar la contraseña.
  */
 
+
+// Profile.jsx
 import React, { useState, useRef, useEffect, useContext } from "react";
-import EditIcon from "@mui/icons-material/Edit";
 import Button from "@mui/material/Button";
 import MyModal from "./modal";
 import UserInfo from "./userInfo";
 import ChangePasswordForm from "./changePasswordForm";
 import { AuthContext } from "../../../context/AuthContext";
 import { Toaster, toast } from 'sonner';
+import SubscriptionInfo from "./suscriptionInfo";
 
-
+const defaultAvatar = "https://www.w3schools.com/w3images/avatar2.png"; // URL imagen predeterminada
 
 const Profile = () => {
     const [modalIsOpen, setModalIsOpen] = useState(false);
     const formRef = useRef(null);
     const fileInputRef = useRef(null);
-    const { fetchUserData } = useContext(AuthContext);
+    const { fetchUserData, updateProfileImage } = useContext(AuthContext);
     const [user, setUser] = useState(null);
-    const { updateProfileImage, profileImage, changeProfilePicture } = useContext(AuthContext);
+    const [avatar, setAvatar] = useState(defaultAvatar);
+    const [isGoogleUser, setIsGoogleUser] = useState(false); // Estado para verificar si es usuario de Google
 
-    // Cargar la imagen de perfil cuando el componente se monte
-    useEffect(() => {
-        async function fetchData() {
-            try {
-              const userData = await fetchUserData();
-              setUser(userData);
-            } catch (error) {
-              console.error("Error fetching user data:", error);
-            }
-          }
-  
-          fetchData();
-        }, [fetchUserData]);
+    const [subscriptionInfo, setSubscriptionInfo] = useState({
+        plan: "Basic",
+        expirationDate: "2024-12-31",
+        benefits: ["Escaneos de Qrs/Mes 10000", "5 Qrs activos"],
+    });
 
-    // Manejar el cambio de imagen de perfil
+        /**
+     @UpdatedBy : Cristian Rueda,   @date 2024-09-26 17:46:36
+     * @description :Apartado para traer la foto del perfil dado que el usuario se registre con Email (Traer iamgen predeterminada).
+                    SubscriptionInfo usado para traer en el perfil la informacion del plan que esta menejando el usuario
+     */
+                    useEffect(() => {
+                        async function fetchData() {
+                            try {
+                                const userData = await fetchUserData();
+                                setUser(userData);
+                                console.log("User Data:", userData);
+                    
+                                // Verifica si el usuario es de Google y tiene una foto
+                                if (userData.info.authProvider === 'google') {
+                                    setIsGoogleUser(true);
+                                    // Si es usuario de Google, usa la imagen de Google
+                                    setAvatar(userData.info.profile_picture || defaultAvatar);
+                                } else {
+                                    setIsGoogleUser(false);
+                                    // Si no es usuario de Google, usa su imagen o la predeterminada si no tiene
+                                    setAvatar(userData.info.profile_picture || defaultAvatar);
+                                }
+                    
+                                if (userData.membership) {
+                                    setSubscriptionInfo({
+                                        plan: userData.membership.type_membership,
+                                        expirationDate: userData.membership.limit_date,
+                                        benefits: userData.membership.benefits || [],
+                                    });
+                                }
+                            } catch (error) {
+                                console.error("Error fetching user data:", error);
+                            }
+                        }
+                    
+                        fetchData();
+                    }, [fetchUserData]);
+
     const handleImageChange = async (event) => {
         const file = event.target.files[0];
         if (file) {
             const result = await changeProfilePicture(file);
             if (result.success) {
-                // Actualiza la imagen de perfil llamando a la función updateProfileImage
                 updateProfileImage();
                 toast.success('Profile picture successfully changed');
             } else {
@@ -54,29 +85,9 @@ const Profile = () => {
         }
     };
 
-    const modalActions = [
-        {
-            label: "Confirm",
-            onClick: () => {
-                formRef.current.submitForm();
-            },
-        },
-        {
-            label: "Cancel",
-            onClick: () => {
-                setModalIsOpen(false);
-            },
-            color: "error",
-            variant: "contained",
-            style: { color: "white" },
-        },
-    ];
-
     return (
-        <div className="bg-white flex justify-center items-center mt-10 mx-4 lg:mx-20 rounded-3xl">
+        <div className=" flex justify-center items-center mt-10 mx-4 lg:mx-20 rounded-3xl ">
             <div className="flex flex-col lg:flex-row lg:w-11/12 mx-2 lg:mx-8 my-8 lg:my-16 rounded-3xl bg-MyBlack lg:min-h-[30vh] sm:min-h-[40vh]">
-                <div className="border-solid lg:border-MyGray lg:border-r flex flex-col lg:w-4/12 justify-center items-center">
-                    <a className="mt-0 text-xl p-2">{user?.info?.rol === 'CLIENT' ? 'User Settings' : 'Admin Settings'}</a>
                     <input
                         type="file"
                         accept="image/*"
@@ -84,27 +95,58 @@ const Profile = () => {
                         onChange={handleImageChange}
                         ref={fileInputRef}
                     />
-                    <img
-                        src={profileImage}
-                        className="mx-8 my-8 w-32 h-32 rounded-full cursor-pointer"
-                        alt="Profile"
-                        onClick={() => fileInputRef.current.click()} // Abre el selector de archivo cuando se hace clic en la imagen
-                    />
-                </div>
-                <div className="flex flex-col w-full lg:w-8/12">
-                    <div className="w-full p-4 lg:p-16 text-MyGray">
-                        <UserInfo setUser user />
-                    </div>
-                    <div className="flex justify-center w-full h-2/6 pb-3 space-x-4">
-                        <Button
-                            className="h-12 lg:w-48 mt-6 rounded-3xl"
-                            style={{ backgroundColor: "#3C6E71", color: "#D9D9D9" }}
-                            onClick={() => setModalIsOpen(true)}
-                        >
-                            Edit Password
-                        </Button>
+                      
+
+                            <SubscriptionInfo 
+                                className="subscription-info w-full p-8 rounded-lg "
+                                plan={subscriptionInfo.plan}
+                                expirationDate={subscriptionInfo.expirationDate}
+                                benefits={subscriptionInfo.benefits}
+                            />
+                        
+    <div className="flex flex-col items-center lg:w-8/12 lg:items-start">
+            <div className="flex flex-col lg:flex-row lg:justify-between p-4 lg:p-16 text-MyGray items-center lg:items-start">
+                
+                {/* Foto de perfil */}
+                <img
+                    src={avatar}
+                    className="mx-20 my-8 w-32 h-32 rounded-full cursor-pointer"
+                    alt="Profile"
+                    onClick={() => fileInputRef.current.click()}
+                />
+
+                <div className="w-full mt-4 lg:ml-8 lg:mt-0 lg:w-3/6">
+                    <UserInfo setUser={setUser} user={user} />
+
+                    <div className="items-center mt-6 w-full h-2/6 pb-3 space-x-4">
+                        {/* Mostrar el botn de Editar Contraseña solo si el usuario no es de Google*/}
+                        {!isGoogleUser && (
+                            <Button
+                                className="h-12 lg:w-48 mt-4 rounded-3xl"
+                                style={{ backgroundColor: "#3C6E71", color: "#D9D9D9" }}
+                                onClick={() => setModalIsOpen(true)}
+                            >
+                                Edit Password
+                            </Button>
+                        )}
                         <MyModal
-                            actions={modalActions}
+                            actions={[
+                                {
+                                    label: "Confirm",
+                                    onClick: () => {
+                                        formRef.current.submitForm();
+                                    },
+                                },
+                                {
+                                    label: "Cancel",
+                                    onClick: () => {
+                                        setModalIsOpen(false);
+                                    },
+                                    color: "error",
+                                    variant: "contained",
+                                    style: { color: "white" },
+                                },
+                            ]}
                             open={modalIsOpen}
                             title={<h1>EDIT PASSWORD</h1>}
                             onClose={() => setModalIsOpen(false)}
@@ -114,8 +156,12 @@ const Profile = () => {
                     </div>
                 </div>
             </div>
+                   
+                </div>
+            </div>
         </div>
     );
 };
 
 export default Profile;
+

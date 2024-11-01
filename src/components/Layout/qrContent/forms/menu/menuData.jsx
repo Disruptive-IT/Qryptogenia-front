@@ -1,0 +1,23 @@
+export const menuFormData={
+    restaurantName:"",
+    restaurantLogo:null,
+    backgroundCard:"#000",
+    colorMenu:'#fff',
+    idFontPreview:null,
+    idUserTemplate:null,
+    idImgTemplate:null,
+    category:[{
+        categoryName:"",
+        products:[{
+            backgroundProductCard:"#fff",
+            colorName:"#000",
+            colorDescription:"#000",
+            colorPrice:"#000",
+            productImg:null,
+            productName:"",
+            productDescription:"",
+            top:false,
+            price:null
+        }]
+    }]
+}

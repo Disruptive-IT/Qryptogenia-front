@@ -30,6 +30,8 @@ export const StoreLayout = ({ appFormValues }) => {
     const backgroundcolor = appFormValues.backgroundColor;
     const description = appFormValues.description;
     const logo = appFormValues.image
+    const [fontPreview,setFontPreview]=useState({});
+    const {getNameFont}=UseMenu();
 
     const options = [
         {
@@ -64,7 +66,6 @@ export const StoreLayout = ({ appFormValues }) => {
           }
     ];
 
-
     const data = Array.isArray(appFormValues.selectedOptions)
     ? appFormValues.selectedOptions.map(option => {
       const originalOption = options.find(opt => opt.value === option.value);
@@ -78,10 +79,15 @@ export const StoreLayout = ({ appFormValues }) => {
     })
     : [];
 
+    useEffect(()=>{
+      getNameFont(appFormValues?.idFontPreview,setFontPreview);
+      console.log("letraa ");
+    },[appFormValues?.idFontPreview])
+
     return (
         <div
   className="flex flex-col min-h-screen w-full items-center justify-center"
-  style={{ background: backgroundcolor }}
+  style={{ background: backgroundcolor,fontFamily:fontPreview?.fontName}}
 >
   <div
     className="flex flex-col items-center mt-10 md:mt-28 bg-white rounded-2xl w-[90%] sm:w-[400px] md:w-[600px] min-h-[400px] max-h-[600px] p-6 shadow-lg"

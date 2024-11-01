@@ -9,7 +9,10 @@ import { useTranslation } from 'react-i18next';
  * @description : Componente de la seccion frame o texto. El contenido es dedicado a establecer el texto y su posicion
  * @return : Retorna el input para escritura del usuario y los tabs para seleccion de la posicion del texto
 **/
-
+/**
+ @UpdatedBy : Cristian Rueda,   @date 2024-09-17 13:13:48
+ * @description : Se cambian los colores del color de la letra, linea scroll y cuadro seleccionado acorde al formato manejado
+ */
 
 
 export default function ScrollableInputText() {
@@ -54,6 +57,9 @@ export default function ScrollableInputText() {
                 </span>
             </div>
             <div className='flex justify-between gap-4 pt-4'>
+                
+ 
+
                 <Tabs
                     value={value}
                     onChange={handleTabChange}
@@ -63,22 +69,26 @@ export default function ScrollableInputText() {
                     sx={{
                         '&.MuiTabs-scrollButtons': {
                             width: '20px',
-                            color: '#284B63',
+                            color: '',
                         },
                     }}
                     TabIndicatorProps={{
                         style: {
-                            backgroundColor: "",
-                            height: '4px'
+                            backgroundColor: "#CC2905", // Color linea scroll de 'Position text'
+                            height: '4px',
                         }
                     }}
-                >
+                    >
                     {Object.keys(positionStyles).map((key, index) => (
-                        <Tab
-                            key={index}
-                            sx={{ margin: "5px" }}
-                            label={<span>{key}</span>}
-                        />
+                   <Tab
+                       key={index}
+                       sx={{
+                        '&.Mui-selected': {  
+                            color: '#CC2905', // Cambia el color del texto del tab seleccionado
+                        },
+                       }}
+                       label={<span>{key}</span>}
+                   />
                     ))}
                 </Tabs>
             </div>

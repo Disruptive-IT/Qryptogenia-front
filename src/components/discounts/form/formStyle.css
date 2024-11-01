@@ -8,3 +8,34 @@ input[type="number"]::-webkit-outer-spin-button {
 input[type="number"] {
     -moz-appearance: textfield; /* Firefox */
 }
+
+.select__control {
+    border-color: #d1d5db !important; /* Color gris por defecto */
+    box-shadow: none !important; /* Sin sombra */
+    outline: none !important; /* Elimina el outline */
+  }
+  
+  .select__control--is-focused {
+    border-color: #d1d5db !important; /* Mantener el borde gris cuando está enfocado */
+    box-shadow: none !important; /* Sin sombra al enfocar */
+    outline: none !important; /* Asegura que no haya contorno de foco */
+  }
+  
+  .select__control:focus {
+    border-color: #d1d5db !important; /* Borde gris al enfocar */
+    outline: none !important; /* Elimina cualquier outline por defecto */
+  }
+  
+  .select__multi-value {
+    background-color: #f0f4f8; /* Fondo de cada opción seleccionada */
+  }
+  
+  .select__multi-value__label {
+    color: #333; /* Color del texto en cada opción */
+  }
+  
+
+
+
+
+  

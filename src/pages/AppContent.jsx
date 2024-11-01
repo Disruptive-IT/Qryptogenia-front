@@ -19,11 +19,15 @@ import axios from 'axios';
 import { OptionBarTwo } from '../components/Layout/optionBar';
 import { useQr } from '../context/QrContext';
 import { useTranslation } from 'react-i18next';
+import { UseMenu } from '../components/Layout/qrContent/forms/menu/menuContext';
+import { menuFormData } from '../components/Layout/qrContent/forms/menu/menuData';
 Modal.setAppElement('#root');
 
 const initialAppFormValues = Valuesjson.appFormValues;
 const initialSocialFormValues = Valuesjson.socialFormValues;
 const initialMusicFormValues = Valuesjson.musicFormValues;
+const initialMenuValues=menuFormData;
+const initialPdfValues=Valuesjson.pdfFormValues;
 
 const AppContent = () => {
     const { contentName, id } = useParams(); // Asegúrate de que qrId está presente en la ruta
@@ -41,6 +45,8 @@ const AppContent = () => {
         appFormValues,
         setAppFormValues,
         musicFormValues,
+        menuFormValues,
+        setMenuFormValues,
         setMusicFormValues,
         socialFormValues,
         setSocialFormValues,
@@ -61,6 +67,7 @@ const AppContent = () => {
         setTextChipColor,
         setQrImage
     } = useQr();
+    const {formData,setFormData}=UseMenu();
     const [valuesLoaded, setValuesLoaded] = useState(false);
     const [isModalOpen, setIsModalOpen] = useState(false);
     setCurrentContentType(contentName);
@@ -71,87 +78,157 @@ const AppContent = () => {
         const fetchQRData = async () => {
             if (location.pathname.includes('/edit')) {
                 try {
-                    const response = await axios.get(`http://localhost:3000/api/qr/getpreview/${id}`, {
+                    const response = await axios.get(`http://localhost:3000/api/qr/getPreviewUpdate/${id}`, {
                         withCredentials: true,
                     });
-    
-                    const {
-                        title, colorTitle, description, descriptionColor, boxColor, borderImg, image, backgroundColor, selectedOptions, frame, frameColor, dots, cornerSquare, cornerDot, text, colorText, position, qrTextBubble = {}, qrTextFont = {}, logo
-                    } = response.data;
-    
+                
+                    const { typeQr } = response.data;
+                
+                    // Declaramos las variables fuera del `if` para que estén disponibles después
+                    let restaurantName, restaurantLogo, backgroundCard, colorMenu, idFontPreview, idImgTemplate,idUserTemplate,category, frameColor, dots, cornerSquare, cornerDot, text, colorText, position, qrTextBubble = {}, qrTextFont = {}, logo;
+                
+                    let title, colorTitle, description, descriptionColor, boxColor, borderImg, image, backgroundColor, selectedOptions, frame;
+                
+                    if (typeQr === "food-menu") {
+                        ({
+                            restaurantName,
+                            restaurantLogo,
+                            backgroundCard,
+                            colorMenu,
+                            idFontPreview,
+                            idImgTemplate,
+                            idUserTemplate,
+                            category,
+                            frameColor,
+                            dots,
+                            cornerSquare,
+                            cornerDot,
+                            text,
+                            colorText,
+                            position,
+                            qrTextBubble = {},
+                            qrTextFont = {},
+                            logo,
+                        } = response.data);
+                    } else {
+                        ({
+                            title,
+                            colorTitle,
+                            description,
+                            descriptionColor,
+                            boxColor,
+                            borderImg,
+                            image,
+                            backgroundColor,
+                            selectedOptions,
+                            idFontPreview,
+                            frame,
+                            frameColor,
+                            dots,
+                            cornerSquare,
+                            cornerDot,
+                            text,
+                            colorText,
+                            position,
+                            qrTextBubble = {},
+                            qrTextFont = {},
+                            logo,
+                        } = response.data);
+                    }
+                
+                    // Función para establecer el marco según el tipo de frame
                     const setMarcoTypes = (frame) => {
                         let marcoData;
-    
-                        if (frame === 'circle') {
-                            marcoData = { id: 2, type: 'circle', icon: 'MdOutlineQrCode2', style: { borderRadius: '50%', borderColor: '#000000', padding: '35px' }, shape: 'circle', backgroundType: 'pattern' };
-                        } else if (frame === 'square') {
-                            marcoData = { id: 3, type: 'square', icon: 'MdOutlineQrCode2', style: { borderRadius: '0', borderColor: '#000000', padding: '25px' }, shape: 'square', backgroundType: 'pattern' };
-                        } else if (frame === 'rounded') {
-                            marcoData = { id: 4, type: 'rounded', icon: 'MdOutlineQrCode2', style: { borderRadius: '15px', borderColor: '#000000', padding: '25px' }, shape: 'rounded', backgroundType: 'pattern' };
-                        } else if (frame === 'hexagon') {
-                            marcoData = { id: 5, type: 'hexagon', icon: 'MdOutlineQrCode2', style: { clipPath: 'polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 24%)', borderColor: '#000000 ', padding: '35px' }, shape: 'hexagon', backgroundType: 'pattern' };
-                        } else if (frame === 'octagon') {
-                            marcoData = { id: 6, type: 'octagon', icon: 'MdOutlineQrCode2', style: { clipPath: 'polygon(30% 0%, 70% 0%, 100% 30%, 100% 70%, 70% 100%, 30% 100%, 0% 70%, 0% 30%)', borderColor: '#000000', padding: '35px' }, shape: 'octagon', backgroundType: 'pattern' };
-                        } else {
-                            marcoData = { id: 1, type: 'default', icon: 'TbLetterX', style: { borderColor: 'transparent', border: 0, padding: '37px' }, shape: 'none', backgroundType: 'pattern' };
+                
+                        switch (frame) {
+                            case 'circle':
+                                marcoData = { id: 2, type: 'circle', icon: 'MdOutlineQrCode2', style: { borderRadius: '50%', borderColor: '#000000', padding: '35px' }, shape: 'circle', backgroundType: 'pattern' };
+                                break;
+                            case 'square':
+                                marcoData = { id: 3, type: 'square', icon: 'MdOutlineQrCode2', style: { borderRadius: '0', borderColor: '#000000', padding: '25px' }, shape: 'square', backgroundType: 'pattern' };
+                                break;
+                            case 'rounded':
+                                marcoData = { id: 4, type: 'rounded', icon: 'MdOutlineQrCode2', style: { borderRadius: '15px', borderColor: '#000000', padding: '25px' }, shape: 'rounded', backgroundType: 'pattern' };
+                                break;
+                            case 'hexagon':
+                                marcoData = { id: 5, type: 'hexagon', icon: 'MdOutlineQrCode2', style: { clipPath: 'polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 24%)', borderColor: '#000000 ', padding: '35px' }, shape: 'hexagon', backgroundType: 'pattern' };
+                                break;
+                            case 'octagon':
+                                marcoData = { id: 6, type: 'octagon', icon: 'MdOutlineQrCode2', style: { clipPath: 'polygon(30% 0%, 70% 0%, 100% 30%, 100% 70%, 70% 100%, 30% 100%, 0% 70%, 0% 30%)', borderColor: '#000000', padding: '35px' }, shape: 'octagon', backgroundType: 'pattern' };
+                                break;
+                            default:
+                                marcoData = { id: 1, type: 'default', icon: 'TbLetterX', style: { borderColor: 'transparent', border: 0, padding: '37px' }, shape: 'none', backgroundType: 'pattern' };
                         }
-    
-                        // Aquí envías el marcoData a la función que corresponda
-                        setMarcoType(marcoData);
+                
+                        setMarcoType(marcoData); // Actualiza el tipo de marco
                     };
-    
+                
+                    // Llamar a setMarcoTypes si el frame está presente
                     setMarcoTypes(frame);
-    
-                    // Verifica si las propiedades no son undefined antes de actualizar los estados
-                    if (colorText !== undefined) setTextColor(colorText);
-                    if (text !== undefined) setQrText(text);
-                    if (position !== undefined) setQrTextPosition(position);
-                    if (qrTextBubble.burbble !== undefined) setTextChip(qrTextBubble.burbble);
-                    if (qrTextBubble.color !== undefined) setTextChipColor(qrTextBubble.color);
-                    if (cornerDot !== undefined) setCornersDotType(cornerDot);
-                    if (cornerSquare !== undefined) setCornersSquareType(cornerSquare);
-                    if (dots !== undefined) setDotsType(dots);
-                    if (frameColor !== undefined) setQrBgColor(frameColor);
-                    if (qrTextFont.fontFamily !== undefined) setQrFontStyle(qrTextFont.fontFamily);
-                    if (logo !== undefined) setQrImage(logo);
-    
-                    const appValues = {
-                        title,
-                        colorTitle,
-                        description,
-                        descriptionColor,
-                        boxColor,
-                        borderImg,
-                        image,
-                        backgroundColor,
-                        selectedOptions,
-                    };
-                    console.log(appFormValues);
-                    
-    
-                    // Actualiza los valores del formulario solo si no son undefined
+                
+                    // Verificar y actualizar los valores relacionados con el QR
+                    if (colorText) setTextColor(colorText);
+                    if (text) setQrText(text);
+                    if (position) setQrTextPosition(position);
+                    if (qrTextBubble?.burbble) setTextChip(qrTextBubble.burbble);
+                    if (qrTextBubble?.color) setTextChipColor(qrTextBubble.color);
+                    if (cornerDot) setCornersDotType(cornerDot);
+                    if (cornerSquare) setCornersSquareType(cornerSquare);
+                    if (dots) setDotsType(dots);
+                    if (frameColor) setQrBgColor(frameColor);
+                    if (qrTextFont?.fontFamily) setQrFontStyle(qrTextFont.fontFamily);
+                    if (logo) setQrImage(logo);
+                
+                    // Actualización de valores del formulario dependiendo del tipo de QR
+                    const appValues = typeQr === "food-menu"
+                        ? {
+                            restaurantName,
+                            restaurantLogo,
+                            backgroundCard,
+                            colorMenu,
+                            idFontPreview,
+                            idImgTemplate,
+                            idUserTemplate,
+                            category,
+                        }
+                        : {
+                            title,
+                            colorTitle,
+                            description,
+                            descriptionColor,
+                            boxColor,
+                            borderImg,
+                            image,
+                            backgroundColor,
+                            selectedOptions,
+                            idFontPreview
+                        };
+                
+                    // Verificar que los valores no sean undefined antes de actualizar los estados del formulario
                     if (Object.values(appValues).every(value => value !== undefined)) {
                         setAppFormValues(appValues);
                         setSocialFormValues(appValues);
                         setMusicFormValues(appValues);
+                        setFormData(appValues); //valores de qr para menu de comidas
                     }
-    
+                
                     setValuesLoaded(true); // Indicar que los valores se han cargado
                 } catch (error) {
                     console.error('Error fetching QR data:', error);
-                }
+                }                
             } else {
                 // Restablecer los valores de los formularios al cambiar de ruta
                 setAppFormValues(initialAppFormValues);
                 setSocialFormValues(initialSocialFormValues);
                 setMusicFormValues(initialMusicFormValues);
+                setFormData(initialMenuValues);
                 setValuesLoaded(true); // Indicar que los valores se han cargado
             }
             setActiveStep(1);
         };
     
         fetchQRData();
-    }, [location, id, setActiveStep, setAppFormValues, setSocialFormValues, setMusicFormValues]);
+    }, [location, id, setActiveStep, setAppFormValues, setSocialFormValues, setMusicFormValues,setFormData]);
 
     const content = contentTexts[contentName.toLowerCase().replace(/\s+/g, '-')];
     const name = contentName.replace(/-/g, ' ');
@@ -184,6 +261,7 @@ const AppContent = () => {
     const handleTabChange = (newTab) => {
         setSelectedTab(newTab);
     };
+    const isWifiRoute = location.pathname === '/qr/wifi'; //funcion para ocultar el boton Show Preview en la ruta wifi
 
     const isQrRoute = location.pathname.startsWith('/qr/');
     console.log(name)
@@ -191,11 +269,12 @@ const AppContent = () => {
         <>
             {isQrRoute && <OptionBarTwo contentName={contentName} name={name} />}
             <section id='qr-content'>
-                <div className='pl-14 flex flex-col gap-1'>
-                    <h1 className='font-bold text-dark-blue text-3xl'>{name.toUpperCase()}</h1>
+                <div className='pl-14 flex flex-col gap-1;
+'>
+                    <h1 className='font-bold text-dark-blue text-3xl '>{name.toUpperCase()}</h1>
                     <p className='text-sm text-slate-400'>{content}</p>
                 </div>
-                <div className='grid grid-cols-1 lg:grid-cols-5 gap-10 w-11/12 m-auto py-10'>
+                <div className='grid grid-cols-1 lg:grid-cols-5 gap-10 w-11/12 m-auto py-10 '>
                     <div className='col-span-1 lg:col-span-3 bg-white shadow-xl rounded-xl p-6'>
                         <QrContentSwitch
                             contentName={name}
@@ -207,6 +286,7 @@ const AppContent = () => {
                             appFormValues={appFormValues}
                             socialFormValues={socialFormValues}
                             musicFormValues={musicFormValues}
+                            menuFormValues={formData}
                         />
                     </div>
                     <div className='col-span-1 lg:col-span-2'>
@@ -216,6 +296,7 @@ const AppContent = () => {
                                 appFormValues={appFormValues}
                                 socialFormValues={socialFormValues}
                                 musicFormValues={musicFormValues}
+                                menuFormValues={formData}
                                 selectedTab={selectedTab}
                                 onTabChange={handleTabChange}
                                 location={location}
@@ -225,10 +306,14 @@ const AppContent = () => {
                     </div>
                 </div>
             </section>
-
-            <button onClick={openModal} className='block lg:hidden px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 fixed bottom-16 right-4 z-50'>
-                {t("Show Preview")}
+            {/* Hidden para ocultal el boton */}
+            
+            <button 
+                onClick={openModal} 
+                className={`block lg:hidden px-4 py-2 bg-dark-blue text-white rounded hover:bg-light-blue fixed bottom-16 right-4 z-50 ${isWifiRoute ? 'hidden' : ''}`}>
+                {t("Show Preview")} 
             </button>
+            
 
             <Modal
                 isOpen={isModalOpen}
@@ -240,7 +325,7 @@ const AppContent = () => {
                 <div className="bg-transparent p-0 rounded-lg border-none shadow-none flex justify-center items-center w-full h-full">
                     <div className="relative flex justify-center items-start" style={{ maxHeight: 'calc(100vh - 40px)', maxWidth: 'calc(100vw - 40px)' }}>
                         <button onClick={closeModal} className="absolute top-4 right-4 text-red-500 z-10">Cerrar</button>
-                        <div className="relative scale-wrapper" style={{ marginTop: '40px' }}>
+                        <div className="relative scale-wrapper" style={{ marginTop: '40px', }}>
                             <CellBox>
                                 <PhoneContentSwitch
                                     contentName={name}

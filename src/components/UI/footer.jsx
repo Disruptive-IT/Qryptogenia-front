@@ -3,6 +3,8 @@ import { FaFacebookSquare , FaInstagramSquare, FaTwitterSquare } from 'react-ico
 import disruptive from "../../assets/imgs/disruptive/disruptive.png";
 import { FaLinkedin, FaSquareXTwitter  } from "react-icons/fa6";
 import { useTranslation } from "react-i18next";
+import { Link } from "react-router-dom";
+import { SocialIcon } from 'react-social-icons'
 
 export const Footer = () => {
   const gradientStyle = {
@@ -16,23 +18,23 @@ export const Footer = () => {
 
     const socialMedia = [
       {
-        icon: <FaFacebookSquare className="text-[#0865fe] w-6 h-6" title="Facebook" />,
+        icon: <SocialIcon network='facebook' style={{ marginTop: '8px', marginRight: '5px', width: '40px', height: '40px' }} />,
         link: 'https://www.facebook.com/disruptive.devops?locale=es_LA',
         color: '#0865fe'
       },
       {
-        icon: <FaLinkedin className="text-[#0b65c3] w-6 h-6" title="Linkedin" />,
+        icon: <SocialIcon network='linkedin' style={{ marginTop: '8px', marginRight: '5px', width: '40px', height: '40px' }} />,
         link: 'https://www.linkedin.com/company/disruptive-information-technologies/',
         color: '#0b65c3'
       },
       {
-        icon: <FaInstagramSquare className="text-[#c32a5f] w-6 h-6" title="Instagram" />,
+        icon: <SocialIcon network='instagram' style={{ marginTop: '8px', marginRight: '5px', width: '40px', height: '40px' }} />,
         link: 'https://www.instagram.com/disruptive.info/',
         color: '#0865fe'
 
       },
       {
-        icon: <FaSquareXTwitter className="text-black w-6 h-6" title="Instagram" />,
+        icon: <SocialIcon network='x' style={{ marginTop: '8px', marginRight: '5px', width: '40px', height: '40px' }} />,
         link: 'https://x.com/DisruptiveITDev',
         color: '#0865fe'
 
@@ -51,36 +53,38 @@ export const Footer = () => {
         <path
           transform="translate(0, -20)"
           d="M0,10 c80,-22 240,0 350,18 c90,17 260,7.5 350,-20 v50 h-700"
-          fill="#284B63"
+          fill="#353535"
         />
         <path
           d="M0,10 c80,-18 230,-12 350,7 c80,13 260,17 350,-5 v100 h-700z"
-          fill="#cbd5e1"
+          fill="#284B63"
         />
       </svg>
-      <div className="flex justify-between flex-wrap bg-slate-300 w-full px-6">
+      <div className="flex justify-between flex-wrap bg-dark-blue w-full px-6">
 
-        <div className="cursor-default flex flex-col items-center md:items-start justify-center w-full md:w-2/6 text-slate-500">
+        <div className="cursor-default flex flex-col items-center md:items-start justify-center w-full md:w-2/6 text-white">
           <p><strong>{t("Contact us")}</strong></p>
-          <p><strong>{t("Email")}:</strong> disruptive.devops@gmail.com</p>
+          <p><strong>{t("Email")}:</strong> qryptogenia@gmail.com</p>
           <p><strong>{t("Phone")}:</strong> +57 324 2167567</p>
         </div>
 
         <div className="flex flex-col items-center justify-center text-center w-full md:w-2/6">
-            <span className="cursor-default text-slate-500"><strong>{t("Developed By")}</strong></span>
-            <img src={disruptive} alt="disruptive" className="w-36 h-36"/>
+            <span className="cursor-default text-white"><strong>{t("Developed By")}</strong></span>
+            <a href="https://disruptiveinfotech.com/index-es.html" target="_blank" rel="noreferrer">
+              <img src={disruptive} alt="disruptive" className="w-36 h-36 transition-all duration-300 hover:scale-110"/>
+            </a>
             
         </div>
 
-        <div className="flex flex-col items-center  gap-2 w-full md:w-2/6 md:items-end text-slate-500">
+        <div className="flex flex-col items-center  gap-2 w-full md:w-2/6 md:items-end text-white">
           <div className="flex gap-1 flex-nowrap">
             
           {socialMedia.map((item, index) => (
               <a href={item.link} target="_blank" rel="noreferrer" key={index}>
-              <div className="flex items-center justify-center transition-all hover:scale-110 duration-300">
-                {item.icon}
-              </div>
-            </a>
+                <div className="flex items-center justify-center transition-all hover:scale-110 duration-300">
+                  {item.icon}
+                </div>
+              </a>
           ))}
           </div>
           
@@ -89,8 +93,8 @@ export const Footer = () => {
         </div>
         
       </div>
-      <div className="w-full flex justify-center bg-slate-300 mb-[55px] md:mb-0 md:py-3  ">
-        <p className="text-slate-500 font-bold">© 2024 {t("All rights reserved")}</p>
+      <div className="w-full flex justify-center bg-dark-blue mb-[55px] md:mb-0 md:py-3  ">
+        <p className="text-white font-bold">© 2024 {t("All rights reserved")}</p>
       </div>
     </footer>
   );

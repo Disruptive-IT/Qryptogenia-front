@@ -1,16 +1,24 @@
+/**
+ * @Author : Cristian Rueda,   @date 2024-09-18 19:47:33
+ * @description : Se crea formato de validación utilizando la herramienta Yup
+ * @Props :
+ * @return :
+ */
+
 import { useLocation, Navigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { useState, useEffect } from "react";
 import React, { useContext } from "react";
 import { SubmitButton } from "../../components/auth/pure/submitButton";
-import { IconsRight } from "../../components/auth/pure/iconsRight";
-import logo from "../../assets/imgs/logoForms.png";
+import logo from "../../../public/Logo.png";
 import { AuthContext } from "../../context/AuthContext";
 import { Formik, Form, Field, ErrorMessage } from "formik";
-import { useParams } from "react-router-dom";
-// import toast from 'react-hot-toast';
+import { useTranslation } from "react-i18next";
 import { Toaster, toast } from "sonner";
 import { FaLock, FaLockOpen } from "react-icons/fa";
+import * as Yup from "yup";
+
+
 
 export const RecoverPassForm = () => {
   const { register, handleSubmit, setError } = useForm();
@@ -22,10 +30,26 @@ export const RecoverPassForm = () => {
     newPassword: false,
     confirmPassword: false,
   });
-  const [error, setErrorState] = useState("");
+  const { t } = useTranslation();
+
+
+  const validationSchema = Yup.object().shape({ //Manejo de validaciones 
+    password: Yup.string()
+      .min(8, t('Password is too short - should be 8 chars minimum'))
+      .matches(/[a-zA-Z]/, t('The password cannot contain only numbers'))
+      .matches(/[A-Z]/, t('Password must contain at least one uppercase letter'))
+      .matches(/[a-z]/, t('Password must contain at least one lowercase letter'))
+      .matches(/[0-9]/, t('Password must contain at least one number'))
+      .matches(/[!@#$%^&*(),.?":{}|<>]/, t('Password must contain at least one special character'))
+      .required(t('Password is required')),
+    confirmPassword: Yup.string()
+      .oneOf([Yup.ref('password'), null], t('Passwords must match'))
+      .required(t('Confirm Password is required')),
+  });
 
   const toggleShowPassword = () => {
     setShowPassword(!showPassword);
+
   };
   const onSubmit = async (data) => {
     try {
@@ -84,32 +108,22 @@ export const RecoverPassForm = () => {
           confirmPassword: "",
           token: token, // Agregar el token como un campo oculto en el formulario
         }}
-        validate={(values) => {
-          const errors = {};
-
-          if (!values.password) {
-            errors.password = "Password is required";
-          }
-
-          if (!values.confirmPassword) {
-            errors.confirmPassword = "Confirm password is required";
-          } else if (values.password !== values.confirmPassword) {
-            errors.confirmPassword = "Passwords don't match";
-          }
-          return errors;
-        }}
+        validationSchema={validationSchema} //Traemos el schema de Yup
         onSubmit={onSubmit}
+
       >
-        <section className="w-full  flex flex-col justify-center items-center ">
+        <section className="flex w-full h-screen justify-center items-center bg-gradient-to-r from-dark-blue to-light-blue  ">
           <Form className="flex flex-col gap-4 flex-nowrap border-2 border-white rounded-xl w-[calc(100%-20px)] md:w-[700px] p-5 shadow-2xl bg-gray-200">
-            <h1 className="text-[30px] font-bold tex-center">
-              <span className="text-[#284B63]">Recover</span> Password
-            </h1>
+           
 
-            <div className="border-t-2 border-gray-300 mb-2"></div>
-
+            <div className="flex flex-col items-center justify-center sm:mt-14 transition-all duration-500">
+              <img src={logo} alt="logo" className="w-20 h-20 drop-shadow-lg " />
+              <h1 className="text-[30px] font-bold tex-center cursor-default">
+                <span className="text-[#284B63]">{t("Recover")}</span> {t("Password")}
+              </h1>
+            </div> 
             <span className="w-full text-center text-gray-400">
-              Set your new password
+              {t("Set your new password")}
             </span>
 
             <div className="flex flex-col h-14 w-full sm:w-[100%] px-10">
@@ -124,9 +138,9 @@ export const RecoverPassForm = () => {
                 <Field
                   className={`rounded-none rounded-e-lg bg-gray-50 border text-gray-900 focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 text-sm border-gray-300 p-2.5  dark:bg-my-gray dark:border-gray-600 dark:placeholder-gray-400 dark:text-black dark:focus:ring-blue-500 dark:focus:border-blue-500 `}
                   type={showPassword ? "text" : "password"}
-                  title="Password"
+                  title={t("Password")}
                   name="password"
-                  placeholder="Password"
+                  placeholder={t("Password")}
                   maxLength="64"
                 />
                 <br />
@@ -150,9 +164,9 @@ export const RecoverPassForm = () => {
                 <Field
                   className={`rounded-none rounded-e-lg bg-gray-50 border text-gray-900 focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 text-sm border-gray-300 p-2.5  dark:bg-my-gray dark:border-gray-600 dark:placeholder-gray-400 dark:text-black dark:focus:ring-blue-500 dark:focus:border-blue-500 `}
                   type={showPassword ? "text" : "password"}
-                  title="Confirm Password"
+                  title={t("Confirm Password")}
                   name="confirmPassword"
-                  placeholder="Confirm Password"
+                  placeholder={t("Confirm Password")}
                   maxLength="64"
                 />
                 <br />
@@ -166,7 +180,7 @@ export const RecoverPassForm = () => {
 
             {/* Campo oculto para enviar el token */}
             <Field type="hidden" name="token" value={token} />
-            <SubmitButton text="Recover Password" />
+            <SubmitButton text={t("Recover Password")} />
           </Form>
         </section>
       </Formik>

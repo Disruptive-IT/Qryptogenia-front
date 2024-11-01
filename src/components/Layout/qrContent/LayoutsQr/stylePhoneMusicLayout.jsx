@@ -17,13 +17,16 @@
  * @return : Retorna un componente que representa el diseño de una tienda de música con elementos personalizables y botones sociales.
  */
 
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { SocialButtonM } from '../socialMedia/socialButtons';
 import logot from "../../../../assets/imgs/Captura.png";
 import apple from "../../../../assets/imgs/applew.png";
+import { UseMenu } from '../forms/menu/menuContext';
 
 export const MusicLayout = ({ musicFormValues }) => {
 console.log(musicFormValues)
+const {getNameFont}=UseMenu();
+const [fontPreview,setFontPreview]=useState({});
   const options = [
     {
       value: 'youtube',
@@ -74,10 +77,14 @@ console.log(musicFormValues)
     })
     : [];
 
+    useEffect(()=>{
+      getNameFont(musicFormValues.idFontPreview,setFontPreview);
+    },[musicFormValues.idFontPreview])
+
   return (
     <div
   className="flex flex-col min-h-screen w-full items-center justify-center"
-  style={{ background: musicFormValues.backgroundColor }}
+  style={{ background: musicFormValues.backgroundColor,fontFamily:fontPreview?.fontName }}
 >
   <div
     className="flex flex-col items-center mt-10 md:mt-28 bg-white rounded-2xl w-[90%] sm:w-[400px] md:w-[600px] min-h-[400px] max-h-[600px] p-6 shadow-lg"

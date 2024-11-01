@@ -6,6 +6,12 @@ import { useLoader } from "../../context/LoaderContext";
 import { SchemaPinValidate } from "../../helpers/validate/auth.validate";
 import { MdOutlineMailLock } from "react-icons/md";
 import { useTranslation } from "react-i18next";
+import logo from "../../../public/Logo.png";
+import { Link } from "react-router-dom";
+
+
+
+
 const PinVerificationForm = ({ onSuccess, onSendVerification, email }) => {
   const { verifyPin } = useAuthContext();
   const { t } = useTranslation();
@@ -31,20 +37,24 @@ const PinVerificationForm = ({ onSuccess, onSendVerification, email }) => {
       validationSchema={schemaPin}
       onSubmit={handleSubmit}
     >
-      <section className="w-full mt-24 flex flex-col justify-center items-center ">
+      <section className="flex w-full h-screen justify-center items-center bg-gradient-to-r from-dark-blue to-light-blue ">
         <Form className="flex flex-col flex-nowrap gap-3 border-2 border-white rounded-xl w-[calc(100%-20px)] md:w-[700px] p-5 shadow-2xl bg-gray-200">
-          <h1 className="text-[30px] font-bold tex-center">
-            <span className="text-[#284B63]">{t("Verificate")}</span> {t("Code")}
-          </h1>
-          <div className="border-t-2 border-gray-300 mb-2"></div>
+          
+          <div className="flex flex-col items-center justify-center sm:mt-14 transition-all duration-500">
+                <img src={logo} alt="logo" className="w-20 h-20 drop-shadow-lg " />
+                <h1 className="text-[30px] font-bold tex-center cursor-default">
+                  <span className="text-[#284B63]">{t("Verificate")}</span> {t("Code")}
+                </h1>
+              </div> 
           <div className="flex flex-col gap-2 justify-center items-center w-full tansition-all duration-500">
             <span className="fullWidth text-center text-gray-400">
-            {t("An email has been sent to")} <strong>{email}</strong>
+              {t("An email has been sent to")} <strong>{email}</strong>
             </span>
             <span className="fullWidth text-center text-gray-400">
-            {t("Verificate your email and get the code to complete your registration.")}
+              {t(
+                "Verificate your email and get the code to complete your registration."
+              )}
             </span>
-            
 
             <div className="flex flex-col h-14 w-[70%] sm:w-[40%]  ">
               {/*  //?box input User */}

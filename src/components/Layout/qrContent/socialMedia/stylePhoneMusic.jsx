@@ -5,6 +5,7 @@ import mesadoko from "../../../../assets/imgs/mesadoko.png";
 import google from "../../../../assets/imgs/google.png";
 
 import { SocialButton, SocialButtonS } from './socialButton';
+import { UseMenu } from '../forms/menu/menuContext';
 /*
  * @Author : Cristian Escobar, @date 2024-09-03 20:13:14
  * @description: Componente que renderiza una vista de enlace web en la preview del movil. 
@@ -27,50 +28,50 @@ export const WebLinkPhoneMusic = ({ FormValues, contentName }) => {
   const [showDesc, setShowDesc] = useState(true);
   const initialValues = useRef(FormValues);
   const [isDark, setIsDark] = useState('#000000');
+  const [fontPreview,setFontPreview]=useState({});
+  const {getNameFont}=UseMenu();
   console.log(contentName)
   console.log(FormValues.backgroundColor)
 
 
   useEffect(() => {
-    // Function to compare if current values differ from initial values
+    // Función para comparar si los valores actuales difieren de los valores iniciales
     const hasChanged = (current, initial) => {
       const keysToCompare = ['title', 'description', 'backgroundColor', 'boxColor', 'titleColor', 'descriptionColor', 'selectedOptions'];
       return keysToCompare.some(key => {
         if (key === 'selectedOptions') {
-          return current[key].length !== initial[key].length ||
-            current[key].some((opt, index) => opt.value !== initial[key][index].value);
+          const currentOptions = current[key]?.map(opt => opt.value).sort().join() || '';
+          const initialOptions = initial[key]?.map(opt => opt.value).sort().join() || '';
+          return currentOptions !== initialOptions;
         }
         return current[key] !== initial[key];
       });
     };
-
-    if(hasChanged(FormValues, initialValues.current)){
+  
+    // Realiza las acciones necesarias según los cambios detectados
+    if (hasChanged(FormValues, initialValues.current)) {
       setShowImage(false);
       setShowDesc(FormValues.description !== initialValues.current.description);
-    }
-
-    // Check if any of the values (excluding image) have changed from initial values
-    if (hasChanged(FormValues, initialValues.current)) {
       console.log('Values have changed, setting showImage to false');
-      setShowImage(false);
     }
-
-    // If a new image is provided, show the image
+  
+    // Si se proporciona una nueva imagen, muestra la imagen
     if (FormValues.image && FormValues.image !== logot) {
       console.log('New image provided, setting showImage to true');
       setShowImage(true);
     }
-
-    // Update initialValues ref
-    initialValues.current = FormValues;
-  }, [FormValues]);
+  
+  }, [FormValues, logot]);
+  
 
   useEffect(() => {
-    // Reset showImage when contentName changes
     setShowImage(true);
-    // Reset description visibility when contentName changes
     setShowDesc(true);
   }, [contentName]);
+
+  useEffect(()=>{
+    getNameFont(FormValues.idFontPreview,setFontPreview);
+  },[FormValues.idFontPreview])
 
 
   const options = [
@@ -226,7 +227,7 @@ export const WebLinkPhoneMusic = ({ FormValues, contentName }) => {
   console.log(FormValues)
 
   return (
-    <div className='relative flex flex-col w-[100%] h-[100%] items-center rounded-t-[52px] rounded-b-[50px]  p-4 overflow-y-auto custom-scrollbarphone' style={{ background:FormValues.backgroundColor, minHeight: '670px', maxHeight: '670px', minWidth: '350px', maxWidth: '350px'}}>
+    <div  className='relative flex flex-col w-[100%] h-[100%] items-center rounded-t-[52px] rounded-b-[50px]  p-4 overflow-y-auto custom-scrollbarphone' style={{fontFamily:fontPreview?.fontName, background:FormValues.backgroundColor, minHeight: '670px', maxHeight: '670px', minWidth: '350px', maxWidth: '350px'}}>
         <div className='flex flex-col items-center mt-28 w-[97%] bg-white rounded-2xl' style={{ background:FormValues.boxColor }}>
             {showImage && (
                 <div className='relative bg-white rounded-2xl -mt-14 border-4 shadow-lg' style={{ borderColor: FormValues.borderImg }}>
