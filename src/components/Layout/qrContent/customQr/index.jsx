@@ -329,17 +329,13 @@ const CustomQr = ({ location, qrId }) => {
                     <OptionComponent onTabSelect={handleOptionSelect} />
                 </div>
             </div>
-            
-            <ThemeProvider theme={themee}> 
-            <Button
-                variant="contained" // manejar el boton de crearQR
-                color="primary"
+             
+            <button
                 onClick={Dowload}
-                className='absolute bottom-0 left-8 w-4/5 md:left-0 md:w-full'
+                className='bottom-0 left-8 w-4/5 md:left-0 md:w-full p-3 rounded-md text-white font-semibold bg-light-blue hover:bg-dark-blue'
             >
                    {!isEditRoute ? t("CREATE MY QR"): "SAVE CHANGES"}
-                   </Button>
-            </ThemeProvider>
+            </button>
 
            
         </div>
