@@ -13,6 +13,10 @@
  * @UpdatedBy : Nicolas Barrios,   @date 2024-07-29 16:59:26
  * @description : se borraron archivos de previwes cleular para social y apps dejando solo el esqueleto del de musica para todos
  */
+/**
+ @UpdatedBy : Cristian Rueda,   @date 2024-11-04 18:40:39
+ * @description : Se incorporan los skeleton en las diferentes vistas previas de teléfono implementando un estado de carga. 
+ */
 
 import AppForm from "./forms/App";
 import { PdfUploadComponent, LinkInput } from "./forms/Pdf";
@@ -22,6 +26,11 @@ import { WebLinkPhoneMusic } from "./socialMedia/stylePhoneMusic";
 import MenuForm from "./forms/menu/menuForm";
 import FormWifi from "./forms/Wifi";
 import WebLinkMenuFood from "./LayoutsQr/stylePhoneMenu";
+import Skeleton from 'react-loading-skeleton';
+import SkeletonNews from "./forms/Skeleton/SkeletonNews";
+import { useEffect, useState } from "react";
+import SkeletonPhone from "./forms/Skeleton/SkeletonPhone";
+import axios from "axios";
 export const QrContentSwitch = ({contentName, onFormChangeApp, onFormChange, onFormChangeMusic, onSocialFormSubmit, location, appFormValues, musicFormValues, socialFormValues,menuFormValues, pdfFormValues}) => {
 
     let qrContent;
@@ -95,73 +104,68 @@ export const QrContentSwitch = ({contentName, onFormChangeApp, onFormChange, onF
 };
 
 
-export const PhoneContentSwitch = ({contentName, appFormValues, socialFormValues, musicFormValues,menuFormValues}) => {
-console.log(contentName);
-let phoneContent;
-switch (contentName) {
-    case "app store":                                                       
-    phoneContent = (
-            <div>
-                <WebLinkPhoneMusic FormValues={appFormValues} contentName={contentName}/>
-            </div>
-        );
-        break;
-    case "social media":
-        phoneContent = (
-            <div>
-                <WebLinkPhoneMusic FormValues={socialFormValues} contentName={contentName}/>
-            </div>
-        );
-        break;
-        case "website url":
-            phoneContent = (
-                <div>
-                    <WebLinkPhoneMusic FormValues={appFormValues} />
-                </div>
-            );
-            break;
-        case "pdf":
-            phoneContent = (
-                <div>
-                    <h1>PDF</h1>
-                </div>
-            );
-            break;
-        case "news":
-            phoneContent = (
-                <div>
-                    <h1>NOTICIAS</h1>
-                </div>
-            );
-            break;
-        case "music":
-            phoneContent = (
-                <div>
-                    <WebLinkPhoneMusic FormValues={musicFormValues} contentName={contentName}/>
-                </div>
-            );
-            break;
-        case "wifi":
-            phoneContent = (
-                <div>
-                    <p>WIFI</p>
-                </div>
-            );
-            break;
-        case "curriculum":
-            phoneContent = (
-                <div>
-                    <p>COMPARTIR LA HOJA DE VIDA</p>
-                </div>
-            );
-            break;
-        case "food menu":
-            phoneContent = (
-                <div>
-                    <WebLinkMenuFood FormValues={menuFormValues}  ContentName={contentName} />
-                </div>
-            );
-            break;
+export const PhoneContentSwitch = ({ contentName, qrId, appFormValues, socialFormValues, musicFormValues, menuFormValues }) => {
+    const [isLoading, setIsLoading] = useState(true);
+    const [data, setData] = useState(null);
+
+    useEffect(() => {
+        const loadData = async () => {
+            setIsLoading(true);
+            try {
+                const response = await axios.get(`http://localhost:3000/api/qr/getPreviewUpdate/${qrId}`, {
+                    withCredentials: true,
+                })
+                setData(response.data);
+            } catch (error) {
+                console.error('Error fetching data:', error);
+            } finally {
+                setIsLoading(false);
+            }
+        };
+        loadData();
+    }, [qrId]);
+
+    let phoneContent;
+    if (isLoading) {
+        phoneContent = <SkeletonPhone/>; // Skeleton para mostrar mientras se carga el contenido
+    } else {
+        switch (contentName) {
+            case "app store":
+            case "social media":
+            case "music":
+                phoneContent = (
+                    <div>
+                        <WebLinkPhoneMusic FormValues={data || appFormValues} contentName={contentName} />
+                    </div>
+                );
+                break;
+            case "website url":
+                phoneContent = (
+                    <div>
+                        <WebLinkPhoneMusic FormValues={data || appFormValues} />
+                    </div>
+                );
+                break;
+            case "pdf":
+                phoneContent = <div><h1>PDF</h1></div>;
+                break;
+            case "news":
+                phoneContent = <div><h1>NOTICIAS</h1></div>;
+                break;
+            case "wifi":
+                phoneContent = <div><p>WIFI</p></div>;
+                break;
+            case "curriculum":
+                phoneContent = <div><br /><br /><p>COMPARTIR LA HOJA DE VIDA</p></div>;
+                break;
+            case "food menu":
+                phoneContent = (
+                    <div>
+                        <WebLinkMenuFood FormValues={data || menuFormValues} ContentName={contentName} />
+                    </div>
+                );
+                break;
+        }
     }
 
     return phoneContent;

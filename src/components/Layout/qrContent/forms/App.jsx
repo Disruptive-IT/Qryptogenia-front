@@ -65,9 +65,20 @@ export const AppForm = ({ onFormChangeApp, location, appFormValues }) => {
         }
       };
 
-    useEffect(() => {
-       getFontsPreview(setAppFontsPreview);
-    }, []);
+useEffect(() => {
+    const fetchFontsPreview = async () => {
+        setLoading(true); // Activa el loading antes de la petición
+        try {
+            await getFontsPreview(setAppFontsPreview);
+        } catch (error) {
+            console.error("Error fetching fonts preview:", error);
+        } finally {
+            setLoading(false); // Desactiva el loading al terminar
+        }
+    };
+
+    fetchFontsPreview();
+}, []);
 
 console.log("these are the selected options: ",appFormValues.selectedOptions);
 
@@ -401,12 +412,6 @@ console.log("these are the selected options: ",appFormValues.selectedOptions);
         return selectedOptions.some(selected => selected.value === option.value);
     };
 
-    // Skeleton Loader
-            useEffect(() => {
-              setTimeout(() => {
-                setLoading(false); // Cambia a false una vez que los datos hayan cargado
-              }, 10000); // Tiempo simulado de carga
-            }, []);            
     return (
         <Formik
             initialValues={initialValues}

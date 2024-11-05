@@ -10,11 +10,11 @@ import './menu.css'
 import { toast } from 'sonner';
 import { useValidate } from '../../../../../context/validateFormContext';
 import ColorPicker from '../form-helpers/picker';
-
+import SkeletonLoader from '../Skeleton/Skeleton';
 function MenuForm(){
     const { formData,editFormdata,activeCategory,currentTemplate,indexTemplate,setIndexTemplate,showBackgroundPicker,showMenuPicker,showBackCategoryPicker,backgroundPickerRef,menuPickerRef,backgroundProductPickerRef,namePickerRef,descriptionPickerRef,pricePickerRef,setShowBackgroundPicker,setShowBackCategoryPicker,setShowMenuPicker,setShowNamePicker,setShowDescriptionPicker,setShowPricePicker,
             showNamePicker,showDescriptionPicker,showPricePicker,fonts,templates,isEditRoute,initialFormDataRef,validateLink,getFonts,getTemplates,handlePrev,handleNext,handleActiveCategory,handleRestaurantName,handleActiveProduct,handleShowBackgroundPicker,handleShowMenuPicker,handleShowBackCategoryPicker,handleShowNamePicker,handleShowDescriptionPicker,handleShowPricePicker,resetUserTemplate,validation,getDataToEdit,handleTemplate,
-            templateNull,usertemplateNull,handleLogo,handleUserTemplate,handleBackgroundCard,handleMenuColor,addCategory,handleFontFamily,removeCategory,handleChangeCategoryName,addProductToCategory,removeProductToCategory,handleProductField,handleImgProduct,handleBackgroundProduct,handleColorNameProduct,handleColorDescriptionProduct,handleColorPriceProduct,handleProductName,handleProductDescription,handleProductTop,handleProductPrice
+            templateNull,usertemplateNull,handleLogo,handleUserTemplate,handleBackgroundCard,handleMenuColor,addCategory,handleFontFamily,removeCategory,handleChangeCategoryName,addProductToCategory,removeProductToCategory,handleProductField,handleImgProduct,handleBackgroundProduct,handleColorNameProduct,handleColorDescriptionProduct,handleColorPriceProduct,handleProductName,handleProductDescription,handleProductTop,handleProductPrice, loading, setLoading,
     }=UseMenu();
 
     const{setValidateFormMenu}=useValidate();
@@ -65,6 +65,17 @@ function MenuForm(){
         category:isEditRoute && formData ? formData.category : [{categoryName:"",products:[{ backgroundProductCard:"#fff",colorName:"#000",colorDescription:"#000",colorPrice:"#000",productImg:null, productName:"", productDescription:"", top:false,price:null}]}]
     }
     },[])
+    
+    useEffect(() => {
+      const loadData = async () => {
+        await new Promise((resolve) => setTimeout(resolve, 2000)); // 2 segundos de retraso
+          setLoading(true); // Activa el skeleton loader para ambas cargas
+          await Promise.all([getFonts(), getTemplates()]); // Espera que ambas funciones terminen
+          setLoading(false); // Desactiva el skeleton loader para ambas cargas
+      };
+
+      loadData();
+  }, []);
 
     useEffect(()=>{
       document.addEventListener("mousedown",handleShowBackgroundPicker);
@@ -98,6 +109,9 @@ function MenuForm(){
     // console.log("formik errors",formik.errors);
 return (
     <div className='p-4'>
+      {loading ? (
+                <SkeletonLoader />
+            ) : (
         <Formik
             initialValues={formData}
             validate={validation}
@@ -149,8 +163,7 @@ return (
                 onChange={(e) => { handleLogo(e); formik.setFieldValue('restaurantLogo', e.target.files[0]); }}
               />
             </div>
-          </div>
-
+          </div>          
           {/* Sección del Color de Fondo */}
           <div className="flex flex-col md:flex-row justify-start items-start space-y-4 md:space-y-0 md:space-x-6 py-4">
             {/* Background Section */}
@@ -669,6 +682,7 @@ return (
                 </form>
             )}
         </Formik>
+      )}      
     </div>
 );
 
