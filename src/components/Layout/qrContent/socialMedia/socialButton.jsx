@@ -52,9 +52,10 @@ export const SocialButton = ({ data, botonColor}) => {
   },[botonColor])
   
     return (
-      <motion.div whileHover={{scale:1.1}} initial={{translateX:'-500px'}} animate={{translateX:'0px'}} transition={{duration:'.3s',type:'spring',bounce:'0.5'}} whileTap={{scale:0.9}} className="flex gap-3 justify-center flex-wrap w-full mt-5 mb-5">
+      <div className="flex gap-3 justify-center flex-wrap w-full mt-5 mb-5">
         {data && data.map((social, index) => (
-          <a
+          <motion.a
+          whileHover={{scale:1.1}} initial={{translateY:'500px'}} animate={{translateY:'0px'}} transition={{duration:'.3s',type:'spring',bounce:'0.5'}} whileTap={{scale:0.9}}
             key={index}
             href={social.url}
             target="_blank"
@@ -73,9 +74,9 @@ export const SocialButton = ({ data, botonColor}) => {
                 {social.textBottom}
               </span>
             </div>
-          </a>
+          </motion.a>
         ))}
-      </motion.div>
+      </div>
       
     );
   };
@@ -99,7 +100,8 @@ export const SocialButton = ({ data, botonColor}) => {
     return (
       <div className='flex gap-3 justify-center flex-wrap w-full mt-5 mb-5'>
         {data && data.map((social, index) => (
-          <a
+          <motion.a
+            whileHover={{scale:1.1}} initial={{translateY:'500px'}} animate={{translateY:'0px'}} transition={{duration:'.3s',type:'spring',bounce:'0.4'}} whileTap={{scale:0.9}}
             target="_blank"
             rel="noopener noreferrer"
             href={social.url}
@@ -111,7 +113,7 @@ export const SocialButton = ({ data, botonColor}) => {
             <SocialIcon network={social.name.toLowerCase()} style={{ width: 30, height: 30 }} />
             {/* Mostrar el nombre del botón solo en pantallas grandes */}
             <span style={{color: fontColor}}>{capitalizeFirstLetter(social.name)}</span>
-          </a>
+          </motion.a>
   
         ))}
       </div>
