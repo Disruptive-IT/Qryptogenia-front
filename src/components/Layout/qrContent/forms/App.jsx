@@ -421,8 +421,9 @@ console.log("these are the selected options: ",appFormValues.selectedOptions);
                 actions.setSubmitting(false);
                 }
             }}
+            validateOnBlur={true}
             >
-           {({ setFieldValue, handleSubmit }) => (
+           {({ setFieldValue, handleSubmit,setFieldTouched,touched,e}) => (
       <Form className="max-w-4xl mx-auto mt-8 relative">
         {/* Mostrar el Skeleton mientras loading sea verdadero */}
         {loading ? (
@@ -445,11 +446,12 @@ console.log("these are the selected options: ",appFormValues.selectedOptions);
                     handleTitleChange(e);
                     setFieldValue('title', e.target.value);
                   }}
+                  onBlur={()=>setFieldTouched('title',true)}
                 />
                 <div className="text-right text-sm text-gray-900">
                   {title.length}/{maxTitle} {t("Characters")}
                 </div>
-                {formErrors.title && <div className="text-red-500 text-sm">{formErrors.title}</div>}
+                {(formErrors.title && touched.title) && <div className="text-red-500 text-sm">{formErrors.title}</div>}
               </div>
 
       <div className="flex flex-col relative">

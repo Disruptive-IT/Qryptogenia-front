@@ -13,8 +13,8 @@ import { createTheme, ThemeProvider } from '@mui/material';
 import { useValidate } from '../../../../context/validateFormContext';
 import { toast } from 'sonner';
 import { v4 as uuidv4 } from 'uuid';
-import axios from '../../../../libs/axios';
 import { UseMenu } from '../forms/menu/menuContext';
+import instance from '../../../../libs/axios';
 
 
 /*
@@ -33,7 +33,7 @@ const generateUniqueKey = async () => {
 
     while (!isUnique) {
         try {
-            const response = await axios.get(`/qr/check-key/${uniquekey}`);
+            const response = await instance.get(`/qr/check-key/${uniquekey}`);
             console.log(uniquekey);
             if (!response.data.exists) {
                 isUnique = true;

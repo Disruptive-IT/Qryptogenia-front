@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
 import QRTable from './QRTable';
 import DetailModal from './modaldetail';
 import StoreModal from './StoreModal';
@@ -15,6 +14,7 @@ import { useTranslation } from 'react-i18next';
 import Skeleton from 'react-loading-skeleton';
 import 'react-loading-skeleton/dist/skeleton.css';
 import SkeletonQrs from '../../Layout/qrContent/forms/Skeleton/SkeletonQrs';
+import instance from '../../../libs/axios';
 
 const formatDate = (isoDate) => {
   const date = new Date(isoDate);
@@ -72,7 +72,7 @@ const App = ({ id }) => {
   useEffect(() => {
   const fetchQRCodes = async () => {
     try {
-      const response = await axios.get(`http://localhost:3000/api/qr/`, {
+      const response = await instance.get(`/qr/`, {
         withCredentials: true,
       });
 
@@ -126,8 +126,8 @@ const App = ({ id }) => {
     }).then(async (result) => {
       if (result.isConfirmed) {
         try {
-          const response = await axios.patch(
-            `http://localhost:3000/api/qr/patchqrs/${item.id}`,
+          const response = await instance.patch(
+            `/qr/patchqrs/${item.id}`,
             { state: newState },
             { withCredentials: true }
           );

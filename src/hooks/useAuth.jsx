@@ -1,7 +1,7 @@
-import axios from "../libs/axios";
 import { useEffect, useState } from "react";
 import { toast } from 'sonner';
 import { useLoader } from '../context/LoaderContext';
+import instance from "../libs/axios";
 /**
  * @Author : Jobserd Julián Ocampo, @date 2024-08-13 09:48:10
  * @description : Este archivo define un hook personalizado `useAuth` para manejar la autenticación y las operaciones relacionadas con los usuarios, como iniciar sesión, registrarse, cambiar contraseñas y obtener datos del perfil. Incluye varias funciones para interactuar con el backend mediante solicitudes HTTP utilizando `axios`. 
@@ -20,7 +20,7 @@ export const useAuth = (navigate) => {
 
     async function checkToken() {
         try {
-            const res = await axios.get('/auth/check-token');
+            const res = await instance.get('/auth/check-token');
             if (res.data.user) {
                 setUser(res.data.user);
             }
@@ -31,7 +31,7 @@ export const useAuth = (navigate) => {
 
     const fetchUserData = async () => {
         try {
-            const response = await axios.get('/user'); // Reemplaza '/api/user' con la ruta correcta en tu backend
+            const response = await instance.get('/user'); // Reemplaza '/api/user' con la ruta correcta en tu backend
             return response.data; // Suponiendo que el backend devuelve los datos del usuario en la propiedad 'data'
         } catch (error) {
             console.error('Error fetching user data:', error);
@@ -43,7 +43,7 @@ export const useAuth = (navigate) => {
 
     async function logoutUser() {
         try {
-            const res = await axios.get('/auth/logout/');
+            const res = await instance.get('/auth/logout/');
             toast.success(res.data.msg)
             setUser(null)
             navigate("/login")
@@ -54,7 +54,7 @@ export const useAuth = (navigate) => {
 
     async function loginUser(values,  redirectTo = "/") {
         try {
-            const res = await axios.post('/auth/login', values);
+            const res = await instance.post('/auth/login', values);
             toast.success(res.data.msg)
             const user = res.data.info.user
             setUser(user);
@@ -73,7 +73,7 @@ export const useAuth = (navigate) => {
     const registerUser = async (email) => {
         try {
             console.log("ANTES REGISTER")
-            const res = await axios.post('/auth/register', { email: email });
+            const res = await instance.post('/auth/register', { email: email });
             console.log("DESPUES REGISTER")
             toast.info(res.data.msg);
             return { success: true };
@@ -85,7 +85,7 @@ export const useAuth = (navigate) => {
 
     const verifyPin = async ({ pin, email }) => {
         try {
-            const res = await axios.post('/auth/confirm', { pin, email });
+            const res = await instance.post('/auth/confirm', { pin, email });
             console.log("llefa")
             toast.success(res.data.msg);
             return { success: true };
@@ -96,7 +96,7 @@ export const useAuth = (navigate) => {
 
     const completeRegister = async (values) => {
         try {
-            const res = await axios.post('/auth/complete-register', values);
+            const res = await instance.post('/auth/complete-register', values);
             return { success: true };
         } catch (err) {
             toast.error(err.response.data.msg);
@@ -114,7 +114,7 @@ export const useAuth = (navigate) => {
             console.log('Token enviado en la solicitud:', token);
 
             // Realizar la solicitud POST con el token como parte del cuerpo de la solicitud
-            const response = await axios.post(`/auth/password_reset/confirm`, { token, confirmPassword });
+            const response = await instance.post(`/auth/password_reset/confirm`, { token, confirmPassword });
 
             switch (response.status) {
                 case 200:
@@ -148,7 +148,7 @@ export const useAuth = (navigate) => {
  */
     const forgotPassword = async (email) => {
         try {
-            const response = await axios.post('/auth/password_reset', { email });
+            const response = await instance.post('/auth/password_reset', { email });
             if (response.data.status === 'User not exists!') {
                 // Si el usuario no existe en el servidor, mostrar un error
                 return { success: false, error: 'E-mail not registered in our system' };
@@ -168,7 +168,7 @@ export const useAuth = (navigate) => {
  */
     const getUsersData = async () => {
         try {
-            const response = await axios.get('/admin/users');
+            const response = await instance.get('/admin/users');
             const data = response.data;
             return { success: true, data: data };
         } catch (error) {
@@ -179,7 +179,7 @@ export const useAuth = (navigate) => {
 
     const changePassword = async (newPassword, oldPassword) => {
         try {
-            const response = await axios.post('/user/change_password', {
+            const response = await instance.post('/user/change_password', {
                 old_password: oldPassword,
                 new_password: newPassword,
             });
@@ -201,7 +201,7 @@ export const useAuth = (navigate) => {
 
     const changeUsername = async (newUsername, password) => {
         try {
-            const response = await axios.post('/user/change_username', {
+            const response = await instance.post('/user/change_username', {
                 new_username: newUsername,
                 password: password
             });
@@ -217,7 +217,7 @@ export const useAuth = (navigate) => {
 
         try {
             // Realiza la solicitud POST al endpoint correcto en tu backend
-            const response = await axios.post('/user/change_picture', formData, {
+            const response = await instance.post('/user/change_picture', formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data'
                 },
@@ -241,7 +241,7 @@ export const useAuth = (navigate) => {
     const getProfileImageUrl = async () => {
         try {
             // Realiza una solicitud GET al endpoint de backend que devuelve la URL de la imagen de perfil
-            const response = await axios.get('/user/get_image');
+            const response = await instance.get('/user/get_image');
             // Retorna la URL de la imagen de perfil del usuario
             return response.data.image_url;
         } catch (error) {
@@ -253,7 +253,7 @@ export const useAuth = (navigate) => {
 
     const handleChangeEmail = async (values) => {
         try {
-            const response = await axios.post('/user/change-email', { email: values.email });
+            const response = await instance.post('/user/change-email', { email: values.email });
             return response.data
 
         } catch (error) {
@@ -263,7 +263,7 @@ export const useAuth = (navigate) => {
 
     const handleVerifyCode = async (verificationCode) => {
         try {
-            const response = await axios.post('/user/verify-account', { pin: verificationCode });
+            const response = await instance.post('/user/verify-account', { pin: verificationCode });
             return response.data
 
         } catch (error) {
@@ -273,7 +273,7 @@ export const useAuth = (navigate) => {
 
     const handleChangeNewEmail = async (values) => {
         try {
-            const response = await axios.post('/user/send-verify-new-email', { newEmail: values.newEmail });
+            const response = await instance.post('/user/send-verify-new-email', { newEmail: values.newEmail });
             return response.data
         } catch (error) {
             console.error('Error changing email:', error);
@@ -282,7 +282,7 @@ export const useAuth = (navigate) => {
 
     const handleVerifyNewCode = async (newVerificationCode) => {
         try {
-            const response = await axios.post('/user/verify-new-email', { newPin: newVerificationCode });
+            const response = await instance.post('/user/verify-new-email', { newPin: newVerificationCode });
             return response.data
         } catch (error) {
             console.error('Error verifying new code:', error);
@@ -291,7 +291,7 @@ export const useAuth = (navigate) => {
 
     const getMusicData = async (id) => {
         try {
-            const response = await axios.get(`/music/${id}`);
+            const response = await instance.get(`/music/${id}`);
             return { success: true, data: response.data };
         } catch (error) {
             console.error('Error fetching music data:', error);
@@ -301,7 +301,7 @@ export const useAuth = (navigate) => {
 
     const getSocialData = async (id) => {
         try {
-            const response = await axios.get(`/social/${id}`);
+            const response = await instance.get(`/social/${id}`);
             return { success: true, data: response.data };
         } catch (error) {
             console.error('Error fetching music data:', error);
@@ -316,7 +316,7 @@ export const useAuth = (navigate) => {
  */
     const getStoreData = async (id) => {
         try {
-            const response = await axios.get(`http://localhost:3000/api/qr/getpreview/${id}`);
+            const response = await instance.get(`/qr/getpreview/${id}`);
             return { success: true, data: response.data };
         } catch (error) {
             console.error('Error fetching music data:', error);
