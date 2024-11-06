@@ -7,7 +7,6 @@ import UserProfileMenu from '../../../components/Admin/Profile';
 import { useTranslation } from 'react-i18next';
 import LenguageSelector from './../../../components/UI/lenguage/lenguageSelector'
 
-
 function Navbar() {
     const location = useLocation();
     const { t } = useTranslation();
