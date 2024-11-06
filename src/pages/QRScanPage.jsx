@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import axios from '../libs/axios';
 import { SocialButtonM } from '../components/Layout/qrContent/socialMedia/socialButtons';
 import Skeleton from '@mui/material/Skeleton';
 import { autocompleteClasses, createTheme, Modal, ThemeProvider } from '@mui/material';
@@ -16,6 +15,7 @@ import { SocialButton, SocialButtonS } from '../components/Layout/qrContent/soci
 import { extractColorFromGradient, isDarkColor } from '../components/Layout/qrContent/preview-helpers/handlerColor';
 import { mapNetworkName, options } from '../components/Layout/qrContent/preview-helpers/handlePreviewButtons';
 import { UseMenu } from '../components/Layout/qrContent/forms/menu/menuContext';
+import instance from '../libs/axios';
 
 
 /**
@@ -45,7 +45,7 @@ const QRScanPage = () => {
     
     const fetchData = async () => {
         try {
-            const res = await axios.get(`/verify-qr?q=${qrId}`);
+            const res = await instance.get(`/verify-qr?q=${qrId}`);
             console.log(res.data);
             setQrData(res.data);
             setLoading(false);

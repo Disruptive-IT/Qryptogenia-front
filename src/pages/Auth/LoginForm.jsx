@@ -12,9 +12,9 @@ import AuthSwitcher from "../../components/auth/pure/AuthSwitcher";
 import ReCAPTCHA from "react-google-recaptcha";
 import { IoIosMail } from "react-icons/io";
 import { FaLock, FaLockOpen } from "react-icons/fa";
-import axios from "../../libs/axios";
 import { useTranslation } from "react-i18next";
 import { FaArrowLeft } from "react-icons/fa6";
+import instance from "../../libs/axios";
 /**
  * @Author : Daniel Salazar,   @date 2024-07-26 11:25:43
  * @description :form login implementation with recaptcha, google login and email and password validation.
@@ -52,10 +52,11 @@ const LoginForm = () => {
   };
 
   async function handleGoogleLogin() {
+    const backBaseUrl=import.meta.env.VITE_BASE_BACK_URL;
     try {
       console.log("entrando al login2");
       const response = (window.location.href =
-        "http://localhost:3000/api/auth/google");
+        `${backBaseUrl}/auth/google`);
       console.log("entrando al login3");
       if (response.status === 200) {
         setUser(response.data.info.user);
@@ -65,14 +66,14 @@ const LoginForm = () => {
         console.error("Error:", response.data.error);
       }
     } catch (error) {
-      console.err("Error:", err);
+      console.error("Error:", error.message);
     }
   }
 
   useEffect(() => {
     const fetchData = async () => {
       if (recaptchaValue) {
-        const res = await axios.post("/auth/verifyRecaptcha", {
+        const res = await instance.post("/auth/verifyRecaptcha", {
           recaptchaToken: recaptchaValue,
           email,
         });

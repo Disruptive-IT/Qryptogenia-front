@@ -13,9 +13,9 @@ import { PricingsCards } from '../components/Layout/pricingsCards';
 import { IoClose } from "react-icons/io5";
 import { FaCheck } from "react-icons/fa";
 import { useState, useEffect } from 'react';
-import axios from 'axios';
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useLocation } from 'react-router-dom';
+import instance from '../libs/axios';
 
 export const PlansPricings = () => {
   const [data, setData] = useState([]);
@@ -26,7 +26,7 @@ export const PlansPricings = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get('http://localhost:3000/api/memberships', {
+        const response = await instance.get('/memberships', {
           withCredentials: true,
         });
 

@@ -3,8 +3,8 @@ import Swal from 'sweetalert2';
 import { FaCheck, FaTimes } from 'react-icons/fa';
 import { MdOutlineEdit, MdVisibility } from "react-icons/md";
 import { Modal } from '@mui/material';
-import axios from 'axios';
 import { useTranslation } from 'react-i18next';
+import instance from '../../../libs/axios';
 
 /**
  * @Author : Cristian Escobar
@@ -27,7 +27,7 @@ const QRCodeList = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get('http://localhost:3000/api/memberships', {
+        const response = await instance.get('/memberships', {
           withCredentials: true,
         });
         setData(response.data.memberships);
@@ -85,7 +85,7 @@ const QRCodeList = () => {
         ...formValues,
         discounts: selectedDiscounts // Incluye los descuentos seleccionados
       };
-      await axios.patch(`http://localhost:3000/api/admin/editmemberships/${id}`, updatedData, {
+      await instance.patch(`/admin/editmemberships/${id}`, updatedData, {
         withCredentials: true,
       });
       setData(data.map(d => d.id === editItem.id ? { ...d, ...updatedData } : d));
