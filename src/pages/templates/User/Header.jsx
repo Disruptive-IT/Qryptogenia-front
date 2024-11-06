@@ -5,7 +5,7 @@ import UserProfileMenu from '../../../components/Admin/Profile';
 import { useAuthContext } from '../../../context/AuthContext';
 import CustomLink from '../../../components/Layout/CustomLink';
 import MenuDrawer from '../../../components/UI/menu/menuDrawer';
-import logo from "../../../../public/Logo.png";
+import logo from "/Logo.png";
 import { useTranslation } from 'react-i18next';
 import LenguageSelector from './../../../components/UI/lenguage/lenguageSelector'
 
@@ -28,7 +28,7 @@ function Navbar() {
                         <CustomLink to="/" isActive={isActive('/')}>{t('Home')}</CustomLink>
                         <CustomLink to="#" isActive={isActive('/about')}>{t('About us')}</CustomLink>
                         <CustomLink to="/pricings" isActive={isActive('/pricings')}>{t('Plans')}</CustomLink>
-                        <CustomLink to="#" isActive={isActive('/faq')}>FAQ</CustomLink>
+                        <CustomLink to="#" isActive={isActive('/faq')}>{t('FAQ')}</CustomLink>
                         <CustomLink to= '/user/qr' isActive={isActive('/user/qr')}>{t('My QR codes')}</CustomLink>
                     </ul>
                 </nav>

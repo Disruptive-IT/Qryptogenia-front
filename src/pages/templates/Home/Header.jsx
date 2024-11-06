@@ -1,12 +1,13 @@
 import React, { useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import CustomLink from '../../../components/Layout/CustomLink';
-import logo from "../../../../public/Logo.png";
+
 import MenuDrawer from '../../../components/UI/menu/menuDrawer';
 import { useAuth } from '../../../hooks/useAuth';
 import UserProfileMenu from '../../../components/Admin/Profile';
 import { useTranslation } from 'react-i18next';
 import LenguageSelector from './../../../components/UI/lenguage/lenguageSelector'
+const logo = 'Logo.png';
 
 function Navbar() {
     const location = useLocation();
@@ -29,7 +30,7 @@ function Navbar() {
                         <CustomLink to="/" isActive={isActive('/')}>{t('Home')}</CustomLink>
                         <CustomLink to="#" isActive={isActive('/about')}>{t('About us')}</CustomLink>
                         <CustomLink to="/pricings" isActive={isActive('/pricings')}>{t('Plans')}</CustomLink>
-                        <CustomLink to="#" isActive={isActive('/faq')}>FAQ</CustomLink>
+                        <CustomLink to="#" isActive={isActive('/faq')}>{t('FAQ')}</CustomLink>
                     </ul>
                 </nav>
 

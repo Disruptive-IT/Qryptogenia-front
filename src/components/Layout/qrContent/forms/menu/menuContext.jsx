@@ -840,8 +840,6 @@ export default function MenuProvider({children}) {
             //skeleton
             loading,
             setLoading,
-            getFonts,
-            getTemplates
             }}>
             {children}
         </MenuContext.Provider>

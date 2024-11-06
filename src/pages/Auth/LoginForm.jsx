@@ -4,7 +4,6 @@ import { Link } from "react-router-dom";
 import { SubmitButton } from "../../components/auth/pure/submitButton";
 import { GoogleButton } from "../../components/auth/pure/googleButton";
 import { IconsRight } from "../../components/auth/pure/iconsRight";
-import logo from "../../../public/Logo.png";
 import { useAuthContext } from "../../context/AuthContext";
 import { useLoader } from "../../context/LoaderContext";
 import { SchemaLoginValidate } from "../../helpers/validate/auth.validate";
@@ -20,7 +19,8 @@ import { FaArrowLeft } from "react-icons/fa6";
  * @description :form login implementation with recaptcha, google login and email and password validation.
  * @Props :null
  * @return :component <LoginForm />
- */
+*/
+const logo = 'Logo.png';
 
 const LoginForm = () => {
   const { loginUser } = useAuthContext();

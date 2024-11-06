@@ -628,7 +628,7 @@ console.log("these are the selected options: ",appFormValues.selectedOptions);
 
                     <div className="flex flex-col md:flex-row md:items-center mb-4 mt-4">
                         <div className="w-full md:w-3/4">
-                            <label htmlFor="" className="mb-2">Multiselect:</label>
+                            <label htmlFor="" className="mb-2">{t("Multiselect")}</label>
                             <Select
                                 id="selectedOptions"
                                 options={options}

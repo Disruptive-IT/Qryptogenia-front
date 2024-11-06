@@ -363,7 +363,7 @@ const App = ({ id }) => {
       )
     },
     {
-      header: t("Scans Restantes"), accessor: 'scan_qrs', render: (item) => (
+      header: t("Remaining scans"), accessor: 'scan_qrs', render: (item) => (
         <span className="px-2 inline-flex text-xs leading-5 font-semibold text-gray-800">
           {item.scan_qrs} {/* Mostrar 0 si scan_count es nulo o no está definido */}
         </span>

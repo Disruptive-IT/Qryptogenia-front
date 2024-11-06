@@ -3,7 +3,6 @@ import celular from "../../assets/imgs/Celular.png";
 import "./optionBar.css";
 import { BoxLink } from "./boxLink";
 import QR from "../../assets/imgs/qr.png";
-import logo from "../../../public/Logo.png";
 import  UseDataTypeQr  from "./qrContent/contentData";
 import { useNavigate } from "react-router-dom";
 import menu from "../../assets/imgs/QR-types/menu.png";
@@ -13,6 +12,7 @@ import './styles/qr-animation.css'
 import { motion } from "framer-motion";
 import { useTranslation } from "react-i18next";
 import { useValidate } from "../../context/validateFormContext";
+const logo = 'Logo.png';
 
 /**
  * @UpdatedBy : Nicolas Barrios,   @date 2024-07-25 11:51:05
