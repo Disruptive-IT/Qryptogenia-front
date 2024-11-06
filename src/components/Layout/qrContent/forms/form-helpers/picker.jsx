@@ -1,7 +1,7 @@
 import GradientColorPicker from 'react-gcolor-picker';
 
 
-function ColorPicker({handlerFunction,pickerValue,pickerColor}){
+function ColorPicker({handlerFunction,pickerValue,pickerColor,style}){
     return(
         <GradientColorPicker 
         enableAlpha
@@ -16,6 +16,7 @@ function ColorPicker({handlerFunction,pickerValue,pickerColor}){
         color={pickerColor}
         value={pickerValue}
         onChange={handlerFunction}
+        style={style}
         />
     )
 }

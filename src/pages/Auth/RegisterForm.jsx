@@ -9,11 +9,11 @@ import PinVerificationForm from "../../components/auth/PinVerificationForm";
 import CompleteRegisterForm from "../../components/auth/CompleteRegisterForm";
 import AuthSwitcher from "../../components/auth/pure/AuthSwitcher";
 import { IoIosMail } from "react-icons/io";
-import axios from "axios";
 import { useTranslation } from "react-i18next";
 import { FaArrowLeft } from "react-icons/fa6";
 import { Link } from "react-router-dom";
 const logo = 'Logo.png';
+import instance from "../../libs/axios";
 
 /**
  * @Author : Daniel Salazar,   @date 2024-07-29 12:18:52
@@ -59,7 +59,7 @@ const RegisterForm = () => {
 
   async function auth() {
     try {
-      const response = await axios.get("http://localhost:3000/api/auth/google");
+      const response = await instance.get("/auth/google");
 
       if (response.status === 200) {
         navigate(response.data.url);
@@ -72,10 +72,11 @@ const RegisterForm = () => {
   }
 
   async function handleGoogleLogin() {
+    const baseBackUrl=import.meta.env.VITE_BASE_BACK_URL
     try {
       console.log("entrando al login2");
       const response = (window.location.href =
-        "http://localhost:3000/api/auth/google");
+        `${baseBackUrl}/auth/google`);
       console.log("entrando al login3");
       if (response.status === 200) {
         setUser(response.data.info.user);

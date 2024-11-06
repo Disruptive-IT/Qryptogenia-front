@@ -106,6 +106,7 @@ export const saveQrData = async (
     };
 
     const isEditRoute = location.pathname.startsWith('/edit')
+    const baseFrontUrl=import.meta.env.VITE_BASE_FRONT_URL
 
     try {
         console.log(qrData);
@@ -115,9 +116,8 @@ export const saveQrData = async (
             data: isEditRoute ? { qrData } : qrData,
         });
 
-        window.location.href = 'http://localhost:5173/user/qr';
+        window.location.href = `${baseFrontUrl}/user/qr`;
         return false;
-
     } 
      catch (err) {
         const errorMessage = err.response && err.response.data && err.response.data.msg
@@ -138,7 +138,7 @@ export const saveQrData = async (
                   }
             }).then((result) => {
                 if (result.isConfirmed) {
-                    window.location.href = 'http://localhost:5173/login';
+                    window.location.href = `${baseFrontUrl}/login`;
                 }
             });
         } else {

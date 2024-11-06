@@ -8,9 +8,9 @@
 
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import axios from 'axios';
 import { toast } from 'sonner';
 import { useNavigate } from 'react-router-dom';
+import instance from '../../libs/axios';
 /*
  * @UpdatedBy : Cristian Escobar,   @date 2024-09-03 15:05:11
  * @description : Se configuro para que se hiciera un mapeo de las membresias en orden de precio
@@ -22,7 +22,7 @@ export const PricingsCards = ({ data, userId, isSelectionMode }) => {
   const handlePlanSelection = async (membershipId) => {
     if (isSelectionMode) { // Solo procede si está en la ruta '/selectPlan'
       try {
-        const response = await axios.post('http://localhost:3000/api/user/assign-membership', {
+        const response = await instance.post('/user/assign-membership', {
           userId: userId,
           membershipId: membershipId,
         }, {
