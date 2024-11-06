@@ -2,7 +2,6 @@ import { FieldArray, Formik, useFormik} from 'formik';
 import { useEffect, useState } from 'react';
 import { UseMenu } from './menuContext';
 import { motion } from "framer-motion";
-import EjectIcon from '@mui/icons-material/Eject';
 import DeleteIcon from '@mui/icons-material/Delete';
 import CancelIcon from '@mui/icons-material/Cancel';
 import {Accordion,AccordionItem} from '@nextui-org/accordion'
@@ -12,7 +11,7 @@ import { useValidate } from '../../../../../context/validateFormContext';
 import ColorPicker from '../form-helpers/picker';
 
 function MenuForm(){
-    const { formData,editFormdata,activeCategory,currentTemplate,indexTemplate,setIndexTemplate,showBackgroundPicker,showMenuPicker,showBackCategoryPicker,backgroundPickerRef,menuPickerRef,backgroundProductPickerRef,namePickerRef,descriptionPickerRef,pricePickerRef,setShowBackgroundPicker,setShowBackCategoryPicker,setShowMenuPicker,setShowNamePicker,setShowDescriptionPicker,setShowPricePicker,
+    const { formData,productsCategory,editFormdata,activeCategory,currentTemplate,indexTemplate,setIndexTemplate,showBackgroundPicker,showMenuPicker,showBackCategoryPicker,backgroundPickerRef,menuPickerRef,backgroundProductPickerRef,namePickerRef,descriptionPickerRef,pricePickerRef,setShowBackgroundPicker,setShowBackCategoryPicker,setShowMenuPicker,setShowNamePicker,setShowDescriptionPicker,setShowPricePicker,
             showNamePicker,showDescriptionPicker,showPricePicker,fonts,templates,isEditRoute,initialFormDataRef,validateLink,getFonts,getTemplates,handlePrev,handleNext,handleActiveCategory,handleRestaurantName,handleActiveProduct,handleShowBackgroundPicker,handleShowMenuPicker,handleShowBackCategoryPicker,handleShowNamePicker,handleShowDescriptionPicker,handleShowPricePicker,resetUserTemplate,validation,getDataToEdit,handleTemplate,
             templateNull,usertemplateNull,handleLogo,handleUserTemplate,handleBackgroundCard,handleMenuColor,addCategory,handleFontFamily,removeCategory,handleChangeCategoryName,addProductToCategory,removeProductToCategory,handleProductField,handleImgProduct,handleBackgroundProduct,handleColorNameProduct,handleColorDescriptionProduct,handleColorPriceProduct,handleProductName,handleProductDescription,handleProductTop,handleProductPrice
     }=UseMenu();
@@ -365,7 +364,7 @@ return (
               title={
                 <div onClick={()=>handleActiveCategory(index)} className="flex justify-between p-2">
                   <label htmlFor={`category.${index}.categoryName`} className="">
-                    Category Name
+                    {!productsCategory?.[index].categoryName=="" ? productsCategory?.[index]?.categoryName:'Category name'}
                   </label>
                     <button
                       onClick={() => {
@@ -476,7 +475,7 @@ return (
                             aria-label={`product ${index}-${productIndex}`}
                             title={
                               <div className="flex justify-between px-2">
-                                <h1 className="">Product {productIndex + 1}</h1>
+                                <h1 className=""> {!productsCategory?.[index].products?.[productIndex].productName=="" ? productsCategory?.[index]?.products?.[productIndex]?.productName:`product ${productIndex+1}`}</h1>
                                 <div className="self-end">
                                   {/* Botón para eliminar producto, visible solo si hay más de uno */}
                                   <button

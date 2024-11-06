@@ -27,6 +27,7 @@ export default function MenuProvider({children}) {
     const isEditRoute = location.pathname.startsWith('/edit');
     const initialFormDataRef=useRef();
     const validateLink=/.webp/
+    const productsCategory=formData.category;
 
     const [currentTemplate, setCurrentTemplate] = useState(0);
     const [indexTemplate,setIndexTemplate]=useState(null);
@@ -753,6 +754,7 @@ export default function MenuProvider({children}) {
     return(
         <MenuContext.Provider value={{
             //variables use state
+            productsCategory,
             formData,
             editFormdata,
             activeCategory,
