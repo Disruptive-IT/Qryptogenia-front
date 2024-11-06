@@ -1,5 +1,5 @@
 import { FieldArray, Formik, useFormik} from 'formik';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { UseMenu } from './menuContext';
 import { motion } from "framer-motion";
 import EjectIcon from '@mui/icons-material/Eject';
@@ -11,6 +11,13 @@ import { toast } from 'sonner';
 import { useValidate } from '../../../../../context/validateFormContext';
 import ColorPicker from '../form-helpers/picker';
 
+/*
+ * @Author : Nicolas Barrios,   @date 2024-11-05 17:41:54
+ * @description : formulario de menu con validaciones realizadas
+ * @Props :
+ * @return :
+ */
+
 function MenuForm(){
     const { formData,editFormdata,activeCategory,currentTemplate,indexTemplate,setIndexTemplate,showBackgroundPicker,showMenuPicker,showBackCategoryPicker,backgroundPickerRef,menuPickerRef,backgroundProductPickerRef,namePickerRef,descriptionPickerRef,pricePickerRef,setShowBackgroundPicker,setShowBackCategoryPicker,setShowMenuPicker,setShowNamePicker,setShowDescriptionPicker,setShowPricePicker,
             showNamePicker,showDescriptionPicker,showPricePicker,fonts,templates,isEditRoute,initialFormDataRef,validateLink,getFonts,getTemplates,handlePrev,handleNext,handleActiveCategory,handleRestaurantName,handleActiveProduct,handleShowBackgroundPicker,handleShowMenuPicker,handleShowBackCategoryPicker,handleShowNamePicker,handleShowDescriptionPicker,handleShowPricePicker,resetUserTemplate,validation,getDataToEdit,handleTemplate,
@@ -18,7 +25,7 @@ function MenuForm(){
     }=UseMenu();
 
     const{setValidateFormMenu}=useValidate();
-    let initialValues;
+    const [initialValues,setInitialValues]=useState(formData);
 
 
     const validateFormFields = () => {
@@ -37,34 +44,35 @@ function MenuForm(){
         onsubmit:(values,{setSubmitting})=>{
             console.log(values);
         },
+        enableReinitialize:true
     });
     console.log(" values ",formik.values);
+    console.log("formdata: ",formData);
 
     useEffect(()=>{
       const executeFunctions=async()=>{
         await getFonts();
         await getTemplates();
+        if(formData){
+          setInitialValues({
+            restaurantName:isEditRoute && formData ? formData.restaurantName:'',
+            restaurantLogo:isEditRoute && formData ? formData.restaurantLogo :null,
+            backgroundCard:isEditRoute && formData ? formData.backgroundCard : '#000',
+            colorMenu:isEditRoute && formData ? formData.colorMenu : '#fff',
+            idFontPreview:isEditRoute && formData ? formData.idFontPreview : null,
+            iduserTemplate:isEditRoute && formData ? formData.idUserTemplate : null,
+            idImgTemplate:isEditRoute && formData ? formData.idImgTemplate : null,
+            category:isEditRoute && formData ? formData.category : [{categoryName:"",products:[{ backgroundProductCard:"#fff",colorName:"#000",colorDescription:"#000",colorPrice:"#000",productImg:null, productName:"", productDescription:"", top:false,price:null}]}]
+        })
+        }
       }
 
       executeFunctions();
-    },[])
+    },[isEditRoute,formData])
 
     useEffect(()=>{
       validateFormFields()
     },[formik.errors])
-
-    useEffect(()=>{
-        initialValues={
-        restaurantName:isEditRoute && formData ? formData.restaurantName:'',
-        restaurantLogo:isEditRoute && formData ? formData.restaurantLogo :null,
-        backgroundCard:isEditRoute && formData ? formData.backgroundCard : '#000',
-        colorMenu:isEditRoute && formData ? formData.colorMenu : '#fff',
-        idFontPreview:isEditRoute && formData ? formData.idFontPreview : null,
-        iduserTemplate:isEditRoute && formData ? formData.idUserTemplate : null,
-        idImgTemplate:isEditRoute && formData ? formData.idImgTemplate : null,
-        category:isEditRoute && formData ? formData.category : [{categoryName:"",products:[{ backgroundProductCard:"#fff",colorName:"#000",colorDescription:"#000",colorPrice:"#000",productImg:null, productName:"", productDescription:"", top:false,price:null}]}]
-    }
-    },[])
 
     useEffect(()=>{
       document.addEventListener("mousedown",handleShowBackgroundPicker);
@@ -93,13 +101,13 @@ function MenuForm(){
       }
     },[])
     // console.log("isss ",editFormdata);
-    // console.log("fomik values: ",formik.values);
-    // console.log("intial values: ",formik.initialValues);
-    // console.log("formik errors",formik.errors);
+    console.log("fomik values: ",formik.values);
+    console.log("intial values: ",formik.initialValues);
+    console.log("formik errors",formik.errors);
 return (
     <div className='p-4'>
         <Formik
-            initialValues={formData}
+            initialValues={initialValues}
             validate={validation}
             onSubmit={(values) => {
                 console.log(values);
@@ -288,7 +296,7 @@ return (
                     </div>
                     {/* Sección para Agregar Nueva Categoría y Productos */}
                     <div className='flex flex-col mt-6'>
-                        {values.category && values.category.length <= 0 ? (
+                        {values?.category && values?.category.length <= 0 ? (
                             <div><h1>no hay categorias agregadas</h1></div>
                         ) : (
 <FieldArray name="category">
@@ -352,9 +360,9 @@ return (
       </button>
 
       {/* Asegurarse de que hay categorías antes de mostrar el Accordion */}
-      {values.category.length > 0 && (
+      {values?.category.length > 0 && (
         <Accordion variant="splitted">
-          {values.category.map((category, index) => (
+          {values?.category.map((category, index) => (
             <AccordionItem
               className={`bg-gray-300 my-2 p-3 pb-2 w-full rounded-2xl cursor-pointer ${
                   activeCategory === index ? "border-2 border-zinc-800" : ""
@@ -368,7 +376,7 @@ return (
                   </label>
                     <button
                       onClick={() => {
-                        if (values.category.length>1 && formData.category.length>1) {
+                        if (values?.category.length>1 && formData.category.length>1) {
                           remove(index);
                           removeCategory(index);
                         }

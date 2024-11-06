@@ -15,12 +15,12 @@ import { UseContentTexts} from '../components/Layout/qrContent/contentData';
 import Valuesjson from '../pages/user/Valuesjson.json';
 import Modal from 'react-modal';
 import CellBox from '../components/Layout/qrContent/cellBox';
-import axios from 'axios';
 import { OptionBarTwo } from '../components/Layout/optionBar';
 import { useQr } from '../context/QrContext';
 import { useTranslation } from 'react-i18next';
 import { UseMenu } from '../components/Layout/qrContent/forms/menu/menuContext';
 import { menuFormData } from '../components/Layout/qrContent/forms/menu/menuData';
+import instance from '../libs/axios';
 Modal.setAppElement('#root');
 
 const initialAppFormValues = Valuesjson.appFormValues;
@@ -78,7 +78,7 @@ const AppContent = () => {
         const fetchQRData = async () => {
             if (location.pathname.includes('/edit')) {
                 try {
-                    const response = await axios.get(`http://localhost:3000/api/qr/getPreviewUpdate/${id}`, {
+                    const response = await instance.get(`/qr/getPreviewUpdate/${id}`, {
                         withCredentials: true,
                     });
                 
