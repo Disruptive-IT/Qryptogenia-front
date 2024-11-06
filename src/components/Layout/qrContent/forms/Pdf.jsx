@@ -106,7 +106,7 @@ const handlePdfFile = (event) => {
       useEffect(() => {
         setTimeout(() => {
           setLoading(false); // Cambia a false una vez que los datos hayan cargado
-        }, 100); // Tiempo simulado de carga
+        }, 300); // Tiempo simulado de carga
       }, []); 
       return (
         <>
@@ -114,91 +114,94 @@ const handlePdfFile = (event) => {
           {loading ? (
             <SkeletonPdf />
           ) : (
-            <div className="flex flex-col items-center justify-center px-4 md:px-8">
-              <form onSubmit={formik.handleSubmit} className="flex flex-col items-center w-full max-w-lg">
-                <div className="text-5xl text-gray-700 mb-4">
-                  <img src={pdf} className="w-36" alt="PDF Icon" />
-                </div>
-                <input
-                  type="file"
-                  accept=".pdf"
-                  onChange={(e) => { handleFileChange(e); handlePdfFile(e); }}
-                  className="hidden"
-                  id="pdf-upload"
-                  value={qrProps.data}
-                />
-                <label
-                  htmlFor="pdf-upload"
-                  className="mt-4 px-6 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 focus:outline-none cursor-pointer"
-                  style={{ backgroundColor: '#284B63' }}
-                  onMouseEnter={(e) => (e.target.style.backgroundColor = '#3C6E71')}
-                  onMouseLeave={(e) => (e.target.style.backgroundColor = '#284B63')}
-                >
-                  UPLOAD PDF
-                </label>
-                
-                <div className="flex flex-col space-y-4 mt-4">
-                  <label className="text-lg font-semibold" htmlFor="loadType">LOAD TYPE</label>
-      
-                  <label className="flex items-center cursor-pointer">
-                    <input
-                      type="radio"
-                      name="loadType"
-                      id="download-buttom"
-                      value={loadPdfOptions.download}
-                      onChange={handleLoadType}
-                      className="hidden peer"
-                    />
-                    <span className="w-5 h-5 mr-2 rounded-full border-2 border-gray-500 flex items-center justify-center peer-checked:bg-gray-700 peer-checked:border-transparent">
-                      <span className="w-2 h-2 rounded-full bg-white hidden peer-checked:block"></span>
-                    </span>
-                    Download
-                  </label>
-      
-                  <label className="flex items-center cursor-pointer">
-                    <input
-                      type="radio"
-                      name="loadType"
-                      id="view-buttom"
-                      value={loadPdfOptions.view}
-                      onChange={handleLoadType}
-                      className="hidden peer"
-                    />
-                    <span className="w-5 h-5 mr-2 rounded-full border-2 border-gray-500 flex items-center justify-center peer-checked:bg-gray-700 peer-checked:border-transparent">
-                      <span className="w-2 h-2 rounded-full bg-white hidden peer-checked:block"></span>
-                    </span>
-                    View
-                  </label>
-                </div>
-      
-                {formik.errors.pdfFile && (
-                  <div className="text-red-600 text-sm mt-2">{formik.errors.pdfFile}</div>
-                )}
-              </form>
-      
-              {/* Mostrar el nombre del archivo PDF seleccionado */}
-              {pdfName && (
-                <div className="mt-2 text-gray-600 text-center text-sm sm:text-base md:text-lg max-w-full break-words">
-                  <strong>Archivo seleccionado:</strong> {pdfName}
-                </div>
-              )}
-      
-              {/* Vista previa del PDF */}
-              {pdfUrl && (
-                <div className="mt-4 w-full">
-                  <h4 className="text-lg font-semibold text-center">Vista previa:</h4>
-                  <iframe
-                    src={`${pdfUrl}#toolbar=0`} // Agrega #toolbar=0 al final de la URL para ocultar la barra de herramientas
-                    className="w-full h-[400px] sm:h-[500px] md:h-[550px] lg:h-[600px] border-8 border-[#353535] max-w-full"
-                    title="Vista previa del PDF"
+            <div>
+              <div className="flex flex-col items-center justify-center">
+                <form onSubmit={formik.handleSubmit} className="flex flex-col items-center">
+                  <div className="text-5xl text-gray-700">
+                    <img src={pdf} className='w-36' alt="PDF Icon" />
+                  </div>
+                  <input
+                    type="file"
+                    accept=".pdf"
+                    onChange={(e) => {handleFileChange(e); handlePdfFile(e)}}
+                    className="hidden"
+                    id="pdf-upload"
+                    value={qrProps.data}
                   />
-                </div>
-              )}
+                  <label
+                    htmlFor="pdf-upload"
+                    className="mt-4 px-6 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 focus:outline-none cursor-pointer"
+                    style={{ backgroundColor: '#284B63', color: '' }}
+                    onMouseEnter={(e) => e.target.style.backgroundColor = '#3C6E71'}
+                    onMouseLeave={(e) => e.target.style.backgroundColor = '#284B63'}
+                  >
+                    UPLOAD PDF
+                  </label>
+                  <div className="flex flex-col space-y-4">
+                    <label className="text-lg font-semibold" htmlFor="loadType">LOAD TYPE</label>
+      
+                    <label className="flex items-center cursor-pointer">
+                      <input
+                        type="radio"
+                        name="loadType"
+                        id="download-buttom"
+                        value={loadPdfOptions.download}
+                        onChange={handleLoadType}
+                        className="hidden peer"
+                      />
+                      <span className="w-5 h-5 mr-2 rounded-full border-2 border-gray-500 flex items-center justify-center peer-checked:bg-gray-700 peer-checked:border-transparent">
+                        <span className="w-2 h-2 rounded-full bg-white hidden peer-checked:block"></span>
+                      </span>
+                      Download
+                    </label>
+      
+                    <label className="flex items-center cursor-pointer">
+                      <input
+                        type="radio"
+                        name="loadType"
+                        id="view-buttom"
+                        value={loadPdfOptions.view}
+                        onChange={handleLoadType}
+                        className="hidden peer"
+                      />
+                      <span className="w-5 h-5 mr-2 rounded-full border-2 border-gray-500 flex items-center justify-center peer-checked:bg-gray-700 peer-checked:border-transparent">
+                        <span className="w-2 h-2 rounded-full bg-white hidden peer-checked:block"></span>
+                      </span>
+                      View
+                    </label>
+                  </div>
+      
+                  {formik.errors.pdfFile && (
+                    <div className="text-red-600 text-sm mt-2">{formik.errors.pdfFile}</div>
+                  )}
+                </form>
+      
+                {/* Mostrar el nombre del archivo PDF seleccionado */}
+                {pdfName && (
+                  <div className="mt-2 text-gray-600">
+                    <strong>Archivo seleccionado:</strong> {pdfName}
+                  </div>
+                )}
+      
+                {/* Vista previa del PDF */}
+                {pdfUrl && (
+                  <div className="mt-4">
+                    <h4 className="text-lg font-semibold">Vista previa:</h4>
+                    <iframe
+                      src={`${pdfUrl}#toolbar=0`} // Agrega #toolbar=0 al final de la URL para ocultar la barra de herramientas
+                      width="850"
+                      height="600"
+                      title="Vista previa del PDF"
+                      style={{ border: '10px solid #353535' }} // COLOR Y BORDE
+                    />
+                  </div>
+                )}
+              </div>  
             </div>
           )}
         </>
-      );
-    };         
+      );  
+};    
 
 export const LinkInput = ({ onSubmit }) => {
   const { qrData, qrProps, setQrData } = useQr();

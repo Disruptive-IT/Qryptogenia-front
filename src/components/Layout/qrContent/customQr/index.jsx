@@ -178,7 +178,7 @@ const CustomQr = ({ qrId }) => {
         }
       });
 
-    const Dowload = async () => {
+    const CreateQr = async () => {
         const { value: qrName, isConfirmed } = await Swal.fire({
             title: t("Save QR Code"),
             html: `
