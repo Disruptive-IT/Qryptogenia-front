@@ -126,7 +126,7 @@ export default function ScrollableMarcoQrs({ onStyleClick, value, onChange }) {
                     style={{
                         ...getShapeStyle(style.shape),
                         ...getBackgroundStyle(style.backgroundType, style.style.backgroundColor, style.patternImage),
-                        borderColor: style.style.borderColor,
+                        borderColor:  style.style.borderColor,
                         borderWidth: style.shape !== 'none' ? '2px' : '0px',
                         borderStyle: 'solid',
                         padding: '20px',
@@ -134,7 +134,6 @@ export default function ScrollableMarcoQrs({ onStyleClick, value, onChange }) {
                         alignItems: 'center',  // Center content vertically
                         justifyContent: 'center', // Center content horizontally
                         color : '#000000', // Color QRs
-                        borderColor: '#000000' // Color borde QRs
                     }}
                 >
                     <style.icon size={35} />

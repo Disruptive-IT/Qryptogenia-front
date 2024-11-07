@@ -62,9 +62,20 @@ export const AppForm = ({ onFormChangeApp, location, appFormValues }) => {
         }
       };
 
-    useEffect(() => {
-       getFontsPreview(setAppFontsPreview);
-    }, []);
+useEffect(() => {
+    const fetchFontsPreview = async () => {
+        setLoading(true); // Activa el loading antes de la petición
+        try {
+            await getFontsPreview(setAppFontsPreview);
+        } catch (error) {
+            console.error("Error fetching fonts preview:", error);
+        } finally {
+            setLoading(false); // Desactiva el loading al terminar
+        }
+    };
+
+    fetchFontsPreview();
+}, []);
 
 console.log("these are the selected options: ",appFormValues.selectedOptions);
 
@@ -519,7 +530,7 @@ console.log("these are the selected options: ",appFormValues.selectedOptions);
 
                     <div className="flex flex-col md:flex-row md:items-center mb-4 mt-4">
                         <div className="w-full md:w-3/4">
-                            <label htmlFor="" className="mb-2">Multiselect:</label>
+                            <label htmlFor="" className="mb-2">{t("Multiselect")}</label>
                             <Select
                                 id="selectedOptions"
                                 options={appOptions}

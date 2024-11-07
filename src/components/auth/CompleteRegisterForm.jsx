@@ -7,7 +7,7 @@ import { SchemaCompleteRegisterValidate } from "../../helpers/validate/auth.vali
 import { useState } from "react";
 import { FaLock, FaLockOpen, FaUser } from "react-icons/fa";
 import { useTranslation } from "react-i18next";
-import logo from "../../../public/Logo.png";
+const logo = 'Logo.png';
 
 const CompleteRegisterForm = ({ email }) => {
   const { completeRegister, loginUser } = useAuthContext();

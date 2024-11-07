@@ -1,11 +1,11 @@
 import React from 'react';
 import { StoreLayout } from '../../Layout/qrContent/LayoutsQr/stylePhoneStoreLayout';
-import CellBox from '../../Layout/qrContent/cellBox'; // Ajusta la ruta según corresponda
+import CellBox from '../../Layout/qrContent/cellBox';
 import { MdClose } from 'react-icons/md';
-import './scroll.css'
+import './scroll.css';
 import Modal from 'react-modal';
 import { PhoneContentSwitch } from '../../Layout/qrContent';
-import { animate, motion } from 'framer-motion';
+import { motion } from 'framer-motion';
 import StoreMenuFood from '../../Layout/qrContent/storeLayout/storeFoodMenu';
 
 /**
@@ -19,7 +19,6 @@ import StoreMenuFood from '../../Layout/qrContent/storeLayout/storeFoodMenu';
  *   - `codeType` (string): Tipo de código que se utiliza para determinar el nombre del contenido a mostrar en el modal.
  * @return : Renderiza un modal con una vista previa del contenido móvil basado en `storeData` y `codeType`. El modal incluye un botón de cerrar que utiliza una animación de `framer-motion`. La clase `scale-wrapper` se utiliza para ajustar el tamaño del modal en función del tamaño de la pantalla, con diferentes escalas para diferentes tamaños de pantalla.
  */
-
 const StoreModal = ({ open, handleClose, storeData, codeType }) => {
   if (!open) return null;
 
@@ -28,7 +27,6 @@ const StoreModal = ({ open, handleClose, storeData, codeType }) => {
       handleClose();
     }
   };
-  console.log(storeData)
   const contentName = codeType.replace(/-/g, ' ');
   return (
     <>
@@ -37,28 +35,36 @@ const StoreModal = ({ open, handleClose, storeData, codeType }) => {
         onRequestClose={handleClose}
         contentLabel="Vista Previa del Móvil"
         className="fixed inset-0 flex items-center justify-center p-4 bg-transparent"
-        overlayClassName="fixed inset-0 bg-black bg-opacity-50 overflow-auto"
+        overlayClassName="fixed inset-0 bg-black bg-opacity-50 overflow-auto z-[10000]" 
       >
-        <div onClick={codeType!=="food-menu" && (handleClose)} className="bg-transparent p-0 rounded-lg border-none shadow-none flex justify-center items-center w-full h-full">
-        <div className="relative flex justify-center items-start" style={{ maxHeight: 'calc(100vh - 40px)', maxWidth: 'calc(100vw - 40px)' }}>
-          <motion.button whileTap={{scale:0}} onClick={handleClose} className="absolute bg-white p-1 tracking-wider rounded-[10px] hover:bg-red-600 hover:text-white top-0 left-50 text-red-500">Cerrar</motion.button>
+        <div
+          id="modal-container"
+          onClick={(e) => e.target.id === 'modal-container' && handleClose()}
+          className="flex justify-center items-center w-full h-full bg-transparent"
+        >
+          <div className="relative flex justify-center items-start" 
+          style={{ maxHeight: 'calc(100vh - 40px)', maxWidth: 'calc(100vw - 40px)' }}>
+
+            <motion.button whileTap={{ scale: 0 }} 
+            onClick={handleClose} 
+            className="absolute bg-white p-1 tracking-wider rounded-[10px] hover:bg-red-600 hover:text-white top-0 left-50 text-red-500 z-[10000]">Cerrar</motion.button>
+            
             <div className="relative scale-wrapper" style={{ marginTop: '40px' }}>
-              {codeType=='food-menu' ? (
+              
+              {codeType === 'food-menu' ? (
                 <CellBox>
-                  <StoreMenuFood 
+                  <StoreMenuFood menuFormValues={storeData} />
+                </CellBox>
+              ) : (
+                <CellBox>
+                  <PhoneContentSwitch
+                    contentName={contentName}
+                    appFormValues={storeData}
+                    socialFormValues={storeData}
+                    musicFormValues={storeData}
                     menuFormValues={storeData}
                   />
                 </CellBox>
-              ):(
-                <CellBox>
-                <PhoneContentSwitch
-                  contentName={contentName}
-                  appFormValues={storeData}
-                  socialFormValues={storeData}
-                  musicFormValues={storeData}
-                  menuFormValues={storeData}
-                />
-              </CellBox>
               )}
             </div>
           </div>
@@ -102,10 +108,7 @@ const StoreModal = ({ open, handleClose, storeData, codeType }) => {
         }
       `}</style>
     </>
-
   );
-
-
 };
 
 export default StoreModal;

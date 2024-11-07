@@ -32,7 +32,7 @@ i18n
       escapeValue: false, // react ya escapa valores por defecto
     },
     backend: {
-      loadPath: '/public/lenguages/{{lng}}/{{ns}}.json', // Ruta a los archivos de traducción
+      loadPath: '/lenguages/{{lng}}/{{ns}}.json', // Ruta a los archivos de traducción
     },
   });
 

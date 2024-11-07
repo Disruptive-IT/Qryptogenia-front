@@ -9,7 +9,7 @@ import './menu.css'
 import { toast } from 'sonner';
 import { useValidate } from '../../../../../context/validateFormContext';
 import ColorPicker from '../form-helpers/picker';
-
+import SkeletonLoader from '../Skeleton/Skeleton';
 /*
  * @Author : Nicolas Barrios,   @date 2024-11-05 17:41:54
  * @description : formulario de menu con validaciones realizadas
@@ -20,7 +20,7 @@ import ColorPicker from '../form-helpers/picker';
 function MenuForm(){
     const { formData,productsCategory,editFormdata,activeCategory,currentTemplate,indexTemplate,setIndexTemplate,showBackgroundPicker,showMenuPicker,showBackCategoryPicker,backgroundPickerRef,menuPickerRef,backgroundProductPickerRef,namePickerRef,descriptionPickerRef,pricePickerRef,setShowBackgroundPicker,setShowBackCategoryPicker,setShowMenuPicker,setShowNamePicker,setShowDescriptionPicker,setShowPricePicker,
             showNamePicker,showDescriptionPicker,showPricePicker,fonts,templates,isEditRoute,initialFormDataRef,validateLink,getFonts,getTemplates,handlePrev,handleNext,handleActiveCategory,handleRestaurantName,handleActiveProduct,handleShowBackgroundPicker,handleShowMenuPicker,handleShowBackCategoryPicker,handleShowNamePicker,handleShowDescriptionPicker,handleShowPricePicker,resetUserTemplate,validation,getDataToEdit,handleTemplate,
-            templateNull,usertemplateNull,handleLogo,handleUserTemplate,handleBackgroundCard,handleMenuColor,addCategory,handleFontFamily,removeCategory,handleChangeCategoryName,addProductToCategory,removeProductToCategory,handleProductField,handleImgProduct,handleBackgroundProduct,handleColorNameProduct,handleColorDescriptionProduct,handleColorPriceProduct,handleProductName,handleProductDescription,handleProductTop,handleProductPrice
+            templateNull,usertemplateNull,handleLogo,handleUserTemplate,handleBackgroundCard,handleMenuColor,addCategory,handleFontFamily,removeCategory,handleChangeCategoryName,addProductToCategory,removeProductToCategory,handleProductField,handleImgProduct,handleBackgroundProduct,handleColorNameProduct,handleColorDescriptionProduct,handleColorPriceProduct,handleProductName,handleProductDescription,handleProductTop,handleProductPrice, loading, setLoading,
     }=UseMenu();
 
     const{setValidateFormMenu}=useValidate();
@@ -105,6 +105,9 @@ function MenuForm(){
     console.log("formik errors",formik.errors);
 return (
     <div className='p-4'>
+      {loading ? (
+                <SkeletonLoader />
+            ) : (
         <Formik
             initialValues={initialValues}
             validate={validation}
@@ -156,8 +159,7 @@ return (
                 onChange={(e) => { handleLogo(e); formik.setFieldValue('restaurantLogo', e.target.files[0]); }}
               />
             </div>
-          </div>
-
+          </div>          
           {/* Sección del Color de Fondo */}
           <div className="flex flex-col md:flex-row justify-start items-start space-y-4 md:space-y-0 md:space-x-6 py-4">
             {/* Background Section */}
@@ -676,6 +678,7 @@ return (
                 </form>
             )}
         </Formik>
+      )}      
     </div>
 );
 

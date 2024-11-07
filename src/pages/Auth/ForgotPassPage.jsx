@@ -8,10 +8,10 @@ import { AuthContext } from "../../context/AuthContext";
 import { IoIosMail } from "react-icons/io";
 import AuthSwitcher from "../../components/auth/pure/AuthSwitcher";
 import { RecoverPassForm } from "./RecoverPassPage";
-import logo from "../../../public/Logo.png";
 import { Link } from "react-router-dom";
 import { FaArrowLeft } from "react-icons/fa6";
 import { useTranslation } from "react-i18next";
+const logo = 'Logo.png';
 
 /**
  * @Author : Daniel Salazar,   @date 2024-07-29 12:21:16
