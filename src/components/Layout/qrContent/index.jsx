@@ -54,13 +54,6 @@ export const QrContentSwitch = ({contentName, onFormChangeApp, onFormChange, onF
                 </div>
             );
             break;
-        case "news":
-            qrContent = (
-                <div>
-                    <p>NOTICIAS</p>
-                </div>
-            );
-            break;
         case "music":
             qrContent = (
                 <div>
@@ -75,13 +68,13 @@ export const QrContentSwitch = ({contentName, onFormChangeApp, onFormChange, onF
                 </div>
             );
             break;
-        case "curriculum":
-            qrContent = (
-                <div>
-                    <p>COMPARTIR LA HOJA DE VIDA</p>
-                </div>
-            );
-            break;
+        // case "curriculum":
+        //     qrContent = (
+        //         <div>
+        //             <p>COMPARTIR LA HOJA DE VIDA</p>
+        //         </div>
+        //     );
+        //     break;
         case "food menu":
             qrContent = (
                 <div>
@@ -127,13 +120,6 @@ switch (contentName) {
                 </div>
             );
             break;
-        case "news":
-            phoneContent = (
-                <div>
-                    <h1>NOTICIAS</h1>
-                </div>
-            );
-            break;
         case "music":
             phoneContent = (
                 <div>
@@ -148,13 +134,13 @@ switch (contentName) {
                 </div>
             );
             break;
-        case "curriculum":
-            phoneContent = (
-                <div>
-                    <p>COMPARTIR LA HOJA DE VIDA</p>
-                </div>
-            );
-            break;
+        // case "curriculum":
+        //     phoneContent = (
+        //         <div>
+        //             <p>COMPARTIR LA HOJA DE VIDA</p>
+        //         </div>
+        //     );
+        //     break;
         case "food menu":
             phoneContent = (
                 <div>
