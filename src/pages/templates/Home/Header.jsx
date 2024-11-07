@@ -1,7 +1,6 @@
 import React, { useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import CustomLink from '../../../components/Layout/CustomLink';
-
 import MenuDrawer from '../../../components/UI/menu/menuDrawer';
 import { useAuth } from '../../../hooks/useAuth';
 import UserProfileMenu from '../../../components/Admin/Profile';
@@ -29,7 +28,7 @@ function Navbar() {
                         <CustomLink to="/" isActive={isActive('/')}>{t('Home')}</CustomLink>
                         <CustomLink to="#" isActive={isActive('/about')}>{t('About us')}</CustomLink>
                         <CustomLink to="/pricings" isActive={isActive('/pricings')}>{t('Plans')}</CustomLink>
-                        <CustomLink to="#" isActive={isActive('/faq')}>{t('FAQ')}</CustomLink>
+                        <CustomLink to="#" isActive={isActive('/faq')}>{t("FAQ")}</CustomLink>
                     </ul>
                 </nav>
 
