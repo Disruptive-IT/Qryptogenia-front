@@ -25,6 +25,7 @@ function MenuForm(){
 
     const{setValidateFormMenu}=useValidate();
     const [initialValues,setInitialValues]=useState(formData);
+    const [loading, setLoading] = useState(true); // Por defecto está cargando
 
 
     const validateFormFields = () => {
@@ -99,10 +100,14 @@ function MenuForm(){
         }))
       }
     },[])
+
+    useEffect(()=>{
+      setLoading(false);
+    },[])
     // console.log("isss ",editFormdata);
-    console.log("fomik values: ",formik.values);
-    console.log("intial values: ",formik.initialValues);
-    console.log("formik errors",formik.errors);
+    // console.log("fomik values: ",formik.values);
+    // console.log("intial values: ",formik.initialValues);
+    // console.log("formik errors",formik.errors);
 return (
     <div className='p-4'>
         <Formik
@@ -263,7 +268,7 @@ return (
                           ></div>
                           {showNamePicker && (
                             <div className='colorPicker' ref={namePickerRef}>
-                              <ColorPicker handlerFunction={(color) =>{handleColorNameProduct(activeCategory, color); }} pickerValue={formData.category?.[activeCategory]?.products?.colorName || "#FFFFFF"} pickerColor={formData.category?.[activeCategory]?.products?.colorName || "#FFFFFF"} />
+                              <ColorPicker handlerFunction={(color) =>{handleColorNameProduct(activeCategory, color); }} pickerValue={formData.category?.[activeCategory]?.products?.[0].colorName || "#000"} pickerColor={formData.category?.[activeCategory]?.products?.[0].colorName || "#FFFFFF"} />
                             </div>
                           )}
                         </div>
@@ -274,7 +279,7 @@ return (
                           <div  className='w-10 h-10 border border-gray-300 rounded cursor-pointer'  onClick={() => setShowDescriptionPicker(!showDescriptionPicker)}  style={{ backgroundColor: formData.category?.[activeCategory]?.products[0]?.colorDescription || '#000' }}></div>
                           {showDescriptionPicker && (
                             <div className='colorPicker' ref={descriptionPickerRef}>
-                              <ColorPicker  handlerFunction={(color) => { handleColorDescriptionProduct(activeCategory, color); }} pickerValue={formData.category?.[activeCategory]?.products?.colorDescription || "#FFFFFF"} pickerColor={formData.category?.[activeCategory]?.products?.colorDescription || "#FFFFFF"} />
+                              <ColorPicker  handlerFunction={(color) => { handleColorDescriptionProduct(activeCategory, color); }} pickerValue={formData.category?.[activeCategory]?.products[0]?.colorDescription || "#FFFFFF"} pickerColor={formData.category?.[activeCategory]?.products?.[0].colorDescription || "#FFFFFF"} />
                             </div>
                           )}
                         </div>
@@ -286,7 +291,7 @@ return (
                           ></div>
                           {showPricePicker && (
                             <div className='colorPicker' ref={pricePickerRef}>
-                              <ColorPicker handlerFunction={(color) => { handleColorPriceProduct(activeCategory, color); }} pickerValue={formData.category?.[activeCategory]?.products?.colorPrice || "#FFFFFF"} pickerColor={formData.category?.[activeCategory]?.products?.colorPrice || "#FFFFFF"} 
+                              <ColorPicker handlerFunction={(color) => { handleColorPriceProduct(activeCategory, color); }} pickerValue={formData.category?.[activeCategory]?.products?.[0].colorPrice || "#FFFFFF"} pickerColor={formData.category?.[activeCategory]?.products?.[0].colorPrice || "#FFFFFF"} 
                               />
                             </div>
                           )}

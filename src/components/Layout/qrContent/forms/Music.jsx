@@ -458,7 +458,7 @@ export const MusicForm = ({ onFormChangeMusic, location, musicFormValues }) => {
                                 ></div>
                                 {showBoxColorPicker && (
                                     <div className="absolute mt-2 left-0 z-50" ref={boxColorPickerRef}>
-                                        <ColorPicker handlerFunction={handleBoxColorChange} pickerColor={boxColor}/>
+                                        <ColorPicker handlerFunction={handleBoxColorChange} pickerColor={boxColor} pickerValue={boxColor} />
                                         {/* style={{ width: "calc(100% + 2rem)" }} // Ajuste del ancho */}
                                     </div>
 
