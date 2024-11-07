@@ -275,7 +275,7 @@ console.log("these are the selected options: ",appFormValues.selectedOptions);
     useEffect(() => {
         // Actualiza el estado de las opciones seleccionadas con los íconos correspondientes
         const updatedOptions = selectedOptions.map((option) => {
-            const fullOption = appOptions.find((opt) => opt.value === option.value);
+            const fullOption = appOptions?.find((opt) => opt.value === option.value);
             return {
                 ...option,
                 icon: fullOption ? fullOption.icon : '',
