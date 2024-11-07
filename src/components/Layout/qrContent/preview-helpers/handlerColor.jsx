@@ -43,3 +43,47 @@ export const extractColorFromGradient = (gradient, percentageFromBottom) => {
     // Considera el color oscuro si la luminancia es menor a 0.5
     return luminance < 0.5;
   };
+
+  //funcion resize image
+  export const resizeImage = (file, maxWidth, maxHeight, callback) => {
+    const reader = new FileReader();
+
+    reader.onload = (event) => {
+        const img = new Image();
+        img.onload = () => {
+            let width = img.width;
+            let height = img.height;
+
+            // Resize the image
+            if (width > height) {
+                if (width > maxWidth) {
+                    height *= maxWidth / width;
+                    width = maxWidth;
+                }
+            } else {
+                if (height > maxHeight) {
+                    width *= maxHeight / height;
+                    height = maxHeight;
+                }
+            }
+
+            const canvas = document.createElement("canvas");
+            canvas.width = width;
+            canvas.height = height;
+            const ctx = canvas.getContext("2d");
+            ctx.drawImage(img, 0, 0, width, height);
+
+            let dataUrl;
+            if (file.type === 'image/png') {
+                // If the file is PNG, convert to PNG
+                dataUrl = canvas.toDataURL("image/png");
+            } else {
+                // If the file is not PNG, convert to JPEG with compression
+                dataUrl = canvas.toDataURL("image/jpeg", 0.7); // 0.7 is the quality level for JPEG
+            }
+            callback(dataUrl);
+        };
+        img.src = event.target.result;
+    };
+    reader.readAsDataURL(file);
+};
