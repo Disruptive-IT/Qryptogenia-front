@@ -26,7 +26,6 @@ function MenuForm(){
     const{setValidateFormMenu}=useValidate();
     const [initialValues,setInitialValues]=useState(formData);
 
-
     const validateFormFields = () => {
       if (Object.keys(formik.errors).length > 1) {
         setValidateFormMenu(false);
@@ -100,9 +99,14 @@ function MenuForm(){
       }
     },[])
     // console.log("isss ",editFormdata);
-    console.log("fomik values: ",formik.values);
-    console.log("intial values: ",formik.initialValues);
-    console.log("formik errors",formik.errors);
+    // console.log("fomik values: ",formik.values);
+    // console.log("intial values: ",formik.initialValues);
+    // console.log("formik errors",formik.errors);
+
+    useEffect(()=>{
+      setLoading(false);
+    },[])
+    
 return (
     <div className='p-4'>
       {loading ? (
