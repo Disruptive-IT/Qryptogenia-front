@@ -262,6 +262,8 @@ const AppContent = () => {
         setSelectedTab(newTab);
     };
     const isWifiRoute = location.pathname === '/qr/wifi'; //funcion para ocultar el boton Show Preview en la ruta wifi
+    const isUrlRoute = location.pathname === '/qr/website-url'; //funcion para ocultar el boton Show Preview en la ruta wifi
+    const isPdfRoute = location.pathname === '/qr/pdf'; //funcion para ocultar el boton Show Preview en la ruta wifi
 
     const isQrRoute = location.pathname.startsWith('/qr/');
     console.log(name)
@@ -310,7 +312,7 @@ const AppContent = () => {
             
             <button 
                 onClick={openModal} 
-                className={`block lg:hidden px-4 py-2 bg-dark-blue text-white rounded hover:bg-light-blue fixed bottom-16 right-4 z-50 ${isWifiRoute ? 'hidden' : ''}`}>
+                className={`block lg:hidden px-4 py-2 bg-dark-blue text-white rounded hover:bg-light-blue fixed bottom-16 right-4 z-50 ${isWifiRoute ? 'hidden' : ''} ${isPdfRoute ? 'hidden' : ''} ${isUrlRoute ? 'hidden' : ''}`}>
                 {t("Show Preview")} 
             </button>
             
