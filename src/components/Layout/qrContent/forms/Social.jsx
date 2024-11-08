@@ -9,7 +9,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Formik, Form, Field } from "formik";
 import Select from 'react-select';
-import { SocialIcon } from 'react-social-icons'
 import { IoIosClose } from "react-icons/io";
 import { useTranslation } from 'react-i18next';
 import { MdOutlineCloudUpload } from "react-icons/md";
@@ -18,6 +17,8 @@ import 'react-loading-skeleton/dist/skeleton.css';
 import SkeletonLoader from './Skeleton/Skeleton';
 import ColorPicker from './form-helpers/picker';
 import { UseMenu } from './menu/menuContext';
+import { socialOptions } from '../preview-helpers/handlePreviewButtons';
+import { resizeImage } from '../preview-helpers/handlerColor';
 import { set } from 'react-hook-form';
 
 export const SocialForm = ({ onFormChange, location, socialFormValues }) => {
@@ -238,65 +239,6 @@ export const SocialForm = ({ onFormChange, location, socialFormValues }) => {
     image: isEditRoute && socialFormValues ? socialFormValues.image : null,
   };
 
-  const options = [
-    {
-      value: 'instagram', label: (
-        <div style={{ display: 'flex', alignItems: 'center' }}>
-          <SocialIcon network='instagram' style={{ marginRight: '5px', width: '20px', height: '20px' }} />
-          <span>Instagram</span>
-        </div>
-      ), icon: <SocialIcon network='instagram' style={{ marginTop: '8px', marginRight: '5px', width: '40px', height: '40px' }} />
-    },
-    {
-      value: 'facebook', label: (
-        <div style={{ display: 'flex', alignItems: 'center' }}>
-          <SocialIcon network='facebook' style={{ marginRight: '5px', width: '20px', height: '20px' }} />
-          <span>Facebook</span>
-        </div>
-      ), icon: <SocialIcon network='facebook' style={{ marginTop: '8px', marginRight: '5px', width: '40px', height: '40px' }} />
-    },
-    {
-      value: 'tiktok', label: (
-        <div style={{ display: 'flex', alignItems: 'center' }}>
-          <SocialIcon network='tiktok' style={{ marginRight: '5px', width: '20px', height: '20px' }} />
-          <span>TikTok</span>
-        </div>
-      ), icon: <SocialIcon network='tiktok' style={{ marginTop: '8px', marginRight: '5px', width: '40px', height: '40px' }} />
-    },
-    {
-      value: 'x', label: (
-        <div style={{ display: 'flex', alignItems: 'center' }}>
-          <SocialIcon network='x' style={{ marginRight: '5px', width: '20px', height: '20px' }} />
-          <span>X</span>
-        </div>
-      ), icon: <SocialIcon network='x' style={{ marginTop: '8px', marginRight: '5px', width: '40px', height: '40px' }} />
-    },
-    {
-      value: 'discord', label: (
-        <div style={{ display: 'flex', alignItems: 'center' }}>
-          <SocialIcon network='discord' style={{ marginRight: '5px', width: '20px', height: '20px' }} />
-          <span>Discord</span>
-        </div>
-      ), icon: <SocialIcon network='discord' style={{ marginTop: '8px', marginRight: '5px', width: '40px', height: '40px' }} />
-    },
-    {
-      value: 'youtube', label: (
-        <div style={{ display: 'flex', alignItems: 'center' }}>
-          <SocialIcon network='youtube' style={{ marginRight: '5px', width: '20px', height: '20px' }} />
-          <span>YouTube</span>
-        </div>
-      ), icon: <SocialIcon network='youtube' style={{ marginTop: '8px', marginRight: '5px', width: '40px', height: '40px' }} />
-    },
-    {
-      value: 'reddit', label: (
-        <div style={{ display: 'flex', alignItems: 'center' }}>
-          <SocialIcon network='reddit' style={{ marginRight: '5px', width: '20px', height: '20px' }} />
-          <span>Reddit</span>
-        </div>
-      ), icon: <SocialIcon network='reddit' style={{ marginTop: '8px', marginRight: '5px', width: '40px', height: '40px' }} />
-    },
-  ];
-
   const fileInputRef = React.createRef();
 
   const handleClick = () => {
@@ -314,55 +256,12 @@ export const SocialForm = ({ onFormChange, location, socialFormValues }) => {
     }
   };
 
-  const resizeImage = (file, maxWidth, maxHeight, callback) => {
-    const reader = new FileReader();
-
-    reader.onload = (event) => {
-      const img = new Image();
-      img.onload = () => {
-        let width = img.width;
-        let height = img.height;
-
-        // Resize the image
-        if (width > height) {
-          if (width > maxWidth) {
-            height *= maxWidth / width;
-            width = maxWidth;
-          }
-        } else {
-          if (height > maxHeight) {
-            width *= maxHeight / height;
-            height = maxHeight;
-          }
-        }
-
-        const canvas = document.createElement("canvas");
-        canvas.width = width;
-        canvas.height = height;
-        const ctx = canvas.getContext("2d");
-        ctx.drawImage(img, 0, 0, width, height);
-
-        let dataUrl;
-        if (file.type === 'image/png') {
-          // If the file is PNG, convert to PNG
-          dataUrl = canvas.toDataURL("image/png");
-        } else {
-          // If the file is not PNG, convert to JPEG with compression
-          dataUrl = canvas.toDataURL("image/jpeg", 0.7); // 0.7 is the quality level for JPEG
-        }
-        callback(dataUrl);
-      };
-      img.src = event.target.result;
-    };
-    reader.readAsDataURL(file);
-  };
-
   const [updatedSelectedOptions, setUpdatedSelectedOptions] = useState([]);
 
   useEffect(() => {
     // Actualiza el estado de las opciones seleccionadas con los íconos correspondientes
     const updatedOptions = selectedOptions.map((option) => {
-      const fullOption = options.find((opt) => opt.value === option.value);
+      const fullOption = socialOptions?.find((opt) => opt.value === option.value);
       return {
         ...option,
         icon: fullOption ? fullOption.icon : '',
@@ -385,6 +284,17 @@ export const SocialForm = ({ onFormChange, location, socialFormValues }) => {
   const isOptionSelected = (option) => {
     return selectedOptions.some(selected => selected.value === option.value);
   };
+
+  useEffect(()=>{
+    validateFormFields();
+  },[formErrors])
+
+      // Skeleton Loader
+      useEffect(() => {
+        setTimeout(() => {
+          setLoading(false); // Cambia a false una vez que los datos hayan cargado
+        }, 1500); // Tiempo simulado de carga
+      }, []); 
 
   return (
     <Formik
@@ -496,7 +406,7 @@ export const SocialForm = ({ onFormChange, location, socialFormValues }) => {
                                         {/* Color Picker */}
                                         {showTitleColorPicker && (
                                         <div className="absolute mt-2 left-0 top-full z-50" ref={titleColorPickerRef}>
-                                        <ColorPicker handlerFunction={handleTitleColorChange} pickerColor={colorTitle}/>
+                                        <ColorPicker handlerFunction={handleTitleColorChange} pickerColor={colorTitle} pickerValue={colorTitle}/>
                                     </div>
                                 )}
                             </div>
@@ -530,7 +440,7 @@ export const SocialForm = ({ onFormChange, location, socialFormValues }) => {
                 ></div>
                 {showDescriptionColorPicker && (
                   <div className="absolute mt-2 left-0 top-full z-50" ref={descriptionColorPickerRef}>
-                    <ColorPicker handlerFunction={handleDescriptionColorChange} pickerColor={descriptionColor}/>
+                    <ColorPicker handlerFunction={handleDescriptionColorChange} pickerColor={descriptionColor} pickerValue={descriptionColor}/>
                   </div>
                 )}
               </div>
@@ -548,7 +458,7 @@ export const SocialForm = ({ onFormChange, location, socialFormValues }) => {
                 ></div>
                 {showBackgroundColorPicker && (
                   <div className="absolute mt-2 left-0 z-50" ref={backgroundColorPickerRef}>
-                    <ColorPicker handlerFunction={handleBackgroundColorChange} pickerColor={backgroundColor}/>
+                    <ColorPicker handlerFunction={handleBackgroundColorChange} pickerColor={backgroundColor} pickerValue={backgroundColor}/>
                     {/* style={{ width: "calc(100% + 2rem)" }} // Ajuste del ancho */}
                   </div>
                 )}
@@ -565,7 +475,7 @@ export const SocialForm = ({ onFormChange, location, socialFormValues }) => {
                 ></div>
                 {showBoxColorPicker && (
                   <div className="absolute mt-2 left-0 z-50" ref={boxColorPickerRef}>
-                    <ColorPicker handlerFunction={handleBoxColorChange} pickerColor={boxColor}/>
+                    <ColorPicker handlerFunction={handleBoxColorChange} pickerColor={boxColor} pickerValue={boxColor}/>
                   </div>
                 )}
             </div>
@@ -580,7 +490,7 @@ export const SocialForm = ({ onFormChange, location, socialFormValues }) => {
                   ></div>
                   {showBorderColorPicker && (
                     <div className="absolute mt-2 left-0 z-50" ref={borderColorPickerRef}>
-                      <ColorPicker handlerFunction={handleBorderColorChange} pickerColor={borderImg}/>
+                      <ColorPicker handlerFunction={handleBorderColorChange} pickerColor={borderImg} pickerValue={borderImg}/>
                     </div>
                   )}
                 </div>
@@ -611,7 +521,7 @@ export const SocialForm = ({ onFormChange, location, socialFormValues }) => {
               <label htmlFor="multiselect" className="mb-2">Multiselect:</label>
               <Select
                 id="multiselect"
-                options={options}
+                options={socialOptions}
                 isMulti
                 className="basic-multi-select w-full"
                 classNamePrefix="select"
