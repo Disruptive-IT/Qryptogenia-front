@@ -518,10 +518,10 @@ return (
                             <div>
                               {/* Contenedor de la imagen y detalles del producto */}
                               <div className="flex flex-col lg:flex-row m-0">
-                                <div className="lg:w-[30%] w-full rounded-[10px] bg-slate-600 sm:mb-4 lg:relative md:relative">
+                                <div className={`lg:w-[30%] w-full rounded-[10px] bg-slate-600 sm:mb-4 lg:relative md:relative ${formData?.category[index]?.products[productIndex]?.productImg==null ? 'hidden':''}`}>
                                   <img
                                     id={`imgProductPreview-${index}-${productIndex}`}
-                                    className="object-cover w-full h-full rounded-[10px]"
+                                    className={`w-full h-full rounded-[10px]`}
                                     src={validateLink.test(formData?.category[index]?.products[productIndex]?.productImg)
                                       ? (isEditRoute ? formData?.category[index]?.products[productIndex]?.productImg : '')
                                       : (formData?.category[index]?.products[productIndex]?.productImg instanceof File
