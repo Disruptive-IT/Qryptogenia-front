@@ -2,7 +2,6 @@ import { FieldArray, Formik, useFormik} from 'formik';
 import { useEffect, useState } from 'react';
 import { UseMenu } from './menuContext';
 import { motion } from "framer-motion";
-import EjectIcon from '@mui/icons-material/Eject';
 import DeleteIcon from '@mui/icons-material/Delete';
 import CancelIcon from '@mui/icons-material/Cancel';
 import {Accordion,AccordionItem} from '@nextui-org/accordion'
@@ -10,7 +9,7 @@ import './menu.css'
 import { toast } from 'sonner';
 import { useValidate } from '../../../../../context/validateFormContext';
 import ColorPicker from '../form-helpers/picker';
-
+import SkeletonLoader from '../Skeleton/Skeleton';
 /*
  * @Author : Nicolas Barrios,   @date 2024-11-05 17:41:54
  * @description : formulario de menu con validaciones realizadas
@@ -19,14 +18,13 @@ import ColorPicker from '../form-helpers/picker';
  */
 
 function MenuForm(){
-    const { formData,editFormdata,activeCategory,currentTemplate,indexTemplate,setIndexTemplate,showBackgroundPicker,showMenuPicker,showBackCategoryPicker,backgroundPickerRef,menuPickerRef,backgroundProductPickerRef,namePickerRef,descriptionPickerRef,pricePickerRef,setShowBackgroundPicker,setShowBackCategoryPicker,setShowMenuPicker,setShowNamePicker,setShowDescriptionPicker,setShowPricePicker,
+    const { formData,productsCategory,editFormdata,activeCategory,currentTemplate,indexTemplate,setIndexTemplate,showBackgroundPicker,showMenuPicker,showBackCategoryPicker,backgroundPickerRef,menuPickerRef,backgroundProductPickerRef,namePickerRef,descriptionPickerRef,pricePickerRef,setShowBackgroundPicker,setShowBackCategoryPicker,setShowMenuPicker,setShowNamePicker,setShowDescriptionPicker,setShowPricePicker,
             showNamePicker,showDescriptionPicker,showPricePicker,fonts,templates,isEditRoute,initialFormDataRef,validateLink,getFonts,getTemplates,handlePrev,handleNext,handleActiveCategory,handleRestaurantName,handleActiveProduct,handleShowBackgroundPicker,handleShowMenuPicker,handleShowBackCategoryPicker,handleShowNamePicker,handleShowDescriptionPicker,handleShowPricePicker,resetUserTemplate,validation,getDataToEdit,handleTemplate,
-            templateNull,usertemplateNull,handleLogo,handleUserTemplate,handleBackgroundCard,handleMenuColor,addCategory,handleFontFamily,removeCategory,handleChangeCategoryName,addProductToCategory,removeProductToCategory,handleProductField,handleImgProduct,handleBackgroundProduct,handleColorNameProduct,handleColorDescriptionProduct,handleColorPriceProduct,handleProductName,handleProductDescription,handleProductTop,handleProductPrice
+            templateNull,usertemplateNull,handleLogo,handleUserTemplate,handleBackgroundCard,handleMenuColor,addCategory,handleFontFamily,removeCategory,handleChangeCategoryName,addProductToCategory,removeProductToCategory,handleProductField,handleImgProduct,handleBackgroundProduct,handleColorNameProduct,handleColorDescriptionProduct,handleColorPriceProduct,handleProductName,handleProductDescription,handleProductTop,handleProductPrice, loading, setLoading,
     }=UseMenu();
 
     const{setValidateFormMenu}=useValidate();
     const [initialValues,setInitialValues]=useState(formData);
-
 
     const validateFormFields = () => {
       if (Object.keys(formik.errors).length > 1) {
@@ -100,12 +98,19 @@ function MenuForm(){
         }))
       }
     },[])
+
+    useEffect(()=>{
+      setLoading(false);
+    },[])
     // console.log("isss ",editFormdata);
     console.log("fomik values: ",formik.values);
     console.log("intial values: ",formik.initialValues);
     console.log("formik errors",formik.errors);
 return (
     <div className='p-4'>
+      {loading ? (
+                <SkeletonLoader />
+            ) : (
         <Formik
             initialValues={initialValues}
             validate={validation}
@@ -157,8 +162,7 @@ return (
                 onChange={(e) => { handleLogo(e); formik.setFieldValue('restaurantLogo', e.target.files[0]); }}
               />
             </div>
-          </div>
-
+          </div>          
           {/* Sección del Color de Fondo */}
           <div className="flex flex-col md:flex-row justify-start items-start space-y-4 md:space-y-0 md:space-x-6 py-4">
             {/* Background Section */}
@@ -264,7 +268,7 @@ return (
                           ></div>
                           {showNamePicker && (
                             <div className='colorPicker' ref={namePickerRef}>
-                              <ColorPicker handlerFunction={(color) =>{handleColorNameProduct(activeCategory, color); }} pickerValue={formData.category?.[activeCategory]?.products?.colorName || "#FFFFFF"} pickerColor={formData.category?.[activeCategory]?.products?.colorName || "#FFFFFF"} />
+                              <ColorPicker handlerFunction={(color) =>{handleColorNameProduct(activeCategory, color); }} pickerValue={formData.category?.[activeCategory]?.products?.[0].colorName || "#000"} pickerColor={formData.category?.[activeCategory]?.products?.[0].colorName || "#FFFFFF"} />
                             </div>
                           )}
                         </div>
@@ -275,7 +279,7 @@ return (
                           <div  className='w-10 h-10 border border-gray-300 rounded cursor-pointer'  onClick={() => setShowDescriptionPicker(!showDescriptionPicker)}  style={{ backgroundColor: formData.category?.[activeCategory]?.products[0]?.colorDescription || '#000' }}></div>
                           {showDescriptionPicker && (
                             <div className='colorPicker' ref={descriptionPickerRef}>
-                              <ColorPicker  handlerFunction={(color) => { handleColorDescriptionProduct(activeCategory, color); }} pickerValue={formData.category?.[activeCategory]?.products?.colorDescription || "#FFFFFF"} pickerColor={formData.category?.[activeCategory]?.products?.colorDescription || "#FFFFFF"} />
+                              <ColorPicker  handlerFunction={(color) => { handleColorDescriptionProduct(activeCategory, color); }} pickerValue={formData.category?.[activeCategory]?.products[0]?.colorDescription || "#FFFFFF"} pickerColor={formData.category?.[activeCategory]?.products?.[0].colorDescription || "#FFFFFF"} />
                             </div>
                           )}
                         </div>
@@ -287,7 +291,7 @@ return (
                           ></div>
                           {showPricePicker && (
                             <div className='colorPicker' ref={pricePickerRef}>
-                              <ColorPicker handlerFunction={(color) => { handleColorPriceProduct(activeCategory, color); }} pickerValue={formData.category?.[activeCategory]?.products?.colorPrice || "#FFFFFF"} pickerColor={formData.category?.[activeCategory]?.products?.colorPrice || "#FFFFFF"} 
+                              <ColorPicker handlerFunction={(color) => { handleColorPriceProduct(activeCategory, color); }} pickerValue={formData.category?.[activeCategory]?.products?.[0].colorPrice || "#FFFFFF"} pickerColor={formData.category?.[activeCategory]?.products?.[0].colorPrice || "#FFFFFF"} 
                               />
                             </div>
                           )}
@@ -372,7 +376,7 @@ return (
               title={
                 <div onClick={()=>handleActiveCategory(index)} className="flex justify-between p-2">
                   <label htmlFor={`category.${index}.categoryName`} className="">
-                    Category Name
+                    {!productsCategory?.[index].categoryName=="" ? productsCategory?.[index]?.categoryName:'Category name'}
                   </label>
                     <button
                       onClick={() => {
@@ -483,7 +487,7 @@ return (
                             aria-label={`product ${index}-${productIndex}`}
                             title={
                               <div className="flex justify-between px-2">
-                                <h1 className="">Product {productIndex + 1}</h1>
+                                <h1 className=""> {!productsCategory?.[index].products?.[productIndex].productName=="" ? productsCategory?.[index]?.products?.[productIndex]?.productName:`product ${productIndex+1}`}</h1>
                                 <div className="self-end">
                                   {/* Botón para eliminar producto, visible solo si hay más de uno */}
                                   <button
@@ -514,10 +518,10 @@ return (
                             <div>
                               {/* Contenedor de la imagen y detalles del producto */}
                               <div className="flex flex-col lg:flex-row m-0">
-                                <div className="lg:w-[30%] w-full rounded-[10px] bg-slate-600 sm:mb-4 lg:relative md:relative">
+                                <div className={`lg:w-[30%] w-full rounded-[10px] bg-slate-600 sm:mb-4 lg:relative md:relative ${formData?.category[index]?.products[productIndex]?.productImg==null ? 'hidden':''}`}>
                                   <img
                                     id={`imgProductPreview-${index}-${productIndex}`}
-                                    className="object-cover w-full h-full rounded-[10px]"
+                                    className={`w-full h-full rounded-[10px]`}
                                     src={validateLink.test(formData?.category[index]?.products[productIndex]?.productImg)
                                       ? (isEditRoute ? formData?.category[index]?.products[productIndex]?.productImg : '')
                                       : (formData?.category[index]?.products[productIndex]?.productImg instanceof File
@@ -677,6 +681,7 @@ return (
                 </form>
             )}
         </Formik>
+      )}      
     </div>
 );
 

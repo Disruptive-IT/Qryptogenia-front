@@ -10,13 +10,13 @@ import { useForm } from "react-hook-form";
 import { useState, useEffect } from "react";
 import React, { useContext } from "react";
 import { SubmitButton } from "../../components/auth/pure/submitButton";
-import logo from "../../../public/Logo.png";
 import { AuthContext } from "../../context/AuthContext";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import { useTranslation } from "react-i18next";
 import { Toaster, toast } from "sonner";
 import { FaLock, FaLockOpen } from "react-icons/fa";
 import * as Yup from "yup";
+const logo = 'Logo.png';
 
 
 

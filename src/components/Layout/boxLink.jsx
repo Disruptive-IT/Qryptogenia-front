@@ -27,10 +27,8 @@ export const BoxLink = () => {
         return t("Social Media");
       case 'music':
         return t("Music");
-      case 'news':
-        return t("News");
-      case 'curriculum':
-        return t("Curriculum");
+      // case 'curriculum':
+      //   return t("Curriculum");
       case 'food menu':
         return t("Food Menu");
       case 'website url':

@@ -13,6 +13,10 @@
  * @UpdatedBy : Nicolas Barrios,   @date 2024-07-29 16:59:26
  * @description : se borraron archivos de previwes cleular para social y apps dejando solo el esqueleto del de musica para todos
  */
+/**
+ @UpdatedBy : Cristian Rueda,   @date 2024-11-04 18:40:39
+ * @description : Se incorporan los skeleton en las diferentes vistas previas de teléfono implementando un estado de carga. 
+ */
 
 import AppForm from "./forms/App";
 import { PdfUploadComponent, LinkInput } from "./forms/Pdf";
@@ -22,6 +26,11 @@ import { WebLinkPhoneMusic } from "./socialMedia/stylePhoneMusic";
 import MenuForm from "./forms/menu/menuForm";
 import FormWifi from "./forms/Wifi";
 import WebLinkMenuFood from "./LayoutsQr/stylePhoneMenu";
+import Skeleton from 'react-loading-skeleton';
+import SkeletonNews from "./forms/Skeleton/SkeletonNews";
+import { useEffect, useState } from "react";
+import SkeletonPhone from "./forms/Skeleton/SkeletonPhone";
+import axios from "axios";
 export const QrContentSwitch = ({contentName, onFormChangeApp, onFormChange, onFormChangeMusic, onSocialFormSubmit, location, appFormValues, musicFormValues, socialFormValues,menuFormValues, pdfFormValues}) => {
 
     let qrContent;
@@ -54,13 +63,6 @@ export const QrContentSwitch = ({contentName, onFormChangeApp, onFormChange, onF
                 </div>
             );
             break;
-        case "news":
-            qrContent = (
-                <div>
-                    <p>NOTICIAS</p>
-                </div>
-            );
-            break;
         case "music":
             qrContent = (
                 <div>
@@ -75,13 +77,13 @@ export const QrContentSwitch = ({contentName, onFormChangeApp, onFormChange, onF
                 </div>
             );
             break;
-        case "curriculum":
-            qrContent = (
-                <div>
-                    <p>COMPARTIR LA HOJA DE VIDA</p>
-                </div>
-            );
-            break;
+        // case "curriculum":
+        //     qrContent = (
+        //         <div>
+        //             <p>COMPARTIR LA HOJA DE VIDA</p>
+        //         </div>
+        //     );
+        //     break;
         case "food menu":
             qrContent = (
                 <div>
@@ -127,13 +129,6 @@ switch (contentName) {
                 </div>
             );
             break;
-        case "news":
-            phoneContent = (
-                <div>
-                    <h1>NOTICIAS</h1>
-                </div>
-            );
-            break;
         case "music":
             phoneContent = (
                 <div>
@@ -148,13 +143,13 @@ switch (contentName) {
                 </div>
             );
             break;
-        case "curriculum":
-            phoneContent = (
-                <div>
-                    <p>COMPARTIR LA HOJA DE VIDA</p>
-                </div>
-            );
-            break;
+        // case "curriculum":
+        //     phoneContent = (
+        //         <div>
+        //             <p>COMPARTIR LA HOJA DE VIDA</p>
+        //         </div>
+        //     );
+        //     break;
         case "food menu":
             phoneContent = (
                 <div>

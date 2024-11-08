@@ -1,6 +1,5 @@
 import app from "../../../assets/imgs/QR-types/app.png";
 import QR from "../../../assets/imgs/qr.png";
-import news from "../../../assets/imgs/QR-types/news.png";
 import pdf from "../../../assets/imgs/QR-types/pdf.png";
 import link from "../../../assets/imgs/QR-types/link.png";
 import social from "../../../assets/imgs/QR-types/social.png";
@@ -17,10 +16,9 @@ export const UseContentTexts = () => {
     "social-media": t("Connect with your followers on all social networks."),
     "website-url": t("Link to your web site and make it accessible to everyone."),
     "pdf": t("Display or download your PDF with ease."),
-    "news": t("Keep up to date with the latest news."),
     "music": t("Link your song in all music applications."),
     "wifi": t("Connect to a wireless network with ease."),
-    "curriculum": t("Share your electronic resume easily."),
+    // "curriculum": t("Share your electronic resume easily."),
     "food-menu": t("Create a digital menu for your restaurant."),
     }
 };
@@ -32,10 +30,9 @@ const UseDataTypeQr = () => {
     { name: "Social Media", img: social, description: t("Link to all your social media channels") },
     { name: "Website Url", img: link, description: t("Link to the website of your choice") },
     { name: "PDF", img: pdf, description: t("Show or download your pdf") },
-    { name: "News", img: news, description: t("hello world") },
     { name: "Music", img: music, description: t("Link your song in all music apps") },
     { name: "Wifi", img: wifi, description: t("Connect to a wireless network") },
-    { name: "Curriculum", img: vcard, description: t("Share your electronic business card") },
+    // { name: "Curriculum", img: vcard, description: t("Share your electronic business card") },
     { name: "Food Menu", img: menu, description: t("Create a digital restaurant menu") },
 ];
 }

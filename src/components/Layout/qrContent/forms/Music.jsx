@@ -17,6 +17,8 @@ import ColorPicker from './form-helpers/picker';
 import 'react-loading-skeleton/dist/skeleton.css';
 import SkeletonLoader from './Skeleton/Skeleton';
 import { UseMenu } from './menu/menuContext';
+import { musicOptions } from '../preview-helpers/handlePreviewButtons';
+import { resizeImage } from '../preview-helpers/handlerColor';
 
 export const MusicForm = ({ onFormChangeMusic, location, musicFormValues }) => {
     const [title, setTitle] = useState('');
@@ -51,7 +53,18 @@ export const MusicForm = ({ onFormChangeMusic, location, musicFormValues }) => {
     const {getFontsPreview}=UseMenu();
 
     useEffect(() => {
-        getFontsPreview(setFontsMusicPreview);
+        const fetchFontsPreview = async () => {
+            setLoading(true); // Activa el loading antes de la carga
+            try {
+                await getFontsPreview(setFontsMusicPreview);
+            } catch (error) {
+                console.error("Error fetching fonts preview:", error);
+            } finally {
+                setLoading(false); // Desactiva el loading al terminar
+            }
+        };
+
+        fetchFontsPreview();
     }, []);
 
     const validateForm = (values) => {
@@ -224,56 +237,6 @@ export const MusicForm = ({ onFormChangeMusic, location, musicFormValues }) => {
         image: isEditRoute && musicFormValues ? musicFormValues.image : null,
     };
 
-    const options = [
-        {
-            value: 'youtube', label: (
-                <div style={{ display: 'flex', alignItems: 'center' }}>
-                    <img style={{ marginRight: '5px', width: '25px', height: '25px' }} src="https://img.icons8.com/color/48/youtube-music.png" alt="youtube-music" />
-                    <span>YouTube Music</span>
-                </div>
-            ), icon: <img style={{ marginTop: '8px', marginRight: '5px', width: '40px', height: '40px' }} src="https://img.icons8.com/color/48/youtube-music.png" alt="youtube-music" />
-        },
-        {
-            value: 'soundcloud', label: (
-                <div style={{ display: 'flex', alignItems: 'center' }}>
-                    <img style={{ marginRight: '5px', width: '25px', height: '25px' }} src='https://img.icons8.com/?size=100&id=13669&format=png&color=000000' />
-                    <span>SoundCloud</span>
-                </div>
-            ), icon: <img style={{ marginTop: '8px', marginRight: '5px', width: '40px', height: '40px' }} src='https://img.icons8.com/?size=100&id=13669&format=png&color=000000' />
-        },
-        {
-            value: 'deezer', label: (
-                <div style={{ display: 'flex', alignItems: 'center' }}>
-                    <img width="25" height="25" style={{ marginRight: '5px' }} src="https://img.icons8.com/external-tal-revivo-bold-tal-revivo/48/external-deezer-a-french-online-music-streaming-service-logo-bold-tal-revivo.png" alt="external-deezer-a-french-online-music-streaming-service-logo-bold-tal-revivo" />
-                    <span>Deezer</span>
-                </div>
-            ), icon: <img style={{ marginTop: '8px', marginRight: '5px', width: '40px', height: '40px' }} src='https://img.icons8.com/external-tal-revivo-bold-tal-revivo/48/external-deezer-a-french-online-music-streaming-service-logo-bold-tal-revivo.png' />
-        },
-        {
-            value: 'spotify', label: (
-                <div style={{ display: 'flex', alignItems: 'center' }}>
-                    <img width="25" height="25" style={{ marginRight: '5px' }} src="https://img.icons8.com/?size=100&id=G9XXzb9XaEKX&format=png&color=000000" />
-                    <span>Spotify</span>
-                </div>
-            ), icon: <img style={{ marginTop: '8px', marginRight: '5px', width: '40px', height: '40px' }} src='https://img.icons8.com/?size=100&id=lxwUaALAeQmr&format=png&color=000000' />
-        },
-        {
-            value: 'amazon', label: (
-                <div style={{ display: 'flex', alignItems: 'center' }}>
-                    <img width="25" height="25" style={{ marginRight: '5px' }} src="https://img.icons8.com/?size=100&id=lxwUaALAeQmr&format=png&color=000000" />
-                    <span>Amazon</span>
-                </div>
-            ), icon: <img style={{ marginTop: '8px', marginRight: '5px', width: '40px', height: '40px' }} src='https://img.icons8.com/?size=100&id=lxwUaALAeQmr&format=png&color=000000' />
-        },
-        {
-            value: 'apple', label: (
-                <div style={{ display: 'flex', alignItems: 'center' }}>
-                    <img width="25" height="25" style={{ marginRight: '5px' }} src="https://img.icons8.com/?size=100&id=Bri4HBrgCsPa&format=png&color=000000" />
-                    <span>Apple Music</span>
-                </div>
-            ), icon: <img style={{ marginTop: '8px', marginRight: '5px', width: '40px', height: '40px' }} src='https://img.icons8.com/?size=100&id=Bri4HBrgCsPa&format=png&color=000000' />
-        },
-    ];
 
     const fileInputRef = React.createRef();
 
@@ -292,55 +255,12 @@ export const MusicForm = ({ onFormChangeMusic, location, musicFormValues }) => {
         }
     };
 
-    const resizeImage = (file, maxWidth, maxHeight, callback) => {
-        const reader = new FileReader();
-
-        reader.onload = (event) => {
-            const img = new Image();
-            img.onload = () => {
-                let width = img.width;
-                let height = img.height;
-
-                // Resize the image
-                if (width > height) {
-                    if (width > maxWidth) {
-                        height *= maxWidth / width;
-                        width = maxWidth;
-                    }
-                } else {
-                    if (height > maxHeight) {
-                        width *= maxHeight / height;
-                        height = maxHeight;
-                    }
-                }
-
-                const canvas = document.createElement("canvas");
-                canvas.width = width;
-                canvas.height = height;
-                const ctx = canvas.getContext("2d");
-                ctx.drawImage(img, 0, 0, width, height);
-
-                let dataUrl;
-                if (file.type === 'image/png') {
-                    // If the file is PNG, convert to PNG
-                    dataUrl = canvas.toDataURL("image/png");
-                } else {
-                    // If the file is not PNG, convert to JPEG with compression
-                    dataUrl = canvas.toDataURL("image/jpeg", 0.7); // 0.7 is the quality level for JPEG
-                }
-                callback(dataUrl);
-            };
-            img.src = event.target.result;
-        };
-        reader.readAsDataURL(file);
-    };
-
     const [updatedSelectedOptions, setUpdatedSelectedOptions] = useState([]);
 
     useEffect(() => {
         // Actualiza el estado de las opciones seleccionadas con los íconos correspondientes
         const updatedOptions = selectedOptions.map((option) => {
-            const fullOption = options.find((opt) => opt.value === option.value);
+            const fullOption = musicOptions?.find((opt) => opt.value === option.value);
             return {
                 ...option,
                 icon: fullOption ? fullOption.icon : '',
@@ -368,10 +288,8 @@ export const MusicForm = ({ onFormChangeMusic, location, musicFormValues }) => {
 
     // Skeleton Loader
     useEffect(() => {
-        setTimeout(() => {
-          setLoading(false); // Cambia a false una vez que los datos hayan cargado
-        }, 1500); // Tiempo simulado de carga
-      }, []); 
+          setLoading(false);
+      }, []);
     
     return (
         <Formik
@@ -480,7 +398,7 @@ export const MusicForm = ({ onFormChangeMusic, location, musicFormValues }) => {
                                         {/* Color Picker */}
                                         {showTitleColorPicker && (
                                             <div className="absolute mt-2 left-0 top-full z-50" ref={titleColorPickerRef}>
-                                                <ColorPicker handlerFunction={handleTitleColorChange} pickerColor={colorTitle}/>
+                                                <ColorPicker handlerFunction={handleTitleColorChange} pickerColor={colorTitle} pickerValue={colorTitle}/>
                                             </div>
                                 )}
                             </div>
@@ -515,7 +433,7 @@ export const MusicForm = ({ onFormChangeMusic, location, musicFormValues }) => {
                                 ></div>
                                 {showDescriptionColorPicker && (
                                     <div className="absolute mt-2 left-0 top-full z-50" ref={descriptionColorPickerRef}>
-                                        <ColorPicker handlerFunction={handleDescriptionColorChange} pickerColor={descriptionColor}/>
+                                        <ColorPicker handlerFunction={handleDescriptionColorChange} pickerColor={descriptionColor} pickerValue={descriptionColor}/>
                                     </div>
                                 )}
                             </div>
@@ -533,7 +451,7 @@ export const MusicForm = ({ onFormChangeMusic, location, musicFormValues }) => {
                                 ></div>
                                 {showBackgroundColorPicker && (
                                     <div className="absolute mt-2 left-0 z-50" ref={backgroundColorPickerRef}>
-                                        <ColorPicker handlerFunction={handleBackgroundColorChange} pickerColor={backgroundColor}/>
+                                        <ColorPicker handlerFunction={handleBackgroundColorChange} pickerColor={backgroundColor} pickerValue={backgroundColor}/>
                                     </div>
                                 )}
                             </div>
@@ -551,7 +469,7 @@ export const MusicForm = ({ onFormChangeMusic, location, musicFormValues }) => {
                                 ></div>
                                 {showBoxColorPicker && (
                                     <div className="absolute mt-2 left-0 z-50" ref={boxColorPickerRef}>
-                                        <ColorPicker handlerFunction={handleBoxColorChange} pickerColor={boxColor}/>
+                                        <ColorPicker handlerFunction={handleBoxColorChange} pickerColor={boxColor} pickerValue={boxColor} />
                                         {/* style={{ width: "calc(100% + 2rem)" }} // Ajuste del ancho */}
                                     </div>
 
@@ -569,7 +487,7 @@ export const MusicForm = ({ onFormChangeMusic, location, musicFormValues }) => {
                                     ></div>
                                     {showBorderColorPicker && (
                                         <div className="absolute mt-2 left-0 z-50" ref={borderColorPickerRef}>
-                                            <ColorPicker handlerFunction={handleBorderColorChange} pickerColor={borderImg}/>
+                                            <ColorPicker handlerFunction={handleBorderColorChange} pickerColor={borderImg} pickerValue={borderImg}/>
                                         </div>
                                     )}
                                 
@@ -602,7 +520,7 @@ export const MusicForm = ({ onFormChangeMusic, location, musicFormValues }) => {
                             <label htmlFor="multiselect" className="mb-2">Multiselect:</label>
                             <Select
                                 id="multiselect"
-                                options={options}
+                                options={musicOptions}
                                 isMulti
                                 className="basic-multi-select w-full"
                                 classNamePrefix="select"

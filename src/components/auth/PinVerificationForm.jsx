@@ -6,8 +6,8 @@ import { useLoader } from "../../context/LoaderContext";
 import { SchemaPinValidate } from "../../helpers/validate/auth.validate";
 import { MdOutlineMailLock } from "react-icons/md";
 import { useTranslation } from "react-i18next";
-import logo from "../../../public/Logo.png";
 import { Link } from "react-router-dom";
+const logo = 'Logo.png';
 
 
 
