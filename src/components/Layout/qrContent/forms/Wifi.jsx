@@ -146,7 +146,7 @@ function FormWifi() {
         useEffect(() => {
             setTimeout(() => {
               setLoading(false); // Cambia a false una vez que los datos hayan cargado
-            }, 10000); // Tiempo simulado de carga
+            }, 100); // Tiempo simulado de carga
           }, []);   
 
     return (

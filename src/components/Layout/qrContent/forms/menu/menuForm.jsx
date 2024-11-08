@@ -2,7 +2,6 @@ import { FieldArray, Formik, useFormik} from 'formik';
 import { useEffect, useState } from 'react';
 import { UseMenu } from './menuContext';
 import { motion } from "framer-motion";
-import EjectIcon from '@mui/icons-material/Eject';
 import DeleteIcon from '@mui/icons-material/Delete';
 import CancelIcon from '@mui/icons-material/Cancel';
 import {Accordion,AccordionItem} from '@nextui-org/accordion'
@@ -10,7 +9,7 @@ import './menu.css'
 import { toast } from 'sonner';
 import { useValidate } from '../../../../../context/validateFormContext';
 import ColorPicker from '../form-helpers/picker';
-
+import SkeletonLoader from '../Skeleton/Skeleton';
 /*
  * @Author : Nicolas Barrios,   @date 2024-11-05 17:41:54
  * @description : formulario de menu con validaciones realizadas
@@ -19,14 +18,13 @@ import ColorPicker from '../form-helpers/picker';
  */
 
 function MenuForm(){
-    const { formData,editFormdata,activeCategory,currentTemplate,indexTemplate,setIndexTemplate,showBackgroundPicker,showMenuPicker,showBackCategoryPicker,backgroundPickerRef,menuPickerRef,backgroundProductPickerRef,namePickerRef,descriptionPickerRef,pricePickerRef,setShowBackgroundPicker,setShowBackCategoryPicker,setShowMenuPicker,setShowNamePicker,setShowDescriptionPicker,setShowPricePicker,
+    const { formData,productsCategory,editFormdata,activeCategory,currentTemplate,indexTemplate,setIndexTemplate,showBackgroundPicker,showMenuPicker,showBackCategoryPicker,backgroundPickerRef,menuPickerRef,backgroundProductPickerRef,namePickerRef,descriptionPickerRef,pricePickerRef,setShowBackgroundPicker,setShowBackCategoryPicker,setShowMenuPicker,setShowNamePicker,setShowDescriptionPicker,setShowPricePicker,
             showNamePicker,showDescriptionPicker,showPricePicker,fonts,templates,isEditRoute,initialFormDataRef,validateLink,getFonts,getTemplates,handlePrev,handleNext,handleActiveCategory,handleRestaurantName,handleActiveProduct,handleShowBackgroundPicker,handleShowMenuPicker,handleShowBackCategoryPicker,handleShowNamePicker,handleShowDescriptionPicker,handleShowPricePicker,resetUserTemplate,validation,getDataToEdit,handleTemplate,
-            templateNull,usertemplateNull,handleLogo,handleUserTemplate,handleBackgroundCard,handleMenuColor,addCategory,handleFontFamily,removeCategory,handleChangeCategoryName,addProductToCategory,removeProductToCategory,handleProductField,handleImgProduct,handleBackgroundProduct,handleColorNameProduct,handleColorDescriptionProduct,handleColorPriceProduct,handleProductName,handleProductDescription,handleProductTop,handleProductPrice
+            templateNull,usertemplateNull,handleLogo,handleUserTemplate,handleBackgroundCard,handleMenuColor,addCategory,handleFontFamily,removeCategory,handleChangeCategoryName,addProductToCategory,removeProductToCategory,handleProductField,handleImgProduct,handleBackgroundProduct,handleColorNameProduct,handleColorDescriptionProduct,handleColorPriceProduct,handleProductName,handleProductDescription,handleProductTop,handleProductPrice, loading, setLoading,
     }=UseMenu();
 
     const{setValidateFormMenu}=useValidate();
     const [initialValues,setInitialValues]=useState(formData);
-
 
     const validateFormFields = () => {
       if (Object.keys(formik.errors).length > 1) {
@@ -101,11 +99,19 @@ function MenuForm(){
       }
     },[])
     // console.log("isss ",editFormdata);
-    console.log("fomik values: ",formik.values);
-    console.log("intial values: ",formik.initialValues);
-    console.log("formik errors",formik.errors);
+    // console.log("fomik values: ",formik.values);
+    // console.log("intial values: ",formik.initialValues);
+    // console.log("formik errors",formik.errors);
+
+    useEffect(()=>{
+      setLoading(false);
+    },[])
+    
 return (
     <div className='p-4'>
+      {loading ? (
+                <SkeletonLoader />
+            ) : (
         <Formik
             initialValues={initialValues}
             validate={validation}
@@ -157,8 +163,7 @@ return (
                 onChange={(e) => { handleLogo(e); formik.setFieldValue('restaurantLogo', e.target.files[0]); }}
               />
             </div>
-          </div>
-
+          </div>          
           {/* Sección del Color de Fondo */}
           <div className="flex flex-col md:flex-row justify-start items-start space-y-4 md:space-y-0 md:space-x-6 py-4">
             {/* Background Section */}
@@ -372,7 +377,7 @@ return (
               title={
                 <div onClick={()=>handleActiveCategory(index)} className="flex justify-between p-2">
                   <label htmlFor={`category.${index}.categoryName`} className="">
-                    Category Name
+                    {!productsCategory?.[index].categoryName=="" ? productsCategory?.[index]?.categoryName:'Category name'}
                   </label>
                     <button
                       onClick={() => {
@@ -483,7 +488,7 @@ return (
                             aria-label={`product ${index}-${productIndex}`}
                             title={
                               <div className="flex justify-between px-2">
-                                <h1 className="">Product {productIndex + 1}</h1>
+                                <h1 className=""> {!productsCategory?.[index].products?.[productIndex].productName=="" ? productsCategory?.[index]?.products?.[productIndex]?.productName:`product ${productIndex+1}`}</h1>
                                 <div className="self-end">
                                   {/* Botón para eliminar producto, visible solo si hay más de uno */}
                                   <button
@@ -677,6 +682,7 @@ return (
                 </form>
             )}
         </Formik>
+      )}      
     </div>
 );
 

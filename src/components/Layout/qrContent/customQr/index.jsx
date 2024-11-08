@@ -14,6 +14,7 @@ import { useValidate } from '../../../../context/validateFormContext';
 import { toast } from 'sonner';
 import { v4 as uuidv4 } from 'uuid';
 import { UseMenu } from '../forms/menu/menuContext';
+import { useLocation } from 'react-router-dom';
 import instance from '../../../../libs/axios';
 
 
@@ -25,6 +26,12 @@ import instance from '../../../../libs/axios';
 /**
  @UpdatedBy : Cristian Rueda,   @date 2024-09-17 14:11:06
  * @description : Se modifica el color de los botones, bordes y su respectivo hover
+ */
+
+ /**
+  @UpdatedBy : Cristian Rueda,   @date 2024-11-04 20:00:00
+  * @description :Se implementó una lógica para mantener el nombre del QR al editarlo. Si se está editando un QR, 
+  se recupera su nombre original desde la API y se permite modificarlo antes de guardarlo nuevamente en la base de datos.
  */
 
 const generateUniqueKey = async () => {
@@ -48,15 +55,16 @@ const generateUniqueKey = async () => {
     return uniquekey;
 };
 
-const CustomQr = ({ location, qrId }) => {
+const CustomQr = ({ qrId }) => {
     const [selectedOptionIndex, setSelectedOptionIndex] = useState(0);
     const [uniqueKey, setUniqueKey] = useState('');
-    const { qrType, qrData, qrColor, qrBgColor, qrProps, qrImageInfo, qrTextProps, appFormValues, socialFormValues, musicFormValues, qrBase64, currentContentType,setQrData,pdfFormValues} = useQr();
-    const {formData,handleFileUpload,editFormData,editUploadFiles}=UseMenu();
-    const isEditRoute=location.pathname.startsWith("/edit");
+    const { qrType, qrData, qrColor, qrBgColor, qrProps, qrImageInfo, qrTextProps, appFormValues, socialFormValues, musicFormValues, qrBase64, currentContentType, setQrData, pdfFormValues } = useQr();
+    const { formData, handleFileUpload, editFormData, editUploadFiles } = UseMenu();
+    const location = useLocation();
+    const { pathname } = location; // Accede a pathname directamente
+    const isEditRoute = pathname.startsWith("/edit");
+    const [qrName, setQrName] = useState(''); // Estado para el nombre del QR
 
-
-    
     useEffect(() => {
         const fetchUniqueKey = async () => {
             try {
@@ -74,6 +82,21 @@ const CustomQr = ({ location, qrId }) => {
         console.log('Unique key updated:', uniqueKey);
     }, [uniqueKey]); // Este useEffect se ejecutará cada vez que uniqueKey cambie
 
+
+    useEffect(() => {
+        // Si estás en modo edición, obtén el nombre del QR existente
+        if (isEditRoute && qrId) {
+            const fetchQrData = async () => {
+                try {
+                    const response = await axios.get(`http://localhost:3000/api/qr/getPreviewUpdate/${qrId}`);
+                    setQrName(response.data.qrName); // Suponiendo que la respuesta tiene un campo qrName
+                } catch (error) {
+                    console.error('Error fetching QR data:', error);
+                }
+            };
+            fetchQrData();
+        }
+    }, [isEditRoute, qrId]);
 
     const handleOptionSelect = (index) => {
         setSelectedOptionIndex(index);
@@ -155,26 +178,27 @@ const CustomQr = ({ location, qrId }) => {
         }
       });
 
-    const Dowload = async () => {
-        const { value: qrName, isConfirmed } = await Swal.fire({
+    const CreateQr = async () => {
+        const { value: inputQrName, isConfirmed } = await Swal.fire({
             title: t("Save QR Code"),
             html: `
                 <input 
-            id="swal-input1" 
-            class="swal2-input" 
-            placeholder="${t("Enter QR code name")}"
-            style="width: 60%; padding: 10px; border: 1px solid #ccc; border-radius: 6px; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);background-color: #fff; color: #000
-        >
-        <div style="margin: 2em 0;">
-            <p style="font-size: 1em; color: #888; margin-top: 10px;">${t("Please enter a name for your QR code. If you do not set a name, the system will provide one for you.")}</p>
-            <p style="font-size: 0.8em; margin: 10px 0 0 0;">${t("Click Save to finalize the creation of your QR code.")}</p>
-        </div>
+                    id="swal-input1" 
+                    class="swal2-input" 
+                    placeholder="${t("Enter QR code name")}"
+                    value="${qrName}" // Establece el valor inicial del input
+                    style="width: 60%; padding: 10px; border: 1px solid #ccc; border-radius: 6px; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);background-color: #fff; color: #000"
+                >
+                <div style="margin: 2em 0;">
+                    <p style="font-size: 1em; color: #888; margin-top: 10px;">${t("Please enter a name for your QR code. If you do not set a name, the system will provide one for you.")}</p>
+                    <p style="font-size: 0.8em; margin: 10px 0 0 0;">${t("Click Save to finalize the creation of your QR code.")}</p>
+                </div>
             `,
             focusConfirm: false,
             preConfirm: () => {
                 const input = document.getElementById('swal-input1').value;
-                if (input.length > 30) {
-                    Swal.showValidationMessage('The QR code name must be less than 30 characters');
+                if (input.length > 20) {
+                    Swal.showValidationMessage(t('The QR code name must be less than 20 characters'));
                     return false;
                 }
                 return input;
@@ -189,14 +213,14 @@ const CustomQr = ({ location, qrId }) => {
             }
         });
         if (isConfirmed) {
-            console.log("Data: ", qrData + " Type: ", qrType);
-        
+            setQrName(inputQrName); // Actualiza el estado con el nombre ingresado
+
             // Validación de información requerida para ciertos tipos de QR
             if ((qrType === 'website-url' || qrType === 'pdf' || qrType === "wifi") && qrData === "") {
                 await Swal.fire({
                     icon: 'error',
-                    title: 'Incomplete QR Information',
-                    text: 'Please provide the URL or corresponding information for the QR code.',
+                    title: t('Incomplete QR Information'),
+                    text: t('Please provide the URL or corresponding information for the QR code.'),
                     confirmButtonText: 'OK'
                 });
                 return; // Detener el flujo si falta la información requerida
@@ -234,8 +258,8 @@ const CustomQr = ({ location, qrId }) => {
                     console.error('Error al subir el PDF:', error);
                     await Swal.fire({
                         icon: 'error',
-                        title: 'Upload Failed',
-                        text: 'There was an error uploading the PDF. Please try again.',
+                        title: t('Upload Failed'),
+                        text: t('There was an error uploading the PDF. Please try again.'),
                         confirmButtonText: 'OK'
                     });
                     return; // Detener el flujo si hay un error al subir el PDF
@@ -245,7 +269,7 @@ const CustomQr = ({ location, qrId }) => {
             // Guardado final de datos de QR
             try {
                 await saveQrData(
-                    qrName, 
+                    inputQrName, // Usa el nombre ingresado
                     currentContentType === 'pdf' ? urlpdf : qrData, // Usar urlPdf solo para PDFs
                     qrType, 
                     qrColor, 
@@ -259,22 +283,22 @@ const CustomQr = ({ location, qrId }) => {
                     menuFormValues, 
                     qrBase64,
                     currentContentType, 
-                    location, 
                     qrId, 
-                    uniqueKey
+                    uniqueKey,
+                    location.pathname
                 );
                 console.log("Datos del QR guardados exitosamente.");
             } catch (error) {
                 console.error('Error al guardar los datos del QR:', error);
                 await Swal.fire({
                     icon: 'error',
-                    title: 'Save Failed',
-                    text: 'There was an error saving the QR data. Please try again.',
+                    title: t('Save Failed'),
+                    text: t('There was an error saving the QR data. Please try again.'),
                     confirmButtonText: 'OK'
                 });
             }
         } else {
-            toast.info('QR code saving was cancelled.');
+            toast.info (t('QR code saving was cancelled.'));
         }
         
         
@@ -328,9 +352,8 @@ const CustomQr = ({ location, qrId }) => {
                     <OptionComponent onTabSelect={handleOptionSelect} />
                 </div>
             </div>
-             
             <button
-                onClick={Dowload}
+                onClick={CreateQr}
                 className='bottom-0 left-8 w-4/5 md:left-0 md:w-full p-3 rounded-md text-white font-semibold bg-light-blue hover:bg-dark-blue'
             >
                    {!isEditRoute ? t("CREATE MY QR"): "SAVE CHANGES"}

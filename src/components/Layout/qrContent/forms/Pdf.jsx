@@ -106,7 +106,7 @@ const handlePdfFile = (event) => {
       useEffect(() => {
         setTimeout(() => {
           setLoading(false); // Cambia a false una vez que los datos hayan cargado
-        }, 3000); // Tiempo simulado de carga
+        }, 300); // Tiempo simulado de carga
       }, []); 
       return (
         <>
@@ -238,6 +238,8 @@ export const LinkInput = ({ onSubmit }) => {
     }
   };
 
+  console.log(formik.values);
+
   useEffect(() => {
     validateFormFields();
   }, [formik.errors]);
@@ -246,7 +248,7 @@ export const LinkInput = ({ onSubmit }) => {
       useEffect(() => {
         setTimeout(() => {
           setLoading(false); // Cambia a false una vez que los datos hayan cargado
-        }, 5000); // Tiempo simulado de carga
+        }, 300); // Tiempo simulado de carga
       }, []); 
   return (
 
@@ -258,7 +260,7 @@ export const LinkInput = ({ onSubmit }) => {
 <SkeletonWeb />
 
 ) : (
-    <div className="max-w-md mx-auto bg-gray-100 rounded-lg shadow-md">
+    <div className="max-w-md bg-gray-100 rounded-lg shadow-md p-4 mx-auto w-90">
       <form className="flex flex-col items-center">
         <label className="mb-4 text-lg font-semibold">Write the URL:</label>
         <input
@@ -274,6 +276,11 @@ export const LinkInput = ({ onSubmit }) => {
       {formik.touched.url && formik.errors.url && (
         <div className='text-red-600 text-[15px]'>{formik.errors.url}</div>
       )}
+    </div>
+  )}
+  {!formik.values.url=='' && (
+    <div className='text-center my-5 p-3 text-2xl font-bold text-dark-blue hover:underline'>
+      <a href={formik.values.url} target='_blank'>check web site from the url</a>
     </div>
   )}
 </div>

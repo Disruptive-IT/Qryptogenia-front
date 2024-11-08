@@ -71,11 +71,11 @@ const App = ({ id }) => {
   const { t } = useTranslation();
   useEffect(() => {
   const fetchQRCodes = async () => {
+    setLoading(true); // Mostrar Skeleton al iniciar la carga
     try {
       const response = await instance.get(`/qr/`, {
         withCredentials: true,
       });
-
       const sortedQRCodes = response.data.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
       const formattedQRCodes = sortedQRCodes.map((qr) => ({
         ...qr,
@@ -85,17 +85,18 @@ const App = ({ id }) => {
           year: 'numeric',
         }),
       }));
-
       setQRCodes(formattedQRCodes);
+      setError(null);
     } catch (error) {
       console.error('Error fetching QR codes:', error);
       setError('Error fetching QR codes');
+      } finally {
+        setLoading(false); // Ocultar Skeleton una vez cargados los datos
     }
   };
 
   fetchQRCodes();
-}, []);
-
+}, [id]); 
 
   const handleSearch = (e) => {
     setSearchQuery(e.target.value);
@@ -362,7 +363,7 @@ const App = ({ id }) => {
       )
     },
     {
-      header: t("Scans Restantes"), accessor: 'scan_qrs', render: (item) => (
+      header: t("Remaining scans"), accessor: 'scan_qrs', render: (item) => (
         <span className="px-2 inline-flex text-xs leading-5 font-semibold text-gray-800">
           {item.scan_qrs} {/* Mostrar 0 si scan_count es nulo o no está definido */}
         </span>
@@ -404,30 +405,6 @@ const App = ({ id }) => {
       )
     }
   ];
-  
-  // Skeleton Loader
-          useEffect(() => {
-            const fetchData = async () => {
-              setLoading(true); // Cambia a true mientras se cargan los datos
-              try {
-                  const result = await getStoreData(id);
-                  if (result.success) {
-                      setStoreData(result.data);
-                      filteredQRCodes(result.data.qrCodes || []);
-                      setError(null);
-                  } 
-              } catch (error) {
-                  console.error('Error fetching QR codes:', error);
-                  setError('Error fetching QR codes');
-              } finally {
-                  setLoading(false);
-              }
-          };
-          
-            fetchData(); // Llamar a la función cuando cambie el `id`
-          }, [id]);
-
-        
           return (
             <div className="flex flex-col h-screen overflow-hidden mt-10 shadow-lg lg:w-[94%] w-full items-center md:rounded-lg lg:ml-14">
               <div className="flex-grow p-6 bg-gray-100 overflow-auto w-full">
