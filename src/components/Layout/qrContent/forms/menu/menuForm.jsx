@@ -25,7 +25,6 @@ function MenuForm(){
 
     const{setValidateFormMenu}=useValidate();
     const [initialValues,setInitialValues]=useState(formData);
-    const [loading, setLoading] = useState(true); // Por defecto está cargando
 
     const validateFormFields = () => {
       if (Object.keys(formik.errors).length > 1) {
