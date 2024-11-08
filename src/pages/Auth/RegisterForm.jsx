@@ -6,13 +6,13 @@ import { useAuthContext } from "../../context/AuthContext";
 import { useLoader } from "../../context/LoaderContext";
 import { SchemaRegisterValidate } from "../../helpers/validate/auth.validate";
 import PinVerificationForm from "../../components/auth/PinVerificationForm";
-import logo from "../../../public/Logo.png";
 import CompleteRegisterForm from "../../components/auth/CompleteRegisterForm";
 import AuthSwitcher from "../../components/auth/pure/AuthSwitcher";
 import { IoIosMail } from "react-icons/io";
 import { useTranslation } from "react-i18next";
 import { FaArrowLeft } from "react-icons/fa6";
 import { Link } from "react-router-dom";
+const logo = 'Logo.png';
 import instance from "../../libs/axios";
 
 /**

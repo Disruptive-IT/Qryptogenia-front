@@ -12,9 +12,25 @@ import { useValidate } from '../../../context/validateFormContext';
  * @description : Se implemento la captura del qr con canvas y la transformacion a base64 para almacenarse en la base de datos.
  */
 export const saveQrData = async (
-    qrName, data, qrType, qrColor, qrBgColor, qrProps, qrImageInfo, qrTextProps, appFormValues, socialFormValues, musicFormValues, menuFormValues, qrBase64, currentContentType, location, qrId, uniqueKey, pdfFormValues
+    qrName, 
+    data, 
+    qrType, 
+    qrColor, 
+    qrBgColor, 
+    qrProps, 
+    qrImageInfo, 
+    qrTextProps, 
+    appFormValues, 
+    socialFormValues, 
+    musicFormValues, 
+    menuFormValues, 
+    qrBase64, 
+    currentContentType, 
+    qrId, 
+    uniqueKey, 
+    pdfFormValues, 
+    pathname // Se agrega el pathname como argumento para poder redirigir a la página correcta y editar el nombre del QR
 ) => {
-    
 
     const removeIconFromSelectOptions = (options) => {
         return options.map(option => {

@@ -9,6 +9,7 @@ import GradientColorPicker from 'react-gcolor-picker';
 import { MdQrCodeScanner, MdOutlineQrCode, MdOutlineQrCode2 } from "react-icons/md";
 import { IoQrCodeOutline } from "react-icons/io5";
 import { SlFrame } from "react-icons/sl";
+import { useTranslation } from 'react-i18next';
 
 /**
  * @Author : Jobserd Julián Ocampo,   @date 2024-07-24 15:59:16
@@ -34,6 +35,8 @@ const Design = () => {
         cornersSquare: useRef(null),
         cornersDot: useRef(null),
     };
+
+    const { t } = useTranslation();
 
     const handleToggleColorPicker = (type) => {
         setColorPickerStates(prevState => ({
@@ -149,18 +152,39 @@ const Design = () => {
                     }}
 
                 >
-                    <Tab icon={<SlFrame />} label="Qr frame" sx={{
-                        fontSize: '14px', fontWeight: 'bold',
-                    }} />
-                    <Tab icon={<MdOutlineQrCode2 />} label="Dots" sx={{
-                        fontSize: '14px', fontWeight: 'bold',
-                    }} />
-                    <Tab icon={<MdOutlineQrCode />} label="Corners Square" sx={{
-                        fontSize: '14px', fontWeight: 'bold',
-                    }} />
-                    <Tab icon={<IoQrCodeOutline />} label="Corners Dot" sx={{
-                        fontSize: '14px', fontWeight: 'bold',
-                    }} />
+                        <Tab 
+                            icon={<SlFrame />} 
+                            label={t("Qr frame")} 
+                            sx={{
+                                fontSize: '14px', 
+                                fontWeight: 'bold',
+                            }} 
+                        />
+                        <Tab 
+                            icon={<MdOutlineQrCode2 />} 
+                            label={t("Dots")} 
+                            sx={{
+                                fontSize: '14px', 
+                                fontWeight: 'bold',
+                            }} 
+                        />
+                        <Tab 
+                            icon={<MdOutlineQrCode />} 
+                            label={t("Corners Square")} 
+                            sx={{
+                                fontSize: '14px', 
+                                fontWeight: 'bold',
+                            }} 
+                        />
+                        <Tab 
+                            icon={<IoQrCodeOutline />} 
+                            label={t("Corners Dot")} 
+                            sx={{
+                                fontSize: '14px', 
+                                fontWeight: 'bold',
+                            }} 
+                        />
+
                 </Tabs>
             </div>
             {tabValue === 0 && (

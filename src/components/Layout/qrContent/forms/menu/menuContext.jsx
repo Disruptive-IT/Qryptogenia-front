@@ -28,6 +28,7 @@ export default function MenuProvider({children}) {
     const initialFormDataRef=useRef();
     const validateLink=/.webp/
     const productsCategory=formData.category;
+    const [loading, setLoading] = useState(true); // Maneja el loading aquí
 
     const [currentTemplate, setCurrentTemplate] = useState(0);
     const [indexTemplate,setIndexTemplate]=useState(null);
@@ -43,31 +44,30 @@ export default function MenuProvider({children}) {
         category:isEditRoute && formData ? formData.category : [{categoryName:"",products:[{ backgroundProductCard:"#fff",colorName:"#000",colorDescription:"#000",colorPrice:"#000",productImg:null, productName:"", productDescription:"", top:false,price:null}]}]
     }
 
-    const getFonts=async()=>{
-        try{
-            const getFontsArray=await instance.get('getFonts');
+    const getFonts = async () => {
+        try {
+            const getFontsArray = await instance.get('getFonts');
             setFonts(getFontsArray.data);
-            return getFontsArray.data;
-        }catch(error){
-            console.error("error fonts request: ",error.message);
+        } catch (error) {
+            console.error("Error fetching fonts: ", error.message);
         }
-    }
+    };
+
+    const getTemplates = async () => {
+        try {
+            const getTemplatesArray = await instance.get('getTemplates');
+            setTemplates(getTemplatesArray.data);
+            return getTemplatesArray.data;
+        } catch (error) {
+            console.error("Error fetching templates: ", error.message);
+        }
+    };
 
     const getNameFont=async(id,setter)=>{
         try{
             const getFontsArray=await instance.get(`/getFonts/${id}`);
            setter(getFontsArray.data);
             return getFontsArray.data;
-        }catch(error){
-            console.error("error fonts request: ",error.message);
-        }
-    }
-
-    const getTemplates=async()=>{
-        try{
-            const getTemplatesArray=await instance.get('getTemplates');
-            setTemplates(getTemplatesArray.data);
-            return getTemplatesArray.data;
         }catch(error){
             console.error("error fonts request: ",error.message);
         }
@@ -837,11 +837,16 @@ export default function MenuProvider({children}) {
             handleProductName,
             handleProductDescription,
             handleProductTop,
-            handleProductPrice
+            handleProductPrice,
+            //skeleton
+            loading,
+            setLoading,
             }}>
             {children}
         </MenuContext.Provider>
     )
 }
 
-export const UseMenu=()=>useContext(MenuContext);
+export const UseMenu = () => {
+    return useContext(MenuContext);
+};

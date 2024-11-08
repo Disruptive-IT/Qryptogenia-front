@@ -53,7 +53,18 @@ export const MusicForm = ({ onFormChangeMusic, location, musicFormValues }) => {
     const {getFontsPreview}=UseMenu();
 
     useEffect(() => {
-        getFontsPreview(setFontsMusicPreview);
+        const fetchFontsPreview = async () => {
+            setLoading(true); // Activa el loading antes de la carga
+            try {
+                await getFontsPreview(setFontsMusicPreview);
+            } catch (error) {
+                console.error("Error fetching fonts preview:", error);
+            } finally {
+                setLoading(false); // Desactiva el loading al terminar
+            }
+        };
+
+        fetchFontsPreview();
     }, []);
 
     const validateForm = (values) => {
@@ -249,7 +260,7 @@ export const MusicForm = ({ onFormChangeMusic, location, musicFormValues }) => {
     useEffect(() => {
         // Actualiza el estado de las opciones seleccionadas con los íconos correspondientes
         const updatedOptions = selectedOptions.map((option) => {
-            const fullOption = musicOptions.find((opt) => opt.value === option.value);
+            const fullOption = musicOptions?.find((opt) => opt.value === option.value);
             return {
                 ...option,
                 icon: fullOption ? fullOption.icon : '',

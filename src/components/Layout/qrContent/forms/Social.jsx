@@ -19,6 +19,7 @@ import ColorPicker from './form-helpers/picker';
 import { UseMenu } from './menu/menuContext';
 import { socialOptions } from '../preview-helpers/handlePreviewButtons';
 import { resizeImage } from '../preview-helpers/handlerColor';
+import { set } from 'react-hook-form';
 
 export const SocialForm = ({ onFormChange, location, socialFormValues }) => {
   const [title, setTitle] = useState('');
@@ -52,9 +53,20 @@ export const SocialForm = ({ onFormChange, location, socialFormValues }) => {
   const {getFontsPreview}=UseMenu();
   const [socialFontPreview, setSocialFontpreview] = useState([]);
 
-useEffect(() => {
-    getFontsPreview(setSocialFontpreview);
-}, []);
+    useEffect(() => {
+        const fetchFontsPreview = async () => {
+            setLoading(true); // Activa el loading antes de la carga
+            try {
+                await getFontsPreview(setSocialFontpreview);
+            } catch (error) {
+                console.error("Error fetching fonts preview:", error);
+            } finally {
+                setLoading(false); // Desactiva el loading al terminar
+            }
+        };
+
+        fetchFontsPreview();
+    }, []);
 
   const validateForm = (values) => {
     const errors = {};
@@ -249,7 +261,7 @@ useEffect(() => {
   useEffect(() => {
     // Actualiza el estado de las opciones seleccionadas con los íconos correspondientes
     const updatedOptions = selectedOptions.map((option) => {
-      const fullOption = socialOptions.find((opt) => opt.value === option.value);
+      const fullOption = socialOptions?.find((opt) => opt.value === option.value);
       return {
         ...option,
         icon: fullOption ? fullOption.icon : '',
@@ -279,7 +291,9 @@ useEffect(() => {
 
       // Skeleton Loader
       useEffect(() => {
+        setTimeout(() => {
           setLoading(false); // Cambia a false una vez que los datos hayan cargado
+        }, 1500); // Tiempo simulado de carga
       }, []); 
 
   return (
@@ -484,8 +498,8 @@ useEffect(() => {
           </div>
 
           {/* Select de fuentes */}
-          <div className='my-3 mb-4 flex flex-row justify-start align-middle'>
-                    <h1 className='mt-3 text-lg font-semibold mr-6'>Font style:</h1>
+          <div className='flex flex-col md:flex-row md:items-center mb-4 mt-10'>
+          <h1 className='mt-3 text-lg font-semibold mr-6'>Font style:</h1>
                     <select 
                 className='p-4 rounded-[10px] bg-gray-300' 
                 name="fontFamily" 
