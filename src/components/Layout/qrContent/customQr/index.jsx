@@ -179,7 +179,7 @@ const CustomQr = ({ qrId }) => {
       });
 
     const CreateQr = async () => {
-        const { value: qrName, isConfirmed } = await Swal.fire({
+        const { value: inputQrName, isConfirmed } = await Swal.fire({
             title: t("Save QR Code"),
             html: `
                 <input 
