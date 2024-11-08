@@ -517,7 +517,7 @@ console.log("these are the selected options: ",appFormValues.selectedOptions);
                         </div>
 
                         <div className='flex flex-col md:flex-row md:items-center mb-4 mt-10'>
-                          <h1 className='mt-3 text-lg font-semibold mr-6'>Font style:</h1>
+                          <h1 className='mt-3 text-lg font-semibold mr-6'>{t('Font style')}:</h1>
                           <select className='p-4 rounded-[10px] bg-gray-300' name="fontFamily" id="" value={appFormValues.idFontPreview} onChange={(e)=>handleSelectedFont(e)}>
                           {appFontsPreview?.map((item, index) => (
                             <option style={{ fontFamily: item.fontName }} key={index} id={item.id} value={item.id}>

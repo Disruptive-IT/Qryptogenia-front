@@ -499,7 +499,7 @@ export const SocialForm = ({ onFormChange, location, socialFormValues }) => {
 
           {/* Select de fuentes */}
           <div className='flex flex-col md:flex-row md:items-center mb-4 mt-10'>
-          <h1 className='mt-3 text-lg font-semibold mr-6'>Font style:</h1>
+          <h1 className='mt-3 text-lg font-semibold mr-6'>{t('Font style')}:</h1>
                     <select 
                 className='p-4 rounded-[10px] bg-gray-300' 
                 name="fontFamily" 
@@ -518,7 +518,7 @@ export const SocialForm = ({ onFormChange, location, socialFormValues }) => {
 
           <div className="flex flex-col md:flex-row md:items-center mb-4 mt-4">
             <div className="w-full md:w-3/4">
-              <label htmlFor="multiselect" className="mb-2">Multiselect:</label>
+              <label htmlFor="multiselect" className="mb-2">{t('Multiselect')}:</label>
               <Select
                 id="multiselect"
                 options={socialOptions}
