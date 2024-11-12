@@ -16,7 +16,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { UseMenu } from '../forms/menu/menuContext';
 import { useLocation } from 'react-router-dom';
 import instance from '../../../../libs/axios';
-
+import axios from '../../../../libs/axios';
 
 /*
  * @UpdatedBy : Cristian Escobar,   @date 2024-09-03 15:05:11
