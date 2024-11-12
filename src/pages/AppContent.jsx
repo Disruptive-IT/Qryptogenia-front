@@ -318,28 +318,28 @@ const AppContent = () => {
             
 
             <Modal
-                isOpen={isModalOpen}
-                onRequestClose={closeModal}
-                contentLabel="Vista Previa del Móvil"
-                className="fixed inset-0 flex items-center justify-center p-4 bg-transparent"
-                overlayClassName="fixed inset-0 bg-black bg-opacity-50 overflow-auto"
-            >
-                <div className="bg-transparent p-0 rounded-lg border-none shadow-none flex justify-center items-center w-full h-full">
-                    <div className="relative flex justify-center items-start" style={{ maxHeight: 'calc(100vh - 40px)', maxWidth: 'calc(100vw - 40px)' }}>
-                        <button onClick={closeModal} className="absolute top-4 right-4 text-red-500 z-10">Cerrar</button>
-                        <div className="relative scale-wrapper" style={{ marginTop: '40px', }}>
-                            <CellBox>
-                                <PhoneContentSwitch
-                                    contentName={name}
-                                    appFormValues={appFormValues}
-                                    socialFormValues={socialFormValues}
-                                    musicFormValues={musicFormValues}
-                                />
-                            </CellBox>
-                        </div>
-                    </div>
-                </div>
-            </Modal>
+    isOpen={isModalOpen}
+    onRequestClose={closeModal}
+    contentLabel="Vista Previa del Móvil"
+    className="fixed inset-0 flex items-center justify-center p-4 bg-transparent"
+    overlayClassName="fixed inset-0 bg-black bg-opacity-50 overflow-auto z-50" // Asegúrate de tener un alto z-index aquí
+>
+    <div className="bg-transparent p-0 rounded-lg border-none shadow-none flex justify-center items-center w-full h-full">
+        <div className="relative flex justify-center items-start" style={{ maxHeight: 'calc(100vh - 40px)', maxWidth: 'calc(100vw - 40px)' }}>
+            <button onClick={closeModal} className="absolute top-4 right-4 text-red-500 z-10">Cerrar</button>
+            <div className="relative scale-wrapper" style={{ marginTop: '40px' }}>
+                <CellBox>
+                    <PhoneContentSwitch
+                        contentName={name}
+                        appFormValues={appFormValues}
+                        socialFormValues={socialFormValues}
+                        musicFormValues={musicFormValues}
+                    />
+                </CellBox>
+            </div>
+        </div>
+    </div>
+</Modal>
             <style jsx>{`
         .scale-wrapper {
           transform: scale(0.9);
