@@ -424,7 +424,7 @@ console.log("these are the selected options: ",appFormValues.selectedOptions);
                                 {/* Color Picker */}
                                 {showTitleColorPicker && (
                                     <div className="absolute mt-2 left-0 top-full z-50" ref={titleColorPickerRef}>
-                                        <ColorPicker handlerFunction={handleTitleColorChange} pickerColor={colorTitle} pickerValue={colorTitle}/>
+                                        <ColorPicker gradient={false} handlerFunction={handleTitleColorChange} pickerColor={colorTitle} pickerValue={colorTitle}/>
                                     </div>
                                 )}
                             </div>
@@ -458,7 +458,7 @@ console.log("these are the selected options: ",appFormValues.selectedOptions);
                             ></div>
                                 {showDescriptionColorPicker && (
                                     <div className="absolute mt-2 top-20 z-50" ref={descriptionColorPickerRef}>
-                                        <ColorPicker handlerFunction={handleDescriptionColorChange} pickerColor={descriptionColor} pickerValue={descriptionColor}/>
+                                        <ColorPicker gradient={false} handlerFunction={handleDescriptionColorChange} pickerColor={descriptionColor} pickerValue={descriptionColor}/>
                                     </div>
                                 )}
                                 
@@ -477,7 +477,7 @@ console.log("these are the selected options: ",appFormValues.selectedOptions);
                                         ></div>
                                         {showBackgroundColorPicker && (
                                             <div className="absolute mt-2 left-0 z-50" ref={backgroundColorPickerRef}>
-                                            <ColorPicker handlerFunction={handleBackgroundColorChange} pickerColor={backgroundColor} pickerValue={backgroundColor} style={{ width: "calc(100% + 2rem)" }}/>
+                                            <ColorPicker gradient={true} handlerFunction={handleBackgroundColorChange} pickerColor={backgroundColor} pickerValue={backgroundColor} style={{ width: "calc(100% + 2rem)" }}/>
                                             </div>
                                         )}
                                         </div>
@@ -493,7 +493,7 @@ console.log("these are the selected options: ",appFormValues.selectedOptions);
                                     ></div>
                                     {showBoxColorPicker && (
                                         <div className="absolute mt-2 left-0 z-50" ref={boxColorPickerRef}>
-                                        <ColorPicker handlerFunction={handleBoxColorChange} pickerColor={boxColor} pickerValue={boxColor}/>
+                                        <ColorPicker gradient={true} handlerFunction={handleBoxColorChange} pickerColor={boxColor} pickerValue={boxColor}/>
                                             </div>
                                         )}
                                         </div>
@@ -509,7 +509,7 @@ console.log("these are the selected options: ",appFormValues.selectedOptions);
                                     ></div>
                                     {showBorderColorPicker && (
                                         <div className="absolute mt-2 left-0 z-50" ref={borderColorPickerRef}>
-                                            <ColorPicker handlerFunction={handleBorderColorChange} pickerColor={borderImg} pickerValue={borderImg}/>
+                                            <ColorPicker gradient={true} handlerFunction={handleBorderColorChange} pickerColor={borderImg} pickerValue={borderImg}/>
                                         </div>
                                     )}
                                 </div>

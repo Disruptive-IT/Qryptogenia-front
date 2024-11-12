@@ -95,7 +95,7 @@ const getLinkTemplate=async(id)=>{
         main:'#3f50b5'
       },
       secondary:{
-        main:FormValues.colorMenu
+        main:FormValues?.colorMenu
       }
     },
     typography:{
@@ -106,7 +106,7 @@ const getLinkTemplate=async(id)=>{
       MuiTabs:{
         styleOverrides:{
           scrollButtons:{
-            color:FormValues.colorMenu,
+            color:FormValues?.colorMenu,
           }
         }
       }
@@ -147,21 +147,30 @@ const getLinkTemplate=async(id)=>{
 
   return (
       <div className='parent-container absolute left-0 w-full h-full'>
-        <div
-          className="relative left-0 top-0 w-full h-full  overflow-y-auto p-4"
-          id="main-container"
-          style={{
-            backgroundColor: FormValues.idImgTemplate!==null ? 'rgba(255, 255, 255, 0.8)': FormValues.backgroundCard,
-            backgroundImage: FormValues.idImgTemplate == null ? (FormValues.idUserTemplate !== null ? `url(${URL.createObjectURL(FormValues.idUserTemplate)})` : ''): (isEditRoute ? `url(${templateUrl?.image})` : `url(${templateUrl?.image})`),
-            backgroundSize: '340px 660px',
-            backgroundPosition: 'center',
-            backgroundRepeat: 'no-repeat',
-            position: 'relative',
-            top: 0,
-            width: '100%',
-            height: '100%',
-          }}
-        >
+<div
+    className="relative left-0 top-0 w-full h-full overflow-y-auto p-4"
+    id="main-container"
+    style={{
+      backgroundColor: FormValues.backgroundCard.includes("gradient")
+        ? "transparent"
+        : FormValues.backgroundCard, // Solo asigna si es un color sólido
+      backgroundImage: FormValues.idImgTemplate == null
+        ? FormValues.idUserTemplate !== null
+          ? `url(${URL.createObjectURL(FormValues.idUserTemplate)})`
+          : FormValues.backgroundCard.includes("gradient")
+          ? FormValues.backgroundCard // Asigna el gradiente si lo contiene
+          : "" : isEditRoute
+          ? `url(${templateUrl?.image})`
+          : `url(${templateUrl?.image})`,
+      backgroundSize: "340px 660px",
+      backgroundPosition: "center",
+      backgroundRepeat: "no-repeat",
+      position: "relative",
+      top: 0,
+      width: "100%",
+      height: "100%",
+    }}
+>
         <div
           className="w-[60%] overflow-auto max-w-[196px] max-h-[196px] rounded-[10px] mx-auto my-6 bg-slate-500 flex justify-center items-center"
           id="logo-container"
@@ -221,7 +230,7 @@ const getLinkTemplate=async(id)=>{
           <div style={{backgroundColor:element.backgroundProductCard}} className='w-[40%] h-full bg-slate-500 overflow-auto'>
           <img className='w-full h-full' src={showInitialKeys && counterChange==0 && !isEditRoute ? defaultProductImage : element.productImg && validateLink.test(FormValues?.category?.[index]?.products?.[productIndex]?.productImg)  ? (isEditRoute ? element.productImg : '') : (element?.productImg instanceof File ? URL.createObjectURL(element.productImg) : '')} alt={element.productName || 'Producto'}/>
           </div>
-          <div style={{backgroundColor:showInitialKeys && counterChange==0 && !isEditRoute ? '#7EC2DD':element.backgroundProductCard}} className='w-[60%] h-full bg-red-300 px-1 py-1  flex flex-col self-center'>
+          <div style={{backgroundColor:showInitialKeys && counterChange==0 && !isEditRoute ? '#7EC2DD':element.backgroundProductCard,backgroundImage:element.backgroundProductCard.includes("gradient") ? element.backgroundProductCard : "none"}} className='w-[60%] h-full bg-red-300 px-1 py-1  flex flex-col self-center'>
             <span className='flex w-full items-end justify-end hover:cursor-pointer'>+</span>
             <div className='w-full  h-[80%] bg-transparent flex flex-col justify-evenly'>
               <h1 style={{color: element.colorName,fontFamily:fontFamily?.fontName}} className='text-[17px] text-center break-words font-bold'>{showInitialKeys && counterChange==0 && !isEditRoute ? 'Burguer' : element.productName=='' ? 'Product name' : element.productName}</h1>
