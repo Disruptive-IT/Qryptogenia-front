@@ -9,6 +9,7 @@ import Skeleton from 'react-loading-skeleton';
 import 'react-loading-skeleton/dist/skeleton.css';
 import SkeletonPdf from './Skeleton/SkeletonPdf';
 import SkeletonWeb from './Skeleton/SkeletonWeb';
+import { useTranslation } from 'react-i18next';
 
 export const PdfUploadComponent = () => {
   const { setQrData,qrProps } = useQr();
@@ -20,7 +21,7 @@ export const PdfUploadComponent = () => {
   const [pdfName, setPdfName] = useState('');  // Para guardar el nombre del archivo
   const [qrCodeUrl, setQrCodeUrl] = useState(''); // Estado para la URL del QR
   const [loading, setLoading] = useState(true); // Por defecto está cargando
-
+  const { t } = useTranslation();
 
 const handleLoadType = (event) => {
   const loadType = event.target.value;
@@ -135,10 +136,10 @@ const handlePdfFile = (event) => {
                     onMouseEnter={(e) => e.target.style.backgroundColor = '#3C6E71'}
                     onMouseLeave={(e) => e.target.style.backgroundColor = '#284B63'}
                   >
-                    UPLOAD PDF
+                    {t('UPLOAD PDF')}
                   </label>
                   <div className="flex flex-col space-y-4">
-                    <label className="text-lg font-semibold" htmlFor="loadType">LOAD TYPE</label>
+                    <label className="text-lg font-semibold" htmlFor="loadType">{t('LOAD TYPE')}</label>
       
                     <label className="flex items-center cursor-pointer">
                       <input
@@ -152,7 +153,7 @@ const handlePdfFile = (event) => {
                       <span className="w-5 h-5 mr-2 rounded-full border-2 border-gray-500 flex items-center justify-center peer-checked:bg-gray-700 peer-checked:border-transparent">
                         <span className="w-2 h-2 rounded-full bg-white hidden peer-checked:block"></span>
                       </span>
-                      Download
+                      {t('Download')}
                     </label>
       
                     <label className="flex items-center cursor-pointer">
@@ -167,7 +168,7 @@ const handlePdfFile = (event) => {
                       <span className="w-5 h-5 mr-2 rounded-full border-2 border-gray-500 flex items-center justify-center peer-checked:bg-gray-700 peer-checked:border-transparent">
                         <span className="w-2 h-2 rounded-full bg-white hidden peer-checked:block"></span>
                       </span>
-                      View
+                      {t('View')}
                     </label>
                   </div>
       
@@ -207,7 +208,7 @@ export const LinkInput = ({ onSubmit }) => {
   const { qrData, qrProps, setQrData } = useQr();
   const { validateFormWifi, setValidateFormWifi } = useValidate();
   const [loading, setLoading] = useState(true);  // Estado de carga para LinkInput
-
+  const { t } = useTranslation();
   const formik = useFormik({
     initialValues: { url: '' },
     validate: (values) => {
@@ -262,7 +263,7 @@ export const LinkInput = ({ onSubmit }) => {
 ) : (
     <div className="max-w-md bg-gray-100 rounded-lg shadow-md p-4 mx-auto w-90">
       <form className="flex flex-col items-center">
-        <label className="mb-4 text-lg font-semibold">Write the URL:</label>
+        <label className="mb-4 text-lg font-semibold">{t('Write the URL')}:</label>
         <input
           type="text"
           name="url"
@@ -270,7 +271,7 @@ export const LinkInput = ({ onSubmit }) => {
           onChange={handleInputChange}
           onBlur={formik.handleBlur}
           className="w-full px-4 py-2 mb-4 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500"
-          placeholder="Ejemplo: https://www.ejemplo.com"
+          placeholder={t('Example: https://www.example.com')}
         />
       </form>
       {formik.touched.url && formik.errors.url && (

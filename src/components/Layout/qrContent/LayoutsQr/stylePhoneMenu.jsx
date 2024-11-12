@@ -8,7 +8,7 @@ import instance from '../../../../libs/axios';
 import './../forms/menu/menu.css';
 import { createTheme, Modal, ThemeProvider } from '@mui/material';
 import { UseMenu } from '../forms/menu/menuContext';
-
+import { useTranslation } from 'react-i18next';
 export default function WebLinkMenuFood({ FormValues, ContentName }) {
   const [tabValue, setTabValue] = useState(0);
   const [openModal,setOpenModal]=useState(false);
@@ -22,7 +22,7 @@ export default function WebLinkMenuFood({ FormValues, ContentName }) {
   const[showInitialKeys,setShowInitialKeys]=useState(true);
   const isEditRoute = location.pathname.startsWith('/edit');
   const validateLink=/.webp/
-
+  const {t}=useTranslation();
   const defaultProductImage='https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSpSkKP8LgqK1IPs87-PyJcveeRF0Wet-xgyw&s'
   const defaultLogo='https://media.istockphoto.com/id/981368726/es/vector/restaurante-de-comida-y-bebidas-logotipo-tenedor-cuchillo-fondo-vector-imagen.jpg?s=612x612&w=0&k=20&c=3mPGCDXyBeuGpxeuTlHkECM5rAW5cy07bDFi0i0ZCbw='
 
@@ -179,7 +179,7 @@ const getLinkTemplate=async(id)=>{
           id="name-container"
         >
           <h1 style={{fontFamily:fontFamily?.fontName}} className="text-center font-semibold text-[25px] break-words">
-            {showInitialKeys && counterChange==0 && !isEditRoute ? 'Food Restaurant' : FormValues.restaurantName!==''? FormValues.restaurantName : 'Restaurant name'}
+            {showInitialKeys && counterChange==0 && !isEditRoute ? t('Food Restaurant') : FormValues.restaurantName!==''? FormValues.restaurantName : t('Restaurant name')}
           </h1>
         </div>
         <div
@@ -200,7 +200,7 @@ const getLinkTemplate=async(id)=>{
                 <Tab
                   sx={{ color: FormValues.colorMenu,fontWeight:'800'}}
                   key={index}
-                  label={element.categoryName!==""?element.categoryName:`category ${index+1}`}
+                  label={element.categoryName!==""?element.categoryName:`${t('category')} ${index+1}`}
                   value={index}
                 />
               ))}

@@ -353,11 +353,10 @@ const CustomQr = ({ qrId }) => {
                 </div>
             </div>
             <button
-                onClick={CreateQr}
-                className='bottom-0 left-8 w-4/5 md:left-0 md:w-full p-3 rounded-md text-white font-semibold bg-light-blue hover:bg-dark-blue'
-            >
-                   {!isEditRoute ? t("CREATE MY QR"): "SAVE CHANGES"}
-            </button>
+    onClick={CreateQr}
+    className="bottom-0 left-0 w-full p-3 mt-4 rounded-md text-white font-semibold bg-light-blue hover:bg-dark-blue transition duration-300 ease-in-out shadow-lg flex items-center justify-center">
+    <span>{!isEditRoute ? t("CREATE MY QR") : "SAVE CHANGES"}</span>
+</button>
 
            
         </div>
