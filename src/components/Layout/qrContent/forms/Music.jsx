@@ -345,7 +345,7 @@ export const MusicForm = ({ onFormChangeMusic, location, musicFormValues }) => {
                             <div className="flex flex-col md:flex-nowrap items-start ">
                             <label htmlFor="colorTitle" className="mb-2">{t("Color")}</label>
                                 <div
-                                    className="w-20 h-10 md:w-10 border border-gray-300 rounded cursor-pointer"
+                                    className="w-10 h-10 md:w-10 border border-gray-300 rounded cursor-pointer"
                                     style={{ background: colorTitle }}
                                     onClick={() => setShowTitleColorPicker(!showTitleColorPicker)}
                                 ></div>
@@ -423,11 +423,11 @@ export const MusicForm = ({ onFormChangeMusic, location, musicFormValues }) => {
                                 {description.length}/{maxLength} Characters
                             </div>
                         </div>
-                        <div className="flex flex-col relative">
-                            <label htmlFor="descriptionColor" className="mb-2">{t("Color")}</label>
-                            <div className="flex items-center">
+                        <div className="flex flex-col md:flex-nowrap items-start mb-4">
+                        <label htmlFor="descriptionColor" className="mb-2">{t("Color")}</label>
+                        <div className="flex items-center">
                                 <div
-                                    className="w-20 md:w-10 h-10 border border-gray-300 rounded cursor-pointer"
+                                    className="w-10 md:w-10 h-10 border border-gray-300 rounded cursor-pointer"
                                     style={{ background: descriptionColor }}
                                     onClick={() => setShowDescriptionColorPicker(!showDescriptionColorPicker)}
                                 ></div>
@@ -440,64 +440,62 @@ export const MusicForm = ({ onFormChangeMusic, location, musicFormValues }) => {
                         </div>
                     </div>
 
-                    <div className="flex flex-col md:flex-row text-center gap-6 mr-20">
-                                    <div className="w-full md:w-1/4 flex flex-col items-center">
-                                        <label htmlFor="backgroundColor" className="mb-2">{t("Background Color")}</label>
-                                        <div className="flex items-center relative">
-                                <div
-                                    className="w-10 h-10 border border-gray-300 rounded cursor-pointer"
-                                    style={{ background: backgroundColor }}
-                                    onClick={() => setShowBackgroundColorPicker(!showBackgroundColorPicker)}
-                                ></div>
-                                {showBackgroundColorPicker && (
-                                    <div className="absolute mt-2 left-0 z-50" ref={backgroundColorPickerRef}>
-                                        <ColorPicker handlerFunction={handleBackgroundColorChange} pickerColor={backgroundColor} pickerValue={backgroundColor}/>
-                                    </div>
-                                )}
-                            </div>
-                        </div>
-                        
-                            
-
-                        <div className="w-full md:w-1/4 flex flex-col items-center">
-                                        <label htmlFor="boxColor" className="mb-2">{t("Box Color")}</label>
-                                        <div className="flex items-center relative">
-                                <div
-                                    className="w-20 md:w-10 h-10 border border-gray-300 rounded cursor-pointer"
-                                    style={{ background: boxColor }}
-                                    onClick={() => setShowBoxColorPicker(!showBoxColorPicker)}
-                                ></div>
-                                {showBoxColorPicker && (
-                                    <div className="absolute mt-2 left-0 z-50" ref={boxColorPickerRef}>
-                                        <ColorPicker handlerFunction={handleBoxColorChange} pickerColor={boxColor}/>
-                                        {/* style={{ width: "calc(100% + 2rem)" }} // Ajuste del ancho */}
-                                    </div>
-
-                                )}
+                    <div className="flex flex-col gap-6 mt-4 md:mr-60">
+    <div className="flex flex-row gap-12 md:gap-8 lg:gap-36 w-full justify-center items-center">
+        <div className="flex flex-col items-center">
+            <label htmlFor="backgroundColor" className="mb-2">{t("Background Color")}</label>
+            <div className="flex items-center relative">
+                <div
+                    className="w-10 h-10 border border-gray-300 rounded cursor-pointer"
+                    style={{ background: backgroundColor }}
+                    onClick={() => setShowBackgroundColorPicker(!showBackgroundColorPicker)}
+                ></div>
+                {showBackgroundColorPicker && (
+                    <div className="absolute mt-2 left-0 z-50" ref={backgroundColorPickerRef}>
+                        <ColorPicker handlerFunction={handleBackgroundColorChange} pickerColor={backgroundColor} pickerValue={backgroundColor}/>
                     </div>
+                )}
+            </div>
+        </div>
 
-                            </div>
-                            <div className="w-full md:w-1/4 flex flex-col items-center">
-                            <label htmlFor="boxColor" className="mb-2">{t("Border Profile Color")}</label>
-                                <div className="flex items-center relative">
-                                    <div
-                                        className="w-20 md:w-10 h-10 border border-gray-300 rounded cursor-pointer"
-                                        style={{ background: borderImg }}
-                                        onClick={() => setShowBorderColorPicker(!showBorderColorPicker)}
-                                    ></div>
-                                    {showBorderColorPicker && (
-                                        <div className="absolute mt-2 left-0 z-50" ref={borderColorPickerRef}>
-                                            <ColorPicker handlerFunction={handleBorderColorChange} pickerColor={borderImg} pickerValue={borderImg}/>
-                                        </div>
-                                    )}
-                                
-                            </div>
-                        </div>
+        <div className="flex flex-col items-center">
+            <label htmlFor="boxColor" className="mb-2">{t("Box Color")}</label>
+            <div className="flex items-center relative">
+                <div
+                    className="w-10 h-10 border border-gray-300 rounded cursor-pointer"
+                    style={{ background: boxColor }}
+                    onClick={() => setShowBoxColorPicker(!showBoxColorPicker)}
+                ></div>
+                {showBoxColorPicker && (
+                    <div className="absolute mt-2 left-0 z-50" ref={boxColorPickerRef}>
+                        <ColorPicker handlerFunction={handleBoxColorChange} pickerColor={boxColor}/>
                     </div>
+                )}
+            </div>
+        </div>
+
+        <div className="flex flex-col items-center">
+            <label htmlFor="borderImg" className="mb-2">{t("Border Profile Color")}</label>
+            <div className="flex items-center relative">
+                <div
+                    className="w-10 h-10 border border-gray-300 rounded cursor-pointer"
+                    style={{ background: borderImg }}
+                    onClick={() => setShowBorderColorPicker(!showBorderColorPicker)}
+                ></div>
+                {showBorderColorPicker && (
+                    <div className="absolute mt-2 left-0 z-50" ref={borderColorPickerRef}>
+                        <ColorPicker handlerFunction={handleBorderColorChange} pickerColor={borderImg} pickerValue={borderImg}/>
+                    </div>
+                )}
+            </div>
+        </div>
+    </div>
+</div>
+
 
                     {/* Select de fuentes */}
-                    <div className='my-3 mb-4 flex flex-row justify-start align-middle'>
-                    <h1 className='mt-3 text-lg font-semibold mr-6'>{t('Font style')}</h1>
+                    <div className='flex flex-col md:flex-row md:items-center mb-4 mt-10'>
+                    <h1 className='mt-3 text-lg font-semibold mr-6'>{t('Font style')}:</h1>
                     <select 
                         className='p-4 rounded-[10px] bg-gray-300' 
                         name="fontFamily" 
@@ -571,7 +569,7 @@ export const MusicForm = ({ onFormChangeMusic, location, musicFormValues }) => {
                     </div>
 
                     <div className="flex items-center mt-6  mb-4">
-                        <button type="submit" className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+                        <button type="submit" className="px-4 py-2  text-white rounded "
                         style={{ backgroundColor: '#284B63', color: '#fff' }}
                         onMouseEnter={(e) => e.target.style.backgroundColor = '#3C6E71'} // Cambia el color al hacer hover
                         onMouseLeave={(e) => e.target.style.backgroundColor = '#284B63'} // Vuelve al color original al salir del hover
