@@ -15,7 +15,7 @@ import ChangePasswordForm from "./changePasswordForm";
 import { AuthContext } from "../../../context/AuthContext";
 import { Toaster, toast } from 'sonner';
 import SubscriptionInfo from "./suscriptionInfo";
-
+import { useTranslation } from "react-i18next";
 const defaultAvatar = "https://www.w3schools.com/w3images/avatar2.png"; // URL imagen predeterminada
 
 const Profile = () => {
@@ -26,11 +26,11 @@ const Profile = () => {
     const [user, setUser] = useState(null);
     const [avatar, setAvatar] = useState(defaultAvatar);
     const [isGoogleUser, setIsGoogleUser] = useState(false); // Estado para verificar si es usuario de Google
-
+    const { t } = useTranslation();
     const [subscriptionInfo, setSubscriptionInfo] = useState({
         plan: "Basic",
         expirationDate: "2024-12-31",
-        benefits: ["Escaneos de Qrs/Mes 10000", "5 Qrs activos"],
+        benefits: [t('Qrs Scans/Month'), "5 Qrs activos"],
     });
 
         /**

@@ -10,6 +10,7 @@ import { toast } from 'sonner';
 import { useValidate } from '../../../../../context/validateFormContext';
 import ColorPicker from '../form-helpers/picker';
 import SkeletonLoader from '../Skeleton/Skeleton';
+import { useTranslation } from 'react-i18next';
 /*
  * @Author : Nicolas Barrios,   @date 2024-11-05 17:41:54
  * @description : formulario de menu con validaciones realizadas
@@ -23,6 +24,7 @@ function MenuForm(){
             templateNull,usertemplateNull,handleLogo,handleUserTemplate,handleBackgroundCard,handleMenuColor,addCategory,handleFontFamily,removeCategory,handleChangeCategoryName,addProductToCategory,removeProductToCategory,handleProductField,handleImgProduct,handleBackgroundProduct,handleColorNameProduct,handleColorDescriptionProduct,handleColorPriceProduct,handleProductName,handleProductDescription,handleProductTop,handleProductPrice, loading, setLoading,
     }=UseMenu();
 
+    const { t } = useTranslation();
     const{setValidateFormMenu}=useValidate();
     const [initialValues,setInitialValues]=useState(formData);
 
@@ -126,7 +128,7 @@ return (
             <div className="flex flex-col md:flex-row flex-wrap sm:mx-3 md:mx-3 mb-6">
             {/* Contenedor del input para el nombre del restaurante */}
             <div className="flex flex-col p-4 sm:mr-0 md:mr-4 w-full md:w-auto">
-              <label className="my-1" htmlFor="restaurantName">Restaurant Name</label>
+              <label className="my-1" htmlFor="restaurantName">{t('Restaurant Name')}</label>
               <input
                 onChange={(e) => { handleRestaurantName(e, formik.handleChange); }}
                 className="mb-1 p-2 border rounded w-full md:w-80"
@@ -150,7 +152,7 @@ return (
                 onClick={(e) => { formik.setTouched({ ...formik.touched, restaurantLogo: true }); }}
                 className="cursor-pointer bg-light-blue hover:bg-dark-blue text-white py-2 px-4 rounded-md"
               >
-                Load Logo
+                {t('Load logo')}
               </label>
               <input
                 className="hidden"
@@ -167,7 +169,7 @@ return (
           <div className="flex flex-col md:flex-row justify-start items-start space-y-4 md:space-y-0 md:space-x-6 py-4">
             {/* Background Section */}
             <div className="flex items-center space-x-6 mx-3">
-              <label htmlFor="backgroundColor">Background color:</label>
+              <label htmlFor="backgroundColor">{t('Background color')}</label>
               <button></button>
               <div 
                 className="w-10 h-10 border border-gray-300 rounded cursor-pointer"
@@ -184,7 +186,7 @@ return (
 
             {/* Menu Color Section */}
             <div className="flex items-center space-x-12 mx-3">
-              <label htmlFor="menuColor" className="text-[17px]">Color navbar:</label>
+              <label htmlFor="menuColor" className="text-[17px]">{t('Color navbar')}</label>
               <div className="w-10 h-10 border border-gray-300 rounded cursor-pointer" onClick={() => setShowMenuPicker(!showMenuPicker)} style={{ backgroundColor: formData.colorMenu || "#000" }}
               />
               {showMenuPicker && (
@@ -195,7 +197,7 @@ return (
             </div>
           </div>
                   <Accordion>
-                    <AccordionItem className='bg-gray-300 px-3 rounded-[10px] my-3 mx-0' aria-label='Background Templates' key={'1'} title='Background templates'>
+                    <AccordionItem className='bg-gray-300 px-3 rounded-[10px] my-3 mx-0' aria-label='Background Templates' key={'1'} title={t('Background templates')}>
                     <div className='flex flex-col my-2'>
                     <div className="relative w-full overflow-hidden">
                       <div
@@ -229,7 +231,7 @@ return (
                     </AccordionItem>
                   </Accordion>
                   <div className='my-3 mb-4 flex flex-col sm:flex-col md:flex-col lg:flex-row flex-wrap justify-start items-center lg:items-start'>
-                    <h1 className='mt-3 text-lg font-semibold mb-3 lg:mr-6 lg:mb-0'>Font style:</h1>
+                    <h1 className='mt-3 text-lg font-semibold mb-3 lg:mr-6 lg:mb-0'>{t('Font style')}</h1>
                     <select 
                       value={isEditRoute ? formData.idFontPreview : ''} 
                       className='p-4 rounded-[10px] bg-gray-300 w-full lg:w-auto'
@@ -246,11 +248,11 @@ return (
                   </div>
                     {/* Sección de Personalización de la Tarjeta de Producto */}
                     <div className='flex flex-col mb-6'>
-                      <h1 className='mb-2 text-lg font-semibold'>Customize your product card</h1>
+                      <h1 className='mb-2 text-lg font-semibold'>{t('Customize your product card')}</h1>
                       <div className='flex flex-col sm:flex-row flex-wrap w-full sm:w-[80%] p-4 justify-around gap-4'>
                         {/* Color de Fondo */}
                         <div className='flex flex-col items-center'>
-                          <label className='my-2' htmlFor="background">Background</label>
+                          <label className='my-2' htmlFor="background">{t('Background Color')}</label>
                           <div className='w-10 h-10 border-2 border-gray-300 rounded cursor-pointer' onClick={() =>setShowBackCategoryPicker(!showBackCategoryPicker)} style={{backgroundColor:formData.category?.[activeCategory]?.products[0]?.backgroundProductCard || "#000" }}
                           ></div>
                           {showBackCategoryPicker && (
@@ -263,7 +265,7 @@ return (
 
                         {/* Color del Nombre */}
                         <div className='flex flex-col items-center'>
-                          <label className='my-2' htmlFor="nameColor">Name-Color</label>
+                          <label className='my-2' htmlFor="nameColor">{t('Name Color')}</label>
                           <div className='w-10 h-10 border border-gray-300 rounded cursor-pointer'  onClick={() => setShowNamePicker(!showNamePicker)}   style={{ backgroundColor: formData.category?.[activeCategory]?.products[0]?.colorName || '#000' }}
                           ></div>
                           {showNamePicker && (
@@ -275,7 +277,7 @@ return (
 
                         {/* Color de la Descripción */}
                         <div className='flex flex-col items-center'>
-                          <label className='my-2' htmlFor="descriptionColor">Description-Color</label>
+                          <label className='my-2' htmlFor="descriptionColor">{t('Description Color')}</label>
                           <div  className='w-10 h-10 border border-gray-300 rounded cursor-pointer'  onClick={() => setShowDescriptionPicker(!showDescriptionPicker)}  style={{ backgroundColor: formData.category?.[activeCategory]?.products[0]?.colorDescription || '#000' }}></div>
                           {showDescriptionPicker && (
                             <div className='colorPicker' ref={descriptionPickerRef}>
@@ -286,7 +288,7 @@ return (
 
                         {/* Color del Precio */}
                         <div className='flex flex-col items-center'>
-                          <label className='my-2' htmlFor="priceColor">Price-Color</label>
+                          <label className='my-2' htmlFor="priceColor">{t('Price Color')}</label>
                           <div  className='w-10 h-10 border border-gray-300 rounded cursor-pointer'  onClick={() => setShowPricePicker(!showPricePicker)}  style={{ backgroundColor: formData.category?.[activeCategory]?.products[0]?.colorPrice || '#000' }}
                           ></div>
                           {showPricePicker && (
@@ -360,7 +362,7 @@ return (
         className="mb-4 px-4 py-2 bg-light-blue hover:bg-dark-blue text-white rounded"
         type="button"
       >
-        + Add new category
+        {t('+ Add new category')}
       </button>
 
       {/* Asegurarse de que hay categorías antes de mostrar el Accordion */}
@@ -376,7 +378,7 @@ return (
               title={
                 <div onClick={()=>handleActiveCategory(index)} className="flex justify-between p-2">
                   <label htmlFor={`category.${index}.categoryName`} className="">
-                    {!productsCategory?.[index].categoryName=="" ? productsCategory?.[index]?.categoryName:'Category name'}
+                    {!productsCategory?.[index].categoryName=="" ? productsCategory?.[index]?.categoryName:t('Category name')}
                   </label>
                     <button
                       onClick={() => {
@@ -412,7 +414,7 @@ return (
                     type="text"
                     value={formData?.category[index]?.categoryName}
                     name={`category[${index}].categoryName`}
-                    placeholder="Enter category name"
+                    placeholder={t("Enter category name")}
                     onBlur={formik.handleBlur}
                   />
                 {formik.touched.category?.[index] && formik.errors.category?.[index]?.categoryName ? (
@@ -476,7 +478,7 @@ return (
                         className="mb-4 px-4 py-2 bg-light-blue hover:bg-dark-blue text-white rounded"
                         type="button"
                       >
-                        + Add New Product
+                        {t('+ Add New Product')}
                       </button>
 
                       {/* Accordion para los productos */}
@@ -487,7 +489,7 @@ return (
                             aria-label={`product ${index}-${productIndex}`}
                             title={
                               <div className="flex justify-between px-2">
-                                <h1 className=""> {!productsCategory?.[index].products?.[productIndex].productName=="" ? productsCategory?.[index]?.products?.[productIndex]?.productName:`product ${productIndex+1}`}</h1>
+                                <h1 className=""> {!productsCategory?.[index].products?.[productIndex].productName=="" ? productsCategory?.[index]?.products?.[productIndex]?.productName:`${t('Product')} ${productIndex+1}`}</h1>
                                 <div className="self-end">
                                   {/* Botón para eliminar producto, visible solo si hay más de uno */}
                                   <button
@@ -560,7 +562,7 @@ return (
                                       htmlFor={`category[${index}].products[${productIndex}].productImg`}
                                       className="p-2 text-[17px] rounded-md my-3 w-[50%] sm:w-[25%] text-center bg-light-blue text-white hover:bg-dark-blue"
                                     >
-                                      Add Image
+                                      {t('Add Image')}
                                     </label>
                                     {formik.touched?.category?.[index]?.products?.[productIndex]?.productImg &&
                                       formik.errors?.category?.[index]?.products?.[productIndex]?.productImg ? (
@@ -576,7 +578,7 @@ return (
                                   <input
                                     className="mb-1 p-2 border rounded w-full mx-1"
                                     type="text"
-                                    placeholder="Product Name"
+                                    placeholder={t("Product Name")}
                                     value={formData?.category[index]?.products[productIndex]?.productName}
                                     name={`category[${index}].products[${productIndex}].productName`}
                                     onBlur={formik.handleBlur}
@@ -599,7 +601,7 @@ return (
                                     className="mb-1 p-2 border rounded w-full mx-1"
                                     type="text"
                                     value={formData?.category[index]?.products[productIndex]?.productDescription}
-                                    placeholder="Product Description"
+                                    placeholder={t("Product Description")}
                                     id={`category[${index}].products[${productIndex}].productDescription`}
                                     name={`category[${index}].products[${productIndex}].productDescription`}
                                     onBlur={formik.handleBlur}
@@ -637,7 +639,7 @@ return (
 
                                   {/* Input "Price" */}
                                   <div className="flex items-center sm:w-full lg:w-auto">
-                                    <label className="mx-2">Price $</label>
+                                    <label className="mx-2">{t('Price')} $</label>
                                     <input
                                       className="p-2 border rounded w-full sm:w-[50%] lg:w-24 h-10"
                                       type="number"
