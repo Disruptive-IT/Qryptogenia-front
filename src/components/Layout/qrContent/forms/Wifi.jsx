@@ -7,6 +7,7 @@ import { useValidate } from "../../../../context/validateFormContext";
 import Skeleton from 'react-loading-skeleton';
 import 'react-loading-skeleton/dist/skeleton.css';
 import SkeletonWifi from "./Skeleton/SkeletonWifi";
+import { useTranslation } from 'react-i18next';
 
 
 
@@ -27,6 +28,7 @@ function FormWifi() {
 
     let wifiLink;
 
+    const { t } = useTranslation();
     const validateFormFields=()=>{
         if (Object.keys(formik.errors).length > 0) {
             setValidateFormWifi(false);
@@ -165,12 +167,12 @@ function FormWifi() {
                             onMouseEnter={(e) => e.target.style.backgroundColor = '#3C6E71'} // Cambia el color al hacer hover
                             onMouseLeave={(e) => e.target.style.backgroundColor = '#284B63'} // Vuelve al color original al salir del hoover
                             disabled={formik.isSubmitting}>
-                    Get Wifi Data
+                    {t('Get Wifi Data')}
                 </button>
             </div>
             <form className="max-w-4xl mx-auto mt-8 relative" onSubmit={formik.handleSubmit}>
                 <div className="flex flex-col w-full md:w-2/3 mr-6 mb-[10px] md:mb-0">
-                    <label htmlFor="ssid" className="mb-3">SSID o Nombre de la Red</label>
+                    <label htmlFor="ssid" className="mb-3">{t('SSID or Network Name')}</label>
                     <input
                         type="text"
                         id="ssid"
@@ -185,7 +187,7 @@ function FormWifi() {
                     ) : null}
                 </div>
                 <div className="flex flex-col w-full md:w-2/3 mr-6 mb-[10px] md:mb-0">
-                    <label htmlFor="security_type" className="mb-3">Tipo de Seguridad</label>
+                    <label htmlFor="security_type" className="mb-3">{t('Security Type')}</label>
                     <select
                         name="security_type"
                         id="security_type"
@@ -194,7 +196,7 @@ function FormWifi() {
                         value={formik.values.security_type}
                         className="border w-full border-gray-300 rounded p-2 mb-4"
                     >
-                        <option value="">Selecciona</option>
+                        <option value="">{t('Select')}</option>
                         {securityOptions.map(option => (
                             <option key={option} value={option}>
                                 {option.replace(/_/g, ' ').toUpperCase()}
@@ -206,7 +208,7 @@ function FormWifi() {
                     ) : null}
                 </div>
                 <div className="flex flex-col w-full md:w-2/3 mr-6 mb-[10px] md:mb-0">
-                    <label htmlFor="password" className="mb-3">Contraseña</label>
+                    <label htmlFor="password" className="mb-3">{t('Password')}</label>
                     <input
                         type="password"
                         id="password"
@@ -221,7 +223,7 @@ function FormWifi() {
                     ) : null}
                 </div>
                 <button type="submit" className="px-4 py-2 bg-dark-blue text-white rounded hover:bg-light-blue" disabled={formik.isSubmitting}>
-                    Submit
+                    {t('Submit')}
                 </button>
             </form>
         </div>

@@ -8,7 +8,7 @@ import instance from '../../../../libs/axios';
 import './../forms/menu/menu.css';
 import { createTheme, Modal, ThemeProvider } from '@mui/material';
 import { UseMenu } from '../forms/menu/menuContext';
-
+import { useTranslation } from 'react-i18next';
 export default function WebLinkMenuFood({ FormValues, ContentName }) {
   const [tabValue, setTabValue] = useState(0);
   const [openModal,setOpenModal]=useState(false);
@@ -22,7 +22,7 @@ export default function WebLinkMenuFood({ FormValues, ContentName }) {
   const[showInitialKeys,setShowInitialKeys]=useState(true);
   const isEditRoute = location.pathname.startsWith('/edit');
   const validateLink=/.webp/
-
+  const {t}=useTranslation();
   const defaultProductImage='https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSpSkKP8LgqK1IPs87-PyJcveeRF0Wet-xgyw&s'
   const defaultLogo='https://media.istockphoto.com/id/981368726/es/vector/restaurante-de-comida-y-bebidas-logotipo-tenedor-cuchillo-fondo-vector-imagen.jpg?s=612x612&w=0&k=20&c=3mPGCDXyBeuGpxeuTlHkECM5rAW5cy07bDFi0i0ZCbw='
 
@@ -95,7 +95,7 @@ const getLinkTemplate=async(id)=>{
         main:'#3f50b5'
       },
       secondary:{
-        main:FormValues?.colorMenu
+        main:FormValues?.colorMenu || '#ff4081'
       }
     },
     typography:{
@@ -106,7 +106,7 @@ const getLinkTemplate=async(id)=>{
       MuiTabs:{
         styleOverrides:{
           scrollButtons:{
-            color:FormValues?.colorMenu,
+            color:FormValues?.colorMenu || '#ff4081',
           }
         }
       }
@@ -135,15 +135,15 @@ const getLinkTemplate=async(id)=>{
   }
 
   useEffect(()=>{
-    if(FormValues.idImgTemplate!=null){
+    if(FormValues?.idImgTemplate!=null){
       getLinkTemplate(FormValues.idImgTemplate);
     }
-  },[FormValues.idImgTemplate])
+  },[FormValues?.idImgTemplate])
 
   useEffect(()=>{
-    getNameFont(FormValues.idFontPreview);
+    getNameFont(FormValues?.idFontPreview);
     console.log(fontFamily);
-  },[FormValues.idFontPreview]);
+  },[FormValues?.idFontPreview]);
 
   return (
       <div className='parent-container absolute left-0 w-full h-full'>
@@ -151,14 +151,14 @@ const getLinkTemplate=async(id)=>{
     className="relative left-0 top-0 w-full h-full overflow-y-auto p-4"
     id="main-container"
     style={{
-      backgroundColor: FormValues.backgroundCard.includes("gradient")
+      backgroundColor: FormValues?.backgroundCard.includes("gradient")
         ? "transparent"
-        : FormValues.backgroundCard, // Solo asigna si es un color sólido
-      backgroundImage: FormValues.idImgTemplate == null
-        ? FormValues.idUserTemplate !== null
-          ? `url(${URL.createObjectURL(FormValues.idUserTemplate)})`
-          : FormValues.backgroundCard.includes("gradient")
-          ? FormValues.backgroundCard // Asigna el gradiente si lo contiene
+        : FormValues?.backgroundCard, // Solo asigna si es un color sólido
+      backgroundImage: FormValues?.idImgTemplate == null
+        ? FormValues?.idUserTemplate !== null
+          ? `url(${URL.createObjectURL(FormValues?.idUserTemplate)})`
+          : FormValues?.backgroundCard.includes("gradient")
+          ? FormValues?.backgroundCard // Asigna el gradiente si lo contiene
           : "" : isEditRoute
           ? `url(${templateUrl?.image})`
           : `url(${templateUrl?.image})`,
@@ -188,7 +188,7 @@ const getLinkTemplate=async(id)=>{
           id="name-container"
         >
           <h1 style={{fontFamily:fontFamily?.fontName}} className="text-center font-semibold text-[25px] break-words">
-            {showInitialKeys && counterChange==0 && !isEditRoute ? 'Food Restaurant' : FormValues.restaurantName!==''? FormValues.restaurantName : 'Restaurant name'}
+            {showInitialKeys && counterChange==0 && !isEditRoute ? t('Food Restaurant') : FormValues.restaurantName!==''? FormValues.restaurantName : t('Restaurant name')}
           </h1>
         </div>
         <div
@@ -209,7 +209,7 @@ const getLinkTemplate=async(id)=>{
                 <Tab
                   sx={{ color: FormValues.colorMenu,fontWeight:'800'}}
                   key={index}
-                  label={element.categoryName!==""?element.categoryName:`category ${index+1}`}
+                  label={element.categoryName!==""?element.categoryName:`${t('category')} ${index+1}`}
                   value={index}
                 />
               ))}

@@ -16,7 +16,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { UseMenu } from '../forms/menu/menuContext';
 import { useLocation } from 'react-router-dom';
 import instance from '../../../../libs/axios';
-
+import axios from '../../../../libs/axios';
 
 /*
  * @UpdatedBy : Cristian Escobar,   @date 2024-09-03 15:05:11
@@ -179,7 +179,7 @@ const CustomQr = ({ qrId }) => {
       });
 
     const CreateQr = async () => {
-        const { value: qrName, isConfirmed } = await Swal.fire({
+        const { value: inputQrName, isConfirmed } = await Swal.fire({
             title: t("Save QR Code"),
             html: `
                 <input 
@@ -353,11 +353,10 @@ const CustomQr = ({ qrId }) => {
                 </div>
             </div>
             <button
-                onClick={CreateQr}
-                className='bottom-0 left-8 w-4/5 md:left-0 md:w-full p-3 rounded-md text-white font-semibold bg-light-blue hover:bg-dark-blue'
-            >
-                   {!isEditRoute ? t("CREATE MY QR"): "SAVE CHANGES"}
-            </button>
+    onClick={CreateQr}
+    className="bottom-0 left-0 w-full p-3 mt-4 rounded-md text-white font-semibold bg-light-blue hover:bg-dark-blue transition duration-300 ease-in-out shadow-lg flex items-center justify-center">
+    <span>{!isEditRoute ? t("CREATE MY QR") : "SAVE CHANGES"}</span>
+</button>
 
            
         </div>

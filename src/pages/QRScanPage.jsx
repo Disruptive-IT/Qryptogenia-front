@@ -235,17 +235,26 @@ const QRScanPage = () => {
       },[activeCategory,activeprod])
 
     return (
-        <div style={{
-            backgroundColor:!qrData?.MenuPreview?.imgTemplate && !qrData?.MenuPreview?.imgTemplate ? qrData?.MenuPreview?.backgroundCard : '#fff',
-            backgroundImage: `url(${qrData?.MenuPreview?.imgTemplate || qrData?.MenuPreview?.userTemplate || ''})`,
-            backgroundSize: '100vw 100vh',
-            width:'100%',
-            height:'auto',
-            backgroundPosition: 'center',
-            backgroundRepeat:'no-repeat',
-            margin:'0',
-            overflowY:'hidden',
-          }}>
+      <div style={{
+        backgroundColor: !qrData?.MenuPreview?.imgTemplate && !qrData?.MenuPreview?.userTemplate 
+                           ? qrData?.MenuPreview?.backgroundCard 
+                           : '#fff',
+        backgroundImage: 
+          qrData?.MenuPreview?.imgTemplate 
+            ? `url(${qrData.MenuPreview.imgTemplate})`
+            : qrData?.MenuPreview?.userTemplate 
+            ? `url(${qrData.MenuPreview.userTemplate})`
+            : qrData?.MenuPreview?.backgroundCard?.includes("gradient") 
+            ? qrData.MenuPreview.backgroundCard
+            : 'none',
+        backgroundSize: '100vw 100vh',
+        width: '100%',
+        height: 'auto',
+        backgroundPosition: 'center',
+        backgroundRepeat: 'no-repeat',
+        margin: '0',
+        overflowY: 'hidden',
+      }}>      
             {qrData?.QrPreview && (
                 <div style={{fontFamily:fontPreview?.fontName}} className='flex items-center justify-center min-h-screen'>
                 <div className='flex flex-col min-h-screen w-full items-center justify-center' style={{ background: qrData?.QrPreview?.backgroudColor || '#f0f0f0' }}>
@@ -369,14 +378,14 @@ const QRScanPage = () => {
                                 category.products.map((product, indexProduct) => (
                             <motion.div
                                 key={indexProduct}
-                                initial={cardVariants.offscreen}
-                                whileInView={cardVariants.onscreen}
+                                initial={indexProduct > 0 && cardVariants.offscreen}
+                                whileInView={indexProduct > 0 && cardVariants.onscreen}
                                 viewport={{ once: true, amount: 0.3 }}
-                                style={{ boxShadow: '3px 5px 5px 0px rgb(0,0,0,1)' }}
+                                style={{ boxShadow: '3px 5px 5px 0px rgb(0,0,0,1)',backgroundColor:product.backgroundProductCard,backgroundImage:product.backgroundProductCard.includes("gradient") ? product.backgroundProductCard : "none" }}
                                 className="lg:w-[30%] md:w-[45%] sm:w-[341px] sm:h-[116px] min-w-[320px] max-w-[400px] min-h-[116px] max-h-[180px] mx-4 my-3 flex flex-row rounded-md overflow-hidden"
                                 onClick={() => {setActiveprod({activeCat:indexCategory,activeProd:indexProduct}); handleOpenModal();}}
                             >
-                                <div style={{ backgroundColor: product.backgroundProductCard }} className="w-[40%] h-full overflow-hidden">
+                                <div style={{ backgroundColor: product.backgroundProductCard}} className="w-[40%] h-full overflow-hidden">
                                     <img className="w-full h-full" src={product.productImg} alt={product.productName} />
                                 </div>
                                 <div style={{ backgroundColor: product.backgroundProductCard }} className="w-[60%] h-full px-2 py-2 flex flex-col justify-between">
@@ -406,15 +415,15 @@ const QRScanPage = () => {
                             <div className='flex flex-wrap justify-center px-10 '>
                             {topProducts?.length > 0 ? (
                                 topProducts.map((element, index) => (
-                                <motion.div                                 
-                                initial={cardVariants.offscreen}
-                                whileInView={cardVariants.onscreen}
+                                <motion.div                               
+                                initial={index > 0 && cardVariants.offscreen}
+                                whileInView={index > 0 && cardVariants.onscreen}
                                 viewport={{ once: true, amount: 0.4 }}
-                                style={{ boxShadow: '3px 5px 5px 0px rgb(0,0,0,1)' }} key={index} className="lg:w-[30%] md:w-[30%] sm:min-w-[20%] sm:max-w-[132px] sm:min-h-[116px] mx-4 my-3  flex flex-row rounded-md overflow-hidden" onClick={() => { setActiveprod(index); handleOpenModal(); }}>
-                                    <div style={{ backgroundColor: element.backgroundProductCard }} className="w-[40%] h-full bg-slate-500 overflow-auto">
+                                style={{ boxShadow: '3px 5px 5px 0px rgb(0,0,0,1)',backgroundColor:element.backgroundProductCard,backgroundImage:element.backgroundProductCard.includes("gradient") ? element.backgroundProductCard : "none" }} key={index} className="lg:w-[30%] md:w-[30%] sm:min-w-[20%] sm:max-w-[132px] sm:min-h-[116px] mx-4 my-3  flex flex-row rounded-md overflow-hidden" onClick={() => { setActiveprod(index); handleOpenModal(); }}>
+                                    <div style={{ backgroundColor: element.backgroundProductCard,backgroundImage:element.backgroundProductCard.includes("gradient") ? element.backgroundProductCard : 'none' }} className="w-[40%] h-full bg-slate-500 overflow-auto">
                                     <img className="w-full h-full" src={element.productImg} alt={element.productName} />
                                     </div>
-                                    <div style={{ backgroundColor: element.backgroundProductCard }} className="w-[60%] h-full bg-red-300 px-2 py-2 flex flex-col self-center">
+                                    <div style={{ backgroundColor: element.backgroundProductCard }} className="w-[60%] h-full px-2 py-2 flex flex-col self-center">
                                     <span className="flex w-full items-end justify-end hover:cursor-pointer">+</span>
                                     <div style={{ fontFamily: qrData?.MenuPreview?.fontPreview || 'sans-serif' }} className="w-full h-[80%] bg-transparent flex flex-col justify-evenly">
                                         <h1 style={{ color: element.colorName }} className="text-[17px] text-center break-words font-bold">
@@ -446,7 +455,7 @@ const QRScanPage = () => {
         x
       </button>
       <div 
-        style={{ backgroundColor: qrData?.MenuPreview?.category[activeprod.activeCat].products[activeprod.activeProd].backgroundProductCard, fontFamily: qrData?.MenuPreview?.fontPreview }} 
+        style={{ backgroundColor: qrData?.MenuPreview?.category[activeprod.activeCat].products[activeprod.activeProd].backgroundProductCard,backgroundImage:qrData?.MenuPreview?.category[activeprod.activeCat].products[activeprod.activeProd].backgroundProductCard.includes("gradient") ? qrData?.MenuPreview?.category[activeprod.activeCat].products[activeprod.activeProd].backgroundProductCard  : "none", fontFamily: qrData?.MenuPreview?.fontPreview }} 
         className=" lg:mt-[5%] lg:ml-[40%]  flex lg:w-[20%] flex-col items-center p-4 rounded-lg my-[10%]"
       >
         {/* Imagen del producto */}
@@ -483,7 +492,7 @@ const QRScanPage = () => {
         x
       </button>
       <div 
-        style={{ backgroundColor: topProducts[activeprod].backgroundProductCard, fontFamily: qrData?.MenuPreview?.fontPreview || 'sans-serif' }} 
+        style={{ backgroundColor: topProducts[activeprod].backgroundProductCard,backgroundImage:topProducts[activeprod].backgroundProductCard.includes("gradient") ? topProducts[activeprod].backgroundProductCard : "none", fontFamily: qrData?.MenuPreview?.fontPreview || 'sans-serif' }} 
         className="lg:mt-[5%] lg:ml-[40%]  flex lg:w-[20%] flex-col items-center p-4 rounded-lg my-[10%]"
       >
         {/* Imagen del producto destacado */}

@@ -96,7 +96,14 @@ export default function StoreMenuFood({ menuFormValues }) {
             id="main-container"
             style={{
               backgroundColor: menuFormValues.backgroundCard,
-              backgroundImage: menuFormValues.imgTemplate == null  ? (menuFormValues.userTemplate !== null ? `url(${menuFormValues.userTemplate})` : '') : `url(${menuFormValues.imgTemplate})`,
+              backgroundImage: 
+              menuFormValues.imgTemplate 
+                ? `url(${menuFormValues.imgTemplate})` 
+                : menuFormValues.userTemplate 
+                ? `url(${menuFormValues.userTemplate})` 
+                : menuFormValues.backgroundCard?.includes('gradient') 
+                ? menuFormValues.backgroundCard 
+                : "none",
               backgroundSize: '340px 660px',
               backgroundPosition: 'center',
               backgroundRepeat: 'no-repeat',
@@ -161,11 +168,11 @@ export default function StoreMenuFood({ menuFormValues }) {
     <TabPanel key={index} value={tabValue} index={index}>
       {category.products && category.products.length > 0 && activeCategory!=null ? (
         category.products.map((element, productIndex) => (
-          <div key={productIndex} className='w-full h-[135px] flex flex-row rounded-[10px] overflow-auto mb-4' onClick={() => {setActiveprod(productIndex); handleOpenModal();}}>
-            <div style={{backgroundColor:element.backgroundProductCard}} className='w-[40%] h-full bg-slate-500 overflow-auto'>
+          <div style={{backgroundColor:element.backgroundProductCard,backgroundImage:element.backgroundProductCard.includes("gradient") ? element.backgroundProductCard : "none"}} key={productIndex} className='w-full h-[135px] flex flex-row rounded-[10px] overflow-auto mb-4' onClick={() => {setActiveprod(productIndex); handleOpenModal();}}>
+            <div className='w-[40%] h-full bg-slate-500 overflow-auto'>
               <img className='w-full h-full' src={element.productImg} alt={element.productName} />
             </div>
-            <div style={{backgroundColor:element.backgroundProductCard}} className='w-[60%] h-full bg-red-300 px-1 py-1  flex flex-col self-center'>
+            <div style={{backgroundColor:element.backgroundProductCard}} className='w-[60%] h-full px-1 py-1  flex flex-col self-center'>
               <span className='flex w-full items-end justify-end hover:cursor-pointer'>+</span>
               <div className='w-full  h-[80%] bg-transparent flex flex-col justify-evenly'>
                 <h1 style={{color: element.colorName,fontFamily:menuFormValues.fontpreview}} className='text-[17px] text-center break-words font-bold'>{element.productName=='' ? 'Product name' : element.productName}</h1>
@@ -184,11 +191,11 @@ export default function StoreMenuFood({ menuFormValues }) {
     {
       topProducts.length > 0 ? (
         topProducts.map((element, index) => (
-          <div key={index} className='w-full h-[135px] flex flex-row rounded-[10px] overflow-auto mb-4' onClick={() => { setActiveprod(index); handleOpenModal(); }}>
-            <div style={{backgroundColor:element.backgroundProductCard}} className='w-[40%] h-full bg-slate-500 overflow-auto'>
+          <div style={{backgroundColor:element.backgroundProductCard,backgroundImage:element.backgroundProductCard.includes("gradient") ? element.backgroundProductCard : "none"}} key={index} className='w-full h-[135px] flex flex-row rounded-[10px] overflow-auto mb-4' onClick={() => { setActiveprod(index); handleOpenModal(); }}>
+            <div className='w-[40%] h-full overflow-auto'>
               <img className='w-full h-full' src={element.productImg} alt={element.productName} />
             </div>
-            <div style={{backgroundColor:element.backgroundProductCard}} className='w-[60%] h-full bg-red-300 px-1 py-1  flex flex-col self-center'>
+            <div style={{backgroundColor:element.backgroundProductCard}} className='w-[60%] h-full px-1 py-1  flex flex-col self-center'>
               <span className='flex w-full items-end justify-end hover:cursor-pointer'>+</span>
               <div style={{fontFamily:menuFormValues?.fontPreview || 'sans-serif'}} className='w-full  h-[80%] bg-transparent flex flex-col justify-evenly'>
                 <h1 style={{color: element.colorName}} className='text-[17px] text-center break-words font-bold'>{element.productName === '' ? 'Product name' : element.productName}</h1>
@@ -216,7 +223,7 @@ export default function StoreMenuFood({ menuFormValues }) {
     {activeCategory !== null ? (
       // Si estás en una categoría normal
       menuFormValues.category[activeCategory]?.products?.[activeprod] && (
-        <div style={{backgroundColor: menuFormValues.category[activeCategory].products[activeprod].backgroundProductCard}} className={`absolute bg-orange-400 top-[25%] w-[80%] left-[10%] h-auto rounded-[10px] p-4`}>
+        <div style={{backgroundColor: menuFormValues.category[activeCategory].products[activeprod].backgroundProductCard,backgroundImage:menuFormValues.category[activeCategory].products[activeprod].backgroundProductCard.includes("gradient") ? menuFormValues.category[activeCategory].products[activeprod].backgroundProductCard : "none"}} className={`absolute bg-orange-400 top-[25%] w-[80%] left-[10%] h-auto rounded-[10px] p-4`}>
           <img className='rounded-2xl border-[4px] border-black' src={menuFormValues.category[activeCategory].products[activeprod].productImg} alt={menuFormValues.category[activeCategory].products[activeprod].productName} />
           <div className='flex flex-row w-full h-auto justify-between p-2 mb-1'>
             <h1 className='mx-3 my-4 font-bold text-[20px] text-black'>{menuFormValues.category[activeCategory].products[activeprod].productName}</h1>
@@ -233,7 +240,7 @@ export default function StoreMenuFood({ menuFormValues }) {
     ) : (
       // Si estás en la pestaña "top" y quieres mostrar los productos destacados
       topProducts[activeprod] && (
-        <div style={{backgroundColor: topProducts[activeprod].backgroundProductCard,fontFamily:menuFormValues?.fontPreview|| 'sans-serif'}} className={`absolute bg-orange-400 top-[25%] w-[80%] left-[10%] h-auto rounded-[10px] p-4`}>
+        <div style={{backgroundColor:topProducts[activeprod].backgroundProductCard,backgroundImage:topProducts[activeprod].backgroundProductCard.includes("gradient") ? topProducts[activeprod].backgroundProductCard : "none",fontFamily:menuFormValues?.fontPreview|| 'sans-serif'}} className={`absolute bg-orange-400 top-[25%] w-[80%] left-[10%] h-auto rounded-[10px] p-4`}>
           <img className='rounded-2xl border-[4px] border-black' src={topProducts[activeprod].productImg} alt={topProducts[activeprod].productName} />
           <div className='flex flex-row w-full h-auto justify-between p-2 mb-1'>
             <h1 className='mx-3 my-4 font-bold text-[20px] text-black'>{topProducts[activeprod].productName}</h1>

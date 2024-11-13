@@ -477,7 +477,7 @@ console.log("these are the selected options: ",appFormValues.selectedOptions);
                                         ></div>
                                         {showBackgroundColorPicker && (
                                             <div className="absolute mt-2 left-0 z-50" ref={backgroundColorPickerRef}>
-                                            <ColorPicker gradient={true} handlerFunction={handleBackgroundColorChange} pickerColor={backgroundColor} pickerValue={backgroundColor} style={{ width: "calc(100% + 2rem)" }}/>
+                                            <ColorPicker handlerFunction={handleBackgroundColorChange} pickerColor={backgroundColor} pickerValue={backgroundColor} style={{ width: "calc(100% + 2rem)" }}/>
                                             </div>
                                         )}
                                         </div>
@@ -509,7 +509,7 @@ console.log("these are the selected options: ",appFormValues.selectedOptions);
                                     ></div>
                                     {showBorderColorPicker && (
                                         <div className="absolute mt-2 left-0 z-50" ref={borderColorPickerRef}>
-                                            <ColorPicker gradient={true} handlerFunction={handleBorderColorChange} pickerColor={borderImg} pickerValue={borderImg}/>
+                                            <ColorPicker handlerFunction={handleBorderColorChange} pickerColor={borderImg} pickerValue={borderImg}/>
                                         </div>
                                     )}
                                 </div>
@@ -517,7 +517,7 @@ console.log("these are the selected options: ",appFormValues.selectedOptions);
                         </div>
 
                         <div className='flex flex-col md:flex-row md:items-center mb-4 mt-10'>
-                          <h1 className='mt-3 text-lg font-semibold mr-6'>Font style:</h1>
+                          <h1 className='mt-3 text-lg font-semibold mr-6'>{t('Font style')}:</h1>
                           <select className='p-4 rounded-[10px] bg-gray-300' name="fontFamily" id="" value={appFormValues.idFontPreview} onChange={(e)=>handleSelectedFont(e)}>
                           {appFontsPreview?.map((item, index) => (
                             <option style={{ fontFamily: item.fontName }} key={index} id={item.id} value={item.id}>
