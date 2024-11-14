@@ -476,7 +476,7 @@ export const SocialForm = ({ onFormChange, location, socialFormValues }) => {
                 ></div>
                 {showBoxColorPicker && (
                   <div className="absolute mt-2 left-0 z-50" ref={boxColorPickerRef}>
-                    <ColorPicker handlerFunction={handleBoxColorChange} pickerColor={boxColor} pickerValue={boxColor}/>
+                    <ColorPicker gradient={true} handlerFunction={handleBoxColorChange} pickerColor={boxColor} pickerValue={boxColor}/>
                   </div>
                 )}
             </div>
@@ -492,7 +492,7 @@ export const SocialForm = ({ onFormChange, location, socialFormValues }) => {
                 ></div>
                 {showBorderColorPicker && (
                     <div className="absolute mt-2 left-0 z-50" ref={borderColorPickerRef}>
-                      <ColorPicker handlerFunction={handleBorderColorChange} pickerColor={borderImg} pickerValue={borderImg}/>
+                      <ColorPicker gradient={true} handlerFunction={handleBorderColorChange} pickerColor={borderImg} pickerValue={borderImg}/>
                     </div>
                 )}
             </div>

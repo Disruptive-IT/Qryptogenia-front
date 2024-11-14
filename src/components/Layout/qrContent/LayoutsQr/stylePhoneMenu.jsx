@@ -228,13 +228,13 @@ const getLinkTemplate=async(id)=>{
       category.products.map((element, productIndex) => (
         <div key={productIndex} className='w-full h-[135px] flex flex-row rounded-[10px] overflow-auto mb-4' onClick={() => {setActiveprod(productIndex); handleOpenModal();}}>
           <div style={{backgroundColor:element.backgroundProductCard}} className='w-[40%] h-full bg-slate-500 overflow-auto'>
-          <img className='w-full h-full' src={showInitialKeys && counterChange==0 && element.productImg==null && !isEditRoute ? defaultProductImage : element.productImg && validateLink.test(FormValues?.category?.[index]?.products?.[productIndex]?.productImg)  ? (isEditRoute ? element.productImg : '') : (element?.productImg instanceof File ? URL.createObjectURL(element.productImg) : '')} alt={element.productName || 'Producto'}/>
+          <img className='w-full h-full' src={showInitialKeys && index==0 && productIndex==0 && counterChange==0 && element.productImg==null && !isEditRoute ? defaultProductImage : element.productImg && validateLink.test(FormValues?.category?.[index]?.products?.[productIndex]?.productImg)  ? (isEditRoute ? element.productImg : '') : (element?.productImg instanceof File ? URL.createObjectURL(element.productImg) : '')} alt={element.productName || 'Producto'}/>
           </div>
           <div style={{backgroundColor:showInitialKeys && counterChange==0 && !isEditRoute && element.backgroundColor=='#fff' ? '#7EC2DD':element.backgroundProductCard,backgroundImage:element.backgroundProductCard.includes("gradient") ? element.backgroundProductCard : "none"}} className='w-[60%] h-full bg-red-300 px-1 py-1  flex flex-col self-center'>
             <span className='flex w-full items-end justify-end hover:cursor-pointer'>+</span>
             <div className='w-full  h-[80%] bg-transparent flex flex-col justify-evenly'>
-              <h1 style={{color: element.colorName,fontFamily:fontFamily?.fontName}} className='text-[17px] text-center break-words font-bold'>{showInitialKeys && counterChange==0 && !isEditRoute && element.productName=='' ? 'Burguer' : element.productName=='' ? 'Product name' : element.productName}</h1>
-              <h1 style={{color: element.colorPrice,fontFamily:fontFamily?.fontName}} className='text-center break-words font-bold'>{showInitialKeys && counterChange==0 && !isEditRoute && element.price=='' ? '45.67$' : element.price==null ? 'price':element.price+'$'}</h1>
+              <h1 style={{color: element.colorName,fontFamily:fontFamily?.fontName}} className='text-[17px] text-center break-words font-bold'>{showInitialKeys && index==0 && productIndex==0 && counterChange==0 && !isEditRoute && element.productName=='' ? 'Burguer' : element.productName=='' ? 'Product name' : element.productName}</h1>
+              <h1 style={{color: element.colorPrice,fontFamily:fontFamily?.fontName}} className='text-center break-words font-bold'>{showInitialKeys && index==0 && productIndex==0 && counterChange==0 && !isEditRoute && element.price=='' ? '45.67$' : element.price==null ? 'price':element.price+'$'}</h1>
             </div>
             <span className='text-end'>{element.top ? <StarIcon className='text-yellow-300 text-2xl' /> : ''}</span>
           </div>

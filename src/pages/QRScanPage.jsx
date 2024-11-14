@@ -376,31 +376,35 @@ const QRScanPage = () => {
                                <div className='flex flex-wrap justify-center px-10 '>
                             {category.products && category.products.length > 0 ? (
                                 category.products.map((product, indexProduct) => (
-                            <motion.div
-                                key={indexProduct}
-                                initial={indexProduct > 0 && cardVariants.offscreen}
-                                whileInView={indexProduct > 0 && cardVariants.onscreen}
-                                viewport={{ once: true, amount: 0.3 }}
-                                style={{ boxShadow: '3px 5px 5px 0px rgb(0,0,0,1)',backgroundColor:product.backgroundProductCard,backgroundImage:product.backgroundProductCard.includes("gradient") ? product.backgroundProductCard : "none" }}
-                                className="lg:w-[30%] md:w-[45%] sm:w-[341px] sm:h-[116px] min-w-[320px] max-w-[400px] min-h-[116px] max-h-[180px] mx-4 my-3 flex flex-row rounded-md overflow-hidden"
-                                onClick={() => {setActiveprod({activeCat:indexCategory,activeProd:indexProduct}); handleOpenModal();}}
-                            >
-                                <div style={{ backgroundColor: product.backgroundProductCard}} className="w-[40%] h-full overflow-hidden">
-                                    <img className="w-full h-full" src={product.productImg} alt={product.productName} />
-                                </div>
-                                <div style={{ backgroundColor: product.backgroundProductCard }} className="w-[60%] h-full px-2 py-2 flex flex-col justify-between">
-                                    <span className="flex w-full items-end justify-end hover:cursor-pointer">+</span>
-                                    <div className="w-full flex-grow bg-transparent flex flex-col justify-evenly">
-                                        <h1 style={{ color: product.colorName, fontFamily: qrData?.MenuPreview?.fontPreview }} className="text-[17px] text-center break-words font-bold">
-                                            {product.productName || 'Product name'}
-                                        </h1>
-                                        <h1 style={{ color: product.colorPrice, fontFamily: qrData?.MenuPreview?.fontPreview }} className="text-center break-words font-bold">
-                                            {product.price == null ? 'Price' : `${product.price}$`}
-                                        </h1>
-                                    </div>
-                                    {product.top && <span className="text-end"><StarIcon className="text-yellow-300 text-2xl" /></span>}
-                                </div>
-                            </motion.div>
+                                  <motion.div
+                                  key={indexProduct}
+                                  initial={indexProduct > 2 && cardVariants.offscreen}
+                                  whileInView={indexProduct > 2 && cardVariants.onscreen}
+                                  viewport={{ once: true, amount: 0.3 }}
+                                  style={{
+                                      boxShadow: '3px 5px 5px 0px rgb(0,0,0,1)',
+                                      backgroundColor: product.backgroundProductCard,
+                                      backgroundImage: product.backgroundProductCard.includes("gradient") ? product.backgroundProductCard : "none",
+                                  }}
+                                  className="lg:w-[30%] md:w-[45%] sm:w-[341px] sm:h-[116px] min-w-[320px] max-w-[400px] min-h-[116px] max-h-[180px] mx-4 my-3 flex flex-row rounded-md overflow-hidden"
+                                  onClick={() => {setActiveprod({activeCat: indexCategory, activeProd: indexProduct}); handleOpenModal();}}
+                              >
+                                  <div style={{ backgroundColor: product.backgroundProductCard }} className="w-[40%] h-full overflow-hidden">
+                                      <img className="w-full h-full" src={product.productImg} alt={product.productName} />
+                                  </div>
+                                  <div style={{ backgroundColor: product.backgroundProductCard }} className="w-[60%] h-full px-2 py-2 flex flex-col justify-between">
+                                      <span className="flex w-full items-end justify-end hover:cursor-pointer">+</span>
+                                      <div className="w-full flex-grow bg-transparent flex flex-col justify-evenly">
+                                          <h1 style={{ color: product.colorName, fontFamily: qrData?.MenuPreview?.fontPreview }} className="text-[17px] text-center break-words font-bold">
+                                              {product.productName || 'Product name'}
+                                          </h1>
+                                          <h1 style={{ color: product.colorPrice, fontFamily: qrData?.MenuPreview?.fontPreview }} className="text-center break-words font-bold">
+                                              {product.price == null ? 'Price' : `${product.price}$`}
+                                          </h1>
+                                      </div>
+                                      {product.top && <span className="text-end"><StarIcon className="text-yellow-300 text-2xl" /></span>}
+                                  </div>
+                              </motion.div>                              
                                 ))
                             ) : (
                                 <div>No products available</div>
@@ -416,16 +420,17 @@ const QRScanPage = () => {
                             {topProducts?.length > 0 ? (
                                 topProducts.map((element, index) => (
                                 <motion.div                               
-                                initial={index > 0 && cardVariants.offscreen}
-                                whileInView={index > 0 && cardVariants.onscreen}
+                                initial={index > 2 && cardVariants.offscreen}
+                                whileInView={index > 2 && cardVariants.onscreen}
                                 viewport={{ once: true, amount: 0.4 }}
-                                style={{ boxShadow: '3px 5px 5px 0px rgb(0,0,0,1)',backgroundColor:element.backgroundProductCard,backgroundImage:element.backgroundProductCard.includes("gradient") ? element.backgroundProductCard : "none" }} key={index} className="lg:w-[30%] md:w-[30%] sm:min-w-[20%] sm:max-w-[132px] sm:min-h-[116px] mx-4 my-3  flex flex-row rounded-md overflow-hidden" onClick={() => { setActiveprod(index); handleOpenModal(); }}>
-                                    <div style={{ backgroundColor: element.backgroundProductCard,backgroundImage:element.backgroundProductCard.includes("gradient") ? element.backgroundProductCard : 'none' }} className="w-[40%] h-full bg-slate-500 overflow-auto">
+                                style={{ boxShadow: '3px 5px 5px 0px rgb(0,0,0,1)',backgroundColor:element.backgroundProductCard,backgroundImage:element.backgroundProductCard.includes("gradient") ? element.backgroundProductCard : "none" }} key={index} 
+                                className="lg:w-[30%] md:w-[45%] sm:w-[341px] sm:h-[116px] min-w-[320px] max-w-[400px] min-h-[116px] max-h-[180px] mx-4 my-3 flex flex-row rounded-md overflow-hidden" onClick={() => { setActiveprod(index); handleOpenModal(); }}>
+                                    <div style={{ backgroundColor: element.backgroundProductCard,backgroundImage:element.backgroundProductCard.includes("gradient") ? element.backgroundProductCard : 'none' }} className="w-[40%] h-full overflow-hidden">
                                     <img className="w-full h-full" src={element.productImg} alt={element.productName} />
                                     </div>
-                                    <div style={{ backgroundColor: element.backgroundProductCard }} className="w-[60%] h-full px-2 py-2 flex flex-col self-center">
+                                    <div style={{ backgroundColor: element.backgroundProductCard }} className="w-[60%] h-full px-2 py-2 flex flex-col justify-between">
                                     <span className="flex w-full items-end justify-end hover:cursor-pointer">+</span>
-                                    <div style={{ fontFamily: qrData?.MenuPreview?.fontPreview || 'sans-serif' }} className="w-full h-[80%] bg-transparent flex flex-col justify-evenly">
+                                    <div style={{ fontFamily: qrData?.MenuPreview?.fontPreview || 'sans-serif' }} className="w-full flex-grow bg-transparent flex flex-col justify-evenly">
                                         <h1 style={{ color: element.colorName }} className="text-[17px] text-center break-words font-bold">
                                         {element.productName || 'Product name'}
                                         </h1>
