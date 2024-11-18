@@ -59,8 +59,8 @@ const ChangePasswordForm = ({ formRef, setModalIsOpen }) => {
         }
       }
     } catch (error) {
-      console.error("Error changing password:", error);
-      toast.error("There was a problem changing the password. Please try again later.");
+      //console.error("Error changing password:", error);
+      //toast.error("There was a problem changing the password. Please try again later.");
       actions.setFieldError(
         "confirmPassword",
         "There was a problem changing the password. Please try again later."

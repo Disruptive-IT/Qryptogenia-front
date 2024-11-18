@@ -25,8 +25,8 @@ function AddDiscount({reload}) {
     return(
                 <div className="w-full h-auto p-4  mx-auto flex justify-center">
                 <motion.button
-                    className="text-[13px] text-white font-bold p-2 bg-[#007bff] rounded-lg hover:bg-[#0056b3] focus:outline-none focus:ring-2 focus:ring-cyan-500"
-                    whileHover={{ backgroundColor: "#2783e4" }}
+                    className="text-[13px] text-white font-bold p-2  bg-light-blue rounded-lg  focus:outline-none focus:ring-2 "
+                    whileHover={{ backgroundColor: "#284B63" }}
                     whileTap={{ scale: "0.9", transitionDuration: ".2s" }}
                     onClick={handleOpen}
                 >

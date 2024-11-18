@@ -20,14 +20,14 @@ const WebLinkPhoneStorePage = () => {
 
     const fetchData = async () => {
         setLoading(true);
-        console.log("Fetching data for music ID:", id);
+        // console.log("Fetching data for music ID:", id);
         try {
             const result = await getStoreData(id);
             setAppFormValues(result.data);
-            console.log("Data fetched:", result.data);
+            // console.log("Data fetched:", result.data);
         } catch (error) {
             setError(error.message);
-            console.error("Error fetching data:", error);
+            // console.error("Error fetching data:", error);
         } finally {
             setLoading(false);
         }

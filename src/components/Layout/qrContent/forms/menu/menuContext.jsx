@@ -49,7 +49,7 @@ export default function MenuProvider({children}) {
             const getFontsArray = await instance.get('getFonts');
             setFonts(getFontsArray.data);
         } catch (error) {
-            console.error("Error fetching fonts: ", error.message);
+           // console.error("Error fetching fonts: ", error.message);
         }
     };
 
@@ -59,7 +59,7 @@ export default function MenuProvider({children}) {
             setTemplates(getTemplatesArray.data);
             return getTemplatesArray.data;
         } catch (error) {
-            console.error("Error fetching templates: ", error.message);
+           // console.error("Error fetching templates: ", error.message);
         }
     };
 
@@ -69,7 +69,7 @@ export default function MenuProvider({children}) {
            setter(getFontsArray.data);
             return getFontsArray.data;
         }catch(error){
-            console.error("error fonts request: ",error.message);
+          // console.error("error fonts request: ",error.message);
         }
     }
 
@@ -106,7 +106,7 @@ export default function MenuProvider({children}) {
             const response = await instance.get('/getFonts'); 
             setter(response.data);
         } catch (error) {
-            console.error("Error fetching fonts: ", error.message);
+           // console.error("Error fetching fonts: ", error.message);
         }
     }
 
@@ -249,7 +249,7 @@ export default function MenuProvider({children}) {
               setEditFormData(initialFormDataRef.current);
           }
       } catch (error) {
-          console.error("Error al obtener los datos para editar:", error);
+        //  console.error("Error al obtener los datos para editar:", error);
           setLoading(false);
       }finally{
         setTimeout(() => {
@@ -285,10 +285,10 @@ export default function MenuProvider({children}) {
           if (response.ok) {
             return data.secure_url; // Retorna la URL de la imagen subida
           } else {
-            console.error('Error al subir la imagen:', data.error.message);
+           // console.error('Error al subir la imagen:', data.error.message);
           }
         } catch (error) {
-          console.error('Error en la petición:', error);
+         // console.error('Error en la petición:', error);
         }
     }
 
@@ -305,7 +305,7 @@ export default function MenuProvider({children}) {
             const encodedPublicId =encodeURIComponent(idImg);
             const response=await instance.delete(`/qr/imgCloudinary/${encodedPublicId}`);
             if (response.status === 200) {
-                console.log("Imagen eliminada exitosamente:", response.data);
+               // console.log("Imagen eliminada exitosamente:", response.data);
                 return true;
             }
         }catch(error){
@@ -316,7 +316,7 @@ export default function MenuProvider({children}) {
 
     const editUploadFiles = async () => {
         try {
-            console.log("Iniciando editUploadFiles");
+            //console.log("Iniciando editUploadFiles");
         
             let updatedFormData = { ...formData }; // Crear una copia para manipular los datos
     
@@ -357,7 +357,7 @@ export default function MenuProvider({children}) {
             // Actualizar el estado de formData de una sola vez, después de procesar todas las imágenes
             setFormData(updatedFormData);
     
-            console.log("Valores actualizados en editUploadFiles:", updatedFormData);
+           // console.log("Valores actualizados en editUploadFiles:", updatedFormData);
             return updatedFormData; // Retornar siempre los datos actualizados
         } catch (error) {
             console.error("Error en editUploadFiles:", error.message);
@@ -373,14 +373,14 @@ export default function MenuProvider({children}) {
             if (formData.restaurantLogo) {
                 logoUrl = await uploadImageToCloudinary(formData.restaurantLogo);
                 if (logoUrl) {
-                    console.log('Logo subido.');
+                  //  console.log('Logo subido.');
                 }
             }
 
             if(formData.idUserTemplate){
                 userTemplateUrl=await uploadImageToCloudinary(formData.idUserTemplate);
                 if(userTemplateUrl){
-                    console.log("template subido");
+                   // console.log("template subido");
                 }
             }
     
@@ -419,7 +419,7 @@ export default function MenuProvider({children}) {
     
             setFormData(updatedFormData);
     
-            console.log('Todas las imágenes fueron subidas y el estado actualizado.');
+           // console.log('Todas las imágenes fueron subidas y el estado actualizado.');
     
             // Retorna el objeto formData actualizado
             return updatedFormData; 
@@ -605,14 +605,14 @@ export default function MenuProvider({children}) {
     }
     
     function addProductToCategory(index, newProduct) {
-        console.log('Adding product to category index:', index);
-        console.log('New product:', newProduct);
+       // console.log('Adding product to category index:', index);
+       // console.log('New product:', newProduct);
     
         setFormData((prevValues) => {
             const updatedCategories = [...prevValues.category];
             updatedCategories[index].products.push(newProduct);
     
-            console.log('Updated categories in formData:', updatedCategories);
+           // console.log('Updated categories in formData:', updatedCategories);
     
             return {
                 ...prevValues,

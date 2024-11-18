@@ -48,7 +48,7 @@ const handlePdfFile = (event) => {
         ),
     }),
     onSubmit: (values) => {
-      console.log("Archivo PDF enviado:", values.pdfFile);
+     // console.log("Archivo PDF enviado:", values.pdfFile);
     },
     validateOnChange:true,
     validateOnBlur:true
@@ -86,7 +86,7 @@ const handlePdfFile = (event) => {
             // Si necesitas generar la URL para el QR, usa el archivo directamente
             // setQrCodeUrl(url); // Esto es solo para la vista previa, no para la carga
         } else {
-            console.error('Por favor, selecciona un archivo PDF válido.');
+            //console.error('Por favor, selecciona un archivo PDF válido.');
         }
     }
 };
@@ -97,7 +97,7 @@ const handlePdfFile = (event) => {
     view: 'view'
   }
 
- console.log('Valores pdf', pdfFormValues);
+ //console.log('Valores pdf', pdfFormValues);
 
   useEffect(() => {
     validateFormFields();
@@ -239,7 +239,7 @@ export const LinkInput = ({ onSubmit }) => {
     }
   };
 
-  console.log(formik.values);
+ // console.log(formik.values);
 
   useEffect(() => {
     validateFormFields();

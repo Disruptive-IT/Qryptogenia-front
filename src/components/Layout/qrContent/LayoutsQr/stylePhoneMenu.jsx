@@ -43,7 +43,7 @@ export default function WebLinkMenuFood({ FormValues, ContentName }) {
     }
   },[FormValues])
 
-  console.log("show intial keys menu is : ",showInitialKeys);
+ // console.log("show intial keys menu is : ",showInitialKeys);
 
   const handleOpenModal=()=>{
     setOpenModal(true)
@@ -142,7 +142,7 @@ const getLinkTemplate=async(id)=>{
 
   useEffect(()=>{
     getNameFont(FormValues.idFontPreview);
-    console.log(fontFamily);
+    //console.log(fontFamily);
   },[FormValues.idFontPreview]);
 
   return (

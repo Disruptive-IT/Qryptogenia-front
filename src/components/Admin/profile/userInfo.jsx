@@ -14,14 +14,14 @@ import ChangeInfo from "./changeUserName";
 import ChangeEmail from "./changeEmail";
 import { IoIosMail } from "react-icons/io";
 import { FaUser } from "react-icons/fa";
-
+import { useTranslation } from "react-i18next";
 const UserInfo = () => {
   const [modalisOpen, setmodalisOpen] = useState(false);
   const [emailModalisOpen, setEmailModalisOpen] = useState(false);
   const formRef = useRef(null);
   const { fetchUserData } = useContext(AuthContext);
   const [user, setUser] = useState(null);
-
+  const { t } = useTranslation();
   const handleModal = () => {
     setmodalisOpen(!modalisOpen);
   };
@@ -49,7 +49,7 @@ const UserInfo = () => {
       const userData = await fetchUserData();
       setUser(userData);
     } catch (error) {
-      console.error("Error fetching user data:", error);
+      //console.error("Error fetching user data:", error);
     }
 
   };
@@ -62,7 +62,7 @@ const UserInfo = () => {
         const userData = await fetchUserData();
         setUser(userData);
       } catch (error) {
-        console.error("Error fetching user data:", error);
+       // console.error("Error fetching user data:", error);
       }
     }
 
@@ -73,7 +73,7 @@ const UserInfo = () => {
   if (!user) {
     return <div>No authenticated user</div>;
   }
-  console.log("Información del usuario:", user);
+  //console.log("Información del usuario:", user);
 
   const modalActions = [
     {
@@ -107,12 +107,12 @@ const UserInfo = () => {
   // Renderizar la información del usuario
   return (
     <div>
-      <p>Username:</p>
+      <p>{t('Username')}</p>
       <div className="flex md:w-96">
         <span className=" opacity-50 inline-flex items-center px-2 text-lg text-gray-900 bg-gray-200 border rounded-e-0 border-gray-300 border-e-0 rounded-s-md dark:bg-my-gray dark:text-black dark:border-gray-600">
           <FaUser />
         </span>
-        <p className="max-w-xs opacity-50 h-12 text-center overflow-hidden border border-gray-300 rounded-none bg-gray-50 border text-gray-900 focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-full text-sm border-gray-300 p-2.5  dark:bg-my-gray dark:border-gray-600 dark:placeholder-gray-400 dark:text-black dark:focus:dark-blue dark:focus:border-blue-500 cursor-not-allowed">
+        <p className="max-w-xs opacity-50 h-12 text-center overflow-hidden  rounded-none bg-gray-50 border text-gray-900 block flex-1 min-w-0 w-full text-sm border-gray-300 p-2.5  dark:bg-my-gray dark:border-gray-600 dark:placeholder-gray-400 dark:text-black dark:focus:dark-blue cursor-not-allowed">
           {user.info.username}
         </p>
         <div className="inline-flex items-center px-2 text-lg text-gray-900 bg-gray-200 border rounded-s-0 border-gray-300 border-s-0 rounded-r-md dark:bg-my-gray dark:text-black dark:border-gray-600">
@@ -129,7 +129,7 @@ const UserInfo = () => {
           <ChangeInfo formRef={formRef} setModalIsOpen={setmodalisOpen} handleCloseModal={handleCloseModal} />
         </MyModal>
       </div>
-      <p>Email:</p>
+      <p>{t('Email')}</p>
 
       <div className="flex md:w-96">
         <span className="opacity-50 inline-flex items-center px-2 text-lg text-gray-900 bg-gray-200 border rounded-e-0 border-gray-300 border-e-0 rounded-s-md dark:bg-my-gray dark:text-black dark:border-gray-600">
@@ -146,7 +146,7 @@ const UserInfo = () => {
         <MyModal
           actions={modalActionsEmail}
           open={emailModalisOpen}
-          title={<h1>EDIT EMAIL</h1>}
+          title={<h1>{t('EDIT EMAIL')}</h1>}
           onClose={handleCloseEmail}
         >
           <ChangeEmail formRef={formRef} setModalIsOpen={setEmailModalisOpen} handleCloseEmail={handleCloseEmail} />

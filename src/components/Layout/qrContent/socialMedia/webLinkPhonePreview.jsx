@@ -56,7 +56,7 @@ const options = [
   }
 ];
 const WebLinkPhonePreview = ({ appFormValues }) => {
-  console.log(appFormValues);
+  // console.log(appFormValues);
   const headerColor = appFormValues.boxColor;
   const title = appFormValues.title;
   const textColor = appFormValues.titleColor;
@@ -124,7 +124,7 @@ const WebLinkPhonePreview = ({ appFormValues }) => {
     }
   }, [appFormValues.backgroundColor]);
 
-  console.log(isDark);
+  // console.log(isDark);
 
   useEffect(() => {
     const hasChanged = (current, initial) => {

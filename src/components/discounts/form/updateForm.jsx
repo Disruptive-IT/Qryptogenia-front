@@ -19,7 +19,7 @@ const UpdateDiscount = ({ event, id, reload }) => {
         try {
             const response = await instance.put(`/admin/putDiscount/${id}`, data);
             if (response.status === 200) {
-                console.log("Discount updated successfully");
+               // console.log("Discount updated successfully");
                 if (typeof event === 'function') {
                     await event();
                 }
@@ -32,7 +32,7 @@ const UpdateDiscount = ({ event, id, reload }) => {
                 await reload();
             }
         } catch (error) {
-            console.error("Error: ", error.message);
+          //  console.error("Error: ", error.message);
             Swal.fire({
                 icon: 'error',
                 title: 'Error',
@@ -47,10 +47,10 @@ const UpdateDiscount = ({ event, id, reload }) => {
             const getDiscount = await instance.get(`/admin/getDiscount/${id}`);
             if (getDiscount.status === 200) {
                 setDiscountData(getDiscount.data);
-                console.log("Discount data:", getDiscount.data);
+             //   console.log("Discount data:", getDiscount.data);
             }
         } catch (error) {
-            console.error("Error: ", error.message);
+          //  console.error("Error: ", error.message);
         }
     };
 
@@ -101,7 +101,7 @@ const UpdateDiscount = ({ event, id, reload }) => {
                 setStatus({ success: true });
             } catch (error) {
                 setStatus({ success: false, message: 'Error al enviar los datos' });
-                console.error(error);
+              //  console.error(error);
             } finally {
                 setSubmitting(false);
             }

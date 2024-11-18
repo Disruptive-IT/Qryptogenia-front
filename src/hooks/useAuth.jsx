@@ -25,7 +25,7 @@ export const useAuth = (navigate) => {
                 setUser(res.data.user);
             }
         } catch (error) {
-            console.log("...")
+           // console.log("...")
         }
     }
 
@@ -72,13 +72,13 @@ export const useAuth = (navigate) => {
 
     const registerUser = async (email) => {
         try {
-            console.log("ANTES REGISTER")
+            //console.log("ANTES REGISTER")
             const res = await instance.post('/auth/register', { email: email });
-            console.log("DESPUES REGISTER")
+            //console.log("DESPUES REGISTER")
             toast.info(res.data.msg);
             return { success: true };
         } catch (err) {
-            console.log("ERROR REGISTER ", err)
+           // console.log("ERROR REGISTER ", err)
             toast.error(err.response.data.msg);
         }
     };
@@ -86,7 +86,7 @@ export const useAuth = (navigate) => {
     const verifyPin = async ({ pin, email }) => {
         try {
             const res = await instance.post('/auth/confirm', { pin, email });
-            console.log("llefa")
+           // console.log("llefa")
             toast.success(res.data.msg);
             return { success: true };
         } catch (err) {
@@ -111,7 +111,7 @@ export const useAuth = (navigate) => {
  */
     const recoverPassword = async (confirmPassword, token) => {
         try {
-            console.log('Token enviado en la solicitud:', token);
+           // console.log('Token enviado en la solicitud:', token);
 
             // Realizar la solicitud POST con el token como parte del cuerpo de la solicitud
             const response = await instance.post(`/auth/password_reset/confirm`, { token, confirmPassword });
@@ -186,7 +186,7 @@ export const useAuth = (navigate) => {
 
             if (response.status === 200) {
                 // Contraseña cambiada correctamente
-                console.log('Contraseña cambiada correctamente');
+                //console.log('Contraseña cambiada correctamente');
                 return { success: true };
             } else {
                 // Manejar errores
@@ -246,7 +246,7 @@ export const useAuth = (navigate) => {
             return response.data.image_url;
         } catch (error) {
             // Maneja errores y retorna null en caso de error
-            console.error('Error obteniendo la URL de la imagen de perfil:', error);
+           // console.error('Error obteniendo la URL de la imagen de perfil:', error);
             return null;
         }
     };

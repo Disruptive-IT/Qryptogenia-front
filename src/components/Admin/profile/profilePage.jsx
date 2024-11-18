@@ -43,7 +43,7 @@ const Profile = () => {
                             try {
                                 const userData = await fetchUserData();
                                 setUser(userData);
-                                console.log("User Data:", userData);
+                               // console.log("User Data:", userData);
                     
                                 // Verifica si el usuario es de Google y tiene una foto
                                 if (userData.info.authProvider === 'google') {
@@ -64,7 +64,7 @@ const Profile = () => {
                                     });
                                 }
                             } catch (error) {
-                                console.error("Error fetching user data:", error);
+                               // console.error("Error fetching user data:", error);
                             }
                         }
                     
@@ -79,8 +79,8 @@ const Profile = () => {
                 updateProfileImage();
                 toast.success('Profile picture successfully changed');
             } else {
-                console.error('Error when changing profile picture:', result.error);
-                toast.error('Error changing profile picture');
+                //console.error('Error when changing profile picture:', result.error);
+                //toast.error('Error changing profile picture');
             }
         }
     };

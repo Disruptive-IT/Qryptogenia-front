@@ -41,7 +41,7 @@ const ChangeEmail = ({ formRef, setModalIsOpen, handleCloseEmail }) => {
         const userData = await fetchUserData();
         setUser(userData);
       } catch (error) {
-        console.error("Error fetching user data:", error);
+        // console.error("Error fetching user data:", error);
       }
     }
 
@@ -61,8 +61,8 @@ const ChangeEmail = ({ formRef, setModalIsOpen, handleCloseEmail }) => {
       setMessage("Se ha enviado un correo de verificación");
       setConfirmChangeEmail(true);
     } catch (error) {
-      console.error("Error changing email:", error);
-      toast.error("Error cambiando correo electrónico");
+      //console.error("Error changing email:", error);
+      //toast.error("Error cambiando correo electrónico");
     }
   };
 
@@ -103,8 +103,8 @@ const ChangeEmail = ({ formRef, setModalIsOpen, handleCloseEmail }) => {
         "Se ha enviado un correo de verificación para el nuevo correo"
       );
     } catch (error) {
-      console.error("Error changing email:", error);
-      toast.error("Error cambiando correo electrónico");
+      //console.error("Error changing email:", error);
+      //toast.error("Error cambiando correo electrónico");
     }
   };
 
@@ -133,8 +133,8 @@ const ChangeEmail = ({ formRef, setModalIsOpen, handleCloseEmail }) => {
         toast.error("El codigo ingresado es incorrecto");
       }
     } catch (error) {
-      console.error("Error verifying new code:", error);
-      toast.error("Error verificando nuevo código");
+      //console.error("Error verifying new code:", error);
+      //toast.error("Error verificando nuevo código");
     }
   };
 

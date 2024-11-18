@@ -81,7 +81,7 @@ export const StoreLayout = ({ appFormValues }) => {
 
     useEffect(()=>{
       getNameFont(appFormValues?.idFontPreview,setFontPreview);
-      console.log("letraa ");
+      //console.log("letraa ");
     },[appFormValues?.idFontPreview])
 
     return (

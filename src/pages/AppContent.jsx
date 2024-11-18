@@ -5,7 +5,7 @@
  * @return : Retorna un componente React que muestra contenido dinámico y permite la configuración de formularios.
  */
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { PhoneContentSwitch, QrContentSwitch } from '../components/Layout/qrContent';
 import NotFoundPage from './NotFoundPage';
@@ -70,9 +70,14 @@ const AppContent = () => {
     const {formData,setFormData}=UseMenu();
     const [valuesLoaded, setValuesLoaded] = useState(false);
     const [isModalOpen, setIsModalOpen] = useState(false);
-    setCurrentContentType(contentName);
-    console.log(selectedTab)
-    console.log(qrTextProps);
+    useEffect(() => {
+        setTimeout(() => {
+          setCurrentContentType(contentName);
+        }, 0);
+      }, [contentName]);
+      
+   console.log(selectedTab)
+   // console.log(qrTextProps);
 
     useEffect(() => {
         const fetchQRData = async () => {
@@ -257,6 +262,22 @@ const AppContent = () => {
     const closeModal = () => {
         setIsModalOpen(false);
     };
+    
+    useEffect(() => {
+        const handleOutsideClick = (event) => {
+            if (modalContentRef.current && !modalContentRef.current.contains(event.target)) {
+                closeModal(); // Cerrar el modal si se hace clic fuera de él
+            }
+        };
+
+        // Añadir el listener de clic al documento
+        document.addEventListener('mousedown', handleOutsideClick);
+
+        // Limpiar el listener cuando el componente se desmonte
+        return () => {
+            document.removeEventListener('mousedown', handleOutsideClick);
+        };
+    }, []); // Solo se ejecuta una vez, al montar el componente
 
     const handleTabChange = (newTab) => {
         setSelectedTab(newTab);
@@ -266,7 +287,9 @@ const AppContent = () => {
     const isPdfRoute = location.pathname === '/qr/pdf'; //funcion para ocultar el boton Show Preview en la ruta wifi
 
     const isQrRoute = location.pathname.startsWith('/qr/');
-    console.log(name)
+   // console.log(name)
+   const modalContentRef = useRef(null);
+
     return (
         <>
             {isQrRoute && <OptionBarTwo contentName={contentName} name={name} />}
@@ -319,28 +342,33 @@ const AppContent = () => {
 
             <Modal
                 isOpen={isModalOpen}
-                onRequestClose={closeModal}
+                onRequestClose={closeModal} // Esto asegura que se cierra cuando el overlay es clickeado
                 contentLabel="Vista Previa del Móvil"
+                shouldCloseOnOverlayClick={true} // Esta propiedad también debería funcionar, pero la manejaremos explícitamente
                 className="fixed inset-0 flex items-center justify-center p-4 bg-transparent"
-                overlayClassName="fixed inset-0 bg-black bg-opacity-50 overflow-auto"
+                overlayClassName="fixed inset-0 bg-black bg-opacity-50 overflow-auto z-50"
             >
                 <div className="bg-transparent p-0 rounded-lg border-none shadow-none flex justify-center items-center w-full h-full">
-                    <div className="relative flex justify-center items-start" style={{ maxHeight: 'calc(100vh - 40px)', maxWidth: 'calc(100vw - 40px)' }}>
-                        <button onClick={closeModal} className="absolute top-4 right-4 text-red-500 z-10">Cerrar</button>
-                        <div className="relative scale-wrapper" style={{ marginTop: '40px', }}>
-                            <CellBox>
-                                <PhoneContentSwitch
-                                    contentName={name}
-                                    appFormValues={appFormValues}
-                                    socialFormValues={socialFormValues}
-                                    musicFormValues={musicFormValues}
-                                />
-                            </CellBox>
-                        </div>
-                    </div>
-                </div>
-            </Modal>
-            <style jsx>{`
+
+        <div className="relative flex justify-center items-start" style={{ maxHeight: 'calc(100vh - 40px)', maxWidth: 'calc(100vw - 40px)' }}>
+            <button 
+            onClick={closeModal}
+            ref={modalContentRef} // Refiere al contenedor del modal
+            className="absolute bg-white p-1 tracking-wider rounded-[10px] hover:bg-red-600 hover:text-white top-0 left-50 text-red-500 z-[10000]">Cerrar</button>
+            <div className="relative scale-wrapper" style={{ marginTop: '40px' }}>
+                <CellBox>
+                    <PhoneContentSwitch
+                        contentName={name}
+                        appFormValues={appFormValues}
+                        socialFormValues={socialFormValues}
+                        musicFormValues={musicFormValues}
+                    />
+                </CellBox>
+            </div>
+        </div>
+    </div>
+</Modal>
+            <style>{`
         .scale-wrapper {
           transform: scale(0.9);
           transform-origin: top center;

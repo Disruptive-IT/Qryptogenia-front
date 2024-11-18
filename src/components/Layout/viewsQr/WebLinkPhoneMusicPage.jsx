@@ -41,14 +41,14 @@ export const WebLinkPhoneMusicPage = () => {
 
     const fetchData = async () => {
         setLoading(true);
-        console.log("Fetching data for music ID:", id);
+        // console.log("Fetching data for music ID:", id);
         try {
             const result = await getStoreData(id);
             setMusicFormValues(result.data);
-            console.log("Data fetched:", result.data);
+            // console.log("Data fetched:", result.data);
         } catch (error) {
             setError(error.message);
-            console.error("Error fetching data:", error);
+            // console.error("Error fetching data:", error);
         } finally {
             setLoading(false);
         }
@@ -77,14 +77,14 @@ export const WebLinkPhoneSocialPage = () => {
 
     const fetchData = async () => {
         setLoading(true);
-        console.log("Fetching data for social ID:", id);
+        // console.log("Fetching data for social ID:", id);
         try {
             const result = await getStoreData(id);
             setSocialFormValues(result.data);
-            console.log("Data fetched:", result.data);
+            // console.log("Data fetched:", result.data);
         } catch (error) {
             setError(error.message);
-            console.error("Error fetching data:", error);
+            // console.error("Error fetching data:", error);
         } finally {
             setLoading(false);
         }

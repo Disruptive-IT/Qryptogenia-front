@@ -98,7 +98,7 @@ export const QrContentSwitch = ({contentName, onFormChangeApp, onFormChange, onF
 
 
 export const PhoneContentSwitch = ({contentName, appFormValues, socialFormValues, musicFormValues,menuFormValues}) => {
-console.log(contentName);
+//console.log(contentName);
 let phoneContent;
 switch (contentName) {
     case "app store":                                                       

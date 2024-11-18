@@ -29,7 +29,7 @@ const ChangeInfo = ({ formRef, setModalIsOpen, handleCloseModal }) => {
           const userData = await fetchUserData();
           setUser(userData);
         } catch (error) {
-          console.error("Error fetching user data:", error);
+          //console.error("Error fetching user data:", error);
         }
       }
 
@@ -41,7 +41,7 @@ const ChangeInfo = ({ formRef, setModalIsOpen, handleCloseModal }) => {
       try {
         // Envía la solicitud para cambiar la información de usuario (nombre de usuario) incluyendo la contraseña actual
         const result = await changeUsername(values.new_username, values.password);
-        console.log(result);
+        //console.log(result);
         if (result.success) {
           // Muestra un toast de éxito
           toast.success("Username changed successfully");
@@ -64,8 +64,8 @@ const ChangeInfo = ({ formRef, setModalIsOpen, handleCloseModal }) => {
           }
         }
       } catch (error) {
-        console.error("Error changing user information:", error);
-        toast.error("There was a problem changing the information. Please try again later.");
+        //console.error("Error changing user information:", error);
+       // toast.error("There was a problem changing the information. Please try again later.");
       }
     };
   

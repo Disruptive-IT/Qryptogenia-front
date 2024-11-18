@@ -42,12 +42,12 @@ function MenuForm(){
         initialValues,
         validate:validation,
         onsubmit:(values,{setSubmitting})=>{
-            console.log(values);
+           // console.log(values);
         },
         enableReinitialize:true
     });
-    console.log(" values ",formik.values);
-    console.log("formdata: ",formData);
+    //console.log(" values ",formik.values);
+    //console.log("formdata: ",formData);
 
     useEffect(()=>{
       const executeFunctions=async()=>{
@@ -118,7 +118,7 @@ return (
             initialValues={initialValues}
             validate={validation}
             onSubmit={(values) => {
-                console.log(values);
+                //console.log(values);
             }}
             validateOnBlur={true}
             enableReinitialize={true}

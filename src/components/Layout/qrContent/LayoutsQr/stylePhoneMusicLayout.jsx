@@ -24,7 +24,7 @@ import apple from "../../../../assets/imgs/applew.png";
 import { UseMenu } from '../forms/menu/menuContext';
 
 export const MusicLayout = ({ musicFormValues }) => {
-console.log(musicFormValues)
+//console.log(musicFormValues)
 const {getNameFont}=UseMenu();
 const [fontPreview,setFontPreview]=useState({});
   const options = [

@@ -221,7 +221,7 @@ const QRCodeList = () => {
               <select
                 id="discounts"
                 name="discounts"
-                value={selectedDiscounts}
+                value={selectedDiscounts || ''}
                 onChange={handleDiscountChange}
                 className="p-2 border border-gray-300 rounded-md"
               >

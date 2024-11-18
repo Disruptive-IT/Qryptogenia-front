@@ -133,7 +133,7 @@ const App = ({ id }) => {
             { withCredentials: true }
           );
   
-          console.log('API response:', response.data);
+         // console.log('API response:', response.data);
           setQRCodes(
             qrCodes.map((qr) =>
               qr.id === item.id ? { ...qr, state: newState } : qr
@@ -322,7 +322,7 @@ const App = ({ id }) => {
     } else if (action === 'edit') {
       navigate(`/edit/${item.qrType ? item.qrType.type : 'N/A'}/${item.id}`);
     }
-    console.log(`Action: ${action} on item:`, item);
+    //console.log(`Action: ${action} on item:`, item);
   };
 
 

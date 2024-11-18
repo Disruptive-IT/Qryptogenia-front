@@ -18,14 +18,14 @@ const CreateDiscount = ({event, efect}) => {
 
     const handleIsAdd=(bool)=>{
         setIsAdd(bool);
-        console.log(isAdd);
+       // console.log(isAdd);
     }
 
     const handlePostDiscount = async (data,evento) => {
         try {
             const response = await instance.post("/admin/addDiscount", data);
             if (response.status === 200) {
-                console.log("Discount added successfully");
+               // console.log("Discount added successfully");
                 if (typeof evento === 'function') {
                     await evento();
                 }
@@ -38,7 +38,7 @@ const CreateDiscount = ({event, efect}) => {
                 });
             }
         } catch (error) {
-            console.error("Error: ", error.message);
+          //  console.error("Error: ", error.message);
             Swal.fire({
                 icon: 'error',
                 title: 'Error',
@@ -85,7 +85,7 @@ const CreateDiscount = ({event, efect}) => {
                 await handlePostDiscount(values,event);
             } catch (error) {
                 setStatus(false);
-                console.error(error);
+              //  console.error(error);
             } finally {
                 setSubmitting(false);
             }

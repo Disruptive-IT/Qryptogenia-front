@@ -50,7 +50,7 @@ export const AppForm = ({ onFormChangeApp, location, appFormValues }) => {
     const [appFontsPreview, setAppFontsPreview] = useState([]);
     const {getFontsPreview}=UseMenu();
 
-    console.log("validate from app",validateFormApp, formErrors);
+    //console.log("validate from app",validateFormApp, formErrors);
 
     const validateFormFields = () => {
         if (Object.keys(formErrors).length > 0) {
@@ -68,7 +68,7 @@ useEffect(() => {
         try {
             await getFontsPreview(setAppFontsPreview);
         } catch (error) {
-            console.error("Error fetching fonts preview:", error);
+           // console.error("Error fetching fonts preview:", error);
         } finally {
             setLoading(false); // Desactiva el loading al terminar
         }
@@ -77,7 +77,7 @@ useEffect(() => {
     fetchFontsPreview();
 }, []);
 
-console.log("these are the selected options: ",appFormValues.selectedOptions);
+//console.log("these are the selected options: ",appFormValues.selectedOptions);
 
     const validateForm = (values) => {
         const errors = {};
@@ -95,15 +95,15 @@ console.log("these are the selected options: ",appFormValues.selectedOptions);
         if (selectedOptions.length === 0) {
             errors.selectedOptions = t("At least one option must be selected");
         }
-        console.log(selectedOptions)
+       // console.log(selectedOptions)
         // Validar cada campo url en selectedOptions
         selectedOptions.forEach((option, index) => {
-            console.log(option.url)
+            //console.log(option.url)
             if (!option.url) {
                 errors[`url_${index}`] = t("URL is required");
             }
         });
-        console.log(errors)
+        //console.log(errors)
 
         return errors;
     };
@@ -262,7 +262,7 @@ console.log("these are the selected options: ",appFormValues.selectedOptions);
         selectedOptions: isEditRoute && appFormValues ? appFormValues.selectedOptions : [],
         image: isEditRoute && appFormValues ? appFormValues.image : null,
     };
-    console.log(selectedOptions)
+   // console.log(selectedOptions)
 
     const fileInputRef = React.createRef();
 
@@ -520,7 +520,13 @@ console.log("these are the selected options: ",appFormValues.selectedOptions);
 
                         <div className='flex flex-col md:flex-row md:items-center mb-4 mt-10'>
                           <h1 className='mt-3 text-lg font-semibold mr-6'>{t('Font style')}:</h1>
-                          <select className='p-4 rounded-[10px] bg-gray-300' name="fontFamily" id="" value={appFormValues.idFontPreview} onChange={(e)=>handleSelectedFont(e)}>
+                          <select 
+                            className='p-4 rounded-[10px] bg-gray-300' 
+                            name="fontFamily" 
+                            id="" 
+                            value={appFormValues.idFontPreview || ""} //
+                            onChange={(e) => handleSelectedFont(e)}
+                            >
                           {appFontsPreview?.map((item, index) => (
                             <option style={{ fontFamily: item.fontName }} key={index} id={item.id} value={item.id}>
                               {item.fontName}
@@ -539,7 +545,7 @@ console.log("these are the selected options: ",appFormValues.selectedOptions);
                                 isMulti
                                 className="basic-multi-select w-full" // Para el contenedor externo
                                 classNamePrefix="select" // Prefijo para los estilos internos
-                                value={updatedSelectedOptions.map(({ icon, ...rest }) => rest)}
+                                value={updatedSelectedOptions && updatedSelectedOptions.length > 0 ? updatedSelectedOptions.map(({ icon, ...rest }) => rest) : []}
                                 onChange={(selected) => {
                                     handleMultiSelectChange(selected);
                                     setFieldValue('selectedOptions', selected);

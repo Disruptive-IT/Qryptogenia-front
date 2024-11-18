@@ -16,32 +16,29 @@ export const Footer = () => {
   };
   const { t } = useTranslation();
 
-    const socialMedia = [
-      {
-        icon: <SocialIcon network='facebook' style={{ marginTop: '8px', marginRight: '5px', width: '40px', height: '40px' }} />,
-        link: 'https://www.facebook.com/disruptive.devops?locale=es_LA',
-        color: '#0865fe'
-      },
-      {
-        icon: <SocialIcon network='linkedin' style={{ marginTop: '8px', marginRight: '5px', width: '40px', height: '40px' }} />,
-        link: 'https://www.linkedin.com/company/disruptive-information-technologies/',
-        color: '#0b65c3'
-      },
-      {
-        icon: <SocialIcon network='instagram' style={{ marginTop: '8px', marginRight: '5px', width: '40px', height: '40px' }} />,
-        link: 'https://www.instagram.com/disruptive.info/',
-        color: '#0865fe'
+const socialMedia = [
+  {
+    network: 'facebook',  // Aquí va el nombre de la red social
+    link: 'https://www.facebook.com/disruptive.devops?locale=es_LA',
+    color: '#0865fe'
+  },
+  {
+    network: 'linkedin',  // Nombre de la red social
+    link: 'https://www.linkedin.com/company/disruptive-information-technologies/',
+    color: '#0b65c3'
+  },
+  {
+    network: 'instagram',  // Nombre de la red social
+    link: 'https://www.instagram.com/disruptive.info/',
+    color: '#0865fe'
+  },
+  {
+    network: 'twitter',  // Nombre de la red social
+    link: 'https://x.com/DisruptiveITDev',
+    color: '#0865fe'
+  },
+];
 
-      },
-      {
-        icon: <SocialIcon network='x' style={{ marginTop: '8px', marginRight: '5px', width: '40px', height: '40px' }} />,
-        link: 'https://x.com/DisruptiveITDev',
-        color: '#0865fe'
-
-      },
-    ]
-
-    
   return (
     <footer className="mt-10">
       <svg
@@ -75,27 +72,25 @@ export const Footer = () => {
             </a>
             
         </div>
+        <div className="flex flex-col items-center gap-2 w-full md:w-2/6 md:items-end text-white">
+        <div className="flex gap-1 flex-nowrap">
+  {socialMedia.map((item, index) => {
+    return (
+      <div key={index} className="flex items-center justify-center transition-all hover:scale-110 duration-300">
+        <SocialIcon 
+          network={item.network}  // Usamos 'network' aquí, no 'link'
+          style={{ marginTop: '8px', marginRight: '5px', width: '40px', height: '40px' }}
+          url={item.link} // Usamos el prop 'url' en lugar de envolver el SocialIcon en un <a>
+        />
+      </div>
+    );
+    })}
+  </div>
+  <p className="font-bold cursor-pointer">{t("Terms of use")}</p>
+  <p className="font-bold cursor-pointer">{t("Privacy policy")}</p>
+</div>
 
-        <div className="flex flex-col items-center  gap-2 w-full md:w-2/6 md:items-end text-white">
-          <div className="flex gap-1 flex-nowrap">
-            
-          {socialMedia.map((item, index) => (
-              <a href={item.link} target="_blank" rel="noreferrer" key={index}>
-                <div className="flex items-center justify-center transition-all hover:scale-110 duration-300">
-                  {item.icon}
-                </div>
-              </a>
-          ))}
-          </div>
-          
-          <p className="font-bold cursor-pointer">{t("Terms of use")}</p>
-          <p className="font-bold cursor-pointer">{t("Privacy policy")}</p>
-        </div>
-        
-      </div>
-      <div className="w-full flex justify-center bg-dark-blue mb-[55px] md:mb-0 md:py-3  ">
-        <p className="text-white font-bold">© 2024 {t("All rights reserved")}</p>
-      </div>
-    </footer>
+</div>
+</footer>
   );
-};
+}

@@ -26,7 +26,7 @@ import { UseMenu } from '../forms/menu/menuContext';
 export const SocialLayout = ({socialFormValues}) => {
     const [fontPreview,setFontPreview]=useState({});
     const {getNameFont}=UseMenu();
-    console.log(socialFormValues)
+    //console.log(socialFormValues)
     const data = Array.isArray(socialFormValues.selectedOptions) ? socialFormValues.selectedOptions.map(option => ({
         name: option.value.charAt(0).toUpperCase() + option.value.slice(1),
         url: option.url // Include URL

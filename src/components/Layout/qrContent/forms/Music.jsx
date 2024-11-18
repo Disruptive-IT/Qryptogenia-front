@@ -58,7 +58,7 @@ export const MusicForm = ({ onFormChangeMusic, location, musicFormValues }) => {
             try {
                 await getFontsPreview(setFontsMusicPreview);
             } catch (error) {
-                console.error("Error fetching fonts preview:", error);
+                //console.error("Error fetching fonts preview:", error);
             } finally {
                 setLoading(false); // Desactiva el loading al terminar
             }
@@ -79,15 +79,15 @@ export const MusicForm = ({ onFormChangeMusic, location, musicFormValues }) => {
         if (selectedOptions.length === 0) {
             errors.selectedOptions = t("At least one option must be selected");
         }
-        console.log(selectedOptions)
+      //  console.log(selectedOptions)
         // Validar cada campo url en selectedOptions
         selectedOptions.forEach((option, index) => {
-            console.log(option.url)
+           // console.log(option.url)
             if (!option.url) {
                 errors[`url_${index}`] = t("URL is required");
             }
         });
-        console.log(errors)
+       // console.log(errors)
 
         return errors;
     };
@@ -522,7 +522,7 @@ export const MusicForm = ({ onFormChangeMusic, location, musicFormValues }) => {
                                 isMulti
                                 className="basic-multi-select w-full"
                                 classNamePrefix="select"
-                                value={updatedSelectedOptions.map(({ icon, ...rest }) => rest)}
+                                value={updatedSelectedOptions && updatedSelectedOptions.length > 0 ? updatedSelectedOptions.map(({ icon, ...rest }) => rest) : []}
                                 onChange={(selected) => {
                                     handleMultiSelectChange(selected);
                                     setFieldValue('selectedOptions', selected);

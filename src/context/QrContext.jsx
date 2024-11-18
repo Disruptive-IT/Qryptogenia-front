@@ -11,7 +11,7 @@ export const QrProvider = ({ children }) => {
     const [menuFormValues,setMenuFormValues]=useState({});
     const [currentContentType, setCurrentContentType] = useState({});
     const [pdfFormValues, setPdfFormValues] = useState({});
-    console.log(socialFormValues)
+   // console.log(socialFormValues)
 
 
 

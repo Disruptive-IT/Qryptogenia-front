@@ -54,10 +54,10 @@ function Discounts() {
       const getDiscount = await instance.get("/admin/getDiscount");
       if (getDiscount.status === 200) {
         setDiscountData(getDiscount.data);
-        console.log(getDiscount.data);
+        //console.log(getDiscount.data);
       }
     } catch (error) {
-      console.error("error: ", error.message);
+    // console.error("error: ", error.message);
     }
   };
 
@@ -79,8 +79,8 @@ function Discounts() {
       }
 
     } catch (error) {
-      console.error('Error al cambiar el estado del descuento:', error);
-      toast.error("Error: discount is currently associated with a membership.");
+   //   console.error('Error al cambiar el estado del descuento:', error);
+      //toast.error("Error: discount is currently associated with a membership.");
     }
   };
 
@@ -110,8 +110,8 @@ function Discounts() {
         }
       }
     } catch (error) {
-      console.error("Error while deleting the discount:", error);
-      toast.error("Error: the current discount is associated with a membership.");
+    //  console.error("Error while deleting the discount:", error);
+     // toast.error("Error: the current discount is associated with a membership.");
     }
   };
 

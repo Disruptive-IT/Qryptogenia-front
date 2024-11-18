@@ -143,7 +143,8 @@ export const OptionBarTwo = ({ contentName, name }) => {
     <div className='flex gap-4 flex-wrap justify-center mb-10 px-10 p-7'>
       {dataTypeQr.map((item, index) => (
         <button
-          onClick={() => handleItemClick(item)}
+           key={index}
+        onClick={() => handleItemClick(item)}
           className={`shadow-md max-w-[200px] h-[80px] transition-all duration-200 ease-in-out hover:translate-y-1 flex-grow flex items-center p-3 justify-center gap-3 rounded-lg text-black ${activeButtonIndex === index ? 'bg-dark-blue' : 'bg-white'} hover:border-spacing-48 hover:text-neutral-100`}
         >
           <img className="w-[50px]" src={item.img} alt={item.name} />

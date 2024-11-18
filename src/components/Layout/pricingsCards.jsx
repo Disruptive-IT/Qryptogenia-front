@@ -29,11 +29,11 @@ export const PricingsCards = ({ data, userId, isSelectionMode }) => {
           withCredentials: true,
         });
         
-        console.log('Membership assigned:', response.data);
+      //  console.log('Membership assigned:', response.data);
         navigate('/')
         toast.success(response.data.msg)
       } catch (error) {
-        console.error('Error assigning membership:', error);
+      //  console.error('Error assigning membership:', error);
         alert('Failed to assign membership');
       }
     } else {

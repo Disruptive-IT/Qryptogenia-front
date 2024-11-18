@@ -40,7 +40,7 @@ export const SocialButton = ({ data, botonColor}) => {
     microsoftw: microsoftw
     // Puedes agregar más mapeos aquí si es necesario
   };
-  console.log(data)
+  //console.log(data)
 
   useEffect(()=>{
     if(botonColor==='#ffffff'){
@@ -96,7 +96,7 @@ export const SocialButton = ({ data, botonColor}) => {
         setfontColor('#ffffff')
       }
     },[botonColor])
-    console.log(data)
+    //console.log(data)
     return (
       <div className='flex gap-3 justify-center flex-wrap w-full mt-5 mb-5'>
         {data && data.map((social, index) => (

@@ -39,7 +39,7 @@ export const saveQrData = async (
         });
     };
 
-    console.log(qrType);
+   // console.log(qrType);
 
     const qrData = {
         qr: {
@@ -109,7 +109,7 @@ export const saveQrData = async (
     const baseFrontUrl=import.meta.env.VITE_BASE_FRONT_URL
 
     try {
-        console.log(qrData);
+     //   console.log(qrData);
         const res = await axios({
             method: isEditRoute ? 'patch' : 'post',
             url: isEditRoute ? `/qr/edit/${qrId}` : '/qr',
@@ -156,12 +156,12 @@ const QR = ({ uniqueKey }) => {
     const mario = useRef(null);
 
     useEffect(() => {
-        console.log('Unique key updated:', uniqueKey);
+    //    console.log('Unique key updated:', uniqueKey);
     }, [uniqueKey]); // Este useEffect se ejecutará cada vez que uniqueKey cambie
     
     const generateBase64FromDiv = async () => {
         if (!mario.current) {
-            console.log('mario.current is null');
+           // console.log('mario.current is null');
             return;
         }
 
@@ -187,7 +187,7 @@ const QR = ({ uniqueKey }) => {
             const base64String = dataUrl.split(',')[1];
             setQrBase64(base64String);
         } catch (error) {
-            console.error('Failed to convert div to base64', error);
+         //   console.error('Failed to convert div to base64', error);
         }
     };
 

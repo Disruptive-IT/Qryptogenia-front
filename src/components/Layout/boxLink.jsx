@@ -12,7 +12,7 @@ export const BoxLink = () => {
   const dataTypeQr = UseDataTypeQr();
   const { t } = useTranslation();
   const handleItemClick = (item) => {
-    console.log(item.name);
+   // console.log(item.name);
     
     let title = item.name.toLowerCase().replace(/\s+/g, '-')
     navigate(`/qr/${title}`);

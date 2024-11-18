@@ -58,7 +58,7 @@ export const SocialButton = ({ data }) => {
  */
 
 export const SocialButtonM = ({ data, botonColor }) => {
-  console.log("data button ",data)
+  //console.log("data button ",data)
   return (
     <div className='flex gap-3 justify-center mt-8 flex-wrap w-full mb-5'>
       {data && data.map((social, index) => (

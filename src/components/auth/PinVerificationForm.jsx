@@ -20,11 +20,11 @@ const PinVerificationForm = ({ onSuccess, onSendVerification, email }) => {
   };
 
   const handleSubmit = async (values) => {
-    console.log("ANTES handleSubmit");
+    //console.log("ANTES handleSubmit");
     const result = await verifyPin({ pin: values.pin, email: email });
-    console.log("DESPUES handleSubmit");
+   // console.log("DESPUES handleSubmit");
     if (result.success) {
-      console.log("BIEN handleSubmit");
+     // console.log("BIEN handleSubmit");
       onSuccess();
     }
   };

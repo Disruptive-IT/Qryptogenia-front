@@ -72,7 +72,7 @@ function FormWifi() {
                 }
             }
         } catch (error) {
-            console.error("Error al obtener los datos WiFi:", error);
+            //console.error("Error al obtener los datos WiFi:", error);
         }
     };
 
@@ -193,7 +193,7 @@ function FormWifi() {
                         id="security_type"
                         onChange={(e) => handlerOnChange(e, "security_type", formik.handleChange)}
                         onBlur={formik.handleBlur}
-                        value={formik.values.security_type}
+                        value={formik.values.security_type || ''}
                         className="border w-full border-gray-300 rounded p-2 mb-4"
                     >
                         <option value="">{t('Select')}</option>

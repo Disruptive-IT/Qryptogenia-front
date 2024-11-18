@@ -76,7 +76,7 @@ const Design = () => {
     }, []);
 
     const handleColorChange = (color, type) => {
-        console.log(`Color changed for ${type}:`, color);
+    //    console.log(`Color changed for ${type}:`, color);
         setQrColor(color);
         if (type === 'dots') {
             setDotsColor(color);
@@ -88,7 +88,7 @@ const Design = () => {
     };
 
     const handleStyleMarco = (type) => {
-        console.log(type);
+     //   console.log(type);
         setMarcoType(type);
     };
 
@@ -121,72 +121,73 @@ const Design = () => {
             transform: 'translateX(-50%)', // Ajusta la posición para centrarlo 
             
              }}>
-            <div className="tabs-container">
-                <Tabs
-                    value={tabValue}
-                    onChange={handleTabChange}
-                    variant="scrollable"
-                    scrollButtons="auto"
-                    aria-label="scrollable auto tabs example"
-                        
-                    TabIndicatorProps={{                    //Colores seccion DesignScroll
-                        style: {
-                            backgroundColor: "#CC2905", // Color linea scroll
-                            height: '4px'
+        <div className="tabs-container">
+            <Tabs
+                value={tabValue}  // El valor de la pestaña seleccionada
+                onChange={handleTabChange}  // Función para cambiar la pestaña
+                variant="scrollable"
+                scrollButtons="auto"
+                aria-label="scrollable auto tabs example"
+                TabIndicatorProps={{
+                    style: {
+                        backgroundColor: "#CC2905",  // Color de la línea indicador
+                        height: '4px',
+                    }
+                }}
+                sx={{
+                    '& .MuiTabs-scrollButtons': {
+                        width: '20px',
+                        color: '', // Color de las flechas de scroll
+                    },
+                    '& .Mui-selected': {
+                        color: '#CC2905', // Color del texto cuando la pestaña está seleccionada
+                    },
+                    '& .MuiTab-root': {
+                        color: '#808080',  // Color del texto de las pestañas no seleccionadas
+                        '&.Mui-selected': {
+                            color: '#CC2905',  // Color cuando la pestaña está seleccionada
                         }
-                    }}
+                    },
+                }}
+            >
+                <Tab
+                    icon={<SlFrame />}
+                    label={t("Qr frame")}
                     sx={{
-                        '& .MuiTabs-scrollButtons': {
-                            width: '20px',
-                            color: '', // Color flechas scroll
-                        },
-                        '& .Mui-selected': {
-                            color: '#CC2905', // cplor del texto seleccionado
-                        },
-                        '& .MuiTab-root': {
-                            color: '#808080', // color text
-                            '&.Mui-selected': {
-                                color: '#CC2905', ///coolor cuadro
-                            }
-                        },
+                        fontSize: '14px',
+                        fontWeight: 'bold',
                     }}
-
-                >
-                        <Tab 
-                            icon={<SlFrame />} 
-                            label={t("Qr frame")} 
-                            sx={{
-                                fontSize: '14px', 
-                                fontWeight: 'bold',
-                            }} 
-                        />
-                        <Tab 
-                            icon={<MdOutlineQrCode2 />} 
-                            label={t("Dots")} 
-                            sx={{
-                                fontSize: '14px', 
-                                fontWeight: 'bold',
-                            }} 
-                        />
-                        <Tab 
-                            icon={<MdOutlineQrCode />} 
-                            label={t("Corners Square")} 
-                            sx={{
-                                fontSize: '14px', 
-                                fontWeight: 'bold',
-                            }} 
-                        />
-                        <Tab 
-                            icon={<IoQrCodeOutline />} 
-                            label={t("Corners Dot")} 
-                            sx={{
-                                fontSize: '14px', 
-                                fontWeight: 'bold',
-                            }} 
-                        />
-
-                </Tabs>
-            </div>
+                    value={0}  // El valor de esta pestaña es 0
+                />
+                <Tab
+                    icon={<MdOutlineQrCode2 />}
+                    label={t("Dots")}
+                    sx={{
+                        fontSize: '14px',
+                        fontWeight: 'bold',
+                    }}
+                    value={1}  // El valor de esta pestaña es 1
+                />
+                <Tab
+                    icon={<MdOutlineQrCode />}
+                    label={t("Corners Square")}
+                    sx={{
+                        fontSize: '14px',
+                        fontWeight: 'bold',
+                    }}
+                    value={2}  // El valor de esta pestaña es 2
+                />
+                <Tab
+                    icon={<IoQrCodeOutline />}
+                    label={t("Corners Dot")}
+                    sx={{
+                        fontSize: '14px',
+                        fontWeight: 'bold',
+                    }}
+                    value={3}  // El valor de esta pestaña es 3
+                />
+            </Tabs>
+        </div>
             {tabValue === 0 && (
                 <div>
                     <ScrollableMarcoQrs
