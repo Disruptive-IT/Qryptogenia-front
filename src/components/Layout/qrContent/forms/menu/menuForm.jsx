@@ -100,15 +100,14 @@ function MenuForm(){
         }))
       }
     },[])
-    // console.log("isss ",editFormdata);
-    // console.log("fomik values: ",formik.values);
-    // console.log("intial values: ",formik.initialValues);
-    // console.log("formik errors",formik.errors);
 
     useEffect(()=>{
       setLoading(false);
     },[])
-    
+    // console.log("isss ",editFormdata);
+    console.log("fomik values: ",formik.values);
+    console.log("intial values: ",formik.initialValues);
+    console.log("formik errors",formik.errors);
 return (
     <div className='p-4'>
       {loading ? (
@@ -176,11 +175,11 @@ return (
                 className="w-10 h-10 border border-gray-300 rounded cursor-pointer"
                 onClick={() => indexTemplate == null && (setShowBackgroundPicker(!showBackgroundPicker))}
                 aria-disabled={indexTemplate != null ? false : true}
-                style={{ backgroundColor: formData.backgroundCard || "#000" }}
+                style={{ backgroundColor: formData.backgroundCard || "#000" ,backgroundImage:formData?.backgroundCard.includes("gradient") ? formData?.backgroundCard : "none"}}
               />
               {showBackgroundPicker && (
                 <div className="colorPickerr z-50" ref={backgroundPickerRef}>
-                  <ColorPicker handlerFunction={(color) => { handleBackgroundCard(color); }} pickerValue={formData.backgroundCard} pickerColor={formData.backgroundCard} />
+                  <ColorPicker gradient={true} handlerFunction={(color) => { handleBackgroundCard(color); }} pickerValue={formData.backgroundCard} pickerColor={formData.backgroundCard} />
                 </div>
               )}
             </div>
@@ -192,7 +191,7 @@ return (
               />
               {showMenuPicker && (
                 <div className="menuPicker z-50" ref={menuPickerRef}>
-                  <ColorPicker handlerFunction={(color) => { handleMenuColor(color); }} pickerValue={formData.colorMenu} pickerColor={formData.colorMenu} />
+                  <ColorPicker gradient={false} handlerFunction={(color) => { handleMenuColor(color); }} pickerValue={formData.colorMenu} pickerColor={formData.colorMenu} />
                 </div>
               )}
             </div>
@@ -253,13 +252,12 @@ return (
                       <div className='flex flex-col sm:flex-row flex-wrap w-full sm:w-[80%] p-4 justify-around gap-4'>
                         {/* Color de Fondo */}
                         <div className='flex flex-col items-center'>
-                          <label className='my-2' htmlFor="background">{t('Background Color')}</label>
-                          <div className='w-10 h-10 border-2 border-gray-300 rounded cursor-pointer' onClick={() =>setShowBackCategoryPicker(!showBackCategoryPicker)} style={{backgroundColor:formData.category?.[activeCategory]?.products[0]?.backgroundProductCard || "#000" }}
+                          <label className='my-2' htmlFor="background">Background</label>
+                          <div className='w-10 h-10 border-2 border-gray-300 rounded cursor-pointer' onClick={() =>setShowBackCategoryPicker(!showBackCategoryPicker)} style={{backgroundColor:formData.category?.[activeCategory]?.products[0]?.backgroundProductCard || "#000",backgroundImage:formData.category?.[activeCategory]?.products[0]?.backgroundProductCard.includes("gradient") ? formData.category?.[activeCategory]?.products[0]?.backgroundProductCard : "none" }}
                           ></div>
                           {showBackCategoryPicker && (
-                            <div className='colorPicker' ref={backgroundProductPickerRef}>
-                              <ColorPicker handlerFunction={(color) => { if (activeCategory !== null) {handleBackgroundProduct(activeCategory, color); }}}   pickerValue={formData.category?.[activeCategory]?.products[0]?.backgroundProductCard || '#FFFFFF'}  pickerColor={formData.category?.[activeCategory]?.products[0]?.backgroundProductCard || '#FFFFFF'} 
-                              />
+                            <div className='colorPicker z-50' ref={backgroundProductPickerRef}>
+                              <ColorPicker handlerFunction={(color) => { if (activeCategory !== null) {handleBackgroundProduct(activeCategory, color); }}}   pickerValue={formData.category?.[activeCategory]?.products[0]?.backgroundProductCard || '#FFFFFF'}  pickerColor={formData.category?.[activeCategory]?.products[0]?.backgroundProductCard || '#FFFFFF'} gradient={true}/>
                             </div>
                           )}
                         </div>
@@ -271,7 +269,7 @@ return (
                           ></div>
                           {showNamePicker && (
                             <div className='colorPicker' ref={namePickerRef}>
-                              <ColorPicker handlerFunction={(color) =>{handleColorNameProduct(activeCategory, color); }} pickerValue={formData.category?.[activeCategory]?.products?.colorName || "#FFFFFF"} pickerColor={formData.category?.[activeCategory]?.products?.colorName || "#FFFFFF"} />
+                              <ColorPicker gradient={false} handlerFunction={(color) =>{handleColorNameProduct(activeCategory, color); }} pickerValue={formData.category?.[activeCategory]?.products?.[0].colorName || "#000"} pickerColor={formData.category?.[activeCategory]?.products?.[0].colorName || "#FFFFFF"} />
                             </div>
                           )}
                         </div>
@@ -282,7 +280,7 @@ return (
                           <div  className='w-10 h-10 border border-gray-300 rounded cursor-pointer'  onClick={() => setShowDescriptionPicker(!showDescriptionPicker)}  style={{ backgroundColor: formData.category?.[activeCategory]?.products[0]?.colorDescription || '#000' }}></div>
                           {showDescriptionPicker && (
                             <div className='colorPicker' ref={descriptionPickerRef}>
-                              <ColorPicker  handlerFunction={(color) => { handleColorDescriptionProduct(activeCategory, color); }} pickerValue={formData.category?.[activeCategory]?.products?.colorDescription || "#FFFFFF"} pickerColor={formData.category?.[activeCategory]?.products?.colorDescription || "#FFFFFF"} />
+                              <ColorPicker gradient={false}  handlerFunction={(color) => { handleColorDescriptionProduct(activeCategory, color); }} pickerValue={formData.category?.[activeCategory]?.products[0]?.colorDescription || "#FFFFFF"} pickerColor={formData.category?.[activeCategory]?.products?.[0].colorDescription || "#FFFFFF"} />
                             </div>
                           )}
                         </div>
@@ -294,8 +292,7 @@ return (
                           ></div>
                           {showPricePicker && (
                             <div className='colorPicker' ref={pricePickerRef}>
-                              <ColorPicker handlerFunction={(color) => { handleColorPriceProduct(activeCategory, color); }} pickerValue={formData.category?.[activeCategory]?.products?.colorPrice || "#FFFFFF"} pickerColor={formData.category?.[activeCategory]?.products?.colorPrice || "#FFFFFF"} 
-                              />
+                              <ColorPicker gradient={false} handlerFunction={(color) => { handleColorPriceProduct(activeCategory, color); }} pickerValue={formData.category?.[activeCategory]?.products?.[0].colorPrice || "#FFFFFF"} pickerColor={formData.category?.[activeCategory]?.products?.[0].colorPrice || "#FFFFFF"} />
                             </div>
                           )}
                         </div>
@@ -521,10 +518,10 @@ return (
                             <div>
                               {/* Contenedor de la imagen y detalles del producto */}
                               <div className="flex flex-col lg:flex-row m-0">
-                                <div className="lg:w-[30%] w-full rounded-[10px] bg-slate-600 sm:mb-4 lg:relative md:relative">
+                                <div className={`lg:w-[30%] w-full rounded-[10px] bg-slate-600 sm:mb-4 lg:relative md:relative ${formData?.category[index]?.products[productIndex]?.productImg==null ? 'hidden':''}`}>
                                   <img
                                     id={`imgProductPreview-${index}-${productIndex}`}
-                                    className="object-cover w-full h-full rounded-[10px]"
+                                    className={`w-full h-full rounded-[10px]`}
                                     src={validateLink.test(formData?.category[index]?.products[productIndex]?.productImg)
                                       ? (isEditRoute ? formData?.category[index]?.products[productIndex]?.productImg : '')
                                       : (formData?.category[index]?.products[productIndex]?.productImg instanceof File
