@@ -173,12 +173,12 @@ export default function StoreMenuFood({ menuFormValues }) {
               <img className='w-full h-full' src={element.productImg} alt={element.productName} />
             </div>
             <div style={{backgroundColor:element.backgroundProductCard}} className='w-[60%] h-full px-1 py-1  flex flex-col self-center'>
-              <span className='flex w-full items-end justify-end hover:cursor-pointer'>+</span>
+            <img className='w-4 self-end' src='/eye.svg'/>
               <div className='w-full  h-[80%] bg-transparent flex flex-col justify-evenly'>
                 <h1 style={{color: element.colorName,fontFamily:menuFormValues.fontpreview}} className='text-[17px] text-center break-words font-bold'>{element.productName=='' ? 'Product name' : element.productName}</h1>
                 <h1 style={{color: element.colorPrice,fontFamily:menuFormValues.fontpreview}} className='text-center break-words font-bold'>{element.price==null ? 'price':element.price+'$'}</h1>
               </div>
-              <span className='text-end'>{element.top ? <StarIcon className='text-yellow-300 text-2xl' /> : ''}</span>
+              {element.top ? <img className='w-8 self-end pb-1' src='/star.svg'/> : ''}
             </div>
           </div>
         ))
@@ -196,12 +196,12 @@ export default function StoreMenuFood({ menuFormValues }) {
               <img className='w-full h-full' src={element.productImg} alt={element.productName} />
             </div>
             <div style={{backgroundColor:element.backgroundProductCard}} className='w-[60%] h-full px-1 py-1  flex flex-col self-center'>
-              <span className='flex w-full items-end justify-end hover:cursor-pointer'>+</span>
+              <img className='w-4 self-end' src='/eye.svg'/>
               <div style={{fontFamily:menuFormValues?.fontPreview || 'sans-serif'}} className='w-full  h-[80%] bg-transparent flex flex-col justify-evenly'>
                 <h1 style={{color: element.colorName}} className='text-[17px] text-center break-words font-bold'>{element.productName === '' ? 'Product name' : element.productName}</h1>
                 <h1 style={{color: element.colorPrice}} className='text-center break-words font-bold'>{element.price == null ? 'price' : element.price + '$'}</h1>
               </div>
-              <span className='text-end'>{element.top ? <StarIcon className='text-yellow-300 text-2xl' /> : ''}</span>
+              {element.top ? <img className='w-8 self-end pb-1' src='/star.svg'/> : ''}
             </div>
           </div>
         ))
@@ -233,7 +233,7 @@ export default function StoreMenuFood({ menuFormValues }) {
             <h1 className='font-bold text-[20px] text-center text-black'>{menuFormValues.category[activeCategory].products[activeprod].productDescription}</h1>
           </div>
           <div>
-            <span className='float-end'>{menuFormValues.category[activeCategory].products[activeprod].top ? <StarIcon className='text-yellow-400' /> : ''}</span>
+            {menuFormValues.category[activeCategory].products[activeprod].top ? <img className='w-10 self-center' src='/star.svg'/> : ''}
           </div>
         </div>
       )
@@ -250,7 +250,7 @@ export default function StoreMenuFood({ menuFormValues }) {
             <h1 className='font-bold text-[20px] text-center text-black'>{topProducts[activeprod].productDescription}</h1>
           </div>
           <div>
-            <span className='float-end'>{topProducts[activeprod].top ? <StarIcon className='text-yellow-400' /> : ''}</span>
+            {topProducts[activeprod].top ? <img className='w-10 self-center' src='/star.svg'/> : ''}
           </div>
         </div>
       )

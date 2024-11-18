@@ -394,7 +394,7 @@ const App = ({ id }) => {
           <motion.div  
             whileHover={{scale:"1.2"}}
           >
-          {item.qrType && item.qrType.type !== 'website-url' && (
+          {item.qrType && item.qrType.type !== 'website-url' && item.qrType.type !== 'pdf' && item.qrType.type!=="wifi" && (
           <MdVisibility
             className="cursor-pointer text-xl"
             onClick={() => handleOpenModal(item.id, item.qrType ? item.qrType.type : 'N/A')}

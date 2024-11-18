@@ -231,12 +231,12 @@ const getLinkTemplate=async(id)=>{
           <img className='w-full h-full' src={showInitialKeys && index==0 && productIndex==0 && counterChange==0 && element.productImg==null && !isEditRoute ? defaultProductImage : element.productImg && validateLink.test(FormValues?.category?.[index]?.products?.[productIndex]?.productImg)  ? (isEditRoute ? element.productImg : '') : (element?.productImg instanceof File ? URL.createObjectURL(element.productImg) : '')} alt={element.productName || 'Producto'}/>
           </div>
           <div style={{backgroundColor:showInitialKeys && counterChange==0 && !isEditRoute && element.backgroundColor=='#fff' ? '#7EC2DD':element.backgroundProductCard,backgroundImage:element.backgroundProductCard.includes("gradient") ? element.backgroundProductCard : "none"}} className='w-[60%] h-full bg-red-300 px-1 py-1  flex flex-col self-center'>
-            <span className='flex w-full items-end justify-end hover:cursor-pointer'>+</span>
+            <img className='w-4 self-end' src='/eye.svg'/>
             <div className='w-full  h-[80%] bg-transparent flex flex-col justify-evenly'>
               <h1 style={{color: element.colorName,fontFamily:fontFamily?.fontName}} className='text-[17px] text-center break-words font-bold'>{showInitialKeys && index==0 && productIndex==0 && counterChange==0 && !isEditRoute && element.productName=='' ? 'Burguer' : element.productName=='' ? 'Product name' : element.productName}</h1>
               <h1 style={{color: element.colorPrice,fontFamily:fontFamily?.fontName}} className='text-center break-words font-bold'>{showInitialKeys && index==0 && productIndex==0 && counterChange==0 && !isEditRoute && element.price=='' ? '45.67$' : element.price==null ? 'price':element.price+'$'}</h1>
             </div>
-            <span className='text-end'>{element.top ? <StarIcon className='text-yellow-300 text-2xl' /> : ''}</span>
+            {element.top ? <img className='w-8 self-end pb-1' src='/star.svg'/> : ''}
           </div>
         </div>
       ))
@@ -254,12 +254,12 @@ const getLinkTemplate=async(id)=>{
             <img className='w-full h-full' src={validateLink.test(element.productImg)  ? (isEditRoute ? element.productImg : '') : (element.productImg instanceof File ? URL.createObjectURL(element.productImg) : '')} alt={element.productName} />
           </div>
           <div style={{backgroundColor:element.backgroundProductCard}} className='w-[60%] h-full bg-red-300 px-1 py-1  flex flex-col self-center'>
-            <span className='flex w-full items-end justify-end hover:cursor-pointer'>+</span>
+            <img className='w-4 self-end' src='/eye.svg'/>
             <div style={{fontFamily:fontFamily?.fontName || 'sans-serif'}} className='w-full  h-[80%] bg-transparent flex flex-col justify-evenly'>
               <h1 style={{color: element.colorName}} className='text-[17px] text-center break-words font-bold'>{element.productName === '' ? 'Product name' : element.productName}</h1>
               <h1 style={{color: element.colorPrice}} className='text-center break-words font-bold'>{element.price == null ? 'price' : element.price + '$'}</h1>
             </div>
-            <span className='text-end'>{element.top ? <StarIcon className='text-yellow-300 text-2xl' /> : ''}</span>
+            {element.top ? <img className='w-8 self-end pb-1' src='/star.svg'/>: ''}
           </div>
         </div>
       ))
@@ -291,7 +291,7 @@ const getLinkTemplate=async(id)=>{
           <h1 className='font-bold text-[20px] text-center text-black'>{FormValues.category[activeCategory].products[activeprod].productDescription}</h1>
         </div>
         <div>
-          <span className='float-end'>{FormValues.category[activeCategory].products[activeprod].top ? <StarIcon className='text-yellow-400' /> : ''}</span>
+          {FormValues.category[activeCategory].products[activeprod].top ? <img className='w-10 self-center' src='/star.svg'/> : ''}
         </div>
       </div>
     )
@@ -308,7 +308,7 @@ const getLinkTemplate=async(id)=>{
           <h1 className='font-bold text-[20px] text-center text-black'>{topProducts[activeprod].productDescription}</h1>
         </div>
         <div>
-          <span className='float-end'>{topProducts[activeprod].top ? <StarIcon className='text-yellow-400' /> : ''}</span>
+          {topProducts[activeprod].top ? <img className='w-10 self-center' src='/star.svg'/> : ''}
         </div>
       </div>
     )
