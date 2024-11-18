@@ -235,17 +235,27 @@ const QRScanPage = () => {
       },[activeCategory,activeprod])
 
     return (
-        <div style={{
-            backgroundColor:!qrData?.MenuPreview?.imgTemplate && !qrData?.MenuPreview?.imgTemplate ? qrData?.MenuPreview?.backgroundCard : '#fff',
-            backgroundImage: `url(${qrData?.MenuPreview?.imgTemplate || qrData?.MenuPreview?.userTemplate || ''})`,
-            backgroundSize: '100vw 100vh',
-            width:'100%',
-            height:'auto',
-            backgroundPosition: 'center',
-            backgroundRepeat:'no-repeat',
-            margin:'0',
-            overflowY:'hidden',
-          }}>
+      <div style={{
+        backgroundColor: !qrData?.MenuPreview?.imgTemplate && !qrData?.MenuPreview?.userTemplate 
+                           ? qrData?.MenuPreview?.backgroundCard 
+                           : '#fff',
+        backgroundImage: 
+          qrData?.MenuPreview?.imgTemplate 
+            ? `url(${qrData.MenuPreview.imgTemplate})`
+            : qrData?.MenuPreview?.userTemplate 
+            ? `url(${qrData.MenuPreview.userTemplate})`
+            : qrData?.MenuPreview?.backgroundCard?.includes("gradient") 
+            ? qrData.MenuPreview.backgroundCard
+            : 'none',
+        backgroundSize: '100vw 100vh',
+        // width: '100%',
+        height: 'auto',
+        backgroundPosition: 'center',
+        backgroundRepeat: 'no-repeat',
+        margin: '0',
+        overflowY: 'hidden',
+        overflowX:'hidden'
+      }}>      
             {qrData?.QrPreview && (
                 <div style={{fontFamily:fontPreview?.fontName}} className='flex items-center justify-center min-h-screen'>
                 <div className='flex flex-col min-h-screen w-full items-center justify-center' style={{ background: qrData?.QrPreview?.backgroudColor || '#f0f0f0' }}>
@@ -295,7 +305,7 @@ const QRScanPage = () => {
                     {loading ? (
                         <h1>loading......</h1>
                     ):(
-                    <div className="h-[100vh] flex flex-col justify-start items-center space-y-2 md:space-y-0 md:space-x-10 pt-5">
+                    <div className="h-[100vh] w-full  flex flex-col justify-start items-center space-y-2 md:space-y-0 pt-5">
                     {/* Logo y nombre del restaurante */}
                     <div className="w-full mx-auto sm:p-4 md:p-2  relative sm:top-5 md:top-0 lg:top-1 min-w-[345px] sm:min-w-[400px] md:min-w-[500px] lg:min-w-[600px] flex justify-center flex-col items-center">
                       <div style={{ boxShadow: '2px 4px 4px 0px rgb(0,0,0,1)' }} className="w-[150px] h-[150px] sm:w-[180px] sm:h-[180px] md:w-[196px] md:h-[196px] lg:w-[230px] lg:h-[230px] rounded-md overflow-hidden">
@@ -364,34 +374,39 @@ const QRScanPage = () => {
                             {/* Paneles de Categorías */}
                             {qrData?.MenuPreview?.category.map((category, indexCategory) => (
                             <TabPanel key={indexCategory} value={tabValue} index={indexCategory}>
-                               <div className='flex flex-wrap justify-center px-10 '>
+                               <div className='flex flex-wrap justify-center gap-4'>
                             {category.products && category.products.length > 0 ? (
                                 category.products.map((product, indexProduct) => (
-                            <motion.div
-                                key={indexProduct}
-                                initial={cardVariants.offscreen}
-                                whileInView={cardVariants.onscreen}
-                                viewport={{ once: true, amount: 0.3 }}
-                                style={{ boxShadow: '3px 5px 5px 0px rgb(0,0,0,1)' }}
-                                className="lg:w-[30%] md:w-[45%] sm:w-[341px] sm:h-[116px] min-w-[320px] max-w-[400px] min-h-[116px] max-h-[180px] mx-4 my-3 flex flex-row rounded-md overflow-hidden"
-                                onClick={() => {setActiveprod({activeCat:indexCategory,activeProd:indexProduct}); handleOpenModal();}}
-                            >
-                                <div style={{ backgroundColor: product.backgroundProductCard }} className="w-[40%] h-full overflow-hidden">
-                                    <img className="w-full h-full" src={product.productImg} alt={product.productName} />
-                                </div>
-                                <div style={{ backgroundColor: product.backgroundProductCard }} className="w-[60%] h-full px-2 py-2 flex flex-col justify-between">
-                                    <span className="flex w-full items-end justify-end hover:cursor-pointer">+</span>
-                                    <div className="w-full flex-grow bg-transparent flex flex-col justify-evenly">
-                                        <h1 style={{ color: product.colorName, fontFamily: qrData?.MenuPreview?.fontPreview }} className="text-[17px] text-center break-words font-bold">
-                                            {product.productName || 'Product name'}
-                                        </h1>
-                                        <h1 style={{ color: product.colorPrice, fontFamily: qrData?.MenuPreview?.fontPreview }} className="text-center break-words font-bold">
-                                            {product.price == null ? 'Price' : `${product.price}$`}
-                                        </h1>
-                                    </div>
-                                    {product.top && <span className="text-end"><StarIcon className="text-yellow-300 text-2xl" /></span>}
-                                </div>
-                            </motion.div>
+                                  <motion.div
+                                  key={indexProduct}
+                                  initial={indexProduct > 2 && cardVariants.offscreen}
+                                  whileInView={indexProduct > 2 && cardVariants.onscreen}
+                                  viewport={{ once: true, amount: 0.3 }}
+                                  style={{
+                                      boxShadow: '3px 5px 5px 0px rgb(0,0,0,1)',
+                                      backgroundColor: product.backgroundProductCard,
+                                      backgroundImage: product.backgroundProductCard.includes("gradient") ? product.backgroundProductCard : "none",
+                                  }}
+                                  // className="lg:w-[30%] md:w-[45%] sm:w-[341px] sm:h-[116px] min-w-[320px] max-w-[400px] min-h-[116px] max-h-[180px] mx-4 my-3 flex flex-row rounded-md overflow-hidden"
+                                  className='w-[320px] h-[116px] flex rounded-md overflow-hidden'
+                                  onClick={() => {setActiveprod({activeCat: indexCategory, activeProd: indexProduct}); handleOpenModal();}}
+                              >
+                                  <div className="w-[40%] h-full overflow-hidden">
+                                      <img className="w-full h-full" src={product.productImg} alt={product.productName} />
+                                  </div>
+                                  <div className="w-[60%] h-full px-2 py-2 flex flex-col justify-between">
+                                  <img className='w-4 self-end' src='/eye.svg'/>
+                                      <div className="w-full flex-grow bg-transparent flex flex-col justify-evenly">
+                                          <h1 style={{ color: product.colorName, fontFamily: qrData?.MenuPreview?.fontPreview }} className="text-[17px] text-center break-words font-bold">
+                                              {product.productName || 'Product name'}
+                                          </h1>
+                                          <h1 style={{ color: product.colorPrice, fontFamily: qrData?.MenuPreview?.fontPreview }} className="text-center break-words font-bold">
+                                              {product.price == null ? 'Price' : `${product.price}$`}
+                                          </h1>
+                                      </div>
+                                      {product.top && <img className='w-8 self-end pb-6' src='/star.svg'/>}
+                                  </div>
+                              </motion.div>                              
                                 ))
                             ) : (
                                 <div>No products available</div>
@@ -403,20 +418,21 @@ const QRScanPage = () => {
 
                             {/* Panel para los productos destacados */}
                             <TabPanel key="top" value={tabValue} index={qrData?.MenuPreview?.category.length}>
-                            <div className='flex flex-wrap justify-center px-10 '>
+                            <div className='flex flex-wrap justify-center px-10 gap-4'>
                             {topProducts?.length > 0 ? (
                                 topProducts.map((element, index) => (
-                                <motion.div                                 
-                                initial={cardVariants.offscreen}
-                                whileInView={cardVariants.onscreen}
+                                <motion.div                               
+                                initial={index > 2 && cardVariants.offscreen}
+                                whileInView={index > 2 && cardVariants.onscreen}
                                 viewport={{ once: true, amount: 0.4 }}
-                                style={{ boxShadow: '3px 5px 5px 0px rgb(0,0,0,1)' }} key={index} className="lg:w-[30%] md:w-[30%] sm:min-w-[20%] sm:max-w-[132px] sm:min-h-[116px] mx-4 my-3  flex flex-row rounded-md overflow-hidden" onClick={() => { setActiveprod(index); handleOpenModal(); }}>
-                                    <div style={{ backgroundColor: element.backgroundProductCard }} className="w-[40%] h-full bg-slate-500 overflow-auto">
+                                style={{ boxShadow: '3px 5px 5px 0px rgb(0,0,0,1)',backgroundColor:element.backgroundProductCard,backgroundImage:element.backgroundProductCard.includes("gradient") ? element.backgroundProductCard : "none" }} key={index} 
+                                className="w-[320px] h-[116px] flex rounded-md overflow-hidden" onClick={() => { setActiveprod(index); handleOpenModal(); }}>
+                                    <div className="w-[40%] h-full overflow-hidden">
                                     <img className="w-full h-full" src={element.productImg} alt={element.productName} />
                                     </div>
-                                    <div style={{ backgroundColor: element.backgroundProductCard }} className="w-[60%] h-full bg-red-300 px-2 py-2 flex flex-col self-center">
-                                    <span className="flex w-full items-end justify-end hover:cursor-pointer">+</span>
-                                    <div style={{ fontFamily: qrData?.MenuPreview?.fontPreview || 'sans-serif' }} className="w-full h-[80%] bg-transparent flex flex-col justify-evenly">
+                                    <div className="w-[60%] h-full px-2 py-2 flex flex-col justify-between">
+                                    <img className='w-4 self-end' src='/eye.svg'/>
+                                    <div style={{ fontFamily: qrData?.MenuPreview?.fontPreview || 'sans-serif' }} className="w-full flex-grow bg-transparent flex flex-col justify-evenly">
                                         <h1 style={{ color: element.colorName }} className="text-[17px] text-center break-words font-bold">
                                         {element.productName || 'Product name'}
                                         </h1>
@@ -424,7 +440,7 @@ const QRScanPage = () => {
                                         {element.price == null ? 'Price' : `${element.price}$`}
                                         </h1>
                                     </div>
-                                    {element.top && <span className="text-end"><StarIcon className="text-yellow-300 text-2xl" /></span>}
+                                    {element.top && <img className='w-8 self-end pb-3' src='/star.svg'/>}
                                     </div>
                                 </motion.div>
                                 ))
@@ -441,12 +457,12 @@ const QRScanPage = () => {
     <ModalComponent isOpen={openModal} onClose={closeModal}>
       <button
         onClick={() => { handleCloseModal(); setActiveprod(0); }} 
-        className="absolute top-0 right-0 text-red-600 font-bold text-[25px] cursor-pointer"
+        className="absolute top-0 p-1 text-[15px] rounded-md right-40 text-red-600 bg-white font-bold cursor-pointer hover:bg-red-600 hover:text-white"
       >
-        x
+        cerrar
       </button>
       <div 
-        style={{ backgroundColor: qrData?.MenuPreview?.category[activeprod.activeCat].products[activeprod.activeProd].backgroundProductCard, fontFamily: qrData?.MenuPreview?.fontPreview }} 
+        style={{ backgroundColor: qrData?.MenuPreview?.category[activeprod.activeCat].products[activeprod.activeProd].backgroundProductCard,backgroundImage:qrData?.MenuPreview?.category[activeprod.activeCat].products[activeprod.activeProd].backgroundProductCard.includes("gradient") ? qrData?.MenuPreview?.category[activeprod.activeCat].products[activeprod.activeProd].backgroundProductCard  : "none", fontFamily: qrData?.MenuPreview?.fontPreview }} 
         className=" lg:mt-[5%] lg:ml-[40%]  flex lg:w-[20%] flex-col items-center p-4 rounded-lg my-[10%]"
       >
         {/* Imagen del producto */}
@@ -465,9 +481,7 @@ const QRScanPage = () => {
 
         {/* Indicador de producto destacado */}
         {qrData?.MenuPreview?.category[activeprod.activeCat].products[activeprod.activeProd].top && (
-          <span className="mt-4 text-yellow-500 text-3xl">
-            <StarIcon />
-          </span>
+          <img className='w-10 self-center' src='/star.svg'/>
         )}
       </div>
     </ModalComponent>
@@ -483,7 +497,7 @@ const QRScanPage = () => {
         x
       </button>
       <div 
-        style={{ backgroundColor: topProducts[activeprod].backgroundProductCard, fontFamily: qrData?.MenuPreview?.fontPreview || 'sans-serif' }} 
+        style={{ backgroundColor: topProducts[activeprod].backgroundProductCard,backgroundImage:topProducts[activeprod].backgroundProductCard.includes("gradient") ? topProducts[activeprod].backgroundProductCard : "none", fontFamily: qrData?.MenuPreview?.fontPreview || 'sans-serif' }} 
         className="lg:mt-[5%] lg:ml-[40%]  flex lg:w-[20%] flex-col items-center p-4 rounded-lg my-[10%]"
       >
         {/* Imagen del producto destacado */}
@@ -502,9 +516,7 @@ const QRScanPage = () => {
 
         {/* Indicador de producto destacado */}
         {topProducts[activeprod]?.top && (
-          <span className="mt-4 text-yellow-500 text-3xl">
-            <StarIcon />
-          </span>
+          <img className='w-10 self-center' src='/star.svg'/>
         )}
       </div>
     </ModalComponent>

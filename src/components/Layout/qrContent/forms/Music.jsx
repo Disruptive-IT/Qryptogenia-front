@@ -398,7 +398,7 @@ export const MusicForm = ({ onFormChangeMusic, location, musicFormValues }) => {
                                         {/* Color Picker */}
                                         {showTitleColorPicker && (
                                             <div className="absolute mt-2 left-0 top-full z-50" ref={titleColorPickerRef}>
-                                                <ColorPicker handlerFunction={handleTitleColorChange} pickerColor={colorTitle} pickerValue={colorTitle}/>
+                                                <ColorPicker gradient={false} handlerFunction={handleTitleColorChange} pickerColor={colorTitle} pickerValue={colorTitle}/>
                                             </div>
                                 )}
                             </div>
@@ -433,7 +433,7 @@ export const MusicForm = ({ onFormChangeMusic, location, musicFormValues }) => {
                                 ></div>
                                 {showDescriptionColorPicker && (
                                     <div className="absolute mt-2 left-0 top-full z-50" ref={descriptionColorPickerRef}>
-                                        <ColorPicker handlerFunction={handleDescriptionColorChange} pickerColor={descriptionColor} pickerValue={descriptionColor}/>
+                                        <ColorPicker gradient={false} handlerFunction={handleDescriptionColorChange} pickerColor={descriptionColor} pickerValue={descriptionColor}/>
                                     </div>
                                 )}
                             </div>
@@ -451,7 +451,7 @@ export const MusicForm = ({ onFormChangeMusic, location, musicFormValues }) => {
                                 ></div>
                                 {showBackgroundColorPicker && (
                                     <div className="absolute mt-2 left-0 z-50" ref={backgroundColorPickerRef}>
-                                        <ColorPicker handlerFunction={handleBackgroundColorChange} pickerColor={backgroundColor} pickerValue={backgroundColor}/>
+                                        <ColorPicker gradient={true} handlerFunction={handleBackgroundColorChange} pickerColor={backgroundColor} pickerValue={backgroundColor}/>
                                     </div>
                                 )}
                             </div>
@@ -469,7 +469,7 @@ export const MusicForm = ({ onFormChangeMusic, location, musicFormValues }) => {
                                 ></div>
                                 {showBoxColorPicker && (
                                     <div className="absolute mt-2 left-0 z-50" ref={boxColorPickerRef}>
-                                        <ColorPicker handlerFunction={handleBoxColorChange} pickerColor={boxColor}/>
+                                        <ColorPicker gradient={true} handlerFunction={handleBoxColorChange} pickerColor={boxColor} pickerValue={boxColor} />
                                         {/* style={{ width: "calc(100% + 2rem)" }} // Ajuste del ancho */}
                                     </div>
 
@@ -487,7 +487,7 @@ export const MusicForm = ({ onFormChangeMusic, location, musicFormValues }) => {
                                     ></div>
                                     {showBorderColorPicker && (
                                         <div className="absolute mt-2 left-0 z-50" ref={borderColorPickerRef}>
-                                            <ColorPicker handlerFunction={handleBorderColorChange} pickerColor={borderImg} pickerValue={borderImg}/>
+                                            <ColorPicker gradient={true} handlerFunction={handleBorderColorChange} pickerColor={borderImg} pickerValue={borderImg}/>
                                         </div>
                                     )}
                                 
