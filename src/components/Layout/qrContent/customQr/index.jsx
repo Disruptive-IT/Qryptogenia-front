@@ -1,3 +1,10 @@
+/*
+ * @Author : Jaider cuartas,   @date 2024-07-15 20:13:14
+ * @description : Componente para mostrar contenido dinámico de una aplicación basado en la ruta actual. 
+ * Incluye formularios para configurar valores de aplicación, redes sociales y música, así como un modal para ver una vista previa en un dispositivo móvil.
+ * @return : Retorna un componente React que muestra contenido dinámico y permite la configuración de formularios.
+ */
+
 import { useState, useEffect } from 'react';
 import Button from '@mui/material/Button';
 import Frame from './frame';
@@ -16,7 +23,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { UseMenu } from '../forms/menu/menuContext';
 import { useLocation } from 'react-router-dom';
 import instance from '../../../../libs/axios';
-
+import axios from '../../../../libs/axios';
 
 /*
  * @UpdatedBy : Cristian Escobar,   @date 2024-09-03 15:05:11
@@ -41,14 +48,14 @@ const generateUniqueKey = async () => {
     while (!isUnique) {
         try {
             const response = await instance.get(`/qr/check-key/${uniquekey}`);
-           // console.log(uniquekey);
+            console.log(uniquekey);
             if (!response.data.exists) {
                 isUnique = true;
             } else {
                 uniquekey = uuidv4();  // Generar un nuevo uniquekey si ya existe
             }
         } catch (error) {
-        //    console.error('Error checking unique key:', error);
+            console.error('Error checking unique key:', error);
             throw new Error('Failed to verify the unique key.');
         }
     }
@@ -71,7 +78,7 @@ const CustomQr = ({ qrId }) => {
                 const key = await generateUniqueKey();
                 setUniqueKey(key);
             } catch (error) {
-           //     console.error('Error generating unique key:', error);
+                console.error('Error generating unique key:', error);
             }
         };
 
@@ -79,7 +86,7 @@ const CustomQr = ({ qrId }) => {
     }, [qrData, appFormValues, socialFormValues, musicFormValues,formData]);
 
     useEffect(() => {
-       // console.log('Unique key updated:', uniqueKey);
+        console.log('Unique key updated:', uniqueKey);
     }, [uniqueKey]); // Este useEffect se ejecutará cada vez que uniqueKey cambie
 
 
@@ -91,7 +98,7 @@ const CustomQr = ({ qrId }) => {
                     const response = await axios.get(`http://localhost:3000/api/qr/getPreviewUpdate/${qrId}`);
                     setQrName(response.data.qrName); // Suponiendo que la respuesta tiene un campo qrName
                 } catch (error) {
-               //     console.error('Error fetching QR data:', error);
+                    console.error('Error fetching QR data:', error);
                 }
             };
             fetchQrData();
@@ -116,15 +123,15 @@ const CustomQr = ({ qrId }) => {
             });
     
             const data = await response.json();
-           // console.log('Response from Cloudinary:', data); // Añade esta línea
+            console.log('Response from Cloudinary:', data); // Añade esta línea
     
             if (response.ok) {
                 return data.secure_url;
             } else {
-              //  console.error('Error al subir la imagen:', data);
+                console.error('Error al subir la imagen:', data);
             }
         } catch (error) {
-          //  console.error('Error en la petición:', error);
+            console.error('Error en la petición:', error);
         }
     };
     
@@ -226,8 +233,8 @@ const CustomQr = ({ qrId }) => {
                 return; // Detener el flujo si falta la información requerida
             }
         
-           // console.log(musicFormValues);
-          //  console.log(uniqueKey);
+            console.log(musicFormValues);
+            console.log(uniqueKey);
         
             let menuFormValues;
             let urlpdf;
@@ -237,13 +244,13 @@ const CustomQr = ({ qrId }) => {
                 if (isEditRoute) {
                     menuFormValues = await editUploadFiles();
                     if (!menuFormValues) {
-                    //    console.error("Error: menuFormValues es undefined o null en editUploadFiles.");
+                        console.error("Error: menuFormValues es undefined o null en editUploadFiles.");
                         return;
                     }
                 } else {
                     menuFormValues = await handleFileUpload();
                     if (!menuFormValues) {
-                    //    console.error("Error: menuFormValues es undefined o null en handleFileUpload.");
+                        console.error("Error: menuFormValues es undefined o null en handleFileUpload.");
                         return;
                     }
                 }
@@ -255,7 +262,7 @@ const CustomQr = ({ qrId }) => {
                     urlpdf = await PdfUpdateQrData(qrData); // Asegúrate de que qrData sea un File
                     setQrData(urlpdf);
                 } catch (error) {
-                  //  console.error('Error al subir el PDF:', error);
+                    console.error('Error al subir el PDF:', error);
                     await Swal.fire({
                         icon: 'error',
                         title: t('Upload Failed'),
@@ -287,9 +294,9 @@ const CustomQr = ({ qrId }) => {
                     uniqueKey,
                     location.pathname
                 );
-               // console.log("Datos del QR guardados exitosamente.");
+                console.log("Datos del QR guardados exitosamente.");
             } catch (error) {
-             //   console.error('Error al guardar los datos del QR:', error);
+                console.error('Error al guardar los datos del QR:', error);
                 await Swal.fire({
                     icon: 'error',
                     title: t('Save Failed'),
