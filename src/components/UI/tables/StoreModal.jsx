@@ -47,7 +47,7 @@ const StoreModal = ({ open, handleClose, storeData, codeType }) => {
 
             <motion.button whileTap={{ scale: 0 }} 
             onClick={handleClose} 
-            className="absolute bg-white p-1 tracking-wider rounded-[10px] hover:bg-red-600 hover:text-white top-0 left-50 text-red-500 z-[10000]">Cerrar</motion.button>
+            className="absolute bg-my-red p-1 tracking-wider rounded-[10px] hover:bg-red-700 hover:text-white top-0 left-50 text-white z-[10000]">Cerrar</motion.button>
             
             <div className="relative scale-wrapper" style={{ marginTop: '40px' }}>
               
