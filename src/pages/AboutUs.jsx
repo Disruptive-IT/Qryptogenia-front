@@ -72,7 +72,7 @@ const AboutUs = () => {
                 alt="Usuario 3"
             />
             <h3 className="text-lg font-medium mt-3">Carolina Roa</h3>
-            <p className="text-sm text-gray-500">Creadora de BarManager</p>
+            <p className="text-sm text-gray-500">CEO de Startup FoodManager</p>
             <p className="mt-3 text-sm text-gray-700">
                 "Nuestros menús digitales con QR son un éxito.
                  No puedo estas mas satisfecha!"
