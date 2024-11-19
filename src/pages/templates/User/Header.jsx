@@ -24,7 +24,7 @@ function Navbar() {
                 <nav className="md:flex hidden w-2/6 justify-center">
                     <ul className="space-x-4 list-none text-sm text-black items-center inline-flex justify-center text-left gap-3">
                         <CustomLink to="/" isActive={isActive('/')}>{t('Home')}</CustomLink>
-                        <CustomLink to="#" isActive={isActive('/about')}>{t('About us')}</CustomLink>
+                        <CustomLink to="/aboutUs" isActive={isActive('/aboutUs')}>{t('About us')}</CustomLink>
                         <CustomLink to="/pricings" isActive={isActive('/pricings')}>{t('Plans')}</CustomLink>
                         <CustomLink to="#" isActive={isActive('/faq')}>{t("FAQ")}</CustomLink>
                         <CustomLink to= '/user/qr' isActive={isActive('/user/qr')}>{t('My QR codes')}</CustomLink>

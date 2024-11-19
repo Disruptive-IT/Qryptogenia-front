@@ -26,6 +26,7 @@ import QRScanPage from "../pages/QRScanPage";
 import ShowAlert from "../components/alerts/alert_template";
 import { PlansPricings } from "../pages/Plans&pricings";
 import QRCodeList from "../components/UI/tables/memberTable";
+import AboutUs from "../pages/AboutUs";
 
 export const PageRouter = () => {
     const { isLoading } = useLoader();
@@ -42,7 +43,8 @@ export const PageRouter = () => {
                     <Route path="register" element={user ? <Navigate to="/user/home" replace /> : <RegisterForm />} />
                     <Route path="recoverPassword" element={user ? <Navigate to="/user/home" replace /> : <RecoverPassForm />} />
                     <Route path="forgotPassword" element={user ? <Navigate to="/user/home" replace /> : <ForgotPassForm />} />
-                </Route>
+                    <Route path="aboutUs" element={<AboutUs />} />
+                    </Route>
 
                 <Route path="/qr/:contentName" element={user ? <LayoutUser /> : <LayoutHome />}>
                     <Route index element={<AppContent />} />
@@ -51,14 +53,13 @@ export const PageRouter = () => {
                 <Route path="/edit/:contentName/:id" element={user ? <LayoutUser /> : <LayoutHome />}>
                     <Route index element={<AppContent />} />
                 </Route>
-
                 <Route path="music/:id" element={<WebLinkPhoneMusicPage />} />
                 <Route path="social/:id" element={<WebLinkPhoneSocialPage />} />
                 <Route path="store/:id" element={<WebLinkPhoneStorePage />} />
                 <Route path="qr/scan" element={<QRScanPage />} />
                 <Route path="selectPlan" element={<PlansPricings />} />
                 <Route path="limitScans" element={<ShowAlert />} />
-
+                
                 {/* Admin Routes */}
                 <Route path="/admin" element={<ProtectedRouteAdmin />}>
                     <Route element={<LayoutAdmin />}>
@@ -80,7 +81,8 @@ export const PageRouter = () => {
                         <Route path="home" element={<HomePage />} />
                         <Route path="profile" element={<Profile />} />
                         <Route path="qr" element={<App />} />
-                    </Route>
+                        <Route path="aboutUs" element={<AboutUs />} />
+                        </Route>
                 </Route>
 
                 {/* 404 Route */}
