@@ -224,7 +224,7 @@ const QR = ({ uniqueKey }) => {
                 qrCode.current.append(qrRef.current);
             } else {
                 qrCode.current.update({
-                    data: `https://apiqryptogenia.disruptiveinfotech.com/api/qr/scan/${uniqueKey}`, //modificar aqui para crear url directa
+                    data:`${import.meta.env.VITE_BASE_BACK_URL}/qr/scan/${uniqueKey}` || `https://apiqryptogenia.disruptiveinfotech.com/api/qr/scan/${uniqueKey}`, //modificar aqui para crear url directa
                     margin: 10,
                     backgroundOptions: {
                         color: "transparent",
