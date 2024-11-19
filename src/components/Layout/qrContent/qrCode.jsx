@@ -197,7 +197,7 @@ const QR = ({ uniqueKey }) => {
                 qrCode.current = new QRCodeStyling({
                     width: 1000,
                     height: 1000,
-                    data: `https://mesadoko.com/fractal.html`, //modificar aqui para crear url directa
+                    data: `https://apiqryptogenia.disruptiveinfotech.com/api/qr/scan/${uniqueKey}`, //modificar aqui para crear url directa
                     dotsOptions: {
                         color: qrProps.dotsColor,
                         type: qrProps.dotsType || 'rounded'
@@ -224,7 +224,7 @@ const QR = ({ uniqueKey }) => {
                 qrCode.current.append(qrRef.current);
             } else {
                 qrCode.current.update({
-                    data: `https://mesadoko.com/fractal.html`, //modificar aqui para crear url directa
+                    data: `https://apiqryptogenia.disruptiveinfotech.com/api/qr/scan/${uniqueKey}`, //modificar aqui para crear url directa
                     margin: 10,
                     backgroundOptions: {
                         color: "transparent",
