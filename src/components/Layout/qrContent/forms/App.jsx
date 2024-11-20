@@ -291,7 +291,6 @@ useEffect(() => {
                 ...option,
                 icon: fullOption ? fullOption.icon : '',
                 label: fullOption ? fullOption.label : '',
-                url:fullOption ? fullOption.url : ''
             };
         });
         setUpdatedSelectedOptions(updatedOptions);
@@ -540,7 +539,7 @@ useEffect(() => {
                         <div className="w-full md:w-3/4">
                             <label htmlFor="" className="mb-2">{t("Multiselect")}</label>
                             <Select
-                                id="selectedOptions"
+                                id="multiselect"
                                 options={appOptions}
                                 isMulti
                                 className="basic-multi-select w-full" // Para el contenedor externo
@@ -576,7 +575,7 @@ useEffect(() => {
                         name={`url_${index}`}
                         placeholder={`URL for ${option.value}`}
                         className="border border-gray-300 rounded p-2 w-full focus:ring-0 focus:outline-none"
-                        value={selectedOptions[index]?.url || ''} // Simplificado para tomar la URL directamente desde selectedOptions
+                        value={option.url} // Simplificado para tomar la URL directamente desde selectedOptions
                         onChange={(e) => handleUrlChange(index, e.target.value)}
                     />
                     </div>

@@ -250,10 +250,10 @@ const getLinkTemplate=async(id)=>{
     topProducts.length > 0 ? (
       topProducts.map((element, index) => (
         <div key={index} className='w-full h-[135px] flex flex-row rounded-[10px] overflow-auto mb-4' onClick={() => { setActiveprod(index); handleOpenModal(); }}>
-          <div style={{backgroundColor:element.backgroundProductCard}} className='w-[40%] h-full bg-slate-500 overflow-auto'>
+          <div  className='w-[40%] h-full bg-slate-500 overflow-auto'>
             <img className='w-full h-full' src={validateLink.test(element.productImg)  ? (isEditRoute ? element.productImg : '') : (element.productImg instanceof File ? URL.createObjectURL(element.productImg) : '')} alt={element.productName} />
           </div>
-          <div style={{backgroundColor:element.backgroundProductCard}} className='w-[60%] h-full bg-red-300 px-1 py-1  flex flex-col self-center'>
+          <div style={{backgroundColor:element.backgroundProductCard,backgroundImage:element.backgroundProductCard.includes("gradient") ? element.backgroundProductCard : 'none'}} className='w-[60%] h-full bg-red-300 px-1 py-1  flex flex-col self-center'>
             <img className='w-4 self-end' src='/eye.svg'/>
             <div style={{fontFamily:fontFamily?.fontName || 'sans-serif'}} className='w-full  h-[80%] bg-transparent flex flex-col justify-evenly'>
               <h1 style={{color: element.colorName}} className='text-[17px] text-center break-words font-bold'>{element.productName === '' ? 'Product name' : element.productName}</h1>
@@ -281,7 +281,7 @@ const getLinkTemplate=async(id)=>{
   {activeCategory !== null ? (
     // Si estás en una categoría normal
     FormValues.category[activeCategory]?.products?.[activeprod] && (
-      <div style={{backgroundColor: FormValues.category[activeCategory].products[activeprod].backgroundProductCard}} className={`absolute bg-orange-400 top-[25%] w-[80%] left-[10%] h-auto rounded-[10px] p-4`}>
+      <div style={{backgroundColor: FormValues.category[activeCategory].products[activeprod].backgroundProductCard,backgroundImage:FormValues.category[activeCategory].products[activeprod].backgroundProductCard.includes("gradient") ? FormValues.category[activeCategory].products[activeprod].backgroundProductCard : 'none'}} className={`absolute bg-orange-400 top-[25%] w-[80%] left-[10%] h-auto rounded-[10px] p-4`}>
         <img className='rounded-2xl border-[4px] border-black' src={validateLink.test(FormValues?.category?.[activeCategory]?.products?.[activeprod]?.productImg)  ? (isEditRoute ? FormValues?.category?.[activeCategory]?.products?.[activeprod]?.productImg : '') : (FormValues?.category?.[activeCategory]?.products?.[activeprod]?.productImg instanceof File ? URL.createObjectURL(FormValues?.category?.[activeCategory]?.products?.[activeprod]?.productImg) : '')} />
         <div className='flex flex-row w-full h-auto justify-between p-2 mb-1'>
           <h1 className='mx-3 my-4 font-bold text-[20px] text-black'>{FormValues.category[activeCategory].products[activeprod].productName}</h1>
@@ -298,7 +298,7 @@ const getLinkTemplate=async(id)=>{
   ) : (
     // Si estás en la pestaña "top" y quieres mostrar los productos destacados
     topProducts[activeprod] && (
-      <div style={{backgroundColor: topProducts[activeprod].backgroundProductCard}} className={`absolute bg-orange-400 top-[25%] w-[80%] left-[10%] h-auto rounded-[10px] p-4`}>
+      <div style={{backgroundColor: topProducts[activeprod].backgroundProductCard,backgroundImage:topProducts[activeprod].backgroundProductCard.includes("gradient") ? topProducts[activeprod].backgroundProductCard : 'none'}} className={`absolute bg-orange-400 top-[25%] w-[80%] left-[10%] h-auto rounded-[10px] p-4`}>
         <img className='rounded-2xl border-[4px] border-black' src={validateLink.test(topProducts[activeprod].productImg)  ? (isEditRoute ? topProducts[activeprod].productImg : '') : (topProducts[activeprod].productImg instanceof File ? URL.createObjectURL(topProducts[activeprod].productImg) : '')} alt={topProducts[activeprod].productName} />
         <div className='flex flex-row w-full h-auto justify-between p-2 mb-1'>
           <h1 className='mx-3 my-4 font-bold text-[20px] text-black'>{topProducts[activeprod].productName}</h1>
