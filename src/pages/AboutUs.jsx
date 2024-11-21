@@ -68,7 +68,7 @@ const AboutUs = () => {
 <div className="flex flex-col-reverse lg:flex-row-reverse items-center gap-x-6 lg:gap-y-0">
   {/* Imagen al lado derecho en pantallas grandes, arriba en pantallas pequeñas */}
   <img
-    src="/public/HandMenu.png" // Asegúrate de que la ruta sea correcta
+    src="HandMenu.png" // Asegúrate de que la ruta sea correcta
     alt="Imagen de nuestra historia"
     className="w-full lg:w-1/2 h-auto object-cover rounded-lg" // Ajusta el tamaño según sea necesario
   />
