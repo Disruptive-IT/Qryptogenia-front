@@ -34,7 +34,7 @@ const AboutUs = () => {
                 <div className="flex flex-col md:flex-row items-center space-y-6 md:space-y-0 md:space-x-6">
                     {/* Imagen */}
                     <img
-                        src="/public/logo.png" 
+                        src="Logo.png" 
                         alt="Nuestra historia"
                         className="w-72 h-72 mx-auto"
                         />
