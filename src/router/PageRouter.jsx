@@ -27,6 +27,7 @@ import ShowAlert from "../components/alerts/alert_template";
 import { PlansPricings } from "../pages/Plans&pricings";
 import QRCodeList from "../components/UI/tables/memberTable";
 import AboutUs from "../pages/AboutUs";
+import Faq from "../pages/Faq";
 
 export const PageRouter = () => {
     const { isLoading } = useLoader();
@@ -44,6 +45,8 @@ export const PageRouter = () => {
                     <Route path="recoverPassword" element={user ? <Navigate to="/user/home" replace /> : <RecoverPassForm />} />
                     <Route path="forgotPassword" element={user ? <Navigate to="/user/home" replace /> : <ForgotPassForm />} />
                     <Route path="aboutUs" element={<AboutUs />} />
+                    <Route path="faq" element={<Faq />} />
+
                     </Route>
 
                 <Route path="/qr/:contentName" element={user ? <LayoutUser /> : <LayoutHome />}>
@@ -82,6 +85,8 @@ export const PageRouter = () => {
                         <Route path="profile" element={<Profile />} />
                         <Route path="qr" element={<App />} />
                         <Route path="aboutUs" element={<AboutUs />} />
+                        <Route path="faq" element={<Faq />} />
+
                         </Route>
                 </Route>
 

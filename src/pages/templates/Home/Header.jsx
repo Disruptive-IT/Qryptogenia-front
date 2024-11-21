@@ -28,7 +28,7 @@ function Navbar() {
                         <CustomLink to="/" isActive={isActive('/')}>{t('Home')}</CustomLink>
                         <CustomLink to="/aboutUs" isActive={isActive('/aboutUs')}>{t('About us')}</CustomLink>
                         <CustomLink to="/pricings" isActive={isActive('/pricings')}>{t('Plans')}</CustomLink>
-                        <CustomLink to="#" isActive={isActive('/faq')}>{t("FAQ")}</CustomLink>
+                        <CustomLink to="/faq" isActive={isActive('/faq')}>{t("FAQ")}</CustomLink>
                     </ul>
                 </nav>
 
