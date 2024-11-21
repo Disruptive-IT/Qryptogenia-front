@@ -87,7 +87,7 @@ export default function StepperQr() {
     const { activeStep } = useStepper();
     const { t } = useTranslation();
     const steps = [
-        { label: t('Select qr type'), explanation: 'Choose the type of QR code you want to generate. This could be a simple QR code, a QR code with a logo, or a QR code with a custom design.' },
+        { label: t('Select QR type'), explanation: 'Choose the type of QR code you want to generate. This could be a simple QR code, a QR code with a logo, or a QR code with a custom design.' },
         { label: t('Customize QR design'), explanation: 'Customize the appearance of your QR code. You can choose colors, add logos, and adjust the size to fit your needs.' },
         { label: t('Generate and download QR'), explanation: 'Generate your QR code based on your selections. Once generated, you can download the QR code for use in your projects or print it out.' },
     ];
