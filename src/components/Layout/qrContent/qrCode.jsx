@@ -7,7 +7,6 @@ import { toast } from 'sonner';
 import Swal from 'sweetalert2';
 import html2canvas from 'html2canvas';
 import { useValidate } from '../../../context/validateFormContext';
-import { ParseCSSGradient } from './customQr/design/gradientsDots';
 /*
  * @UpdatedBy : Cristian Escobar,   @date 2024-09-03 15:05:11
  * @description : Se implemento la captura del qr con canvas y la transformacion a base64 para almacenarse en la base de datos.
@@ -192,65 +191,36 @@ const QR = ({ uniqueKey }) => {
         }
     };
 
-    const gradientFunction=ParseCSSGradient(qrProps.color);
-
     useEffect(() => {
         const createOrUpdateQRCode = () => {
             if (!qrCode.current) {
                 qrCode.current = new QRCodeStyling({
                     width: 1000,
                     height: 1000,
-                    data: `https://apiqryptogenia.disruptiveinfotech.com/api/scan/${uniqueKey}`, // Modificar aquí para crear URL directa.
-                    dotsOptions: (() => {
-                      if (!qrProps.dotsColor.includes("gradient")) {
-                        return {
-                          color: qrProps.dotsColor,
-                          type: qrProps.dotsType || "rounded",
-                        };
-                      }
-                      if (gradientFunction.type === "linear") {
-                        return {
-                          gradient: {
-                            type: "linear",
-                            colorStops: gradientFunction.colorStops,
-                            rotation: gradientFunction.rotation,
-                          },
-                          type: qrProps.dotsType || "rounded",
-                        };
-                      }
-                      if (gradientFunction.type === "radial") {
-                        return {
-                          gradient: {
-                            type: "radial",
-                            colorStops: gradientFunction.colorStops,
-                          },
-                          type: qrProps.dotsType || "rounded",
-                        };
-                      }
-                      return {
-                        color: "#000",
-                        type: "rounded",
-                      };
-                    })(),
+                    data: `https://apiqryptogenia.disruptiveinfotech.com/api/scan/${uniqueKey}`, //modificar aqui para crear url directa
+                    dotsOptions: {
+                        color: qrProps.dotsColor,
+                        type: qrProps.dotsType || 'rounded'
+                    },
                     cornersSquareOptions: {
-                      color: qrProps.cornersSquareColor,
-                      type: qrProps.cornersSquareType || "extra-rounded",
+                        color: qrProps.cornersSquareColor,
+                        type: qrProps.cornersSquareType || 'extra-rounded'
                     },
                     cornersDotOptions: {
-                      color: qrProps.cornersDotColor,
-                      type: qrProps.cornersDotType || "dot",
+                        color: qrProps.cornersDotColor,
+                        type: qrProps.cornersDotType || 'dot'
                     },
                     backgroundOptions: {
-                      color: "transparent", // Fondo transparente.
+                        color: "transparent",
                     },
                     image: qrImageInfo.includeImage ? qrImageInfo.qrImage : null,
                     imageOptions: {
-                      crossOrigin: "anonymous",
-                      hideBackgroundDots: true,
-                      margin: 2,
-                      imageSize: "0.5",
+                        crossOrigin: "anonymous",
+                        hideBackgroundDots: true,
+                        margin: 2,
+                        imageSize: '0.5'
                     },
-                  });                  
+                });
                 qrCode.current.append(qrRef.current);
             } else {
                 qrCode.current.update({
