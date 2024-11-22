@@ -10,6 +10,7 @@ import { MdQrCodeScanner, MdOutlineQrCode, MdOutlineQrCode2 } from "react-icons/
 import { IoQrCodeOutline } from "react-icons/io5";
 import { SlFrame } from "react-icons/sl";
 import { useTranslation } from 'react-i18next';
+import ColorPicker from '../../forms/form-helpers/picker';
 
 /**
  * @Author : Jobserd Julián Ocampo,   @date 2024-07-24 15:59:16
@@ -221,12 +222,13 @@ const Design = () => {
                         </div>
                         {colorPickerStates.isDotsColorPickerOpen && (
                             <div className="absolute z-50 flex flex-col items-center p-3 bg-white border border-gray-300 rounded shadow-md" ref={colorPickerRefs.dots}>
-                                <GradientColorPicker
+                                {/* <GradientColorPicker
                                     enableAlpha={true}
                                     disableHueSlider={false}
                                     presetColors={[]}
                                     onChange={(color) => handleColorChange(color, 'dots')}
-                                />
+                                /> */}
+                                <ColorPicker gradient={true} handlerFunction={(color)=>handleColorChange(color,'dots')} pickerValue={qrProps.dotsColor} pickerColor={qrProps.dotsColor} />
                             </div>
                         )}
                     </div>

@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import QRCodeStyling from 'qr-code-styling';
+import QRCodeStyling, { gradientTypes } from 'qr-code-styling';
 import '../styles/qrCode.css';
 import { useQr } from '../../../context/QrContext';
 import axios from "../../../libs/axios";

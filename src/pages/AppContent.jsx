@@ -362,6 +362,7 @@ const AppContent = () => {
                         appFormValues={appFormValues}
                         socialFormValues={socialFormValues}
                         musicFormValues={musicFormValues}
+                        menuFormValues={formData}
                     />
                 </CellBox>
             </div>

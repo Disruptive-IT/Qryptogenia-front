@@ -517,23 +517,31 @@ return (
                             {/* Contenedor de cada producto */}
                             <div>
                               {/* Contenedor de la imagen y detalles del producto */}
-                              <div className="flex flex-col lg:flex-row m-0">
-                                <div className={`lg:w-[30%] w-full rounded-[10px] bg-slate-600 sm:mb-4 lg:relative md:relative ${formData?.category[index]?.products[productIndex]?.productImg==null ? 'hidden':''}`}>
+                              <div className="flex flex-col lg:flex-row lg:gap-6 gap-4 m-0 w-full">
+                                {/* Contenedor de la Imagen */}
+                                <div
+                                  className={`lg:w-1/3 w-full sm:h-40 lg:h-auto rounded-[10px] bg-slate-600 ${formData?.category[index]?.products[productIndex]?.productImg == null ? 'hidden' : ''}`}
+                                >
                                   <img
                                     id={`imgProductPreview-${index}-${productIndex}`}
-                                    className={`w-full h-full rounded-[10px]`}
-                                    src={validateLink.test(formData?.category[index]?.products[productIndex]?.productImg)
-                                      ? (isEditRoute ? formData?.category[index]?.products[productIndex]?.productImg : '')
-                                      : (formData?.category[index]?.products[productIndex]?.productImg instanceof File
+                                    className="w-full h-full rounded-[10px]"
+                                    src={
+                                      validateLink.test(formData?.category[index]?.products[productIndex]?.productImg)
+                                        ? isEditRoute
+                                          ? formData?.category[index]?.products[productIndex]?.productImg
+                                          : ''
+                                        : formData?.category[index]?.products[productIndex]?.productImg instanceof File
                                         ? URL.createObjectURL(formData?.category[index]?.products[productIndex]?.productImg)
-                                        : '')}
+                                        : ''
+                                    }
                                     alt=""
                                   />
                                 </div>
 
-                                <div className="lg:w-[68%] w-full ml-4 lg:ml-6 flex flex-col">
-                                  <div className="flex flex-col sm:flex-row sm:items-center mb-4">
-                                    {/* Input para la imagen del producto */}
+                                {/* Contenedor de los Detalles */}
+                                <div className="lg:w-2/3 w-full flex flex-col gap-4">
+                                  {/* Input de Imagen */}
+                                  <div className="flex flex-col sm:flex-row sm:items-center gap-3">
                                     <input
                                       onChange={(e) => {
                                         handleImgProduct(index, productIndex, e);
@@ -553,114 +561,105 @@ return (
                                         if (!touched.category[index]) touched.category[index] = { products: [] };
                                         if (!touched.category[index].products) touched.category[index].products = [];
                                         if (!touched.category[index].products[productIndex]) touched.category[index].products[productIndex] = {};
-
                                         touched.category[index].products[productIndex].productImg = true;
                                         formik.setTouched(touched);
                                       }}
                                       htmlFor={`category[${index}].products[${productIndex}].productImg`}
-                                      className="p-2 text-[17px] rounded-md my-3 w-[50%] sm:w-[25%] text-center bg-light-blue text-white hover:bg-dark-blue"
+                                      className="p-2 text-base rounded-md w-full sm:w-auto sm:max-w-xs text-center bg-light-blue text-white hover:bg-dark-blue"
                                     >
                                       {t('Add Image')}
                                     </label>
                                     {formik.touched?.category?.[index]?.products?.[productIndex]?.productImg &&
-                                      formik.errors?.category?.[index]?.products?.[productIndex]?.productImg ? (
-                                      <div className="text-[13px] text-red-600 mx-2 mt-6">
+                                    formik.errors?.category?.[index]?.products?.[productIndex]?.productImg ? (
+                                      <div className="text-sm text-red-600">
                                         {formik.errors.category[index].products[productIndex].productImg}
-                                      </div>
-                                    ) : (
-                                      <div className="mx-2 my-2 min-h-[20px]"></div>
-                                    )}
-                                  </div>
-
-                                  {/* Input para el nombre del producto */}
-                                  <input
-                                    className="mb-1 p-2 border rounded w-full mx-1"
-                                    type="text"
-                                    placeholder={t("Product Name")}
-                                    value={formData?.category[index]?.products[productIndex]?.productName}
-                                    name={`category[${index}].products[${productIndex}].productName`}
-                                    onBlur={formik.handleBlur}
-                                    onChange={(e) => {
-                                      handleProductName(index, productIndex, e);
-                                      formik.setFieldValue(`category[${index}].products[${productIndex}].productName`, e.target.value);
-                                    }}
-                                  />
-                                  {formik.touched?.category?.[index]?.products?.[productIndex]?.productName &&
-                                    formik.errors?.category?.[index]?.products?.[productIndex]?.productName ? (
-                                    <div className="text-[13px] text-red-600 mx-2 my-2">
-                                      {formik.errors.category[index].products[productIndex].productName}
-                                    </div>
-                                  ) : (
-                                    <div className="mx-2 my-2 min-h-[20px]"></div>
-                                  )}
-
-                                  {/* Input para la descripción del producto */}
-                                  <input
-                                    className="mb-1 p-2 border rounded w-full mx-1"
-                                    type="text"
-                                    value={formData?.category[index]?.products[productIndex]?.productDescription}
-                                    placeholder={t("Product Description")}
-                                    id={`category[${index}].products[${productIndex}].productDescription`}
-                                    name={`category[${index}].products[${productIndex}].productDescription`}
-                                    onBlur={formik.handleBlur}
-                                    onChange={(e) => {
-                                      handleProductDescription(index, productIndex, e);
-                                      formik.setFieldValue(`category[${index}].products[${productIndex}].productDescription`, e.target.value);
-                                    }}
-                                  />
-                                  {formik.touched?.category?.[index]?.products?.[productIndex]?.productDescription &&
-                                    formik.errors?.category?.[index]?.products?.[productIndex]?.productDescription ? (
-                                    <div className="text-[13px] text-red-600 mx-2 my-2">
-                                      {formik.errors.category[index].products[productIndex].productDescription}
-                                    </div>
-                                  ) : (
-                                    <div className="mx-2 my-2 min-h-[20px]"></div>
-                                  )}
-
-                                  {/* Checkbox y input para el precio */}
-                                  <div className="flex flex-wrap sm:flex-col md:flex-col lg:flex-row sm:items-center lg:items-start lg:justify-between w-full">
-                                  {/* Checkbox "Top" */}
-                                  <div className="flex items-center sm:mb-2 lg:mb-0 lg:mr-4">
-                                    <label>Top</label>
-                                    <input
-                                      className="mx-2"
-                                      type="checkbox"
-                                      defaultChecked={isEditRoute ? formData?.category[index]?.products[productIndex]?.top : false}
-                                      name={`category[${index}].products[${productIndex}].top`}
-                                      onBlur={formik.handleBlur}
-                                      onChange={(e) => {
-                                        handleProductTop(index, productIndex, e);
-                                        formik.setFieldValue(`category[${index}].products[${productIndex}].top`, e.target.checked);
-                                      }}
-                                    />
-                                  </div>
-
-                                  {/* Input "Price" */}
-                                  <div className="flex items-center sm:w-full lg:w-auto">
-                                    <label className="mx-2">{t('Price')} $</label>
-                                    <input
-                                      className="p-2 border rounded w-full sm:w-[50%] lg:w-24 h-10"
-                                      type="number"
-                                      value={formData.category[index]?.products[productIndex]?.price}
-                                      name={`category[${index}].products[${productIndex}].price`}
-                                      onBlur={formik.handleBlur}
-                                      min={0}
-                                      onChange={(e) => {
-                                        handleProductPrice(index, productIndex, e);
-                                        formik.setFieldValue(`category[${index}].products[${productIndex}].price`, e.target.value);
-                                      }}
-                                    />
-                                    {formik.touched?.category?.[index]?.products?.[productIndex]?.price &&
-                                      formik.errors?.category?.[index]?.products?.[productIndex]?.price ? (
-                                      <div className="text-[13px] text-red-600 mx-2">
-                                        {formik.errors.category[index].products[productIndex].price}
                                       </div>
                                     ) : null}
                                   </div>
-                                </div>
+
+                                  {/* Input para Nombre y Descripción */}
+                                  <div className="flex flex-col gap-2">
+                                    <input
+                                      className="p-2 border rounded w-full"
+                                      type="text"
+                                      placeholder={t('Product Name')}
+                                      value={formData?.category[index]?.products[productIndex]?.productName}
+                                      name={`category[${index}].products[${productIndex}].productName`}
+                                      onBlur={formik.handleBlur}
+                                      onChange={(e) => {
+                                        handleProductName(index, productIndex, e);
+                                        formik.setFieldValue(`category[${index}].products[${productIndex}].productName`, e.target.value);
+                                      }}
+                                    />
+                                    {formik.touched?.category?.[index]?.products?.[productIndex]?.productName &&
+                                    formik.errors?.category?.[index]?.products?.[productIndex]?.productName ? (
+                                      <div className="text-sm text-red-600">
+                                        {formik.errors.category[index].products[productIndex].productName}
+                                      </div>
+                                    ) : null}
+
+                                    <input
+                                      className="p-2 border rounded w-full"
+                                      type="text"
+                                      placeholder={t('Product Description')}
+                                      value={formData?.category[index]?.products[productIndex]?.productDescription}
+                                      name={`category[${index}].products[${productIndex}].productDescription`}
+                                      onBlur={formik.handleBlur}
+                                      onChange={(e) => {
+                                        handleProductDescription(index, productIndex, e);
+                                        formik.setFieldValue(`category[${index}].products[${productIndex}].productDescription`, e.target.value);
+                                      }}
+                                    />
+                                    {formik.touched?.category?.[index]?.products?.[productIndex]?.productDescription &&
+                                    formik.errors?.category?.[index]?.products?.[productIndex]?.productDescription ? (
+                                      <div className="text-sm text-red-600">
+                                        {formik.errors.category[index].products[productIndex].productDescription}
+                                      </div>
+                                    ) : null}
+                                  </div>
+
+                                  {/* Checkbox y Precio */}
+                                  <div className="flex flex-col lg:flex-row gap-4">
+                                    {/* Checkbox "Top" */}
+                                    <div className="flex items-center gap-2">
+                                      <label>{t('Top')}</label>
+                                      <input
+                                        type="checkbox"
+                                        defaultChecked={isEditRoute ? formData?.category[index]?.products[productIndex]?.top : false}
+                                        name={`category[${index}].products[${productIndex}].top`}
+                                        onBlur={formik.handleBlur}
+                                        onChange={(e) => {
+                                          handleProductTop(index, productIndex, e);
+                                          formik.setFieldValue(`category[${index}].products[${productIndex}].top`, e.target.checked);
+                                        }}
+                                      />
+                                    </div>
+
+                                    {/* Input "Price" */}
+                                    <div className="flex flex-col sm:flex-row items-start gap-2">
+                                      <label className="sm:mr-2">{t('Price')}</label>
+                                      <input
+                                        className="p-2 border rounded w-full sm:w-auto"
+                                        type="number"
+                                        value={formData.category[index]?.products[productIndex]?.price}
+                                        name={`category[${index}].products[${productIndex}].price`}
+                                        onBlur={formik.handleBlur}
+                                        min={0}
+                                        onChange={(e) => {
+                                          handleProductPrice(index, productIndex, e);
+                                          formik.setFieldValue(`category[${index}].products[${productIndex}].price`, e.target.value);
+                                        }}
+                                      />
+                                      {formik.touched?.category?.[index]?.products?.[productIndex]?.price &&
+                                      formik.errors?.category?.[index]?.products?.[productIndex]?.price ? (
+                                        <div className="text-sm text-red-600">
+                                          {formik.errors.category[index].products[productIndex].price}
+                                        </div>
+                                      ) : null}
+                                    </div>
+                                  </div>
                                 </div>
                               </div>
-
                             </div>
                           </AccordionItem>
                         ))}
