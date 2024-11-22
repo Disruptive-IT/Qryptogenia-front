@@ -17,6 +17,7 @@ import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 import { motion } from 'framer-motion'
 import { useTranslation } from 'react-i18next';
 import { useAuthContext } from '../../../context/AuthContext';
+import LenguageSelector from './../../../components/UI/lenguage/lenguageSelector'
 
 function MenuDrawer(props) {
     const [open, setOpen] = useState(false);
@@ -60,14 +61,16 @@ function MenuDrawer(props) {
                 </div>
                 <nav>
                     <List>
+                        
                         <ListItem button component={Link} to="/" className={isActive('/') ? 'active' : ''}>
                             <HomeIcon sx={{ mr: 1 }} />
                             {t("Home")}
                         </ListItem>
-                        <ListItem button component={Link} to="/about" className={isActive('/about') ? 'active' : ''}>
-                            <InfoIcon sx={{ mr: 1 }} />
-                            {t("About us")}
-                        </ListItem>
+                        
+                        <ListItem button component={Link} to="/aboutUs" className={isActive('/aboutUs') ? 'active' : ''}>
+                        <InfoIcon sx={{ mr: 1 }} />
+                        {t("About us")}
+                    </ListItem>
                         <ListItem button component={Link} to="/pricings" className={isActive('/pricings') ? 'active' : ''}>
                             <AttachMoneyIcon sx={{ mr: 1 }} />
                             {t("Plans")}
@@ -76,6 +79,7 @@ function MenuDrawer(props) {
                             <HelpIcon sx={{ mr: 1 }} />
                             {t("FAQ")}
                         </ListItem>
+                        
                         {!user || (user && user.rol != "CLIENT") ? (
                             <ListItem>
                                 <Link to="/login" className="auth-link border-2 border-dark-blue h-8 rounded-md bg-black/5 hover:bg-transparent text-dark-blue duration-200">Sign In</Link>
@@ -97,10 +101,13 @@ function MenuDrawer(props) {
                                 <ListItem button onClick={logoutUser}>
                                     <LogoutIcon sx={{ mr: 1 }} />
                                     {t("Logout")}
-                                </ListItem>
+                                </ListItem>                               
                             </div>
                         ) : null}
                     </List>
+                    <div className="lenguage-selector-container">
+                        <LenguageSelector />
+                    </div>
                 </nav>
             </div>
             {user && user.rol === "CLIENT" ? (
