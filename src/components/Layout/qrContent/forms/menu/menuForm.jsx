@@ -252,7 +252,7 @@ return (
                       <div className='flex flex-col sm:flex-row flex-wrap w-full sm:w-[80%] p-4 justify-around gap-4'>
                         {/* Color de Fondo */}
                         <div className='flex flex-col items-center'>
-                          <label className='my-2' htmlFor="background">Background</label>
+                          <label className='my-2' htmlFor="background">{t('Background')}</label>
                           <div className='w-10 h-10 border-2 border-gray-300 rounded cursor-pointer' onClick={() =>setShowBackCategoryPicker(!showBackCategoryPicker)} style={{backgroundColor:formData.category?.[activeCategory]?.products[0]?.backgroundProductCard || "#000",backgroundImage:formData.category?.[activeCategory]?.products[0]?.backgroundProductCard.includes("gradient") ? formData.category?.[activeCategory]?.products[0]?.backgroundProductCard : "none" }}
                           ></div>
                           {showBackCategoryPicker && (
