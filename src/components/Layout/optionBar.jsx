@@ -82,6 +82,7 @@ export const OptionBarTwo = ({ contentName, name }) => {
   const navigate = useNavigate();
   const dataTypeQr = UseDataTypeQr();
   const { t } = useTranslation();
+  const {setGlobalTabValue}=useValidate();
 
   const {validateFormApp,
     setValidateFormApp,
@@ -125,6 +126,7 @@ export const OptionBarTwo = ({ contentName, name }) => {
         setNullableFormErrors();
         let direcc = item.name.toLowerCase().replace(/\s+/g, '-')
         setQrType(direcc)
+        setGlobalTabValue(0)
         navigate(`/qr/${direcc}`);
       }
     });

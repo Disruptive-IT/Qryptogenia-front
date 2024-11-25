@@ -52,6 +52,7 @@ export const SocialForm = ({ onFormChange, location, socialFormValues }) => {
   const [loading, setLoading] = useState(true); // Por defecto está cargando
   const {getFontsPreview}=UseMenu();
   const [socialFontPreview, setSocialFontpreview] = useState([]);
+  const {changeTabValue}=useValidate();
 
     useEffect(() => {
         const fetchFontsPreview = async () => {
@@ -299,15 +300,16 @@ export const SocialForm = ({ onFormChange, location, socialFormValues }) => {
   return (
     <Formik
       initialValues={initialValues}
-      onSubmit={(values, actions) => {
+      onSubmit={async(values, actions) => {
         const errors = validateForm(values);
         if (Object.keys(errors).length > 0) {
           setFormErrors(errors);
           actions.setSubmitting(false);
         } else {
           setFormErrors({});
+          changeTabValue();
           // Call the onSubmit function passed from the parent component
-          onSubmit(values);
+          await onSubmit(values);
           actions.setSubmitting(false);
         }
       }}

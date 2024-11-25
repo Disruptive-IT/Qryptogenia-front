@@ -48,6 +48,7 @@ function MenuForm(){
     });
     //console.log(" values ",formik.values);
     //console.log("formdata: ",formData);
+    // console.log("formdata", formData);
 
     useEffect(()=>{
       const executeFunctions=async()=>{
@@ -636,26 +637,29 @@ return (
                                     </div>
 
                                     {/* Input "Price" */}
-                                    <div className="flex flex-col sm:flex-row items-start gap-2">
+                                    <div className="flex items-center h-16 gap-2 p-2">
                                       <label className="sm:mr-2">{t('Price')}</label>
-                                      <input
-                                        className="p-2 border rounded w-full sm:w-auto"
-                                        type="number"
-                                        value={formData.category[index]?.products[productIndex]?.price}
-                                        name={`category[${index}].products[${productIndex}].price`}
-                                        onBlur={formik.handleBlur}
-                                        min={0}
-                                        onChange={(e) => {
-                                          handleProductPrice(index, productIndex, e);
-                                          formik.setFieldValue(`category[${index}].products[${productIndex}].price`, e.target.value);
-                                        }}
-                                      />
-                                      {formik.touched?.category?.[index]?.products?.[productIndex]?.price &&
-                                      formik.errors?.category?.[index]?.products?.[productIndex]?.price ? (
-                                        <div className="text-sm text-red-600">
-                                          {formik.errors.category[index].products[productIndex].price}
-                                        </div>
-                                      ) : null}
+                                      <div className='flex flex-col'>
+                                        <input
+                                          className="p-2 border rounded w-full"
+                                          type="number"
+                                          value={formData.category[index]?.products[productIndex]?.price}
+                                          name={`category[${index}].products[${productIndex}].price`}
+                                          onBlur={formik.handleBlur}
+                                          min={0}
+                                          onChange={(e) => {
+                                            const onlyNums = e.target.value.replace(/\D/g, ""); 
+                                            handleProductPrice(index, productIndex, e);
+                                            formik.setFieldValue(`category[${index}].products[${productIndex}].price`, onlyNums);
+                                          }}
+                                        />
+                                        {formik.touched?.category?.[index]?.products?.[productIndex]?.price &&
+                                        formik.errors?.category?.[index]?.products?.[productIndex]?.price ? (
+                                          <div className="text-sm text-red-600">
+                                            {formik.errors.category[index].products[productIndex].price}
+                                          </div>
+                                        ) : null}
+                                      </div>
                                     </div>
                                   </div>
                                 </div>
