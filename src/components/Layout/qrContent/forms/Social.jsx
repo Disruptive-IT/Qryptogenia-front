@@ -448,58 +448,81 @@ export const SocialForm = ({ onFormChange, location, socialFormValues }) => {
               </div>
             </div>
           </div>
-
+          
           <div className="flex flex-col gap-6 mt-4 md:mr-60">
-    <div className="flex flex-row gap-12 md:gap-8 lg:gap-36 w-full justify-center items-center">
-        <div className="flex flex-col items-center">
-            <label htmlFor="backgroundColor" className="mb-2">{t("Background Color")}</label>
-            <div className="flex items-center relative">
-                <div
-                    className="w-10 h-10 border border-gray-300 rounded cursor-pointer"
-                    style={{ background: backgroundColor }}
-                    onClick={() => setShowBackgroundColorPicker(!showBackgroundColorPicker)}
-                ></div>
-                {showBackgroundColorPicker && (
-                  <div className="absolute mt-2 left-0 z-50" ref={backgroundColorPickerRef}>
-                    <ColorPicker gradient={true} handlerFunction={handleBackgroundColorChange} pickerColor={backgroundColor} pickerValue={backgroundColor}/>
-                    {/* style={{ width: "calc(100% + 2rem)" }} // Ajuste del ancho */}
-                  </div>
-                )}
-            </div>
-        </div>
-
-        <div className="flex flex-col items-center">
-            <label htmlFor="boxColor" className="mb-2">{t("Box Color")}</label>
-            <div className="flex items-center relative">
-                <div
-                    className="w-10 h-10 border border-gray-300 rounded cursor-pointer"
-                    style={{ background: boxColor }}
-                    onClick={() => setShowBoxColorPicker(!showBoxColorPicker)}
-                ></div>
-                {showBoxColorPicker && (
-                  <div className="absolute mt-2 left-0 z-50" ref={boxColorPickerRef}>
-                    <ColorPicker gradient={true} handlerFunction={handleBoxColorChange} pickerColor={boxColor} pickerValue={boxColor}/>
-                  </div>
-                )}
-            </div>
-        </div>
-
-        <div className="flex flex-col items-center">
-            <label htmlFor="borderImg" className="mb-2">{t("Border Profile Color")}</label>
-            <div className="flex items-center relative">
-                <div
-                    className="w-10 h-10 border border-gray-300 rounded cursor-pointer"
-                    style={{ background: borderImg }}
-                    onClick={() => setShowBorderColorPicker(!showBorderColorPicker)}
-                ></div>
-                {showBorderColorPicker && (
-                    <div className="absolute mt-2 left-0 z-50" ref={borderColorPickerRef}>
-                      <ColorPicker gradient={true} handlerFunction={handleBorderColorChange} pickerColor={borderImg} pickerValue={borderImg}/>
-                    </div>
-                )}
-            </div>
-        </div>
+  <div className="flex flex-col gap-4 justify-center items-start">
+    {/* Background Color */}
+    <div className="flex flex-row items-center gap-4">
+      <label htmlFor="backgroundColor" className="font-medium">
+        {t("Background Color")}
+      </label>
+      <div className="flex items-center relative">
+        <div
+          className="w-10 h-10 border border-gray-300 rounded cursor-pointer"
+          style={{ background: backgroundColor }}
+          onClick={() => setShowBackgroundColorPicker(!showBackgroundColorPicker)}
+        ></div>
+        {showBackgroundColorPicker && (
+          <div className="absolute mt-2 left-0 z-50" ref={backgroundColorPickerRef}>
+            <ColorPicker
+              gradient={true}
+              handlerFunction={handleBackgroundColorChange}
+              pickerColor={backgroundColor}
+              pickerValue={backgroundColor}
+            />
+          </div>
+        )}
+      </div>
     </div>
+
+    {/* Box Color */}
+    <div className="flex flex-row items-center gap-4">
+      <label htmlFor="boxColor" className="font-medium">
+        {t("Box Color")}
+      </label>
+      <div className="flex items-center relative">
+        <div
+          className="w-10 h-10 border border-gray-300 rounded cursor-pointer"
+          style={{ background: boxColor }}
+          onClick={() => setShowBoxColorPicker(!showBoxColorPicker)}
+        ></div>
+        {showBoxColorPicker && (
+          <div className="absolute mt-2 left-0 z-50" ref={boxColorPickerRef}>
+            <ColorPicker
+              gradient={true}
+              handlerFunction={handleBoxColorChange}
+              pickerColor={boxColor}
+              pickerValue={boxColor}
+            />
+          </div>
+        )}
+      </div>
+    </div>
+
+    {/* Border Profile Color */}
+    <div className="flex flex-row items-center gap-4">
+      <label htmlFor="borderImg" className="font-medium">
+        {t("Border Profile Color")}
+      </label>
+      <div className="flex items-center relative">
+        <div
+          className="w-10 h-10 border border-gray-300 rounded cursor-pointer"
+          style={{ background: borderImg }}
+          onClick={() => setShowBorderColorPicker(!showBorderColorPicker)}
+        ></div>
+        {showBorderColorPicker && (
+          <div className="absolute mt-2 left-0 z-50" ref={borderColorPickerRef}>
+            <ColorPicker
+              gradient={true}
+              handlerFunction={handleBorderColorChange}
+              pickerColor={borderImg}
+              pickerValue={borderImg}
+            />
+          </div>
+        )}
+      </div>
+    </div>
+  </div>
 </div>
 
           {/* Select de fuentes */}

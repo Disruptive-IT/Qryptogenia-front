@@ -172,11 +172,11 @@ const getLinkTemplate=async(id)=>{
     }}
 >
         <div
-          className="w-[60%] overflow-auto max-w-[196px] max-h-[196px] rounded-[10px] mx-auto my-6 bg-slate-500 flex justify-center items-center"
+          className="w-[60%] overflow-hidden max-w-[196px] max-h-[196px] rounded-[10px] mx-auto my-6 bg-slate-500 flex justify-center items-center"
           id="logo-container"
         >
           <img
-            className={`w-full h-auto  object-contain rounded-md ${FormValues.restaurantLogo!==null || counterChange==0 ? '':'hidden'}`}
+            className={`w-full h-auto object-contain rounded-md ${FormValues.restaurantLogo!==null || counterChange==0 ? '':'hidden'}`}
             id="restaurantLogoPreview"
             alt="restaurantLogo"
              src={showInitialKeys && counterChange==0 && !isEditRoute && FormValues.restaurantLogo==null ? defaultLogo : validateLink.test(FormValues?.restaurantLogo)  ? (isEditRoute ? FormValues?.restaurantLogo : '') : (FormValues?.restaurantLogo instanceof File ? URL.createObjectURL(FormValues?.restaurantLogo) : '')}

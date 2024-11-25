@@ -42,7 +42,7 @@ const AboutUs = () => {
                     <div className="md:w-3/5">
                         <h2 className="text-2xl font-semibold text-dark-blue mb-4">Nuestra Historia</h2>
                         <p className="text-gray-700">
-                        En el año 2020, un grupo de apasionados por la tecnología y la innovación se unió con una misión clara: 
+                        En el año 2024, un grupo de apasionados por la tecnología y la innovación se unió con una misión clara: 
                         simplificar la conexión entre empresas y clientes en un mundo cada vez más digital. Así nació nuestra plataforma, 
                         un espacio diseñado para transformar cómo las personas interactúan con información y servicios a través de soluciones 
                         prácticas y accesibles.
