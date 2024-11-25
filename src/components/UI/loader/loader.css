@@ -1,42 +1,36 @@
-
 .container-loader {
-    background: #35353546;
-    position: absolute;
-    z-index: 99;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    margin: auto;
-    
-    width: 100vw;
-    height: 100vh; 
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    
+  background: rgba(53, 53, 53, 0.27); /* Fondo translúcido */
+  position: fixed; /* Fijo en la pantalla, no se mueve con el scroll */
+  z-index: 99;
+  inset: 0; /* Ocupa toda la pantalla (top: 0, bottom: 0, etc.) */
+  
+  display: flex; /* Usamos flexbox para centrar */
+  align-items: center; /* Centrado vertical */
+  justify-content: center; /* Centrado horizontal */
 }
 
 .loader {
   width: 112px;
   height: 112px;
 }
-:root{
-    --DarkBlue:  #284B63;
-    --LigthBlue: #3C6E71;
-    --MyGray:    #D9D9D9;
-    --MyRed:     #CC2905;
-    --MyBlack:   #353535;
-  }
-  
-  .box1,
-  .box2,
-  .box3 {
-    border: 16px solid var(--MyGray);
-    box-sizing: border-box;
-    position: absolute;
-    display: block;
-  }
+
+:root {
+  --DarkBlue:  #284B63;
+  --LigthBlue: #3C6E71;
+  --MyGray:    #D9D9D9;
+  --MyRed:     #CC2905;
+  --MyBlack:   #353535;
+}
+
+.box1,
+.box2,
+.box3 {
+  border: 16px solid var(--MyGray);
+  box-sizing: border-box;
+  position: absolute;
+  display: block;
+}
+
   
   .box1 {
     width: 112px;
