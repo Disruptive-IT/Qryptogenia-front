@@ -24,6 +24,7 @@ import { UseMenu } from '../forms/menu/menuContext';
 import { useLocation } from 'react-router-dom';
 import instance from '../../../../libs/axios';
 import axios from '../../../../libs/axios';
+import { useLoader } from "../../../../context/LoaderContext";
 
 /*
  * @UpdatedBy : Cristian Escobar,   @date 2024-09-03 15:05:11
@@ -185,6 +186,7 @@ const CustomQr = ({ qrId }) => {
         }
       });
 
+      const { startLoading, stopLoading } = useLoader();
     const CreateQr = async () => {
         const { value: inputQrName, isConfirmed } = await Swal.fire({
             title: t("Save QR Code"),
@@ -221,7 +223,7 @@ const CustomQr = ({ qrId }) => {
         });
         if (isConfirmed) {
             setQrName(inputQrName); // Actualiza el estado con el nombre ingresado
-
+            
             // Validación de información requerida para ciertos tipos de QR
             if ((qrType === 'website-url' || qrType === 'pdf' || qrType === "wifi") && qrData === "") {
                 await Swal.fire({
@@ -230,32 +232,38 @@ const CustomQr = ({ qrId }) => {
                     text: t('Please provide the URL or corresponding information for the QR code.'),
                     confirmButtonText: 'OK'
                 });
+                //  stopLoading(); // Detener el loader si hay error
                 return; // Detener el flujo si falta la información requerida
             }
-        
+            startLoading(); // Inicia el loader
             console.log(musicFormValues);
             console.log(uniqueKey);
-        
             let menuFormValues;
             let urlpdf;
-        
             // Lógica para `food-menu`
             if (currentContentType === "food-menu") {
-                if (isEditRoute) {
-                    menuFormValues = await editUploadFiles();
-                    if (!menuFormValues) {
-                        console.error("Error: menuFormValues es undefined o null en editUploadFiles.");
-                        return;
+                try {
+                    if (isEditRoute) {
+                        menuFormValues = await editUploadFiles();
+                        if (!menuFormValues) {
+                            console.error("Error: menuFormValues es undefined o null en editUploadFiles.");
+                            return;
+                        }
+                    } else {
+                        menuFormValues = await handleFileUpload();
+                        if (!menuFormValues) {
+                            console.error("Error: menuFormValues es undefined o null en handleFileUpload.");
+                            return;
+                        }
                     }
-                } else {
-                    menuFormValues = await handleFileUpload();
-                    if (!menuFormValues) {
-                        console.error("Error: menuFormValues es undefined o null en handleFileUpload.");
-                        return;
-                    }
+                } catch (error) {
+                    console.error("Error al manejar archivos:", error);
+                    return;
+                } finally {
+                    stopLoading(); // Detener el loader después de subir el menú
                 }
-            } 
-            
+            }
+    
             // Lógica para `pdf`
             if (currentContentType === 'pdf') {
                 try {
@@ -270,8 +278,10 @@ const CustomQr = ({ qrId }) => {
                         confirmButtonText: 'OK'
                     });
                     return; // Detener el flujo si hay un error al subir el PDF
+                } finally {
+                    stopLoading(); // Detener el loader después de subir el PDF
                 }
-            }
+            } 
         
             // Guardado final de datos de QR
             try {
@@ -295,17 +305,22 @@ const CustomQr = ({ qrId }) => {
                     location.pathname
                 );
                 console.log("Datos del QR guardados exitosamente.");
+                // Mostrar mensaje de éxitoos
             } catch (error) {
                 console.error('Error al guardar los datos del QR:', error);
+                stopLoading();  // Detener el loader si hay un error en la guardada de datos
                 await Swal.fire({
                     icon: 'error',
                     title: t('Save Failed'),
                     text: t('There was an error saving the QR data. Please try again.'),
                     confirmButtonText: 'OK'
                 });
+            } finally {
+                stopLoading(); // Detener el loader después de intentar guardar los datos
             }
         } else {
-            toast.info (t('QR code saving was cancelled.'));
+            toast.info(t('QR code saving was cancelled.'));
+            stopLoading(); // Detener el loader si se cancela
         }
         
         
