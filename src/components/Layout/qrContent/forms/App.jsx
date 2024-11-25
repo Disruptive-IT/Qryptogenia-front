@@ -6,7 +6,7 @@
  * @return : Retorna un formulario interactivo que permite al usuario configurar los detalles de la aplicación QR, incluyendo título, descripción, colores y carga de imagen.
  */
 import React, { useState, useRef, useEffect } from 'react';
-import { Formik, Form, Field } from "formik";
+import { Formik, Form, Field, FormikContext } from "formik";
 import Select from 'react-select';
 import { useValidate } from '../../../../context/validateFormContext';
 import { IoIosClose } from "react-icons/io";
@@ -18,6 +18,7 @@ import SkeletonLoader from './Skeleton/Skeleton';
 import { UseMenu } from './menu/menuContext';
 import { appOptions } from '../preview-helpers/handlePreviewButtons';
 import { resizeImage } from '../preview-helpers/handlerColor';
+import { toast } from 'sonner';
 
 export const AppForm = ({ onFormChangeApp, location, appFormValues }) => {
     const [title, setTitle] = useState('');
@@ -49,6 +50,7 @@ export const AppForm = ({ onFormChangeApp, location, appFormValues }) => {
     const [loading, setLoading] = useState(true); // Por defecto está cargando
     const [appFontsPreview, setAppFontsPreview] = useState([]);
     const {getFontsPreview}=UseMenu();
+    const {changeTabValue}=useValidate();
 
     //console.log("validate from app",validateFormApp, formErrors);
 
@@ -308,6 +310,8 @@ useEffect(() => {
         return selectedOptions.some(selected => selected.value === option.value);
     };
 
+    console.log(formErrors)
+
     // Skeleton Loader
             useEffect(() => {
                 setLoading(false); // Cambia a false una vez que los datos hayan cargado
@@ -315,20 +319,23 @@ useEffect(() => {
     return (
         <Formik
             initialValues={initialValues}
-            onSubmit={(values, actions) => {
+            onSubmit={async(values, actions) => {
                 const errors = validateForm(values);
                 if (Object.keys(errors).length > 0) {
-                setFormErrors(errors);
-                actions.setSubmitting(false);
+                  setFormErrors(errors);
+                  actions.setSubmitting(false);
                 } else {
-                setFormErrors({});
-                onSubmit(values);
-                actions.setSubmitting(false);
+                  setFormErrors({});
+                  changeTabValue(); // Verificar si esta función está disponible
+                  await onSubmit(values);
+                  actions.setSubmitting(false);
                 }
-            }}
+              }}
+              
             validateOnBlur={true}
+            validateOnChange={true}
             >
-           {({ setFieldValue, handleSubmit,setFieldTouched,touched,e}) => (
+           {({ setFieldValue}) => (
       <Form className="max-w-4xl mx-auto mt-8 relative">
         {/* Mostrar el Skeleton mientras loading sea verdadero */}
         {loading ? (
@@ -358,7 +365,7 @@ useEffect(() => {
                 <div className="text-right text-sm text-gray-900">
                   {title.length}/{maxTitle} Characters
                 </div>
-                {formErrors.title && <div className="text-red-500 text-sm">{formErrors.title}</div>}
+                { formErrors.title && <div className="text-red-500 text-sm">{formErrors.title}</div>}
               </div>
         
               <div className="flex flex-col relative">
@@ -596,7 +603,6 @@ useEffect(() => {
                          style={{ backgroundColor: '#284B63', color: '' }}
                          onMouseEnter={(e) => e.target.style.backgroundColor = '#3C6E71'} // Cambia el color al hacer hover
                          onMouseLeave={(e) => e.target.style.backgroundColor = '#284B63'} // Vuelve al color original al salir del hoover
-
                         >{t('Submit')}</button>   
             </div>
           </div>

@@ -51,6 +51,7 @@ export const MusicForm = ({ onFormChangeMusic, location, musicFormValues }) => {
     const {setValidateFormMusic,validateFormMusic}=useValidate();
     const [fontsMusicPreview, setFontsMusicPreview] = useState([]);
     const {getFontsPreview}=UseMenu();
+    const {changeTabValue}=useValidate();
 
     useEffect(() => {
         const fetchFontsPreview = async () => {
@@ -294,15 +295,15 @@ export const MusicForm = ({ onFormChangeMusic, location, musicFormValues }) => {
     return (
         <Formik
             initialValues={initialValues}
-            onSubmit={(values, actions) => {
+            onSubmit={async(values, actions) => {
                 const errors = validateForm(values);
                 if (Object.keys(errors).length > 0) {
                     setFormErrors(errors);
                     actions.setSubmitting(false);
                 } else {
                     setFormErrors({});
-                    // Call the onSubmit function passed from the parent component
-                    onSubmit(values);
+                    changeTabValue()
+                    await onSubmit(values);
                     actions.setSubmitting(false);
                 }
             }}
