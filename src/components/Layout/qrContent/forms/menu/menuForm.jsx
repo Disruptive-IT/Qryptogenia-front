@@ -247,58 +247,112 @@ return (
                       ))}
                     </select>
                   </div>
-                    {/* Sección de Personalización de la Tarjeta de Producto */}
-                    <div className='flex flex-col mb-6'>
-                      <h1 className='mb-2 text-lg font-semibold'>{t('Customize your product card')}</h1>
-                      <div className='flex flex-col sm:flex-row flex-wrap w-full sm:w-[80%] p-4 justify-around gap-4'>
-                        {/* Color de Fondo */}
-                        <div className='flex flex-col items-center'>
-                          <label className='my-2' htmlFor="background">{t('Background')}</label>
-                          <div className='w-10 h-10 border-2 border-gray-300 rounded cursor-pointer' onClick={() =>setShowBackCategoryPicker(!showBackCategoryPicker)} style={{backgroundColor:formData.category?.[activeCategory]?.products[0]?.backgroundProductCard || "#000",backgroundImage:formData.category?.[activeCategory]?.products[0]?.backgroundProductCard.includes("gradient") ? formData.category?.[activeCategory]?.products[0]?.backgroundProductCard : "none" }}
-                          ></div>
-                          {showBackCategoryPicker && (
-                            <div className='colorPicker z-50' ref={backgroundProductPickerRef}>
-                              <ColorPicker handlerFunction={(color) => { if (activeCategory !== null) {handleBackgroundProduct(activeCategory, color); }}}   pickerValue={formData.category?.[activeCategory]?.products[0]?.backgroundProductCard || '#FFFFFF'}  pickerColor={formData.category?.[activeCategory]?.products[0]?.backgroundProductCard || '#FFFFFF'} gradient={true}/>
-                            </div>
-                          )}
-                        </div>
+                  <div className='flex flex-col mb-6'>
+                    <h1 className='mb-2 text-lg font-semibold'>{t('Customize your product card')}</h1>
+                    <div className='grid grid-cols-1 sm:grid-cols-2 gap-4 w-full sm:w-[80%] p-4'>
+                      {/* Color de Fondo */}
+                      <div className='flex flex-col items-center'>
+                        <label className='my-2' htmlFor="background">{t('Background')}</label>
+                        <div
+                          className='w-10 h-10 border-2 border-gray-300 rounded cursor-pointer'
+                          onClick={() => setShowBackCategoryPicker(!showBackCategoryPicker)}
+                          style={{
+                            backgroundColor: formData.category?.[activeCategory]?.products[0]?.backgroundProductCard || "#000",
+                            backgroundImage: formData.category?.[activeCategory]?.products[0]?.backgroundProductCard.includes("gradient") 
+                              ? formData.category?.[activeCategory]?.products[0]?.backgroundProductCard 
+                              : "none"
+                          }}
+                        ></div>
+                        {showBackCategoryPicker && (
+                          <div className='colorPicker z-50' ref={backgroundProductPickerRef}>
+                            <ColorPicker
+                              handlerFunction={(color) => {
+                                if (activeCategory !== null) {
+                                  handleBackgroundProduct(activeCategory, color);
+                                }
+                              }}
+                              pickerValue={formData.category?.[activeCategory]?.products[0]?.backgroundProductCard || '#FFFFFF'}
+                              pickerColor={formData.category?.[activeCategory]?.products[0]?.backgroundProductCard || '#FFFFFF'}
+                              gradient={true}
+                            />
+                          </div>
+                        )}
+                      </div>
 
-                        {/* Color del Nombre */}
-                        <div className='flex flex-col items-center'>
-                          <label className='my-2' htmlFor="nameColor">{t('Name Color')}</label>
-                          <div className='w-10 h-10 border border-gray-300 rounded cursor-pointer'  onClick={() => setShowNamePicker(!showNamePicker)}   style={{ backgroundColor: formData.category?.[activeCategory]?.products[0]?.colorName || '#000' }}
-                          ></div>
-                          {showNamePicker && (
-                            <div className='colorPicker' ref={namePickerRef}>
-                              <ColorPicker gradient={false} handlerFunction={(color) =>{handleColorNameProduct(activeCategory, color); }} pickerValue={formData.category?.[activeCategory]?.products?.[0].colorName || "#000"} pickerColor={formData.category?.[activeCategory]?.products?.[0].colorName || "#FFFFFF"} />
-                            </div>
-                          )}
-                        </div>
+                      {/* Color del Nombre */}
+                      <div className='flex flex-col items-center'>
+                        <label className='my-2' htmlFor="nameColor">{t('Name Color')}</label>
+                        <div
+                          className='w-10 h-10 border border-gray-300 rounded cursor-pointer'
+                          onClick={() => setShowNamePicker(!showNamePicker)}
+                          style={{
+                            backgroundColor: formData.category?.[activeCategory]?.products[0]?.colorName || '#000'
+                          }}
+                        ></div>
+                        {showNamePicker && (
+                          <div className='colorPicker' ref={namePickerRef}>
+                            <ColorPicker
+                              gradient={false}
+                              handlerFunction={(color) => {
+                                handleColorNameProduct(activeCategory, color);
+                              }}
+                              pickerValue={formData.category?.[activeCategory]?.products?.[0].colorName || "#000"}
+                              pickerColor={formData.category?.[activeCategory]?.products?.[0].colorName || "#FFFFFF"}
+                            />
+                          </div>
+                        )}
+                      </div>
 
-                        {/* Color de la Descripción */}
-                        <div className='flex flex-col items-center'>
-                          <label className='my-2' htmlFor="descriptionColor">{t('Description Color')}</label>
-                          <div  className='w-10 h-10 border border-gray-300 rounded cursor-pointer'  onClick={() => setShowDescriptionPicker(!showDescriptionPicker)}  style={{ backgroundColor: formData.category?.[activeCategory]?.products[0]?.colorDescription || '#000' }}></div>
-                          {showDescriptionPicker && (
-                            <div className='colorPicker' ref={descriptionPickerRef}>
-                              <ColorPicker gradient={false}  handlerFunction={(color) => { handleColorDescriptionProduct(activeCategory, color); }} pickerValue={formData.category?.[activeCategory]?.products[0]?.colorDescription || "#FFFFFF"} pickerColor={formData.category?.[activeCategory]?.products?.[0].colorDescription || "#FFFFFF"} />
-                            </div>
-                          )}
-                        </div>
+                      {/* Color de la Descripción */}
+                      <div className='flex flex-col items-center'>
+                        <label className='my-2' htmlFor="descriptionColor">{t('Description Color')}</label>
+                        <div
+                          className='w-10 h-10 border border-gray-300 rounded cursor-pointer'
+                          onClick={() => setShowDescriptionPicker(!showDescriptionPicker)}
+                          style={{
+                            backgroundColor: formData.category?.[activeCategory]?.products[0]?.colorDescription || '#000'
+                          }}
+                        ></div>
+                        {showDescriptionPicker && (
+                          <div className='colorPicker' ref={descriptionPickerRef}>
+                            <ColorPicker
+                              gradient={false}
+                              handlerFunction={(color) => {
+                                handleColorDescriptionProduct(activeCategory, color);
+                              }}
+                              pickerValue={formData.category?.[activeCategory]?.products[0]?.colorDescription || "#FFFFFF"}
+                              pickerColor={formData.category?.[activeCategory]?.products?.[0].colorDescription || "#FFFFFF"}
+                            />
+                          </div>
+                        )}
+                      </div>
 
-                        {/* Color del Precio */}
-                        <div className='flex flex-col items-center'>
-                          <label className='my-2' htmlFor="priceColor">{t('Price Color')}</label>
-                          <div  className='w-10 h-10 border border-gray-300 rounded cursor-pointer'  onClick={() => setShowPricePicker(!showPricePicker)}  style={{ backgroundColor: formData.category?.[activeCategory]?.products[0]?.colorPrice || '#000' }}
-                          ></div>
-                          {showPricePicker && (
-                            <div className='colorPicker' ref={pricePickerRef}>
-                              <ColorPicker gradient={false} handlerFunction={(color) => { handleColorPriceProduct(activeCategory, color); }} pickerValue={formData.category?.[activeCategory]?.products?.[0].colorPrice || "#FFFFFF"} pickerColor={formData.category?.[activeCategory]?.products?.[0].colorPrice || "#FFFFFF"} />
-                            </div>
-                          )}
-                        </div>
+                      {/* Color del Precio */}
+                      <div className='flex flex-col items-center'>
+                        <label className='my-2' htmlFor="priceColor">{t('Price Color')}</label>
+                        <div
+                          className='w-10 h-10 border border-gray-300 rounded cursor-pointer'
+                          onClick={() => setShowPricePicker(!showPricePicker)}
+                          style={{
+                            backgroundColor: formData.category?.[activeCategory]?.products[0]?.colorPrice || '#000'
+                          }}
+                        ></div>
+                        {showPricePicker && (
+                          <div className='colorPicker' ref={pricePickerRef}>
+                            <ColorPicker
+                              gradient={false}
+                              handlerFunction={(color) => {
+                                handleColorPriceProduct(activeCategory, color);
+                              }}
+                              pickerValue={formData.category?.[activeCategory]?.products?.[0].colorPrice || "#FFFFFF"}
+                              pickerColor={formData.category?.[activeCategory]?.products?.[0].colorPrice || "#FFFFFF"}
+                            />
+                          </div>
+                        )}
                       </div>
                     </div>
+                  </div>
+
                     {/* Sección para Agregar Nueva Categoría y Productos */}
                     <div className='flex flex-col mt-6'>
                         {values?.category && values?.category.length <= 0 ? (

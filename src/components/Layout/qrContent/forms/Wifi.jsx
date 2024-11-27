@@ -40,42 +40,6 @@ function FormWifi() {
       }
 
 
-    const getWifi = async () => {
-        try {
-            const result = await Swal.fire({
-                title: "<strong>STATE ALERT</strong>",
-                icon: "question",
-                html: `<h1>Are you sure you want to get data of the current wifi connection</h1>`,
-                showConfirmButton: true,
-                confirmButtonColor: "#3C6E71",
-                showCancelButton: true,
-                cancelButtonColor: "#dc2626",
-            });
-            if (result.isConfirmed) {
-                const getDataWifi = await instance("/getWifi");
-                if (getDataWifi.status === 200) {
-                    const wifiData = getDataWifi.data[0];
-                    const security = securityOptions.find(
-                        (option) => option === wifiData.security_type
-                    );
-                    setInitialValues((prevValues) => ({
-                        ...prevValues,
-                        ssid: wifiData?.wifi_name || prevValues.ssid,
-                        security_type: security || prevValues.security_type,
-                        password: prevValues.password,
-                    }));
-                    formik.setValues({
-                        ssid: wifiData?.wifi_name || "",
-                        security_type: wifiData?.security_type || "",
-                        password: "",
-                    });
-                }
-            }
-        } catch (error) {
-            //console.error("Error al obtener los datos WiFi:", error);
-        }
-    };
-
     const securityOptions = [
         "OPEN", "WEP", "WPA-Personal", "WPA2-Personal", "WPA3-Personal",
         "WPA-Enterprise", "WPA2-Enterprise", "WPA3-Enterprise"
@@ -161,15 +125,6 @@ function FormWifi() {
                 ) : (
                   <div>
         <div>
-            <div className="flex items-center mt-6 mb-4">
-                <button type="button" onClick={getWifi} className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600" 
-                            style={{ backgroundColor: '#284B63', color: '#fff' }}
-                            onMouseEnter={(e) => e.target.style.backgroundColor = '#3C6E71'} // Cambia el color al hacer hover
-                            onMouseLeave={(e) => e.target.style.backgroundColor = '#284B63'} // Vuelve al color original al salir del hoover
-                            disabled={formik.isSubmitting}>
-                    {t('Get Wifi Data')}
-                </button>
-            </div>
             <form className="max-w-4xl mx-auto mt-8 relative" onSubmit={formik.handleSubmit}>
                 <div className="flex flex-col w-full md:w-2/3 mr-6 mb-[10px] md:mb-0">
                     <label htmlFor="ssid" className="mb-3">{t('SSID or Network Name')}</label>
