@@ -51,7 +51,7 @@ export const MusicForm = ({ onFormChangeMusic, location, musicFormValues }) => {
     const {setValidateFormMusic,validateFormMusic}=useValidate();
     const [fontsMusicPreview, setFontsMusicPreview] = useState([]);
     const {getFontsPreview}=UseMenu();
-    const {changeTabValue}=useValidate();
+    const {globalTabValue,changeTabValue}=useValidate();
 
     useEffect(() => {
         const fetchFontsPreview = async () => {
@@ -326,6 +326,7 @@ export const MusicForm = ({ onFormChangeMusic, location, musicFormValues }) => {
         <Field
           type="text"
           id="title"
+          disabled={globalTabValue==1}
           placeholder={t("Title")}
           className="border w-full border-gray-300 rounded p-2 focus:ring-0 focus:outline-none"
           value={title}
@@ -369,6 +370,7 @@ export const MusicForm = ({ onFormChangeMusic, location, musicFormValues }) => {
                           <div className="flex items-center ">
                               <input
                               type="file"
+                              disabled={globalTabValue==1}
                               className="hidden "
                               ref={fileInputRef}
                               accept="image/*"
@@ -376,6 +378,7 @@ export const MusicForm = ({ onFormChangeMusic, location, musicFormValues }) => {
                               />
                               <button
                               onClick={handleClick}
+                              disabled={globalTabValue==1}
                               className="text-blue-500 hover:text-blue-600 focus:outline-none"
                               >
                               <MdOutlineCloudUpload size="40" /> 
@@ -415,6 +418,7 @@ export const MusicForm = ({ onFormChangeMusic, location, musicFormValues }) => {
           as="textarea"
           rows="5"
           type="text"
+          disabled={globalTabValue==1}
           placeholder={t("Description")}
           maxLength={maxLength}
           id="description"
@@ -521,7 +525,8 @@ export const MusicForm = ({ onFormChangeMusic, location, musicFormValues }) => {
                     {/* Select de fuentes */}
                     <div className='flex flex-col md:flex-row md:items-center mb-4 mt-10'>
           <h1 className='mt-3 text-lg font-semibold mr-6'>{t('Font style')}:</h1>
-                    <select 
+                    <select
+                disabled={globalTabValue==1} 
                 className='p-4 rounded-[10px] bg-gray-300' 
                 name="fontFamily" 
                 id="" 
@@ -544,6 +549,7 @@ export const MusicForm = ({ onFormChangeMusic, location, musicFormValues }) => {
                             <Select
                                 id="multiselect"
                                 options={musicOptions}
+                                isDisabled={globalTabValue==1}
                                 isMulti
                                 className="basic-multi-select w-full"
                                 classNamePrefix="select"
@@ -573,6 +579,7 @@ export const MusicForm = ({ onFormChangeMusic, location, musicFormValues }) => {
                                 <label htmlFor={`input_${option.value}`} className="mb-2">{option.icon}</label>
                                 <Field
                                     type="text"
+                                    disabled={globalTabValue==1}
                                     id={`url_${index}`}
                                     name={`url_${index}`}
                                     placeholder={`URL for ${option.value}`}
@@ -598,7 +605,7 @@ export const MusicForm = ({ onFormChangeMusic, location, musicFormValues }) => {
                         style={{ backgroundColor: '#284B63', color: '#fff' }}
                         onMouseEnter={(e) => e.target.style.backgroundColor = '#3C6E71'} // Cambia el color al hacer hover
                         onMouseLeave={(e) => e.target.style.backgroundColor = '#284B63'} // Vuelve al color original al salir del hover
-
+                        disabled={globalTabValue==1}
                         >{t('Submit')}</button>
                     </div>
                 </div>

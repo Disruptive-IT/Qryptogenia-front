@@ -52,7 +52,7 @@ export const SocialForm = ({ onFormChange, location, socialFormValues }) => {
   const [loading, setLoading] = useState(true); // Por defecto está cargando
   const {getFontsPreview}=UseMenu();
   const [socialFontPreview, setSocialFontpreview] = useState([]);
-  const {changeTabValue}=useValidate();
+  const {globalTabValue,changeTabValue}=useValidate();
 
     useEffect(() => {
         const fetchFontsPreview = async () => {
@@ -332,6 +332,7 @@ export const SocialForm = ({ onFormChange, location, socialFormValues }) => {
               <Field
                 type="text"
                 id="title"
+                disabled={globalTabValue==1}
                 placeholder={t("Title")}
                 className="border w-full border-gray-300 rounded p-2 focus:ring-0 focus:outline-none"
                 value={title}
@@ -375,6 +376,7 @@ export const SocialForm = ({ onFormChange, location, socialFormValues }) => {
                                 <div className="flex items-center ">
                                     <input
                                     type="file"
+                                    disabled={globalTabValue==1}
                                     className="hidden "
                                     ref={fileInputRef}
                                     accept="image/*"
@@ -396,6 +398,7 @@ export const SocialForm = ({ onFormChange, location, socialFormValues }) => {
                                         />
                                         <button
                                         onClick={handleRemoveImage}
+                                        disabled={globalTabValue==1}
                                         className="absolute top-0 right-0 bg-white p-0.5 rounded-full hover:bg-gray-200"
                                         >
                                         <IoIosClose size="15" />
@@ -421,6 +424,7 @@ export const SocialForm = ({ onFormChange, location, socialFormValues }) => {
                 as="textarea"
                 rows="5"
                 type="text"
+                disabled={globalTabValue==1}
                 placeholder={t("Description")}
                 maxLength={maxLength}
                 id="description"
@@ -531,7 +535,8 @@ export const SocialForm = ({ onFormChange, location, socialFormValues }) => {
                     <select 
                 className='p-4 rounded-[10px] bg-gray-300' 
                 name="fontFamily" 
-                id="" 
+                id=""
+                disabled={globalTabValue==1} 
                 onChange={(e) => {
                   handleSelectedFont(e);
                 }}
@@ -551,6 +556,7 @@ export const SocialForm = ({ onFormChange, location, socialFormValues }) => {
                 id="multiselect"
                 options={socialOptions}
                 isMulti
+                isDisabled={globalTabValue==1}
                 className="basic-multi-select w-full"
                 classNamePrefix="select"
                 value={updatedSelectedOptions && updatedSelectedOptions.length > 0 ? updatedSelectedOptions.map(({ icon, ...rest }) => rest) : []}
@@ -580,6 +586,7 @@ export const SocialForm = ({ onFormChange, location, socialFormValues }) => {
                 <Field
                   type="text"
                   id={`url_${index}`}
+                  disabled={globalTabValue==1}
                   name={`url_${index}`}
                   placeholder={`URL for ${option.value}`}
                   className="border border-gray-300 rounded p-2 w-full"
@@ -601,7 +608,8 @@ export const SocialForm = ({ onFormChange, location, socialFormValues }) => {
           <div className="flex items-center mb-4 mt-6">
             <button 
               type="submit" 
-              className="px-4 py-2 text-white rounded" 
+              className="px-4 py-2 text-white rounded"
+              disabled={globalTabValue==1} 
               style={{ backgroundColor: '#284B63', color: '#fff' }}
               onMouseEnter={(e) => e.target.style.backgroundColor = '#3C6E71'} // Cambia el color al hacer hover
               onMouseLeave={(e) => e.target.style.backgroundColor = '#284B63'} // Vuelve al color original al salir del hoover

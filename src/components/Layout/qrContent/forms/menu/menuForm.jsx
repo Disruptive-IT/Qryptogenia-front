@@ -29,7 +29,7 @@ function MenuForm(){
     const [initialValues,setInitialValues]=useState(formData);
 
     const validateFormFields = () => {
-      if (Object.keys(formik.errors).length > 1) {
+      if (Object.keys(formik.errors).length > 1 || (Array.isArray(formik.errors.category) && formik.errors.category.length > 0)) {
         setValidateFormMenu(false);
         return false;
       } else {
@@ -49,6 +49,8 @@ function MenuForm(){
     //console.log(" values ",formik.values);
     //console.log("formdata: ",formData);
     // console.log("formdata", formData);
+    console.log(formik.errors)
+
 
     useEffect(()=>{
       const executeFunctions=async()=>{

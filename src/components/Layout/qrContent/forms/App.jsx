@@ -50,7 +50,7 @@ export const AppForm = ({ onFormChangeApp, location, appFormValues }) => {
     const [loading, setLoading] = useState(true); // Por defecto está cargando
     const [appFontsPreview, setAppFontsPreview] = useState([]);
     const {getFontsPreview}=UseMenu();
-    const {changeTabValue}=useValidate();
+    const {changeTabValue,globalTabValue}=useValidate();
 
     //console.log("validate from app",validateFormApp, formErrors);
 
@@ -357,6 +357,7 @@ useEffect(() => {
                   className="border w-full border-gray-300 rounded p-2 focus:ring-0 focus:outline-none"
                   value={title}
                   maxLength={maxTitle}
+                  disabled={globalTabValue==1}
                   onChange={(e) => {
                     handleTitleChange(e);
                     setFieldValue('title', e.target.value);
@@ -395,6 +396,7 @@ useEffect(() => {
                                   {/* Icono de subir imagen */}
                                   <div className="flex items-center ">
                                       <input
+                                      disabled={globalTabValue==1}
                                       type="file"
                                       className="hidden "
                                       ref={fileInputRef}
@@ -417,6 +419,7 @@ useEffect(() => {
                                           />
                                           <button
                                           onClick={handleRemoveImage}
+                                          disabled={globalTabValue==1}
                                           className="absolute top-0 right-0 bg-white p-0.5 rounded-full hover:bg-gray-200"
                                           >
                                           <IoIosClose size="15" />
@@ -443,6 +446,7 @@ useEffect(() => {
                   rows="5"
                   type="text"
                   placeholder={t("Description")}
+                  disabled={globalTabValue==1}
                   maxLength={maxLength}
                   id="description"
                   className="w-full min-h-20 max-h-40 border border-gray-300 rounded p-2 focus:ring-0 focus:outline-none"
@@ -548,7 +552,8 @@ useEffect(() => {
                             {/* Select de fuentes */}
                             <div className='flex flex-col md:flex-row md:items-center mb-4 mt-10'>
                   <h1 className='mt-3 text-lg font-semibold mr-6'>{t('Font style')}:</h1>
-                            <select 
+                            <select
+                            disabled={globalTabValue==1} 
                         className='p-4 rounded-[10px] bg-gray-300' 
                         name="fontFamily" 
                         id="" 
@@ -571,6 +576,7 @@ useEffect(() => {
                             <Select
                                 id="multiselect"
                                 options={appOptions}
+                                isDisabled={globalTabValue==1}
                                 isMulti
                                 className="basic-multi-select w-full" // Para el contenedor externo
                                 classNamePrefix="select" // Prefijo para los estilos internos
@@ -603,6 +609,7 @@ useEffect(() => {
                         type="text"
                         id={`url_${index}`}
                         name={`url_${index}`}
+                        disabled={globalTabValue==1}
                         placeholder={`URL for ${option.value}`}
                         className="border border-gray-300 rounded p-2 w-full focus:ring-0 focus:outline-none"
                         value={option.url} // Simplificado para tomar la URL directamente desde selectedOptions
@@ -624,6 +631,7 @@ useEffect(() => {
                     <div className="flex items-center mt-6 mb-4">
                         <button type="submit" className="px-4 py-2 bg-blue-500 text-white rounded "
                          style={{ backgroundColor: '#284B63', color: '' }}
+                         disabled={globalTabValue==1}
                          onMouseEnter={(e) => e.target.style.backgroundColor = '#3C6E71'} // Cambia el color al hacer hover
                          onMouseLeave={(e) => e.target.style.backgroundColor = '#284B63'} // Vuelve al color original al salir del hoover
                         >{t('Submit')}</button>   
