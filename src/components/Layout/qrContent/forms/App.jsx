@@ -380,7 +380,7 @@ useEffect(() => {
                                   <div
                                       className="w-10 h-10 md:w-10 border border-gray-300 rounded cursor-pointer"
                                       style={{ background: colorTitle }}
-                                      onClick={() => setShowTitleColorPicker(!showTitleColorPicker)}
+                                      onClick={() => {if(globalTabValue!==1)setShowTitleColorPicker(!showTitleColorPicker)}}
                                   ></div>
                                   {showTitleColorPicker && (
                                       <div className="absolute mt-2 left-0 top-full z-50" ref={titleColorPickerRef}>
@@ -463,7 +463,7 @@ useEffect(() => {
                   <div
                     className="w-10 md:w-10 h-10 border border-gray-300 rounded cursor-pointer"
                     style={{ background: descriptionColor }}
-                    onClick={() => setShowDescriptionColorPicker(!showDescriptionColorPicker)}
+                    onClick={() =>{if(globalTabValue!==1) setShowDescriptionColorPicker(!showDescriptionColorPicker)}}
                   ></div>
                   {showDescriptionColorPicker && (
                     <div className="absolute mt-2 left-0 top-full z-50" ref={descriptionColorPickerRef}>
@@ -485,7 +485,7 @@ useEffect(() => {
         <div
           className="w-10 h-10 border border-gray-300 rounded cursor-pointer"
           style={{ background: backgroundColor }}
-          onClick={() => setShowBackgroundColorPicker(!showBackgroundColorPicker)}
+          onClick={() =>{if(globalTabValue!==1) setShowBackgroundColorPicker(!showBackgroundColorPicker)}}
         ></div>
         {showBackgroundColorPicker && (
           <div className="absolute mt-2 left-0 z-50" ref={backgroundColorPickerRef}>
@@ -509,7 +509,7 @@ useEffect(() => {
         <div
           className="w-10 h-10 border border-gray-300 rounded cursor-pointer"
           style={{ background: boxColor }}
-          onClick={() => setShowBoxColorPicker(!showBoxColorPicker)}
+          onClick={() => {if(globalTabValue!==1)setShowBoxColorPicker(!showBoxColorPicker)}}
         ></div>
         {showBoxColorPicker && (
           <div className="absolute mt-2 left-0 z-50" ref={boxColorPickerRef}>
@@ -533,7 +533,7 @@ useEffect(() => {
         <div
           className="w-10 h-10 border border-gray-300 rounded cursor-pointer"
           style={{ background: borderImg }}
-          onClick={() => setShowBorderColorPicker(!showBorderColorPicker)}
+          onClick={() => {if(globalTabValue!==1)setShowBorderColorPicker(!showBorderColorPicker)}}
         ></div>
         {showBorderColorPicker && (
           <div className="absolute mt-2 left-0 z-50" ref={borderColorPickerRef}>

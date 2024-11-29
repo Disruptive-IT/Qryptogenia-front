@@ -325,7 +325,8 @@ const QRScanPage = () => {
                       </div>
                   </div>
                     {/* Categorías y productos */}
-                    <div className="lg:w-[90%] sm:w-full p-1 md:w-[90%] min-h-90 h-auto overflow-scroll">
+                    <motion.div
+                    className="lg:w-[90%] sm:w-full p-1 md:w-[90%] min-h-90 h-auto overflow-y-scroll">
                         <ThemeProvider theme={theme}>
                         <Box>
                             <Tabs
@@ -374,12 +375,13 @@ const QRScanPage = () => {
                             {/* Paneles de Categorías */}
                             {qrData?.MenuPreview?.category.map((category, indexCategory) => (
                             <TabPanel key={indexCategory} value={tabValue} index={indexCategory}>
-                               <div className='flex flex-wrap justify-center gap-4'>
+                               <motion.div initial={{translateY:'500px'}} animate={{translateY:'0px'}} transition={{duration:'.3s',type:'spring',bounce:'0.5'}} className='flex flex-wrap justify-center gap-4'>
                             {category.products && category.products.length > 0 ? (
                                 category.products.map((product, indexProduct) => (
                                   <motion.div
                                   key={indexProduct}
                                   initial={indexProduct > 2 && cardVariants.offscreen}
+                                  transition={{duration:'.3s',type:'spring',bounce:'0.5'}}
                                   whileInView={indexProduct > 2 && cardVariants.onscreen}
                                   viewport={{ once: true, amount: 0.3 }}
                                   style={{
@@ -411,14 +413,14 @@ const QRScanPage = () => {
                             ) : (
                                 <div>No products available</div>
                             )}
-                            </div>
+                            </motion.div>
 
                             </TabPanel>
                             ))}
 
                             {/* Panel para los productos destacados */}
                             <TabPanel key="top" value={tabValue} index={qrData?.MenuPreview?.category.length}>
-                            <div className='flex flex-wrap justify-center px-10 gap-4'>
+                            <motion.div initial={{translateY:'500px'}} animate={{translateY:'0px'}} transition={{duration:'.3s',type:'spring',bounce:'0.5'}} className='flex flex-wrap justify-center px-10 gap-4'>
                             {topProducts?.length > 0 ? (
                                 topProducts.map((element, index) => (
                                 <motion.div                               
@@ -447,81 +449,81 @@ const QRScanPage = () => {
                             ) : (
                                 'There are no top products'
                             )}
-                            </div>
+                            </motion.div>
                             </TabPanel>
                         </Box>
                         </ThemeProvider>
-                    </div>
+                    </motion.div>
                     {activeCategory !== null && activeCategory >= 0 && (
-  qrData?.MenuPreview?.category[activeprod.activeCat]?.products[activeprod.activeProd] && (
-    <ModalComponent isOpen={openModal} onClose={closeModal}>
-      <button
-        onClick={() => { handleCloseModal(); setActiveprod(0); }} 
-        className="absolute top-0 p-1 text-[15px] rounded-md right-40 text-red-600 bg-white font-bold cursor-pointer hover:bg-red-600 hover:text-white"
-      >
-        cerrar
-      </button>
-      <div 
-        style={{ backgroundColor: qrData?.MenuPreview?.category[activeprod.activeCat].products[activeprod.activeProd].backgroundProductCard,backgroundImage:qrData?.MenuPreview?.category[activeprod.activeCat].products[activeprod.activeProd].backgroundProductCard.includes("gradient") ? qrData?.MenuPreview?.category[activeprod.activeCat].products[activeprod.activeProd].backgroundProductCard  : "none", fontFamily: qrData?.MenuPreview?.fontPreview }} 
-        className=" lg:mt-[5%] lg:ml-[40%]  flex lg:w-[20%] flex-col items-center p-4 rounded-lg my-[10%]"
-      >
-        {/* Imagen del producto */}
-        <img 
-          className="w-[200px] h-[200px] rounded-lg border-[2px] border-black" 
-          src={qrData?.MenuPreview?.category[activeprod.activeCat].products[activeprod.activeProd].productImg} 
-          alt={qrData?.MenuPreview?.category[activeprod.activeCat].products[activeprod.activeProd].productName} 
-        />
+                  qrData?.MenuPreview?.category[activeprod.activeCat]?.products[activeprod.activeProd] && (
+                    <ModalComponent isOpen={openModal} onClose={closeModal}>
+                      <button
+                        onClick={() => { handleCloseModal(); setActiveprod(0); }} 
+                        className="absolute top-0 p-1 text-[15px] rounded-md right-40 text-red-600 bg-white font-bold cursor-pointer hover:bg-red-600 hover:text-white"
+                      >
+                        cerrar
+                      </button>
+                      <div 
+                        style={{ backgroundColor: qrData?.MenuPreview?.category[activeprod.activeCat].products[activeprod.activeProd].backgroundProductCard,backgroundImage:qrData?.MenuPreview?.category[activeprod.activeCat].products[activeprod.activeProd].backgroundProductCard.includes("gradient") ? qrData?.MenuPreview?.category[activeprod.activeCat].products[activeprod.activeProd].backgroundProductCard  : "none", fontFamily: qrData?.MenuPreview?.fontPreview }} 
+                        className=" lg:mt-[5%] lg:ml-[40%]  flex lg:w-[20%] flex-col items-center p-4 rounded-lg my-[10%]"
+                      >
+                        {/* Imagen del producto */}
+                        <img 
+                          className="w-[200px] h-[200px] rounded-lg border-[2px] border-black" 
+                          src={qrData?.MenuPreview?.category[activeprod.activeCat].products[activeprod.activeProd].productImg} 
+                          alt={qrData?.MenuPreview?.category[activeprod.activeCat].products[activeprod.activeProd].productName} 
+                        />
 
-        {/* Información del producto */}
-        <div className="w-full mt-4 flex flex-col items-center text-center">
-          <h1 style={{color: qrData?.MenuPreview?.category[activeprod.activeCat].products[activeprod.activeProd].colorName}} className="text-2xl font-bold my-2">{qrData?.MenuPreview?.category[activeprod.activeCat].products[activeprod.activeProd].productName}</h1>
-          <h2 style={{color: qrData?.MenuPreview?.category[activeprod.activeCat].products[activeprod.activeProd].colorPrice}} className="text-xl font-bold text-gray-700 my-2">{qrData?.MenuPreview?.category[activeprod.activeCat].products[activeprod.activeProd].price}$</h2>
-          <p style={{color: qrData?.MenuPreview?.category[activeprod.activeCat].products[activeprod.activeProd].colorDescription}} className="text-lg mt-2 my-2">{qrData?.MenuPreview?.category[activeprod.activeCat].products[activeprod.activeProd].productDescription}</p>
-        </div>
+                        {/* Información del producto */}
+                        <div className="w-full mt-4 flex flex-col items-center text-center">
+                          <h1 style={{color: qrData?.MenuPreview?.category[activeprod.activeCat].products[activeprod.activeProd].colorName}} className="text-2xl font-bold my-2">{qrData?.MenuPreview?.category[activeprod.activeCat].products[activeprod.activeProd].productName}</h1>
+                          <h2 style={{color: qrData?.MenuPreview?.category[activeprod.activeCat].products[activeprod.activeProd].colorPrice}} className="text-xl font-bold text-gray-700 my-2">{qrData?.MenuPreview?.category[activeprod.activeCat].products[activeprod.activeProd].price}$</h2>
+                          <p style={{color: qrData?.MenuPreview?.category[activeprod.activeCat].products[activeprod.activeProd].colorDescription}} className="text-lg mt-2 my-2">{qrData?.MenuPreview?.category[activeprod.activeCat].products[activeprod.activeProd].productDescription}</p>
+                        </div>
 
-        {/* Indicador de producto destacado */}
-        {qrData?.MenuPreview?.category[activeprod.activeCat].products[activeprod.activeProd].top && (
-          <img className='w-10 self-center' src='/star.svg'/>
-        )}
-      </div>
-    </ModalComponent>
-  )
-)}
+                        {/* Indicador de producto destacado */}
+                        {qrData?.MenuPreview?.category[activeprod.activeCat].products[activeprod.activeProd].top && (
+                          <img className='w-10 self-center' src='/star.svg'/>
+                        )}
+                      </div>
+                    </ModalComponent>
+                  )
+                )}
 
-  {topProducts?.[activeprod] && (
-    <ModalComponent isOpen={openModal} onClose={closeModal}>
-      <button
-        onClick={() => { handleCloseModal(); setActiveprod(0); }} 
-        className="absolute top-0 right-0 text-red-600 font-bold text-[25px] cursor-pointer"
-      >
-        x
-      </button>
-      <div 
-        style={{ backgroundColor: topProducts[activeprod].backgroundProductCard,backgroundImage:topProducts[activeprod].backgroundProductCard.includes("gradient") ? topProducts[activeprod].backgroundProductCard : "none", fontFamily: qrData?.MenuPreview?.fontPreview || 'sans-serif' }} 
-        className="lg:mt-[5%] lg:ml-[40%]  flex lg:w-[20%] flex-col items-center p-4 rounded-lg my-[10%]"
-      >
-        {/* Imagen del producto destacado */}
-        <img 
-          className="w-[200px] h-[200px] rounded-lg border-[2px] border-black" 
-          src={topProducts[activeprod]?.productImg} 
-          alt={topProducts[activeprod]?.productName || 'Producto'} 
-        />
+                  {topProducts?.[activeprod] && (
+                    <ModalComponent isOpen={openModal} onClose={closeModal}>
+                      <button
+                        onClick={() => { handleCloseModal(); setActiveprod(0); }} 
+                        className="absolute top-0 p-1 text-[15px] rounded-md right-40 text-red-600 bg-white font-bold cursor-pointer hover:bg-red-600 hover:text-white"
+                      >
+                        cerrar
+                      </button>
+                      <div 
+                        style={{ backgroundColor: topProducts[activeprod].backgroundProductCard,backgroundImage:topProducts[activeprod].backgroundProductCard.includes("gradient") ? topProducts[activeprod].backgroundProductCard : "none", fontFamily: qrData?.MenuPreview?.fontPreview || 'sans-serif' }} 
+                        className="lg:mt-[5%] lg:ml-[40%]  flex lg:w-[20%] flex-col items-center p-4 rounded-lg my-[10%]"
+                      >
+                        {/* Imagen del producto destacado */}
+                        <img 
+                          className="w-[200px] h-[200px] rounded-lg border-[2px] border-black" 
+                          src={topProducts[activeprod]?.productImg} 
+                          alt={topProducts[activeprod]?.productName || 'Producto'} 
+                        />
 
-        {/* Información del producto destacado */}
-        <div className="w-full mt-4 flex flex-col items-center text-center">
-          <h1 style={{color:topProducts[activeprod].colorName}} className="text-2xl font-bold mb-2">{topProducts[activeprod]?.productName}</h1>
-          <h2 style={{color:topProducts[activeprod].colorDescription}} className="text-xl font-bold mb-2 text-gray-700">{topProducts[activeprod]?.price}$</h2>
-          <p style={{color:topProducts[activeprod].colorPrice}} className="text-lg mt-2">{topProducts[activeprod]?.productDescription}</p>
-        </div>
+                        {/* Información del producto destacado */}
+                        <div className="w-full mt-4 flex flex-col items-center text-center">
+                          <h1 style={{color:topProducts[activeprod].colorName}} className="text-2xl font-bold mb-2">{topProducts[activeprod]?.productName}</h1>
+                          <h2 style={{color:topProducts[activeprod].colorPrice}} className="text-xl font-bold mb-2 text-gray-700">{topProducts[activeprod]?.price}$</h2>
+                          <p style={{color:topProducts[activeprod].colorDescription}} className="text-lg mt-2">{topProducts[activeprod]?.productDescription}</p>
+                        </div>
 
-        {/* Indicador de producto destacado */}
-        {topProducts[activeprod]?.top && (
-          <img className='w-10 self-center' src='/star.svg'/>
-        )}
-      </div>
-    </ModalComponent>
-  )}
-    </div>
+                        {/* Indicador de producto destacado */}
+                        {topProducts[activeprod]?.top && (
+                          <img className='w-10 self-center' src='/star.svg'/>
+                        )}
+                      </div>
+                    </ModalComponent>
+                  )}
+                    </div>
                     )}
                 </div>
             )}

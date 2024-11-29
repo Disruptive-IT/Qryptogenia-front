@@ -19,7 +19,7 @@ import { useTranslation } from 'react-i18next';
  */
 
 function MenuForm(){
-    const { formData,productsCategory,editFormdata,activeCategory,currentTemplate,indexTemplate,setIndexTemplate,showBackgroundPicker,showMenuPicker,showBackCategoryPicker,backgroundPickerRef,menuPickerRef,backgroundProductPickerRef,namePickerRef,descriptionPickerRef,pricePickerRef,setShowBackgroundPicker,setShowBackCategoryPicker,setShowMenuPicker,setShowNamePicker,setShowDescriptionPicker,setShowPricePicker,
+    const { formData,productsCategory,editFormdata,activeCategory,currentTemplate,indexTemplate,setIndexTemplate,showBackgroundPicker,showMenuPicker,showBackCategoryPicker,backgroundPickerRef,menuPickerRef,backgroundProductPickerRef,namePickerRef,descriptionPickerRef,pricePickerRef,setShowBackgroundPicker,setShowBackCategoryPicker,setShowMenuPicker,setShowNamePicker,setShowDescriptionPicker,setShowPricePicker,setActiveCategory,
             showNamePicker,showDescriptionPicker,showPricePicker,fonts,templates,isEditRoute,initialFormDataRef,validateLink,getFonts,getTemplates,handlePrev,handleNext,handleActiveCategory,handleRestaurantName,handleActiveProduct,handleShowBackgroundPicker,handleShowMenuPicker,handleShowBackCategoryPicker,handleShowNamePicker,handleShowDescriptionPicker,handleShowPricePicker,resetUserTemplate,validation,getDataToEdit,handleTemplate,
             templateNull,usertemplateNull,handleLogo,handleUserTemplate,handleBackgroundCard,handleMenuColor,addCategory,handleFontFamily,removeCategory,handleChangeCategoryName,addProductToCategory,removeProductToCategory,handleProductField,handleImgProduct,handleBackgroundProduct,handleColorNameProduct,handleColorDescriptionProduct,handleColorPriceProduct,handleProductName,handleProductDescription,handleProductTop,handleProductPrice, loading, setLoading,
     }=UseMenu();
@@ -27,6 +27,7 @@ function MenuForm(){
     const { t } = useTranslation();
     const{setValidateFormMenu}=useValidate();
     const [initialValues,setInitialValues]=useState(formData);
+    const {globalTabValue}=useValidate();
 
     const validateFormFields = () => {
       if (Object.keys(formik.errors).length > 1 || (Array.isArray(formik.errors.category) && formik.errors.category.length > 0)) {
@@ -46,11 +47,6 @@ function MenuForm(){
         },
         enableReinitialize:true
     });
-    //console.log(" values ",formik.values);
-    //console.log("formdata: ",formData);
-    // console.log("formdata", formData);
-    console.log(formik.errors)
-
 
     useEffect(()=>{
       const executeFunctions=async()=>{
@@ -94,6 +90,9 @@ function MenuForm(){
       }
     },[])
 
+    console.log("formdata: ",formData);
+    console.log("global tab value: ",globalTabValue);
+
     useEffect(()=>{
       if(isEditRoute){
         formik.setValues((prevValues)=>({
@@ -107,10 +106,6 @@ function MenuForm(){
     useEffect(()=>{
       setLoading(false);
     },[])
-    // console.log("isss ",editFormdata);
-    console.log("fomik values: ",formik.values);
-    console.log("intial values: ",formik.initialValues);
-    console.log("formik errors",formik.errors);
 return (
     <div className='p-4'>
       {loading ? (
@@ -140,6 +135,7 @@ return (
                 onBlur={formik.handleBlur}
                 name="restaurantName"
                 id="restaurantName"
+                disabled={globalTabValue==1}
               />
               {formik.touched.restaurantName && formik.errors.restaurantName ? (
                 <div className='text-red-600 my-1 text-[13px]'>{formik.errors.restaurantName}</div>
@@ -164,6 +160,7 @@ return (
                 name="restaurantLogo"
                 id="restaurantLogo"
                 onBlur={formik.handleBlur}
+                disabled={globalTabValue==1}
                 onChange={(e) => { handleLogo(e); formik.setFieldValue('restaurantLogo', e.target.files[0]); }}
               />
             </div>
@@ -212,7 +209,7 @@ return (
                         </div>
                         {templates?.length > 0 && templates.map((element, index) => (
                           <motion.div whileHover={{translateY:'-1px',transition:'.4s'}}  key={index} className="w-1/5 px-2 flex-shrink-0">
-                            <img onClick={(e)=>{
+                            <img  onClick={(e)=>{
                               setIndexTemplate(formData.idImgTemplate); handleTemplate(e); setIndexTemplate(index)}} id={element.id} className={`w-full h-full object-cover rounded-lg hover:shadow-md hover:shadow-black ${indexTemplate==element.id ? 'brightness-50':''}`} src={element.image} alt="imagen" />
                           </motion.div>
                         ))}
@@ -239,7 +236,8 @@ return (
                       value={isEditRoute ? formData.idFontPreview : ''} 
                       className='p-4 rounded-[10px] bg-gray-300 w-full lg:w-auto'
                       name="fontFamily" 
-                      id="fontFamily" 
+                      id="fontFamily"
+                      disabled={globalTabValue==1} 
                       onChange={(e) => handleFontFamily(e)}
                     >
                       {fonts?.map((item, index) => (
@@ -360,7 +358,7 @@ return (
                         {values?.category && values?.category.length <= 0 ? (
                             <div><h1>no hay categorias agregadas</h1></div>
                         ) : (
-<FieldArray name="category">
+<FieldArray disabled={globalTabValue==1}  name="category">
   {({ remove, push }) => (
     <div>
       <button
@@ -423,40 +421,45 @@ return (
       {/* Asegurarse de que hay categorías antes de mostrar el Accordion */}
       {values?.category.length > 0 && (
         <Accordion variant="splitted">
-          {values?.category.map((category, index) => (
-            <AccordionItem
-              className={`bg-gray-300 my-2 p-3 pb-2 w-full rounded-2xl cursor-pointer ${
-                  activeCategory === index ? "border-2 border-zinc-800" : ""
-                }`}
-              key={index}
-              aria-label={`category ${index}`}
-              title={
-                <div onClick={()=>handleActiveCategory(index)} className="flex justify-between p-2">
-                  <label htmlFor={`category.${index}.categoryName`} className="">
-                    {!productsCategory?.[index].categoryName=="" ? productsCategory?.[index]?.categoryName:t('Category name')}
-                  </label>
-                    <button
-                      onClick={() => {
-                        if (values?.category.length>1 && formData.category.length>1) {
-                          remove(index);
-                          removeCategory(index);
-                        }
-                        if (activeCategory === index) {
-                          handleActiveCategory(index - 1);
-                        }
-                        const updatedCategories=[...formik.values.category];
-                        updatedCategories.splice(index,1)
-                        formik.setFieldValue(`category`,updatedCategories);
-                      }}
-                      type="button"
-                      className={`p-1 text-red-600 self-end font-semibold hover:underline ${values.category.length > 1 ? "" : "hidden"}`}
-                    >
-                      <DeleteIcon className='text-red-600 hover:underline hover:translate-y-[-2px] hover:duration-[.4s]' />
-                    </button>
-                </div>
-              }
-              keepContentMounted={true}
-            >
+        {values?.category.map((category, index) => (
+          <AccordionItem
+            className={`bg-gray-300 my-2 p-3 pb-2 w-full rounded-2xl cursor-pointer ${
+              activeCategory === index ? "border-2 border-zinc-800" : ""
+            }`}
+            key={index}
+            aria-label={`category ${index}`}
+            isOpen={activeCategory === index} // Asegura que el acordeón se abra correctamente
+            title={
+              <div onClick={() => handleActiveCategory(index)} className="flex justify-between p-2">
+                <label htmlFor={`category.${index}.categoryName`}>
+                  {productsCategory?.[index]?.categoryName || t("Category name")}
+                </label>
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    if (values?.category.length > 1 && index !== 0) {
+                      remove(index);
+                      removeCategory(index);
+                    }
+                    if (activeCategory === index) {
+                      handleActiveCategory(null);
+                    }
+                    const updatedCategories = [...formik.values.category];
+                    updatedCategories.splice(index, 1);
+                    formik.setFieldValue("category", updatedCategories);
+                  }}
+                  type="button"
+                  disabled={index === 0 || globalTabValue==1}
+                  className={`p-1 text-red-600 self-end font-semibold hover:underline ${
+                    values.category.length > 1 && index !== 0 ? "" : "hidden"
+                  }`}
+                >
+                  <DeleteIcon className="text-red-600 hover:underline hover:translate-y-[-2px] hover:duration-[.4s]" />
+                </button>
+              </div>
+            }
+            keepContentMounted={true}
+          >
               <div
                 onClick={() => setActiveCategory(index)}
                 className={`bg-gray-300 my-1 p-3 sm:p-1 md:p-1 w-full rounded-2xl cursor-pointer`}
@@ -468,6 +471,7 @@ return (
                     className="p-2 border rounded w-full"
                     type="text"
                     value={formData?.category[index]?.categoryName}
+                    disabled={globalTabValue==1} 
                     name={`category[${index}].categoryName`}
                     placeholder={t("Enter category name")}
                     onBlur={formik.handleBlur}
@@ -605,6 +609,7 @@ return (
                                         formik.setFieldValue(`category[${index}].products[${productIndex}].productImg`, e.target.files[0]);
                                       }}
                                       className="hidden"
+                                      disabled={globalTabValue==1} 
                                       type="file"
                                       accept="image/*"
                                       name={`category[${index}].products[${productIndex}].productImg`}
@@ -640,6 +645,7 @@ return (
                                       className="p-2 border rounded w-full"
                                       type="text"
                                       placeholder={t('Product Name')}
+                                      disabled={globalTabValue==1}
                                       value={formData?.category[index]?.products[productIndex]?.productName}
                                       name={`category[${index}].products[${productIndex}].productName`}
                                       onBlur={formik.handleBlur}
@@ -658,6 +664,7 @@ return (
                                     <input
                                       className="p-2 border rounded w-full"
                                       type="text"
+                                      disabled={globalTabValue==1} 
                                       placeholder={t('Product Description')}
                                       value={formData?.category[index]?.products[productIndex]?.productDescription}
                                       name={`category[${index}].products[${productIndex}].productDescription`}
@@ -682,14 +689,25 @@ return (
                                       <label>{t('Top')}</label>
                                       <input
                                         type="checkbox"
-                                        defaultChecked={isEditRoute ? formData?.category[index]?.products[productIndex]?.top : false}
+                                        disabled={globalTabValue==1} 
+                                        checked={formData.category[index].products[productIndex]?.top || false}
                                         name={`category[${index}].products[${productIndex}].top`}
                                         onBlur={formik.handleBlur}
                                         onChange={(e) => {
-                                          handleProductTop(index, productIndex, e);
-                                          formik.setFieldValue(`category[${index}].products[${productIndex}].top`, e.target.checked);
+                                          // Verifica si ya hay 3 productos con `top` activado
+                                          const topCount = formData.category[index].products.filter(product => product.top).length;
+
+                                          if (!e.target.checked || topCount < 3) {
+                                            // Permite cambiar el valor solo si se está desmarcando o si aún no hay 3 productos con `top`
+                                            handleProductTop(index, productIndex, e);
+                                            formik.setFieldValue(`category[${index}].products[${productIndex}].top`, e.target.checked);
+                                          }else{
+                                            toast.info("solo puede haber tres productos top por categoria",4000);
+                                          }
                                         }}
                                       />
+
+
                                     </div>
 
                                     {/* Input "Price" */}
@@ -699,6 +717,7 @@ return (
                                         <input
                                           className="p-2 border rounded w-full"
                                           type="number"
+                                          disabled={globalTabValue==1} 
                                           value={formData.category[index]?.products[productIndex]?.price}
                                           name={`category[${index}].products[${productIndex}].price`}
                                           onBlur={formik.handleBlur}

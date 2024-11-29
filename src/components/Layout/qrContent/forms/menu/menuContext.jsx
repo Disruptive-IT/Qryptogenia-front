@@ -27,7 +27,7 @@ export default function MenuProvider({children}) {
     const isEditRoute = location.pathname.startsWith('/edit');
     const initialFormDataRef=useRef();
     const validateLink=/.webp/
-    const productsCategory=formData.category;
+    const productsCategory=formData?.category;
     const [loading, setLoading] = useState(true); // Maneja el loading aquí
 
     const [currentTemplate, setCurrentTemplate] = useState(0);
@@ -52,6 +52,17 @@ export default function MenuProvider({children}) {
            // console.error("Error fetching fonts: ", error.message);
         }
     };
+
+    const limitTops = (array) => {
+        array.forEach((category) => {
+            const topCount = category.products.filter(product => product.top).length;
+            if (topCount > 3) {
+              console.error(`La categoría "${category.name}" tiene más de 3 productos marcados como top.`);
+            } else {
+              console.log(`La categoría "${category.name}" está correcta.`);
+            }
+        });
+      };
 
     const getTemplates = async () => {
         try {
@@ -793,6 +804,7 @@ export default function MenuProvider({children}) {
             setShowDescriptionPicker,
             setShowPricePicker,
             setUserTemplate,
+            setActiveCategory,
             //funciones axios
             getFonts,
             getTemplates,
@@ -838,6 +850,7 @@ export default function MenuProvider({children}) {
             handleProductDescription,
             handleProductTop,
             handleProductPrice,
+            limitTops,
             //skeleton
             loading,
             setLoading,
