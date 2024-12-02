@@ -41,6 +41,7 @@ const QRScanPage = () => {
     const [dataBtn,setDataBtn]=useState(null);
     const [isDark, setIsDark] = useState('#000000');
     const [fontPreview,setFontPreview]=useState({});
+    const [hasAnimated,setHasAnimated]=useState(false);
     const {getNameFont}=UseMenu();
     
     const fetchData = async () => {
@@ -73,6 +74,10 @@ const QRScanPage = () => {
           setDataBtn(updatedDataBtn);
       }
   }, [qrData]);
+
+  // useEffect(()=>{
+  //   setHasAnimated(false);
+  // },[tabValue])
 
   
 
@@ -326,7 +331,7 @@ const QRScanPage = () => {
                   </div>
                     {/* Categorías y productos */}
                     <motion.div
-                    className="lg:w-[90%] sm:w-full p-1 md:w-[90%] min-h-90 h-auto overflow-y-scroll">
+                    className="lg:w-[90%] sm:w-full p-1 md:w-[90%] min-h-90 h-auto overflow-auto">
                         <ThemeProvider theme={theme}>
                         <Box>
                             <Tabs
@@ -375,7 +380,23 @@ const QRScanPage = () => {
                             {/* Paneles de Categorías */}
                             {qrData?.MenuPreview?.category.map((category, indexCategory) => (
                             <TabPanel key={indexCategory} value={tabValue} index={indexCategory}>
-                               <motion.div initial={{translateY:'500px'}} animate={{translateY:'0px'}} transition={{duration:'.3s',type:'spring',bounce:'0.5'}} className='flex flex-wrap justify-center gap-4'>
+                               <motion.div 
+                                  initial={!hasAnimated ? { translateY: "500px", opacity: 0 } : false}
+                                  animate={{ translateY: "0px", opacity: 1 }}
+                                  transition={{
+                                    delay: 0.2, // Retraso para que sea más notorio
+                                    duration: 0.2, // Aumenta la duración
+                                    type: "spring",
+                                    stiffness: 80, // Ajusta la rigidez para un movimiento más suave
+                                    damping: 10,   // Reduce las oscilaciones
+                                    bounce: 0.3,
+                                  }}
+                                  onAnimationComplete={() => {
+                                    if (!hasAnimated) setHasAnimated(true);
+                                  }}
+                                      className="flex flex-wrap justify-center gap-4"
+                                      style={{ marginTop: "20px" }}
+                                    >
                             {category.products && category.products.length > 0 ? (
                                 category.products.map((product, indexProduct) => (
                                   <motion.div
@@ -389,7 +410,6 @@ const QRScanPage = () => {
                                       backgroundColor: product.backgroundProductCard,
                                       backgroundImage: product.backgroundProductCard.includes("gradient") ? product.backgroundProductCard : "none",
                                   }}
-                                  // className="lg:w-[30%] md:w-[45%] sm:w-[341px] sm:h-[116px] min-w-[320px] max-w-[400px] min-h-[116px] max-h-[180px] mx-4 my-3 flex flex-row rounded-md overflow-hidden"
                                   className='w-[320px] h-[116px] flex rounded-md overflow-hidden'
                                   onClick={() => {setActiveprod({activeCat: indexCategory, activeProd: indexProduct}); handleOpenModal();}}
                               >
@@ -406,7 +426,7 @@ const QRScanPage = () => {
                                               {product.price == null ? 'Price' : `${product.price}$`}
                                           </h1>
                                       </div>
-                                      {product.top && <img className='w-8 self-end pb-6' src='/star.svg'/>}
+                                      {product.top && <img className='w-8 self-end pb-6 relative bottom-0' src='/star.svg'/>}
                                   </div>
                               </motion.div>                              
                                 ))
@@ -420,7 +440,23 @@ const QRScanPage = () => {
 
                             {/* Panel para los productos destacados */}
                             <TabPanel key="top" value={tabValue} index={qrData?.MenuPreview?.category.length}>
-                            <motion.div initial={{translateY:'500px'}} animate={{translateY:'0px'}} transition={{duration:'.3s',type:'spring',bounce:'0.5'}} className='flex flex-wrap justify-center px-10 gap-4'>
+                            <motion.div
+                              initial={!hasAnimated ? { translateY: "500px", opacity: 0 } : false}
+                              animate={{ translateY: "0px", opacity: 1 }}
+                              transition={{
+                                delay: 0.2, // Retraso para que sea más notorio
+                                duration: 0.2, // Aumenta la duración
+                                type: "spring",
+                                stiffness: 80, // Ajusta la rigidez para un movimiento más suave
+                                damping: 10,   // Reduce las oscilaciones
+                                bounce: 0.3,
+                              }}
+                              onAnimationComplete={() => {
+                                if (!hasAnimated) setHasAnimated(true);
+                              }}
+                                  className="flex flex-wrap justify-center gap-4"
+                                  style={{ marginTop: "20px" }}                                  
+                            >
                             {topProducts?.length > 0 ? (
                                 topProducts.map((element, index) => (
                                 <motion.div                               
@@ -442,7 +478,7 @@ const QRScanPage = () => {
                                         {element.price == null ? 'Price' : `${element.price}$`}
                                         </h1>
                                     </div>
-                                    {element.top && <img className='w-8 self-end pb-3' src='/star.svg'/>}
+                                    {element.top && <img className='w-8 self-end pb-3 relative bottom-0' src='/star.svg'/>}
                                     </div>
                                 </motion.div>
                                 ))

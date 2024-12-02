@@ -30,6 +30,9 @@ export const WebLinkPhoneMusic = ({ FormValues, contentName }) => {
   const [isDark, setIsDark] = useState('#000000');
   const [fontPreview,setFontPreview]=useState({});
   const {getNameFont}=UseMenu();
+  const isEditRoute=location.pathname.startsWith('/edit');
+  const isModalRoute=location.pathname.startsWith('/user');
+  const isCreateRoute=location.pathname.startsWith('/qr');
   // console.log(contentName)
   // console.log(FormValues.backgroundColor)
 
@@ -170,6 +173,8 @@ export const WebLinkPhoneMusic = ({ FormValues, contentName }) => {
     return luminance < 0.5;
   };
 
+  const validateImage=FormValues.image===logot || FormValues.image===mesadoko || FormValues.image===google;
+
   const extractColorFromGradient = (gradient, percentageFromBottom) => {
     const colors = gradient.match(/rgb\(\d+, \d+, \d+\)/g);
     const stops = gradient.match(/(\d+(\.\d+)?)%/g);
@@ -230,9 +235,28 @@ export const WebLinkPhoneMusic = ({ FormValues, contentName }) => {
     <div  className='relative flex flex-col w-[100%] h-[100%] items-center rounded-t-[52px] rounded-b-[50px]  p-4 overflow-y-auto custom-scrollbarphone' style={{fontFamily:fontPreview?.fontName, background:FormValues.backgroundColor, minHeight: '670px', maxHeight: '670px', minWidth: '350px', maxWidth: '350px'}}>
         <div className='flex flex-col items-center mt-28 w-[97%] bg-white rounded-2xl' style={{ background:FormValues.boxColor }}>
             {showImage && (
-                <div className='relative bg-white rounded-2xl -mt-14 border-4 shadow-lg' style={{ borderColor: FormValues.borderImg }}>
-                    <img className='w-36  rounded-2xl' src={FormValues.image ? `data:image/png;base64,${FormValues.image}` : (contentName === 'music' ? logot : (contentName === 'social media' ? google : mesadoko))} alt="" />
-                </div>
+              <div
+                className={`relative bg-white rounded-2xl -mt-14 ${
+                  validateImage && !isCreateRoute ? 'hidden' : ''
+                } shadow-lg`}
+                style={{border:validateImage ? '0px':'4px', borderColor: validateImage ? 'transparent' : FormValues.borderImg }}
+              >
+                <img
+                  className={`w-36 rounded-2xl`}
+                  src={
+                    FormValues.image
+                      ? `data:image/png;base64,${FormValues.image}`
+                      : contentName === 'music' && !isEditRoute && !isModalRoute
+                      ? logot
+                      : contentName === 'social media' && !isEditRoute && !isModalRoute
+                      ? google
+                      : contentName === 'app store' && !isEditRoute && !isModalRoute
+                      ? mesadoko
+                      : ''
+                  }
+                  alt=""
+                />
+              </div>
             )}
             <div className="mt-[1%] mb-2 w-[90%] text-center">
                 <div className='break-words overflow-y-auto' style={{ color:FormValues.colorTitle, fontSize: '30px' }}>

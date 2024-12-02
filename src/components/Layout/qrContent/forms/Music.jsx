@@ -377,6 +377,7 @@ export const MusicForm = ({ onFormChangeMusic, location, musicFormValues }) => {
                               onChange={handleImageChange}
                               />
                               <button
+                              type='button'
                               onClick={handleClick}
                               disabled={globalTabValue==1}
                               className="text-blue-500 hover:text-blue-600 focus:outline-none"
@@ -526,7 +527,8 @@ export const MusicForm = ({ onFormChangeMusic, location, musicFormValues }) => {
                     <div className='flex flex-col md:flex-row md:items-center mb-4 mt-10'>
           <h1 className='mt-3 text-lg font-semibold mr-6'>{t('Font style')}:</h1>
                     <select
-                disabled={globalTabValue==1} 
+                    value={isEditRoute ? musicFormValues.idFontPreview : ''}
+                disabled={globalTabValue==1}
                 className='p-4 rounded-[10px] bg-gray-300' 
                 name="fontFamily" 
                 id="" 

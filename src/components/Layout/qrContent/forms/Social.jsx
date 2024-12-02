@@ -384,6 +384,7 @@ export const SocialForm = ({ onFormChange, location, socialFormValues }) => {
                                     />
                                     <button
                                     onClick={handleClick}
+                                    type='button'
                                     className="text-blue-500 hover:text-blue-600 focus:outline-none"
                                     >
                                     <MdOutlineCloudUpload size="40" /> 
@@ -536,6 +537,7 @@ export const SocialForm = ({ onFormChange, location, socialFormValues }) => {
                 className='p-4 rounded-[10px] bg-gray-300' 
                 name="fontFamily" 
                 id=""
+                value={isEditRoute ? socialFormValues.idFontPreview : ''}
                 disabled={globalTabValue==1} 
                 onChange={(e) => {
                   handleSelectedFont(e);

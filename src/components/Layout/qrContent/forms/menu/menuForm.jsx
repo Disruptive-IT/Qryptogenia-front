@@ -420,10 +420,10 @@ return (
 
       {/* Asegurarse de que hay categorías antes de mostrar el Accordion */}
       {values?.category.length > 0 && (
-        <Accordion variant="splitted">
+        <Accordion variant='bordered'>
         {values?.category.map((category, index) => (
           <AccordionItem
-            className={`bg-gray-300 my-2 p-3 pb-2 w-full rounded-2xl cursor-pointer ${
+            className={`bg-gray-200 my-1 p-3 pb-2 w-full rounded-md cursor-pointer ${
               activeCategory === index ? "border-2 border-zinc-800" : ""
             }`}
             key={index}
@@ -462,7 +462,7 @@ return (
           >
               <div
                 onClick={() => setActiveCategory(index)}
-                className={`bg-gray-300 my-1 p-3 sm:p-1 md:p-1 w-full rounded-2xl cursor-pointer`}
+                className={`bg-transparent my-1 p-3 sm:p-1 md:p-1 w-full rounded-2xl cursor-pointer`}
               >
                 <div className='flex flex-col'>
                   {/* Input para el nombre de la categoría */}
@@ -573,7 +573,7 @@ return (
                               </div>
                             }
                             keepContentMounted={true}
-                            className={`bg-white p-3 my-2 rounded-[10px]`}
+                            className={`bg-white p-3 my-2 rounded-md`}
                           >
                             {/* Contenedor de cada producto */}
                             <div>
@@ -581,7 +581,7 @@ return (
                               <div className="flex flex-col lg:flex-row lg:gap-6 gap-4 m-0 w-full">
                                 {/* Contenedor de la Imagen */}
                                 <div
-                                  className={`lg:w-1/3 w-full sm:h-40 lg:h-auto rounded-[10px] bg-slate-600 ${formData?.category[index]?.products[productIndex]?.productImg == null ? 'hidden' : ''}`}
+                                  className={`lg:w-1/3 w-full sm:h-40 lg:h-auto ${formData?.category[index]?.products[productIndex]?.productImg == null ? 'hidden' : ''}`}
                                 >
                                   <img
                                     id={`imgProductPreview-${index}-${productIndex}`}

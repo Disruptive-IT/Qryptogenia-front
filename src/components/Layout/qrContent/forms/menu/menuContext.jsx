@@ -92,9 +92,10 @@ export default function MenuProvider({children}) {
         setCurrentTemplate((prevIndex) => (prevIndex < templates.length - 1 ? prevIndex + 1 : 0));
       };
 
-    const handleActiveCategory = (index) => {
-        setActiveCategory(index);
-    };
+      const handleActiveCategory = (index) => {
+        // Si el índice es el mismo que el estado activo, lo cerramos (lo ponemos en null)
+        setActiveCategory((prevIndex) => (prevIndex === index ? null : index));
+      };
     
     const handleActiveProduct = (index) => {
         setActiveProduct(index);

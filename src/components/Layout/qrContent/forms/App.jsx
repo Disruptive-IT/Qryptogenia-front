@@ -272,6 +272,7 @@ useEffect(() => {
         fileInputRef.current.click();
     };
 
+
     const handleImageChange = (e) => {
         const file = e.target.files[0];
         if (file) {
@@ -310,7 +311,7 @@ useEffect(() => {
         return selectedOptions.some(selected => selected.value === option.value);
     };
 
-    console.log(formErrors)
+    // console.log(formErrors)
 
     // Skeleton Loader
             useEffect(() => {
@@ -405,6 +406,7 @@ useEffect(() => {
                                       />
                                       <button
                                       onClick={handleClick}
+                                      type='button'
                                       className="text-blue-500 hover:text-blue-600 focus:outline-none"
                                       >
                                       <MdOutlineCloudUpload size="40" /> 
@@ -553,6 +555,7 @@ useEffect(() => {
                             <div className='flex flex-col md:flex-row md:items-center mb-4 mt-10'>
                   <h1 className='mt-3 text-lg font-semibold mr-6'>{t('Font style')}:</h1>
                             <select
+                            value={isEditRoute ? appFormValues.idFontPreview : ''}
                             disabled={globalTabValue==1} 
                         className='p-4 rounded-[10px] bg-gray-300' 
                         name="fontFamily" 
