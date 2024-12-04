@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { createTheme, Modal, ThemeProvider } from '@mui/material';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
@@ -6,6 +6,7 @@ import Tab from '@mui/material/Tab';
 import Tabs from '@mui/material/Tabs';
 import StarIcon from '@mui/icons-material/Star';
 import './../forms/menu/menu.css';
+import { handleSetIsDark } from "../preview-helpers/handlerColor";
 
 /*
  * @Author : Nicolas Barrios,   @date 2024-10-02 22:01:55
@@ -19,6 +20,7 @@ export default function StoreMenuFood({ menuFormValues }) {
     const [openModal,setOpenModal]=useState(false);
     const [activeprod,setActiveprod]=useState(0);
     const [activeCategory,setActiveCategory]=useState(0);
+    const [isDarkButton,setIsDarkButton]=useState('#000000');
 
   
     const handleOpenModal=()=>{
@@ -67,6 +69,10 @@ export default function StoreMenuFood({ menuFormValues }) {
         }
       }
     });
+
+    useEffect(()=>{
+      handleSetIsDark(menuFormValues?.category[tabValue]?.products[0].backgroundProductCard,setIsDarkButton)
+    },[menuFormValues?.category[tabValue]?.products[0].backgroundProductCard])
   
     function TabPanel(props) {
       const { children, value, index, ...other } = props;
@@ -173,12 +179,12 @@ export default function StoreMenuFood({ menuFormValues }) {
               <img className='w-full h-full' src={element.productImg} alt={element.productName} />
             </div>
             <div style={{backgroundColor:element.backgroundProductCard}} className='w-[60%] h-full px-1 py-1  flex flex-col self-center'>
-            <img className='w-4 self-end' src='/eye.svg'/>
+              {element.top ? <img className='w-7 self-end pb-1' src='/star.svg'/> : ''}
               <div className='w-full  h-[80%] bg-transparent flex flex-col justify-evenly'>
                 <h1 style={{color: element.colorName,fontFamily:menuFormValues.fontpreview}} className='text-[17px] text-center break-words font-bold'>{element.productName=='' ? 'Product name' : element.productName}</h1>
-                <h1 style={{color: element.colorPrice,fontFamily:menuFormValues.fontpreview}} className='text-center break-words font-bold'>{element.price==null ? 'price':element.price+'$'}</h1>
+                <h1 style={{color: element.colorPrice,fontFamily:menuFormValues.fontpreview}} className='text-center break-words font-bold'>{element.price==null ? 'price':'$'+element.price}</h1>
               </div>
-              {element.top ? <img className='w-8 self-end pb-1' src='/star.svg'/> : ''}
+              <button style={{backgroundColor:isDarkButton,color:isDarkButton=='#000000' ? '#ffffff' : '#000000'}} className="w-1/4 text-[12px] self-end text-white px-2 font-semibold rounded-3xl  transition-all duration-200">Ver</button>
             </div>
           </div>
         ))
@@ -196,12 +202,12 @@ export default function StoreMenuFood({ menuFormValues }) {
               <img className='w-full h-full' src={element.productImg} alt={element.productName} />
             </div>
             <div style={{backgroundColor:element.backgroundProductCard}} className='w-[60%] h-full px-1 py-1  flex flex-col self-center'>
-              <img className='w-4 self-end' src='/eye.svg'/>
+              {element.top ? <img className='w-7 self-end pb-1' src='/star.svg'/> : ''}
               <div style={{fontFamily:menuFormValues?.fontPreview || 'sans-serif'}} className='w-full  h-[80%] bg-transparent flex flex-col justify-evenly'>
                 <h1 style={{color: element.colorName}} className='text-[17px] text-center break-words font-bold'>{element.productName === '' ? 'Product name' : element.productName}</h1>
-                <h1 style={{color: element.colorPrice}} className='text-center break-words font-bold'>{element.price == null ? 'price' : element.price + '$'}</h1>
+                <h1 style={{color: element.colorPrice}} className='text-center break-words font-bold'>{element.price == null ? 'price' : '$'+element.price}</h1>
               </div>
-              {element.top ? <img className='w-8 self-end pb-1' src='/star.svg'/> : ''}
+              <button className="bg-black w-1/4 text-[12px] self-end text-white px-2 font-semibold rounded-3xl  transition-all duration-200">Ver</button>
             </div>
           </div>
         ))
@@ -227,7 +233,7 @@ export default function StoreMenuFood({ menuFormValues }) {
           <img className='rounded-2xl border-[4px] border-black' src={menuFormValues.category[activeCategory].products[activeprod].productImg} alt={menuFormValues.category[activeCategory].products[activeprod].productName} />
           <div className='flex flex-row w-full h-auto justify-between p-2 mb-1'>
             <h1 className='mx-3 my-4 font-bold text-[20px] text-black'>{menuFormValues.category[activeCategory].products[activeprod].productName}</h1>
-            <h1 className='mx-3 my-4 font-bold text-[20px] text-black'>{menuFormValues.category[activeCategory].products[activeprod].price}$</h1>
+            <h1 className='mx-3 my-4 font-bold text-[20px] text-black'>${menuFormValues.category[activeCategory].products[activeprod].price}</h1>
           </div>
           <div>
             <h1 className='font-bold text-[20px] text-center text-black'>{menuFormValues.category[activeCategory].products[activeprod].productDescription}</h1>
@@ -244,7 +250,7 @@ export default function StoreMenuFood({ menuFormValues }) {
           <img className='rounded-2xl border-[4px] border-black' src={topProducts[activeprod].productImg} alt={topProducts[activeprod].productName} />
           <div className='flex flex-row w-full h-auto justify-between p-2 mb-1'>
             <h1 className='mx-3 my-4 font-bold text-[20px] text-black'>{topProducts[activeprod].productName}</h1>
-            <h1 className='mx-3 my-4 font-bold text-[20px] text-black'>{topProducts[activeprod].price}$</h1>
+            <h1 className='mx-3 my-4 font-bold text-[20px] text-black'>${topProducts[activeprod].price}</h1>
           </div>
           <div>
             <h1 className='font-bold text-[20px] text-center text-black'>{topProducts[activeprod].productDescription}</h1>

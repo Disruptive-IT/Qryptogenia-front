@@ -90,6 +90,8 @@ export default function ChangeFrame({ name, appFormValues, socialFormValues, mus
     // console.log("ChangeFrame - appFormValues:", appFormValues);
     // console.log("ChangeFrame - socialFormValues:", socialFormValues);
     // console.log("ChangeFrame - musicFormValues:", musicFormValues);
+    console.log("value tab:",value);
+    console.log("globaltab value: ",globalTabValue);
 
     useEffect(() => {
         if (isSmallScreen || isSpecialContent) {
