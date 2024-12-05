@@ -27,7 +27,7 @@ function MenuForm(){
     const { t } = useTranslation();
     const{setValidateFormMenu}=useValidate();
     const [initialValues,setInitialValues]=useState(formData);
-    const {globalTabValue}=useValidate();
+    const {globalTabValue,changeTabValue}=useValidate();
 
     const validateFormFields = () => {
       if (Object.keys(formik.errors).length > 1 || (Array.isArray(formik.errors.category) && formik.errors.category.length > 0)) {
@@ -173,7 +173,7 @@ return (
               <button></button>
               <div 
                 className="w-10 h-10 border border-gray-300 rounded cursor-pointer"
-                onClick={() => indexTemplate == null && (setShowBackgroundPicker(!showBackgroundPicker))}
+                onClick={() =>{if(globalTabValue!==1){ indexTemplate == null && (setShowBackgroundPicker(!showBackgroundPicker))}}}
                 aria-disabled={indexTemplate != null ? false : true}
                 style={{ backgroundColor: formData.backgroundCard || "#000" ,backgroundImage:formData?.backgroundCard.includes("gradient") ? formData?.backgroundCard : "none"}}
               />
@@ -187,7 +187,7 @@ return (
             {/* Menu Color Section */}
             <div className="flex items-center space-x-12 mx-3">
               <label htmlFor="menuColor" className="text-[17px]">{t('Color navbar')}</label>
-              <div className="w-10 h-10 border border-gray-300 rounded cursor-pointer" onClick={() => setShowMenuPicker(!showMenuPicker)} style={{ backgroundColor: formData.colorMenu || "#000" }}
+              <div className="w-10 h-10 border border-gray-300 rounded cursor-pointer" onClick={() =>{if(globalTabValue!==1)setShowMenuPicker(!showMenuPicker)}} style={{ backgroundColor: formData.colorMenu || "#000" }}
               />
               {showMenuPicker && (
                 <div className="menuPicker z-50" ref={menuPickerRef}>
@@ -255,7 +255,7 @@ return (
                         <label className='my-2' htmlFor="background">{t('Background')}</label>
                         <div
                           className='w-10 h-10 border-2 border-gray-300 rounded cursor-pointer'
-                          onClick={() => setShowBackCategoryPicker(!showBackCategoryPicker)}
+                          onClick={() =>{if(globalTabValue!==1) setShowBackCategoryPicker(!showBackCategoryPicker)}}
                           style={{
                             backgroundColor: formData.category?.[activeCategory]?.products[0]?.backgroundProductCard || "#000",
                             backgroundImage: formData.category?.[activeCategory]?.products[0]?.backgroundProductCard.includes("gradient") 
@@ -284,7 +284,7 @@ return (
                         <label className='my-2' htmlFor="nameColor">{t('Name Color')}</label>
                         <div
                           className='w-10 h-10 border border-gray-300 rounded cursor-pointer'
-                          onClick={() => setShowNamePicker(!showNamePicker)}
+                          onClick={() =>{if(globalTabValue!==1) setShowNamePicker(!showNamePicker)}}
                           style={{
                             backgroundColor: formData.category?.[activeCategory]?.products[0]?.colorName || '#000'
                           }}
@@ -308,7 +308,7 @@ return (
                         <label className='my-2' htmlFor="descriptionColor">{t('Description Color')}</label>
                         <div
                           className='w-10 h-10 border border-gray-300 rounded cursor-pointer'
-                          onClick={() => setShowDescriptionPicker(!showDescriptionPicker)}
+                          onClick={() =>{if(globalTabValue!==1)setShowDescriptionPicker(!showDescriptionPicker)}}
                           style={{
                             backgroundColor: formData.category?.[activeCategory]?.products[0]?.colorDescription || '#000'
                           }}
@@ -332,7 +332,7 @@ return (
                         <label className='my-2' htmlFor="priceColor">{t('Price Color')}</label>
                         <div
                           className='w-10 h-10 border border-gray-300 rounded cursor-pointer'
-                          onClick={() => setShowPricePicker(!showPricePicker)}
+                          onClick={() =>{if(globalTabValue!==1)setShowPricePicker(!showPricePicker)}}
                           style={{
                             backgroundColor: formData.category?.[activeCategory]?.products[0]?.colorPrice || '#000'
                           }}
@@ -754,7 +754,17 @@ return (
     </div>
   )}
 </FieldArray>
-                        )}
+)}
+        <div>
+            <button className="px-4 py-2 my-4 bg-light-blue text-white rounded "
+             onClick={()=>{if(Object.keys(formik.errors).length>1 || formik.errors.category.length>0){
+              toast.warning("please complete all fields",2000);
+             }else{
+              changeTabValue();
+             }}} type='button'>
+             submit </button>
+        </div>
+
                     </div>
                 </form>
             )}

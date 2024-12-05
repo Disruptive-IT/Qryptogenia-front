@@ -180,7 +180,7 @@ export default function ChangeFrame({ name, appFormValues, socialFormValues, mus
                         {!(isSmallScreen || isSpecialContent) && <Tab label="Phone" />}  {/* Oculta el tab "Phone" en pantallas pequeñas o para contentName especial */}
                             <Tab
                             label="QR" 
-                            disabled={!isTabClickable || name=='music' || name=='social media' || name=='app store'}
+                            disabled={!isTabClickable || name=='music' || name=='social media' || name=='app store' || name=='food menu'} 
                             />
                     </Tabs>
                 </AppBar>

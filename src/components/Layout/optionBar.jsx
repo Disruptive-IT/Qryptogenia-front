@@ -82,7 +82,7 @@ export const OptionBarTwo = ({ contentName, name }) => {
   const navigate = useNavigate();
   const dataTypeQr = UseDataTypeQr();
   const { t } = useTranslation();
-  const {setGlobalTabValue}=useValidate();
+  const {setGlobalTabValue,globalTabValue}=useValidate();
 
   const {validateFormApp,
     setValidateFormApp,
@@ -126,7 +126,7 @@ export const OptionBarTwo = ({ contentName, name }) => {
         setNullableFormErrors();
         let direcc = item.name.toLowerCase().replace(/\s+/g, '-')
         setQrType(direcc);
-        setGlobalTabValue(contentName!=='website url' && contentName!=='wifi' && contentName!=='pdf' && 0);
+        setGlobalTabValue(direcc=='website-url' || direcc=='wifi' || direcc=='pdf' ? 1:0);
         navigate(`/qr/${direcc}`);
       }
     });
