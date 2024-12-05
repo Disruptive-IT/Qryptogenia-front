@@ -125,8 +125,7 @@ export const OptionBarTwo = ({ contentName, name }) => {
       if (result.isConfirmed) {
         setNullableFormErrors();
         let direcc = item.name.toLowerCase().replace(/\s+/g, '-')
-        setQrType(direcc)
-        setGlobalTabValue(0)
+        setQrType(direcc);
         navigate(`/qr/${direcc}`);
       }
     });

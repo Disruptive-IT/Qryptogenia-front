@@ -4,9 +4,9 @@ import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 import Tab from '@mui/material/Tab';
 import Tabs from '@mui/material/Tabs';
-import StarIcon from '@mui/icons-material/Star';
 import './../forms/menu/menu.css';
 import { handleSetIsDark } from "../preview-helpers/handlerColor";
+import { UseMenu } from "../forms/menu/menuContext";
 
 /*
  * @Author : Nicolas Barrios,   @date 2024-10-02 22:01:55
@@ -21,7 +21,7 @@ export default function StoreMenuFood({ menuFormValues }) {
     const [activeprod,setActiveprod]=useState(0);
     const [activeCategory,setActiveCategory]=useState(0);
     const [isDarkButton,setIsDarkButton]=useState('#000000');
-
+    const {currencyFormat}=UseMenu();
   
     const handleOpenModal=()=>{
       setOpenModal(true)
@@ -182,7 +182,7 @@ export default function StoreMenuFood({ menuFormValues }) {
               {element.top ? <img className='w-7 self-end pb-1' src='/star.svg'/> : ''}
               <div className='w-full  h-[80%] bg-transparent flex flex-col justify-evenly'>
                 <h1 style={{color: element.colorName,fontFamily:menuFormValues.fontpreview}} className='text-[17px] text-center break-words font-bold'>{element.productName=='' ? 'Product name' : element.productName}</h1>
-                <h1 style={{color: element.colorPrice,fontFamily:menuFormValues.fontpreview}} className='text-center break-words font-bold'>{element.price==null ? 'price':'$'+element.price}</h1>
+                <h1 style={{color: element.colorPrice,fontFamily:menuFormValues.fontpreview}} className='text-center break-words font-bold'>{element.price==null ? 'price':currencyFormat(element.price)}</h1>
               </div>
               <button style={{backgroundColor:isDarkButton,color:isDarkButton=='#000000' ? '#ffffff' : '#000000'}} className="w-1/4 text-[12px] self-end text-white px-2 font-semibold rounded-3xl  transition-all duration-200">Ver</button>
             </div>
@@ -205,7 +205,7 @@ export default function StoreMenuFood({ menuFormValues }) {
               {element.top ? <img className='w-7 self-end pb-1' src='/star.svg'/> : ''}
               <div style={{fontFamily:menuFormValues?.fontPreview || 'sans-serif'}} className='w-full  h-[80%] bg-transparent flex flex-col justify-evenly'>
                 <h1 style={{color: element.colorName}} className='text-[17px] text-center break-words font-bold'>{element.productName === '' ? 'Product name' : element.productName}</h1>
-                <h1 style={{color: element.colorPrice}} className='text-center break-words font-bold'>{element.price == null ? 'price' : '$'+element.price}</h1>
+                <h1 style={{color: element.colorPrice}} className='text-center break-words font-bold'>{element.price == null ? 'price' : currencyFormat(element.price)}</h1>
               </div>
               <button className="bg-black w-1/4 text-[12px] self-end text-white px-2 font-semibold rounded-3xl  transition-all duration-200">Ver</button>
             </div>
@@ -233,7 +233,7 @@ export default function StoreMenuFood({ menuFormValues }) {
           <img className='rounded-2xl border-[4px] border-black' src={menuFormValues.category[activeCategory].products[activeprod].productImg} alt={menuFormValues.category[activeCategory].products[activeprod].productName} />
           <div className='flex flex-row w-full h-auto justify-between p-2 mb-1'>
             <h1 className='mx-3 my-4 font-bold text-[20px] text-black'>{menuFormValues.category[activeCategory].products[activeprod].productName}</h1>
-            <h1 className='mx-3 my-4 font-bold text-[20px] text-black'>${menuFormValues.category[activeCategory].products[activeprod].price}</h1>
+            <h1 className='mx-3 my-4 font-bold text-[20px] text-black'>{currencyFormat(menuFormValues.category[activeCategory].products[activeprod].price)}</h1>
           </div>
           <div>
             <h1 className='font-bold text-[20px] text-center text-black'>{menuFormValues.category[activeCategory].products[activeprod].productDescription}</h1>
@@ -250,7 +250,7 @@ export default function StoreMenuFood({ menuFormValues }) {
           <img className='rounded-2xl border-[4px] border-black' src={topProducts[activeprod].productImg} alt={topProducts[activeprod].productName} />
           <div className='flex flex-row w-full h-auto justify-between p-2 mb-1'>
             <h1 className='mx-3 my-4 font-bold text-[20px] text-black'>{topProducts[activeprod].productName}</h1>
-            <h1 className='mx-3 my-4 font-bold text-[20px] text-black'>${topProducts[activeprod].price}</h1>
+            <h1 className='mx-3 my-4 font-bold text-[20px] text-black'>{currencyFormat(topProducts[activeprod].price)}</h1>
           </div>
           <div>
             <h1 className='font-bold text-[20px] text-center text-black'>{topProducts[activeprod].productDescription}</h1>

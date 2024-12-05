@@ -25,6 +25,7 @@ export default function WebLinkMenuFood({ FormValues, ContentName }) {
   const [isDarkButton,setIsDarkButton]=useState('#000000');
   const validateLink=/.webp/
   const {t}=useTranslation();
+  const {currencyFormat}=UseMenu();
   const defaultProductImage='https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSpSkKP8LgqK1IPs87-PyJcveeRF0Wet-xgyw&s'
   const defaultLogo='https://media.istockphoto.com/id/981368726/es/vector/restaurante-de-comida-y-bebidas-logotipo-tenedor-cuchillo-fondo-vector-imagen.jpg?s=612x612&w=0&k=20&c=3mPGCDXyBeuGpxeuTlHkECM5rAW5cy07bDFi0i0ZCbw='
 
@@ -240,7 +241,7 @@ const getLinkTemplate=async(id)=>{
             {element.top ? <img className='w-7 self-end pb-1' src='/star.svg'/> : ''}
             <div style={{fontFamily:fontFamily?.fontName}} className='w-full  h-[80%] bg-transparent flex flex-col justify-evenly'>
               <h1 style={{color: element.colorName}} className='text-[17px] text-center break-words font-bold'>{showInitialKeys && index==0 && productIndex==0 && counterChange==0 && !isEditRoute && element.productName=='' ? 'Burguer' : element.productName=='' ? 'Product name' : element.productName}</h1>
-              <h1 style={{color: element.colorPrice}} className='text-center break-words font-bold'>{showInitialKeys && index==0 && productIndex==0 && counterChange==0 && !isEditRoute && element.price=='' ? '45.67$' : element.price==null ? 'price':'$'+element.price}</h1>
+              <h1 style={{color: element.colorPrice}} className='text-center break-words font-bold'>{showInitialKeys && index==0 && productIndex==0 && counterChange==0 && !isEditRoute && element.price=='' ? '45.67$' : element.price==null ? 'price': currencyFormat(element.price)}</h1>
             </div>
             <button style={{backgroundColor:isDarkButton,color:isDarkButton=='#000000' ? '#ffffff' : '#000000'}} className=" w-1/4 text-[12px] self-end text-white px-2 font-semibold rounded-3xl  transition-all duration-200">Ver</button>
           </div>
@@ -263,7 +264,7 @@ const getLinkTemplate=async(id)=>{
             {element.top ? <img className='w-7 self-end pb-1' src='/star.svg'/>: ''}
             <div style={{fontFamily:fontFamily?.fontName}} className='w-full  h-[80%] bg-transparent flex flex-col justify-evenly'>
               <h1 style={{color: element.colorName}} className='text-[17px] text-center break-words font-bold'>{element.productName === '' ? 'Product name' : element.productName}</h1>
-              <h1 style={{color: element.colorPrice}} className='text-center break-words font-bold'>{element.price == null ? 'price' : '$'+element.price}</h1>
+              <h1 style={{color: element.colorPrice}} className='text-center break-words font-bold'>{element.price == null ? 'price' : currencyFormat(element.price)}</h1>
             </div>
             <button className="bg-black w-1/4 text-[12px] self-end text-white font-semibold rounded-3xl  transition-all duration-200">Ver</button>
           </div>
@@ -291,7 +292,7 @@ const getLinkTemplate=async(id)=>{
         <img className='rounded-2xl border-[4px] border-black' src={validateLink.test(FormValues?.category?.[activeCategory]?.products?.[activeprod]?.productImg)  ? (isEditRoute ? FormValues?.category?.[activeCategory]?.products?.[activeprod]?.productImg : '') : (FormValues?.category?.[activeCategory]?.products?.[activeprod]?.productImg instanceof File ? URL.createObjectURL(FormValues?.category?.[activeCategory]?.products?.[activeprod]?.productImg) : '')} />
         <div className='flex flex-row w-full h-auto justify-between p-2 mb-1'>
           <h1 className='mx-3 my-4 font-bold text-[20px] text-black'>{FormValues.category[activeCategory].products[activeprod].productName}</h1>
-          <h1 className='mx-3 my-4 font-bold text-[20px] text-black'>${FormValues.category[activeCategory].products[activeprod].price}</h1>
+          <h1 className='mx-3 my-4 font-bold text-[20px] text-black'>{currencyFormat(FormValues.category[activeCategory].products[activeprod].price)}</h1>
         </div>
         <div>
           <h1 className='font-bold text-[20px] text-center text-black'>{FormValues.category[activeCategory].products[activeprod].productDescription}</h1>
@@ -308,7 +309,7 @@ const getLinkTemplate=async(id)=>{
         <img className='rounded-2xl border-[4px] border-black' src={validateLink.test(topProducts[activeprod].productImg)  ? (isEditRoute ? topProducts[activeprod].productImg : '') : (topProducts[activeprod].productImg instanceof File ? URL.createObjectURL(topProducts[activeprod].productImg) : '')} alt={topProducts[activeprod].productName} />
         <div className='flex flex-row w-full h-auto justify-between p-2 mb-1'>
           <h1 className='mx-3 my-4 font-bold text-[20px] text-black'>{topProducts[activeprod].productName}</h1>
-          <h1 className='mx-3 my-4 font-bold text-[20px] text-black'>${topProducts[activeprod].price}</h1>
+          <h1 className='mx-3 my-4 font-bold text-[20px] text-black'>{currencyFormat(topProducts[activeprod].price)}</h1>
         </div>
         <div>
           <h1 className='font-bold text-[20px] text-center text-black'>{topProducts[activeprod].productDescription}</h1>

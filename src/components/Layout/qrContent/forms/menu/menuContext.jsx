@@ -44,6 +44,16 @@ export default function MenuProvider({children}) {
         category:isEditRoute && formData ? formData.category : [{categoryName:"",products:[{ backgroundProductCard:"#fff",colorName:"#000",colorDescription:"#000",colorPrice:"#000",productImg:null, productName:"", productDescription:"", top:false,price:null}]}]
     }
 
+    const currencyFormat=(price)=>{
+        const formatter=new Intl.NumberFormat('es-CO',{
+            style:'currency',
+            minimumFractionDigits:0,
+            currency:'COP'
+        })
+
+        return formatter.format(price);
+    }
+
     const getFonts = async () => {
         try {
             const getFontsArray = await instance.get('getFonts');
@@ -852,6 +862,7 @@ export default function MenuProvider({children}) {
             handleProductTop,
             handleProductPrice,
             limitTops,
+            currencyFormat,
             //skeleton
             loading,
             setLoading,

@@ -207,10 +207,12 @@ const handlePdfFile = (event) => {
 export const LinkInput = ({ onSubmit }) => {
   const { qrData, qrProps, setQrData } = useQr();
   const { validateFormWifi, setValidateFormWifi } = useValidate();
-  const [loading, setLoading] = useState(true);  // Estado de carga para LinkInput
+  const {urlValueWebSite}=useQr();
+  const [loading, setLoading] = useState(true);
+  const isEditRoute=location.pathname.startsWith('/edit');  // Estado de carga para LinkInput
   const { t } = useTranslation();
   const formik = useFormik({
-    initialValues: { url: '' },
+    initialValues: { url: isEditRoute ? urlValueWebSite : '' },
     validate: (values) => {
       const errors = {};
       if (!values.url) {
@@ -223,6 +225,8 @@ export const LinkInput = ({ onSubmit }) => {
     validateOnChange: true,
     validateOnBlur: true,
   });
+
+  const valueUrl=isEditRoute ? urlValueWebSite : formik.values.url;
 
   const handleInputChange = (e) => {
     setQrData(e.target.value); // Actualiza el valor en tu contexto personalizado
@@ -240,6 +244,7 @@ export const LinkInput = ({ onSubmit }) => {
   };
 
  // console.log(formik.values);
+ console.log("url website: ",urlValueWebSite);
 
   useEffect(() => {
     validateFormFields();
@@ -267,7 +272,7 @@ export const LinkInput = ({ onSubmit }) => {
         <input
           type="text"
           name="url"
-          value={formik.values.url}
+          value={valueUrl}
           onChange={handleInputChange}
           onBlur={formik.handleBlur}
           className="w-full px-4 py-2 mb-4 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500"

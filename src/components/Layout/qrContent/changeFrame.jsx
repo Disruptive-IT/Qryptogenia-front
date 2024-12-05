@@ -102,11 +102,21 @@ export default function ChangeFrame({ name, appFormValues, socialFormValues, mus
             setIsTabClickable(true);
         }
     }, [isSmallScreen, isSpecialContent]);
+    
+    useEffect(() => {
+        // Sincroniza el valor local (value) con el globalTabValue
+        // pero solo si el contenido no es especial.
+        if (!isSpecialContent) {
+            setValue(globalTabValue);
+        }
+    }, [globalTabValue, isSpecialContent]);
 
     useEffect(() => {
-        // Esta función se ejecutará cada vez que cambie la prop `name`
-        setValue((isSmallScreen || isSpecialContent) ? 1 : 0);
-    }, [name, isSmallScreen, isSpecialContent]);
+        if (value === 0 && !isSmallScreen && !isSpecialContent) {
+            setGlobalTabValue(0);
+        }
+    }, [value, isSmallScreen, isSpecialContent]);
+    
 
     const handleChange = (event, newValue) => {
         if (validateFormApp==false || validateFormMusic==false || validateFormSocial==false || validateFormMenu==false) {
@@ -146,16 +156,6 @@ export default function ChangeFrame({ name, appFormValues, socialFormValues, mus
             label: 'Expand',
         },
     ];
-
-    useEffect(()=>{
-        setValue(globalTabValue);
-    },[globalTabValue])
-
-    useEffect(()=>{
-        if(value==0){
-            setGlobalTabValue(value)
-        }
-    },[value])
 
     return (
         <section className="relative w-full h-full bg-white shadow-xl rounded-xl">

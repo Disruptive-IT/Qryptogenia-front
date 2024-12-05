@@ -43,7 +43,7 @@ const QRScanPage = () => {
     const [isButtonDark,setIsButtonDark]=useState('#000000');
     const [fontPreview,setFontPreview]=useState({});
     const [hasAnimated,setHasAnimated]=useState(false);
-    const {getNameFont}=UseMenu();
+    const {getNameFont,currencyFormat}=UseMenu();
 
     
     const fetchData = async () => {
@@ -392,7 +392,7 @@ const QRScanPage = () => {
                                               {product.productName || 'Product name'}
                                           </h1>
                                           <h1 style={{ color: product.colorPrice, fontFamily: qrData?.MenuPreview?.fontPreview }} className="text-center break-words font-bold">
-                                              {product.price == null ? 'Price' : `$${product.price}`}
+                                              {product.price == null ? 'Price' : `${currencyFormat(product.price)}`}
                                           </h1>
                                       </div>
                                       <button style={{backgroundColor:isButtonDark,color:isButtonDark=='#000000' ? '#ffffff' : '#000000'}} className=" w-1/4 text-[12px] self-end text-white px-2 font-semibold rounded-3xl  transition-all duration-200">Ver</button>
@@ -444,7 +444,7 @@ const QRScanPage = () => {
                                         {element.productName || 'Product name'}
                                         </h1>
                                         <h1 style={{ color: element.colorPrice }} className="text-center break-words font-bold">
-                                        {element.price == null ? 'Price' : `$${element.price}`}
+                                        {element.price == null ? 'Price' : `${currencyFormat(element.price)}`}
                                         </h1>
                                     </div>
                                     <button className="bg-black w-1/4 text-[12px] self-end text-white px-2 font-semibold rounded-3xl  transition-all duration-200">Ver</button>
@@ -484,7 +484,7 @@ const QRScanPage = () => {
                         {/* Información del producto */}
                         <div className="w-full mt-4 flex flex-col items-center text-center">
                           <h1 style={{color: qrData?.MenuPreview?.category[activeprod.activeCat].products[activeprod.activeProd].colorName}} className="text-2xl font-bold my-2">{qrData?.MenuPreview?.category[activeprod.activeCat].products[activeprod.activeProd].productName}</h1>
-                          <h2 style={{color: qrData?.MenuPreview?.category[activeprod.activeCat].products[activeprod.activeProd].colorPrice}} className="text-xl font-bold text-gray-700 my-2">${qrData?.MenuPreview?.category[activeprod.activeCat].products[activeprod.activeProd].price}</h2>
+                          <h2 style={{color: qrData?.MenuPreview?.category[activeprod.activeCat].products[activeprod.activeProd].colorPrice}} className="text-xl font-bold text-gray-700 my-2">{currencyFormat(qrData?.MenuPreview?.category[activeprod.activeCat].products[activeprod.activeProd].price)}</h2>
                           <p style={{color: qrData?.MenuPreview?.category[activeprod.activeCat].products[activeprod.activeProd].colorDescription}} className="text-lg mt-2 my-2">{qrData?.MenuPreview?.category[activeprod.activeCat].products[activeprod.activeProd].productDescription}</p>
                         </div>
 
@@ -521,7 +521,7 @@ const QRScanPage = () => {
                         {/* Información del producto destacado */}
                         <div className="w-full mt-4 flex flex-col items-center text-center">
                           <h1 style={{color:topProducts[activeprod].colorName}} className="text-2xl font-bold mb-2">{topProducts[activeprod]?.productName}</h1>
-                          <h2 style={{color:topProducts[activeprod].colorPrice}} className="text-xl font-bold mb-2 text-gray-700">${topProducts[activeprod]?.price}</h2>
+                          <h2 style={{color:topProducts[activeprod].colorPrice}} className="text-xl font-bold mb-2 text-gray-700">{currencyFormat(topProducts[activeprod]?.price)}</h2>
                           <p style={{color:topProducts[activeprod].colorDescription}} className="text-lg mt-2">{topProducts[activeprod]?.productDescription}</p>
                         </div>
 
