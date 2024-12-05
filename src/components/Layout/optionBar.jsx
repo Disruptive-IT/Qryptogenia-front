@@ -126,6 +126,7 @@ export const OptionBarTwo = ({ contentName, name }) => {
         setNullableFormErrors();
         let direcc = item.name.toLowerCase().replace(/\s+/g, '-')
         setQrType(direcc);
+        setGlobalTabValue(contentName!=='website url' && contentName!=='wifi' && contentName!=='pdf' && 0);
         navigate(`/qr/${direcc}`);
       }
     });
