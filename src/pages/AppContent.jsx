@@ -217,7 +217,6 @@ const AppContent = () => {
                             category,
                         }
                         : (
-                            typeQr==="website-url" ? urlData :
                          {
                             title,
                             colorTitle,
