@@ -1,47 +1,55 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import CustomLink from '../../../components/Layout/CustomLink';
 import MenuDrawer from '../../../components/UI/menu/menuDrawer';
-import { useAuth } from '../../../hooks/useAuth';
-import UserProfileMenu from '../../../components/Admin/Profile';
 import { useTranslation } from 'react-i18next';
-import LenguageSelector from './../../../components/UI/lenguage/lenguageSelector'
+import LenguageSelector from './../../../components/UI/lenguage/lenguageSelector';
 
 function Navbar() {
     const location = useLocation();
     const { t } = useTranslation();
 
-    const isActive = (path) => {
-        return location.pathname === path;
-    };
+    const isActive = (path) => location.pathname === path;
 
     return (
         <header className="relative md:top-4 inset-x-0 z-50">
-            <div className="relative h-20 flex w-full p-3 mx-auto bg-white md:rounded-lg items-center justify-between shadow-lg lg:w-[94%] ">
-                <Link to="/" className="text-black hover:text-black/70 items-center inline-flex font-bold ml-2 text-2xl w-2/6" title="Inicio">
-                <img className='w-[60px]' src="/Logo.png" alt="Qryptogenia" />
-                <span className='text-dark-blue ml-2 font-bold'>QR</span>yptogenia
+            <div className="relative h-20 flex w-full p-3 mx-auto bg-white md:rounded-lg items-center justify-between shadow-lg lg:w-[94%] felx content-between">
+                {/* Logo y nombre */}
+                <Link to="/" className="text-black hover:text-black/70 items-center inline-flex font-bold ml-2 text-2xl w-auto" title="Inicio">
+                    <img className="w-[60px]" src="/Logo.png" alt="Qryptogenia" />
+
+                    {/* Texto visible en pantallas medianas y grandes */}
+                    <span className="text-dark-blue hidden custom-qr-min:flex ml-2 font-bold">QR</span>
+                    <span className="hidden custom-qr-min:flex font-bold">yptogenia</span>
+
+                    {/* Texto completo visible solo en pantallas pequeñas */}
+                    <span className="text-dark-blue md:hidden ml-2 font-bold">Qr</span>
+                    <span className="md:hidden font-bold">yptogenia</span>
                 </Link>
 
-                <nav className="md:flex hidden w-2/6 justify-center">
-                    <ul className="space-x-4 list-none text-sm text-black items-center inline-flex justify-center text-left gap-3">
+                {/* Menú de navegación */}
+                <nav className="md:flex hidden justify-center flex-nowrap">
+                    <ul className="flex gap-5 list-none text-sm text-black items-center justify-center">
                         <CustomLink to="/" isActive={isActive('/')}>{t('Home')}</CustomLink>
                         <CustomLink to="/aboutUs" isActive={isActive('/aboutUs')}>{t('About us')}</CustomLink>
                         <CustomLink to="/pricings" isActive={isActive('/pricings')}>{t('Plans')}</CustomLink>
-                        <CustomLink to="/faq" isActive={isActive('/faq')}>{t("FAQ")}</CustomLink>
+                        <CustomLink to="/faq" isActive={isActive('/faq')}>{t('FAQ')}</CustomLink>
                     </ul>
                 </nav>
 
-                <ul className='md:flex hidden gap-4 w-2/6 justify-end items-center pr-5'>
-                    <li className="transition-all duration-200 hover:scale-105 hover:ease-linear ">
-                        <LenguageSelector/>
+                {/* Idioma y enlaces de registro */}
+                <ul className="md:flex hidden gap-4 items-center justify-end w-auto">
+                    <li className="transition-all duration-200 hover:scale-105">
+                        <LenguageSelector />
                     </li>
                     <CustomLink to="/login" isActive={isActive('/login')}>{t('Sign In')}</CustomLink>
                     <CustomLink to="/register" isActive={isActive('/register')}>{t('Sign Up')}</CustomLink>
-                    
-                    
                 </ul>
-                <MenuDrawer />
+
+                {/* Menú hamburguesa */}
+                <div className="block md:hidden">
+                    <MenuDrawer />
+                </div>
             </div>
         </header>
     );

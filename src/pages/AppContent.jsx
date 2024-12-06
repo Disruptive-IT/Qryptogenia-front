@@ -217,7 +217,6 @@ const AppContent = () => {
                             category,
                         }
                         : (
-                            typeQr==="website-url" ? urlData :
                          {
                             title,
                             colorTitle,
@@ -325,8 +324,9 @@ const AppContent = () => {
                     <h1 className='font-bold text-dark-blue text-3xl '>{name.toUpperCase()}</h1>
                     <p className='text-sm text-slate-400'>{content}</p>
                 </div>
-                <div className='grid grid-cols-1 lg:grid-cols-5 gap-10 w-11/12 m-auto py-10 '>
-                    <div className='col-span-1 lg:col-span-3 bg-white shadow-xl rounded-xl p-6'>
+                {/* <div className='grid grid-cols-1 lg:grid-cols-5 gap-10 w-11/12 m-auto py-10 '> */}
+                <div className='flex justify-center flex-wrap lg:flex-nowrap gap-10 w-full p-3 sm:p-10 '>
+                    <div className='w-full lg:w-[60%] bg-white shadow-xl rounded-xl p-6'>
                         <QrContentSwitch
                             contentName={name}
                             onFormChangeApp={setAppFormValues}
@@ -340,7 +340,7 @@ const AppContent = () => {
                             menuFormValues={formData}
                         />
                     </div>
-                    <div className='col-span-1 lg:col-span-2'>
+                    <div className='w-full lg:w-[40%]'>
                         {valuesLoaded && (
                             <ChangeFrame
                                 name={name}

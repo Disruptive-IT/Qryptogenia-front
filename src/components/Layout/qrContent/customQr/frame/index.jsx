@@ -43,14 +43,15 @@ const Frame = () => {
 
     return (
         <Box sx={{  width: { // Manejo de breakpoints para ampliar el area de personalización del QR
-            xs:200,
-            sm:350,
-            md:325,
-            lg:300,
-            xl:400
+            xs:300,
+            sm:550,
+            md:320,
+            lg:400,
+            xl:450
 
         },
-            position: 'relative', 
+            position: 'relative',
+            padding: '10px', 
             left: '50%',              // 50% hacia la derecha desde su posicion original
             transform: 'translateX(-50%)', // ajusta la posicion para centrarlo 
              }}>

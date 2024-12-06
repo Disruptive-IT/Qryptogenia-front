@@ -23,10 +23,12 @@ export default {
         "my-red": "#CC2905",
         "my-black": "#353535",
       },
-      screens:{
+      screens: {
         'custom-max': {'max': '1340px'},
         'custom-min': {'min': '400px'},
-      }
+        'custom-qr-min': '1143px',
+        'md': '776px'
+    },
     },
   },
   variants: {},
