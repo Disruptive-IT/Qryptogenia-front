@@ -6,7 +6,7 @@
  * @return : Retorna un formulario interactivo que permite al usuario configurar los detalles de la aplicación QR, incluyendo título, descripción, colores y carga de imagen.
  */
 import React, { useState, useRef, useEffect } from 'react';
-import { Formik, Form, Field } from "formik";
+import { Formik, Form, Field, FormikContext } from "formik";
 import Select from 'react-select';
 import { useValidate } from '../../../../context/validateFormContext';
 import { IoIosClose } from "react-icons/io";
@@ -18,6 +18,7 @@ import SkeletonLoader from './Skeleton/Skeleton';
 import { UseMenu } from './menu/menuContext';
 import { appOptions } from '../preview-helpers/handlePreviewButtons';
 import { resizeImage } from '../preview-helpers/handlerColor';
+import { toast } from 'sonner';
 
 export const AppForm = ({ onFormChangeApp, location, appFormValues }) => {
     const [title, setTitle] = useState('');
@@ -49,6 +50,7 @@ export const AppForm = ({ onFormChangeApp, location, appFormValues }) => {
     const [loading, setLoading] = useState(true); // Por defecto está cargando
     const [appFontsPreview, setAppFontsPreview] = useState([]);
     const {getFontsPreview}=UseMenu();
+    const {changeTabValue,globalTabValue}=useValidate();
 
     //console.log("validate from app",validateFormApp, formErrors);
 
@@ -270,6 +272,7 @@ useEffect(() => {
         fileInputRef.current.click();
     };
 
+
     const handleImageChange = (e) => {
         const file = e.target.files[0];
         if (file) {
@@ -291,7 +294,6 @@ useEffect(() => {
                 ...option,
                 icon: fullOption ? fullOption.icon : '',
                 label: fullOption ? fullOption.label : '',
-                url:fullOption ? fullOption.url : ''
             };
         });
         setUpdatedSelectedOptions(updatedOptions);
@@ -309,6 +311,8 @@ useEffect(() => {
         return selectedOptions.some(selected => selected.value === option.value);
     };
 
+    // console.log(formErrors)
+
     // Skeleton Loader
             useEffect(() => {
                 setLoading(false); // Cambia a false una vez que los datos hayan cargado
@@ -316,20 +320,23 @@ useEffect(() => {
     return (
         <Formik
             initialValues={initialValues}
-            onSubmit={(values, actions) => {
+            onSubmit={async(values, actions) => {
                 const errors = validateForm(values);
                 if (Object.keys(errors).length > 0) {
-                setFormErrors(errors);
-                actions.setSubmitting(false);
+                  setFormErrors(errors);
+                  actions.setSubmitting(false);
                 } else {
-                setFormErrors({});
-                onSubmit(values);
-                actions.setSubmitting(false);
+                  setFormErrors({});
+                  changeTabValue(); // Verificar si esta función está disponible
+                  await onSubmit(values);
+                  actions.setSubmitting(false);
                 }
-            }}
+              }}
+              
             validateOnBlur={true}
+            validateOnChange={true}
             >
-           {({ setFieldValue, handleSubmit,setFieldTouched,touched,e}) => (
+           {({ setFieldValue}) => (
       <Form className="max-w-4xl mx-auto mt-8 relative">
         {/* Mostrar el Skeleton mientras loading sea verdadero */}
         {loading ? (
@@ -351,6 +358,7 @@ useEffect(() => {
                   className="border w-full border-gray-300 rounded p-2 focus:ring-0 focus:outline-none"
                   value={title}
                   maxLength={maxTitle}
+                  disabled={globalTabValue==1}
                   onChange={(e) => {
                     handleTitleChange(e);
                     setFieldValue('title', e.target.value);
@@ -359,7 +367,7 @@ useEffect(() => {
                 <div className="text-right text-sm text-gray-900">
                   {title.length}/{maxTitle} Characters
                 </div>
-                {formErrors.title && <div className="text-red-500 text-sm">{formErrors.title}</div>}
+                { formErrors.title && <div className="text-red-500 text-sm">{formErrors.title}</div>}
               </div>
         
               <div className="flex flex-col relative">
@@ -373,7 +381,7 @@ useEffect(() => {
                                   <div
                                       className="w-10 h-10 md:w-10 border border-gray-300 rounded cursor-pointer"
                                       style={{ background: colorTitle }}
-                                      onClick={() => setShowTitleColorPicker(!showTitleColorPicker)}
+                                      onClick={() => {if(globalTabValue!==1)setShowTitleColorPicker(!showTitleColorPicker)}}
                                   ></div>
                                   {showTitleColorPicker && (
                                       <div className="absolute mt-2 left-0 top-full z-50" ref={titleColorPickerRef}>
@@ -389,6 +397,7 @@ useEffect(() => {
                                   {/* Icono de subir imagen */}
                                   <div className="flex items-center ">
                                       <input
+                                      disabled={globalTabValue==1}
                                       type="file"
                                       className="hidden "
                                       ref={fileInputRef}
@@ -397,6 +406,7 @@ useEffect(() => {
                                       />
                                       <button
                                       onClick={handleClick}
+                                      type='button'
                                       className="text-blue-500 hover:text-blue-600 focus:outline-none"
                                       >
                                       <MdOutlineCloudUpload size="40" /> 
@@ -411,6 +421,7 @@ useEffect(() => {
                                           />
                                           <button
                                           onClick={handleRemoveImage}
+                                          disabled={globalTabValue==1}
                                           className="absolute top-0 right-0 bg-white p-0.5 rounded-full hover:bg-gray-200"
                                           >
                                           <IoIosClose size="15" />
@@ -437,6 +448,7 @@ useEffect(() => {
                   rows="5"
                   type="text"
                   placeholder={t("Description")}
+                  disabled={globalTabValue==1}
                   maxLength={maxLength}
                   id="description"
                   className="w-full min-h-20 max-h-40 border border-gray-300 rounded p-2 focus:ring-0 focus:outline-none"
@@ -453,7 +465,7 @@ useEffect(() => {
                   <div
                     className="w-10 md:w-10 h-10 border border-gray-300 rounded cursor-pointer"
                     style={{ background: descriptionColor }}
-                    onClick={() => setShowDescriptionColorPicker(!showDescriptionColorPicker)}
+                    onClick={() =>{if(globalTabValue!==1) setShowDescriptionColorPicker(!showDescriptionColorPicker)}}
                   ></div>
                   {showDescriptionColorPicker && (
                     <div className="absolute mt-2 left-0 top-full z-50" ref={descriptionColorPickerRef}>
@@ -475,7 +487,7 @@ useEffect(() => {
         <div
           className="w-10 h-10 border border-gray-300 rounded cursor-pointer"
           style={{ background: backgroundColor }}
-          onClick={() => setShowBackgroundColorPicker(!showBackgroundColorPicker)}
+          onClick={() =>{if(globalTabValue!==1) setShowBackgroundColorPicker(!showBackgroundColorPicker)}}
         ></div>
         {showBackgroundColorPicker && (
           <div className="absolute mt-2 left-0 z-50" ref={backgroundColorPickerRef}>
@@ -499,7 +511,7 @@ useEffect(() => {
         <div
           className="w-10 h-10 border border-gray-300 rounded cursor-pointer"
           style={{ background: boxColor }}
-          onClick={() => setShowBoxColorPicker(!showBoxColorPicker)}
+          onClick={() => {if(globalTabValue!==1)setShowBoxColorPicker(!showBoxColorPicker)}}
         ></div>
         {showBoxColorPicker && (
           <div className="absolute mt-2 left-0 z-50" ref={boxColorPickerRef}>
@@ -523,7 +535,7 @@ useEffect(() => {
         <div
           className="w-10 h-10 border border-gray-300 rounded cursor-pointer"
           style={{ background: borderImg }}
-          onClick={() => setShowBorderColorPicker(!showBorderColorPicker)}
+          onClick={() => {if(globalTabValue!==1)setShowBorderColorPicker(!showBorderColorPicker)}}
         ></div>
         {showBorderColorPicker && (
           <div className="absolute mt-2 left-0 z-50" ref={borderColorPickerRef}>
@@ -542,7 +554,9 @@ useEffect(() => {
                             {/* Select de fuentes */}
                             <div className='flex flex-col md:flex-row md:items-center mb-4 mt-10'>
                   <h1 className='mt-3 text-lg font-semibold mr-6'>{t('Font style')}:</h1>
-                            <select 
+                            <select
+                            value={isEditRoute ? appFormValues.idFontPreview : ''}
+                            disabled={globalTabValue==1} 
                         className='p-4 rounded-[10px] bg-gray-300' 
                         name="fontFamily" 
                         id="" 
@@ -563,8 +577,9 @@ useEffect(() => {
                         <div className="w-full md:w-3/4">
                             <label htmlFor="" className="mb-2">{t("Multiselect")}</label>
                             <Select
-                                id="selectedOptions"
+                                id="multiselect"
                                 options={appOptions}
+                                isDisabled={globalTabValue==1}
                                 isMulti
                                 className="basic-multi-select w-full" // Para el contenedor externo
                                 classNamePrefix="select" // Prefijo para los estilos internos
@@ -597,9 +612,10 @@ useEffect(() => {
                         type="text"
                         id={`url_${index}`}
                         name={`url_${index}`}
+                        disabled={globalTabValue==1}
                         placeholder={`URL for ${option.value}`}
                         className="border border-gray-300 rounded p-2 w-full focus:ring-0 focus:outline-none"
-                        value={selectedOptions[index]?.url || ''} // Simplificado para tomar la URL directamente desde selectedOptions
+                        value={option.url} // Simplificado para tomar la URL directamente desde selectedOptions
                         onChange={(e) => handleUrlChange(index, e.target.value)}
                     />
                     </div>
@@ -618,9 +634,9 @@ useEffect(() => {
                     <div className="flex items-center mt-6 mb-4">
                         <button type="submit" className="px-4 py-2 bg-blue-500 text-white rounded "
                          style={{ backgroundColor: '#284B63', color: '' }}
+                         disabled={globalTabValue==1}
                          onMouseEnter={(e) => e.target.style.backgroundColor = '#3C6E71'} // Cambia el color al hacer hover
                          onMouseLeave={(e) => e.target.style.backgroundColor = '#284B63'} // Vuelve al color original al salir del hoover
-
                         >{t('Submit')}</button>   
             </div>
           </div>

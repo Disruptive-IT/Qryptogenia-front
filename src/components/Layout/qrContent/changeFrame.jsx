@@ -18,11 +18,11 @@ import CellBox from './cellBox';
 import { PhoneContentSwitch } from '.';
 import {UseContentTexts} from './contentData';
 import CustomQr from './customQr';
-import Button from '@mui/material/Button';
 import './index.css'
 import { useTranslation } from 'react-i18next';
 import { useValidate } from '../../../context/validateFormContext';
 import { toast } from 'sonner';
+import { useEffect } from 'react';
 
 function TabPanel(props) {
     const { children, value, index, ...other } = props;
@@ -68,7 +68,6 @@ const fabGreenStyle = {
         bgcolor: green[600],
     },
 };
-
 /*
  * @UpdatedBy : Nicolas Barrios,   @date 2024-09-26 18:46:29
  * @description : se agrego validacion formularios antes de cambiar de tab a qr
@@ -83,6 +82,7 @@ export default function ChangeFrame({ name, appFormValues, socialFormValues, mus
     const [isTabClickable, setIsTabClickable] = React.useState(true);
     const { t } = useTranslation()
     const contentTexts = UseContentTexts();
+    const {globalTabValue,setGlobalTabValue}=useValidate();
 
     const {validateFormApp,validateFormMusic,validateFormSocial,validateFormMenu}=useValidate();
 
@@ -90,8 +90,10 @@ export default function ChangeFrame({ name, appFormValues, socialFormValues, mus
     // console.log("ChangeFrame - appFormValues:", appFormValues);
     // console.log("ChangeFrame - socialFormValues:", socialFormValues);
     // console.log("ChangeFrame - musicFormValues:", musicFormValues);
+    console.log("value tab:",value);
+    console.log("globaltab value: ",globalTabValue);
 
-    React.useEffect(() => {
+    useEffect(() => {
         if (isSmallScreen || isSpecialContent) {
             setValue(1);
             setIsTabClickable(false);
@@ -100,11 +102,21 @@ export default function ChangeFrame({ name, appFormValues, socialFormValues, mus
             setIsTabClickable(true);
         }
     }, [isSmallScreen, isSpecialContent]);
+    
+    useEffect(() => {
+        // Sincroniza el valor local (value) con el globalTabValue
+        // pero solo si el contenido no es especial.
+        if (!isSpecialContent) {
+            setValue(globalTabValue);
+        }
+    }, [globalTabValue, isSpecialContent]);
 
-    React.useEffect(() => {
-        // Esta función se ejecutará cada vez que cambie la prop `name`
-        setValue((isSmallScreen || isSpecialContent) ? 1 : 0);
-    }, [name, isSmallScreen, isSpecialContent]);
+    useEffect(() => {
+        if (value === 0 && !isSmallScreen && !isSpecialContent) {
+            setGlobalTabValue(0);
+        }
+    }, [value, isSmallScreen, isSpecialContent]);
+    
 
     const handleChange = (event, newValue) => {
         if (validateFormApp==false || validateFormMusic==false || validateFormSocial==false || validateFormMenu==false) {
@@ -166,9 +178,9 @@ export default function ChangeFrame({ name, appFormValues, socialFormValues, mus
                         }}
                     >
                         {!(isSmallScreen || isSpecialContent) && <Tab label="Phone" />}  {/* Oculta el tab "Phone" en pantallas pequeñas o para contentName especial */}
-                            <Tab 
+                            <Tab
                             label="QR" 
-                            disabled={!isTabClickable}
+                            disabled={!isTabClickable || name=='music' || name=='social media' || name=='app store' || name=='food menu'} 
                             />
                     </Tabs>
                 </AppBar>

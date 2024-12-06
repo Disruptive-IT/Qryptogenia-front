@@ -9,6 +9,7 @@ import './../forms/menu/menu.css';
 import { createTheme, Modal, ThemeProvider } from '@mui/material';
 import { UseMenu } from '../forms/menu/menuContext';
 import { useTranslation } from 'react-i18next';
+import { handleSetIsDark } from '../preview-helpers/handlerColor';
 export default function WebLinkMenuFood({ FormValues, ContentName }) {
   const [tabValue, setTabValue] = useState(0);
   const [openModal,setOpenModal]=useState(false);
@@ -21,8 +22,10 @@ export default function WebLinkMenuFood({ FormValues, ContentName }) {
   const initialkeys=useRef(FormValues);
   const[showInitialKeys,setShowInitialKeys]=useState(true);
   const isEditRoute = location.pathname.startsWith('/edit');
+  const [isDarkButton,setIsDarkButton]=useState('#000000');
   const validateLink=/.webp/
   const {t}=useTranslation();
+  const {currencyFormat}=UseMenu();
   const defaultProductImage='https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSpSkKP8LgqK1IPs87-PyJcveeRF0Wet-xgyw&s'
   const defaultLogo='https://media.istockphoto.com/id/981368726/es/vector/restaurante-de-comida-y-bebidas-logotipo-tenedor-cuchillo-fondo-vector-imagen.jpg?s=612x612&w=0&k=20&c=3mPGCDXyBeuGpxeuTlHkECM5rAW5cy07bDFi0i0ZCbw='
 
@@ -135,6 +138,10 @@ const getLinkTemplate=async(id)=>{
   }
 
   useEffect(()=>{
+    handleSetIsDark(FormValues?.category[tabValue]?.products[0].backgroundProductCard,setIsDarkButton);
+  },[FormValues?.category[tabValue]?.products[0].backgroundProductCard])
+
+  useEffect(()=>{
     if(FormValues?.idImgTemplate!=null){
       getLinkTemplate(FormValues.idImgTemplate);
     }
@@ -172,11 +179,11 @@ const getLinkTemplate=async(id)=>{
     }}
 >
         <div
-          className="w-[60%] overflow-auto max-w-[196px] max-h-[196px] rounded-[10px] mx-auto my-6 bg-slate-500 flex justify-center items-center"
+          className="w-[60%] overflow-hidden max-w-[196px] max-h-[196px] rounded-[10px] mx-auto my-6 bg-slate-500 flex justify-center items-center"
           id="logo-container"
         >
           <img
-            className={`w-full h-auto  object-contain rounded-md ${FormValues.restaurantLogo!==null || counterChange==0 ? '':'hidden'}`}
+            className={`w-full h-auto object-contain rounded-md ${FormValues.restaurantLogo!==null || counterChange==0 ? '':'hidden'}`}
             id="restaurantLogoPreview"
             alt="restaurantLogo"
              src={showInitialKeys && counterChange==0 && !isEditRoute && FormValues.restaurantLogo==null ? defaultLogo : validateLink.test(FormValues?.restaurantLogo)  ? (isEditRoute ? FormValues?.restaurantLogo : '') : (FormValues?.restaurantLogo instanceof File ? URL.createObjectURL(FormValues?.restaurantLogo) : '')}
@@ -231,12 +238,12 @@ const getLinkTemplate=async(id)=>{
           <img className='w-full h-full' src={showInitialKeys && index==0 && productIndex==0 && counterChange==0 && element.productImg==null && !isEditRoute ? defaultProductImage : element.productImg && validateLink.test(FormValues?.category?.[index]?.products?.[productIndex]?.productImg)  ? (isEditRoute ? element.productImg : '') : (element?.productImg instanceof File ? URL.createObjectURL(element.productImg) : '')} alt={element.productName || 'Producto'}/>
           </div>
           <div style={{backgroundColor:showInitialKeys && counterChange==0 && !isEditRoute && element.backgroundColor=='#fff' ? '#7EC2DD':element.backgroundProductCard,backgroundImage:element.backgroundProductCard.includes("gradient") ? element.backgroundProductCard : "none"}} className='w-[60%] h-full bg-red-300 px-1 py-1  flex flex-col self-center'>
-            <img className='w-4 self-end' src='/eye.svg'/>
-            <div className='w-full  h-[80%] bg-transparent flex flex-col justify-evenly'>
-              <h1 style={{color: element.colorName,fontFamily:fontFamily?.fontName}} className='text-[17px] text-center break-words font-bold'>{showInitialKeys && index==0 && productIndex==0 && counterChange==0 && !isEditRoute && element.productName=='' ? 'Burguer' : element.productName=='' ? 'Product name' : element.productName}</h1>
-              <h1 style={{color: element.colorPrice,fontFamily:fontFamily?.fontName}} className='text-center break-words font-bold'>{showInitialKeys && index==0 && productIndex==0 && counterChange==0 && !isEditRoute && element.price=='' ? '45.67$' : element.price==null ? 'price':element.price+'$'}</h1>
+            {element.top ? <img className='w-7 self-end pb-1' src='/star.svg'/> : ''}
+            <div style={{fontFamily:fontFamily?.fontName}} className='w-full  h-[80%] bg-transparent flex flex-col justify-evenly'>
+              <h1 style={{color: element.colorName}} className='text-[17px] text-center break-words font-bold'>{showInitialKeys && index==0 && productIndex==0 && counterChange==0 && !isEditRoute && element.productName=='' ? 'Burguer' : element.productName=='' ? 'Product name' : element.productName}</h1>
+              <h1 style={{color: element.colorPrice}} className='text-center break-words font-bold'>{showInitialKeys && index==0 && productIndex==0 && counterChange==0 && !isEditRoute && element.price=='' ? '45.67$' : element.price==null ? 'price': currencyFormat(element.price)}</h1>
             </div>
-            {element.top ? <img className='w-8 self-end pb-1' src='/star.svg'/> : ''}
+            <button style={{backgroundColor:isDarkButton,color:isDarkButton=='#000000' ? '#ffffff' : '#000000'}} className=" w-1/4 text-[12px] self-end text-white px-2 font-semibold rounded-3xl  transition-all duration-200">Ver</button>
           </div>
         </div>
       ))
@@ -250,16 +257,16 @@ const getLinkTemplate=async(id)=>{
     topProducts.length > 0 ? (
       topProducts.map((element, index) => (
         <div key={index} className='w-full h-[135px] flex flex-row rounded-[10px] overflow-auto mb-4' onClick={() => { setActiveprod(index); handleOpenModal(); }}>
-          <div style={{backgroundColor:element.backgroundProductCard}} className='w-[40%] h-full bg-slate-500 overflow-auto'>
+          <div  className='w-[40%] h-full bg-slate-500 overflow-auto'>
             <img className='w-full h-full' src={validateLink.test(element.productImg)  ? (isEditRoute ? element.productImg : '') : (element.productImg instanceof File ? URL.createObjectURL(element.productImg) : '')} alt={element.productName} />
           </div>
-          <div style={{backgroundColor:element.backgroundProductCard}} className='w-[60%] h-full bg-red-300 px-1 py-1  flex flex-col self-center'>
-            <img className='w-4 self-end' src='/eye.svg'/>
-            <div style={{fontFamily:fontFamily?.fontName || 'sans-serif'}} className='w-full  h-[80%] bg-transparent flex flex-col justify-evenly'>
+          <div style={{backgroundColor:element.backgroundProductCard,backgroundImage:element.backgroundProductCard.includes("gradient") ? element.backgroundProductCard : 'none'}} className='w-[60%] h-full bg-red-300 px-1 py-1  flex flex-col self-center'>
+            {element.top ? <img className='w-7 self-end pb-1' src='/star.svg'/>: ''}
+            <div style={{fontFamily:fontFamily?.fontName}} className='w-full  h-[80%] bg-transparent flex flex-col justify-evenly'>
               <h1 style={{color: element.colorName}} className='text-[17px] text-center break-words font-bold'>{element.productName === '' ? 'Product name' : element.productName}</h1>
-              <h1 style={{color: element.colorPrice}} className='text-center break-words font-bold'>{element.price == null ? 'price' : element.price + '$'}</h1>
+              <h1 style={{color: element.colorPrice}} className='text-center break-words font-bold'>{element.price == null ? 'price' : currencyFormat(element.price)}</h1>
             </div>
-            {element.top ? <img className='w-8 self-end pb-1' src='/star.svg'/>: ''}
+            <button className="bg-black w-1/4 text-[12px] self-end text-white font-semibold rounded-3xl  transition-all duration-200">Ver</button>
           </div>
         </div>
       ))
@@ -281,11 +288,11 @@ const getLinkTemplate=async(id)=>{
   {activeCategory !== null ? (
     // Si estás en una categoría normal
     FormValues.category[activeCategory]?.products?.[activeprod] && (
-      <div style={{backgroundColor: FormValues.category[activeCategory].products[activeprod].backgroundProductCard}} className={`absolute bg-orange-400 top-[25%] w-[80%] left-[10%] h-auto rounded-[10px] p-4`}>
+      <div style={{backgroundColor: FormValues.category[activeCategory].products[activeprod].backgroundProductCard,backgroundImage:FormValues.category[activeCategory].products[activeprod].backgroundProductCard.includes("gradient") ? FormValues.category[activeCategory].products[activeprod].backgroundProductCard : 'none'}} className={`absolute bg-orange-400 top-[25%] w-[80%] left-[10%] h-auto rounded-[10px] p-4`}>
         <img className='rounded-2xl border-[4px] border-black' src={validateLink.test(FormValues?.category?.[activeCategory]?.products?.[activeprod]?.productImg)  ? (isEditRoute ? FormValues?.category?.[activeCategory]?.products?.[activeprod]?.productImg : '') : (FormValues?.category?.[activeCategory]?.products?.[activeprod]?.productImg instanceof File ? URL.createObjectURL(FormValues?.category?.[activeCategory]?.products?.[activeprod]?.productImg) : '')} />
         <div className='flex flex-row w-full h-auto justify-between p-2 mb-1'>
           <h1 className='mx-3 my-4 font-bold text-[20px] text-black'>{FormValues.category[activeCategory].products[activeprod].productName}</h1>
-          <h1 className='mx-3 my-4 font-bold text-[20px] text-black'>{FormValues.category[activeCategory].products[activeprod].price}$</h1>
+          <h1 className='mx-3 my-4 font-bold text-[20px] text-black'>{currencyFormat(FormValues.category[activeCategory].products[activeprod].price)}</h1>
         </div>
         <div>
           <h1 className='font-bold text-[20px] text-center text-black'>{FormValues.category[activeCategory].products[activeprod].productDescription}</h1>
@@ -298,11 +305,11 @@ const getLinkTemplate=async(id)=>{
   ) : (
     // Si estás en la pestaña "top" y quieres mostrar los productos destacados
     topProducts[activeprod] && (
-      <div style={{backgroundColor: topProducts[activeprod].backgroundProductCard}} className={`absolute bg-orange-400 top-[25%] w-[80%] left-[10%] h-auto rounded-[10px] p-4`}>
+      <div style={{backgroundColor: topProducts[activeprod].backgroundProductCard,backgroundImage:topProducts[activeprod].backgroundProductCard.includes("gradient") ? topProducts[activeprod].backgroundProductCard : 'none'}} className={`absolute bg-orange-400 top-[25%] w-[80%] left-[10%] h-auto rounded-[10px] p-4`}>
         <img className='rounded-2xl border-[4px] border-black' src={validateLink.test(topProducts[activeprod].productImg)  ? (isEditRoute ? topProducts[activeprod].productImg : '') : (topProducts[activeprod].productImg instanceof File ? URL.createObjectURL(topProducts[activeprod].productImg) : '')} alt={topProducts[activeprod].productName} />
         <div className='flex flex-row w-full h-auto justify-between p-2 mb-1'>
           <h1 className='mx-3 my-4 font-bold text-[20px] text-black'>{topProducts[activeprod].productName}</h1>
-          <h1 className='mx-3 my-4 font-bold text-[20px] text-black'>{topProducts[activeprod].price}$</h1>
+          <h1 className='mx-3 my-4 font-bold text-[20px] text-black'>{currencyFormat(topProducts[activeprod].price)}</h1>
         </div>
         <div>
           <h1 className='font-bold text-[20px] text-center text-black'>{topProducts[activeprod].productDescription}</h1>

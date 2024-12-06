@@ -18,6 +18,11 @@ export default function ValidateProvider({children}){
     const [validateFormLink,setValidateFormLink]=useState(null);
     const [validateFormWifi,setValidateFormWifi]=useState(null);
     const [validateFormMenu,setValidateFormMenu]=useState(null);
+    const [globalTabValue,setGlobalTabValue]=useState(0);
+    
+    const changeTabValue = () => {
+        setGlobalTabValue(1);
+    };
 
     return(
         <validateContext.Provider value={{
@@ -34,7 +39,10 @@ export default function ValidateProvider({children}){
             validateFormPdf,
             setValidateFormPdf,
             validateFormMenu,
-            setValidateFormMenu
+            setValidateFormMenu,
+            globalTabValue,
+            setGlobalTabValue,
+            changeTabValue
         }}>
             {children}
         </validateContext.Provider>

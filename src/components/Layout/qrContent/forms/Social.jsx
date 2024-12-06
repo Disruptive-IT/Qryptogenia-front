@@ -52,6 +52,7 @@ export const SocialForm = ({ onFormChange, location, socialFormValues }) => {
   const [loading, setLoading] = useState(true); // Por defecto está cargando
   const {getFontsPreview}=UseMenu();
   const [socialFontPreview, setSocialFontpreview] = useState([]);
+  const {globalTabValue,changeTabValue}=useValidate();
 
     useEffect(() => {
         const fetchFontsPreview = async () => {
@@ -299,15 +300,16 @@ export const SocialForm = ({ onFormChange, location, socialFormValues }) => {
   return (
     <Formik
       initialValues={initialValues}
-      onSubmit={(values, actions) => {
+      onSubmit={async(values, actions) => {
         const errors = validateForm(values);
         if (Object.keys(errors).length > 0) {
           setFormErrors(errors);
           actions.setSubmitting(false);
         } else {
           setFormErrors({});
+          changeTabValue();
           // Call the onSubmit function passed from the parent component
-          onSubmit(values);
+          await onSubmit(values);
           actions.setSubmitting(false);
         }
       }}
@@ -330,6 +332,7 @@ export const SocialForm = ({ onFormChange, location, socialFormValues }) => {
               <Field
                 type="text"
                 id="title"
+                disabled={globalTabValue==1}
                 placeholder={t("Title")}
                 className="border w-full border-gray-300 rounded p-2 focus:ring-0 focus:outline-none"
                 value={title}
@@ -356,7 +359,7 @@ export const SocialForm = ({ onFormChange, location, socialFormValues }) => {
                                 <div
                                     className="w-10 h-10 md:w-10 border border-gray-300 rounded cursor-pointer"
                                     style={{ background: colorTitle }}
-                                    onClick={() => setShowTitleColorPicker(!showTitleColorPicker)}
+                                    onClick={() => {if(globalTabValue!==1)setShowTitleColorPicker(!showTitleColorPicker)}}
                                 ></div>
                                 {showTitleColorPicker && (
                                     <div className="absolute mt-2 left-0 top-full z-50" ref={titleColorPickerRef}>
@@ -373,6 +376,7 @@ export const SocialForm = ({ onFormChange, location, socialFormValues }) => {
                                 <div className="flex items-center ">
                                     <input
                                     type="file"
+                                    disabled={globalTabValue==1}
                                     className="hidden "
                                     ref={fileInputRef}
                                     accept="image/*"
@@ -380,6 +384,7 @@ export const SocialForm = ({ onFormChange, location, socialFormValues }) => {
                                     />
                                     <button
                                     onClick={handleClick}
+                                    type='button'
                                     className="text-blue-500 hover:text-blue-600 focus:outline-none"
                                     >
                                     <MdOutlineCloudUpload size="40" /> 
@@ -394,6 +399,7 @@ export const SocialForm = ({ onFormChange, location, socialFormValues }) => {
                                         />
                                         <button
                                         onClick={handleRemoveImage}
+                                        disabled={globalTabValue==1}
                                         className="absolute top-0 right-0 bg-white p-0.5 rounded-full hover:bg-gray-200"
                                         >
                                         <IoIosClose size="15" />
@@ -419,6 +425,7 @@ export const SocialForm = ({ onFormChange, location, socialFormValues }) => {
                 as="textarea"
                 rows="5"
                 type="text"
+                disabled={globalTabValue==1}
                 placeholder={t("Description")}
                 maxLength={maxLength}
                 id="description"
@@ -436,7 +443,7 @@ export const SocialForm = ({ onFormChange, location, socialFormValues }) => {
                 <div
                   className="w-10 md:w-10 h-10 border border-gray-300 rounded cursor-pointer"
                   style={{ background: descriptionColor }}
-                  onClick={() => setShowDescriptionColorPicker(!showDescriptionColorPicker)}
+                  onClick={() => {if(globalTabValue!==1)setShowDescriptionColorPicker(!showDescriptionColorPicker)}}
                 ></div>
                 {showDescriptionColorPicker && (
                   <div className="absolute mt-2 left-0 top-full z-50" ref={descriptionColorPickerRef}>
@@ -458,7 +465,7 @@ export const SocialForm = ({ onFormChange, location, socialFormValues }) => {
         <div
           className="w-10 h-10 border border-gray-300 rounded cursor-pointer"
           style={{ background: backgroundColor }}
-          onClick={() => setShowBackgroundColorPicker(!showBackgroundColorPicker)}
+          onClick={() =>{if(globalTabValue!==1) setShowBackgroundColorPicker(!showBackgroundColorPicker)}}
         ></div>
         {showBackgroundColorPicker && (
           <div className="absolute mt-2 left-0 z-50" ref={backgroundColorPickerRef}>
@@ -482,7 +489,7 @@ export const SocialForm = ({ onFormChange, location, socialFormValues }) => {
         <div
           className="w-10 h-10 border border-gray-300 rounded cursor-pointer"
           style={{ background: boxColor }}
-          onClick={() => setShowBoxColorPicker(!showBoxColorPicker)}
+          onClick={() => {if(globalTabValue!==1)setShowBoxColorPicker(!showBoxColorPicker)}}
         ></div>
         {showBoxColorPicker && (
           <div className="absolute mt-2 left-0 z-50" ref={boxColorPickerRef}>
@@ -506,7 +513,7 @@ export const SocialForm = ({ onFormChange, location, socialFormValues }) => {
         <div
           className="w-10 h-10 border border-gray-300 rounded cursor-pointer"
           style={{ background: borderImg }}
-          onClick={() => setShowBorderColorPicker(!showBorderColorPicker)}
+          onClick={() => {if(globalTabValue!==1)setShowBorderColorPicker(!showBorderColorPicker)}}
         ></div>
         {showBorderColorPicker && (
           <div className="absolute mt-2 left-0 z-50" ref={borderColorPickerRef}>
@@ -529,7 +536,9 @@ export const SocialForm = ({ onFormChange, location, socialFormValues }) => {
                     <select 
                 className='p-4 rounded-[10px] bg-gray-300' 
                 name="fontFamily" 
-                id="" 
+                id=""
+                value={isEditRoute ? socialFormValues.idFontPreview : ''}
+                disabled={globalTabValue==1} 
                 onChange={(e) => {
                   handleSelectedFont(e);
                 }}
@@ -549,6 +558,7 @@ export const SocialForm = ({ onFormChange, location, socialFormValues }) => {
                 id="multiselect"
                 options={socialOptions}
                 isMulti
+                isDisabled={globalTabValue==1}
                 className="basic-multi-select w-full"
                 classNamePrefix="select"
                 value={updatedSelectedOptions && updatedSelectedOptions.length > 0 ? updatedSelectedOptions.map(({ icon, ...rest }) => rest) : []}
@@ -578,6 +588,7 @@ export const SocialForm = ({ onFormChange, location, socialFormValues }) => {
                 <Field
                   type="text"
                   id={`url_${index}`}
+                  disabled={globalTabValue==1}
                   name={`url_${index}`}
                   placeholder={`URL for ${option.value}`}
                   className="border border-gray-300 rounded p-2 w-full"
@@ -599,7 +610,8 @@ export const SocialForm = ({ onFormChange, location, socialFormValues }) => {
           <div className="flex items-center mb-4 mt-6">
             <button 
               type="submit" 
-              className="px-4 py-2 text-white rounded" 
+              className="px-4 py-2 text-white rounded"
+              disabled={globalTabValue==1} 
               style={{ backgroundColor: '#284B63', color: '#fff' }}
               onMouseEnter={(e) => e.target.style.backgroundColor = '#3C6E71'} // Cambia el color al hacer hover
               onMouseLeave={(e) => e.target.style.backgroundColor = '#284B63'} // Vuelve al color original al salir del hoover

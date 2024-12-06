@@ -19,7 +19,7 @@ import { useTranslation } from 'react-i18next';
  */
 
 function MenuForm(){
-    const { formData,productsCategory,editFormdata,activeCategory,currentTemplate,indexTemplate,setIndexTemplate,showBackgroundPicker,showMenuPicker,showBackCategoryPicker,backgroundPickerRef,menuPickerRef,backgroundProductPickerRef,namePickerRef,descriptionPickerRef,pricePickerRef,setShowBackgroundPicker,setShowBackCategoryPicker,setShowMenuPicker,setShowNamePicker,setShowDescriptionPicker,setShowPricePicker,
+    const { formData,productsCategory,editFormdata,activeCategory,currentTemplate,indexTemplate,setIndexTemplate,showBackgroundPicker,showMenuPicker,showBackCategoryPicker,backgroundPickerRef,menuPickerRef,backgroundProductPickerRef,namePickerRef,descriptionPickerRef,pricePickerRef,setShowBackgroundPicker,setShowBackCategoryPicker,setShowMenuPicker,setShowNamePicker,setShowDescriptionPicker,setShowPricePicker,setActiveCategory,
             showNamePicker,showDescriptionPicker,showPricePicker,fonts,templates,isEditRoute,initialFormDataRef,validateLink,getFonts,getTemplates,handlePrev,handleNext,handleActiveCategory,handleRestaurantName,handleActiveProduct,handleShowBackgroundPicker,handleShowMenuPicker,handleShowBackCategoryPicker,handleShowNamePicker,handleShowDescriptionPicker,handleShowPricePicker,resetUserTemplate,validation,getDataToEdit,handleTemplate,
             templateNull,usertemplateNull,handleLogo,handleUserTemplate,handleBackgroundCard,handleMenuColor,addCategory,handleFontFamily,removeCategory,handleChangeCategoryName,addProductToCategory,removeProductToCategory,handleProductField,handleImgProduct,handleBackgroundProduct,handleColorNameProduct,handleColorDescriptionProduct,handleColorPriceProduct,handleProductName,handleProductDescription,handleProductTop,handleProductPrice, loading, setLoading,
     }=UseMenu();
@@ -27,9 +27,10 @@ function MenuForm(){
     const { t } = useTranslation();
     const{setValidateFormMenu}=useValidate();
     const [initialValues,setInitialValues]=useState(formData);
+    const {globalTabValue,changeTabValue}=useValidate();
 
     const validateFormFields = () => {
-      if (Object.keys(formik.errors).length > 1) {
+      if (Object.keys(formik.errors).length > 1 || (Array.isArray(formik.errors.category) && formik.errors.category.length > 0)) {
         setValidateFormMenu(false);
         return false;
       } else {
@@ -46,8 +47,6 @@ function MenuForm(){
         },
         enableReinitialize:true
     });
-    //console.log(" values ",formik.values);
-    //console.log("formdata: ",formData);
 
     useEffect(()=>{
       const executeFunctions=async()=>{
@@ -91,6 +90,9 @@ function MenuForm(){
       }
     },[])
 
+    console.log("formdata: ",formData);
+    console.log("global tab value: ",globalTabValue);
+
     useEffect(()=>{
       if(isEditRoute){
         formik.setValues((prevValues)=>({
@@ -104,10 +106,6 @@ function MenuForm(){
     useEffect(()=>{
       setLoading(false);
     },[])
-    // console.log("isss ",editFormdata);
-    console.log("fomik values: ",formik.values);
-    console.log("intial values: ",formik.initialValues);
-    console.log("formik errors",formik.errors);
 return (
     <div className='p-4'>
       {loading ? (
@@ -137,6 +135,7 @@ return (
                 onBlur={formik.handleBlur}
                 name="restaurantName"
                 id="restaurantName"
+                disabled={globalTabValue==1}
               />
               {formik.touched.restaurantName && formik.errors.restaurantName ? (
                 <div className='text-red-600 my-1 text-[13px]'>{formik.errors.restaurantName}</div>
@@ -161,6 +160,7 @@ return (
                 name="restaurantLogo"
                 id="restaurantLogo"
                 onBlur={formik.handleBlur}
+                disabled={globalTabValue==1}
                 onChange={(e) => { handleLogo(e); formik.setFieldValue('restaurantLogo', e.target.files[0]); }}
               />
             </div>
@@ -173,7 +173,7 @@ return (
               <button></button>
               <div 
                 className="w-10 h-10 border border-gray-300 rounded cursor-pointer"
-                onClick={() => indexTemplate == null && (setShowBackgroundPicker(!showBackgroundPicker))}
+                onClick={() =>{if(globalTabValue!==1){ indexTemplate == null && (setShowBackgroundPicker(!showBackgroundPicker))}}}
                 aria-disabled={indexTemplate != null ? false : true}
                 style={{ backgroundColor: formData.backgroundCard || "#000" ,backgroundImage:formData?.backgroundCard.includes("gradient") ? formData?.backgroundCard : "none"}}
               />
@@ -187,7 +187,7 @@ return (
             {/* Menu Color Section */}
             <div className="flex items-center space-x-12 mx-3">
               <label htmlFor="menuColor" className="text-[17px]">{t('Color navbar')}</label>
-              <div className="w-10 h-10 border border-gray-300 rounded cursor-pointer" onClick={() => setShowMenuPicker(!showMenuPicker)} style={{ backgroundColor: formData.colorMenu || "#000" }}
+              <div className="w-10 h-10 border border-gray-300 rounded cursor-pointer" onClick={() =>{if(globalTabValue!==1)setShowMenuPicker(!showMenuPicker)}} style={{ backgroundColor: formData.colorMenu || "#000" }}
               />
               {showMenuPicker && (
                 <div className="menuPicker z-50" ref={menuPickerRef}>
@@ -209,7 +209,7 @@ return (
                         </div>
                         {templates?.length > 0 && templates.map((element, index) => (
                           <motion.div whileHover={{translateY:'-1px',transition:'.4s'}}  key={index} className="w-1/5 px-2 flex-shrink-0">
-                            <img onClick={(e)=>{
+                            <img  onClick={(e)=>{
                               setIndexTemplate(formData.idImgTemplate); handleTemplate(e); setIndexTemplate(index)}} id={element.id} className={`w-full h-full object-cover rounded-lg hover:shadow-md hover:shadow-black ${indexTemplate==element.id ? 'brightness-50':''}`} src={element.image} alt="imagen" />
                           </motion.div>
                         ))}
@@ -236,7 +236,8 @@ return (
                       value={isEditRoute ? formData.idFontPreview : ''} 
                       className='p-4 rounded-[10px] bg-gray-300 w-full lg:w-auto'
                       name="fontFamily" 
-                      id="fontFamily" 
+                      id="fontFamily"
+                      disabled={globalTabValue==1} 
                       onChange={(e) => handleFontFamily(e)}
                     >
                       {fonts?.map((item, index) => (
@@ -246,64 +247,118 @@ return (
                       ))}
                     </select>
                   </div>
-                    {/* Sección de Personalización de la Tarjeta de Producto */}
-                    <div className='flex flex-col mb-6'>
-                      <h1 className='mb-2 text-lg font-semibold'>{t('Customize your product card')}</h1>
-                      <div className='flex flex-col sm:flex-row flex-wrap w-full sm:w-[80%] p-4 justify-around gap-4'>
-                        {/* Color de Fondo */}
-                        <div className='flex flex-col items-center'>
-                          <label className='my-2' htmlFor="background">{t('Background')}</label>
-                          <div className='w-10 h-10 border-2 border-gray-300 rounded cursor-pointer' onClick={() =>setShowBackCategoryPicker(!showBackCategoryPicker)} style={{backgroundColor:formData.category?.[activeCategory]?.products[0]?.backgroundProductCard || "#000",backgroundImage:formData.category?.[activeCategory]?.products[0]?.backgroundProductCard.includes("gradient") ? formData.category?.[activeCategory]?.products[0]?.backgroundProductCard : "none" }}
-                          ></div>
-                          {showBackCategoryPicker && (
-                            <div className='colorPicker z-50' ref={backgroundProductPickerRef}>
-                              <ColorPicker handlerFunction={(color) => { if (activeCategory !== null) {handleBackgroundProduct(activeCategory, color); }}}   pickerValue={formData.category?.[activeCategory]?.products[0]?.backgroundProductCard || '#FFFFFF'}  pickerColor={formData.category?.[activeCategory]?.products[0]?.backgroundProductCard || '#FFFFFF'} gradient={true}/>
-                            </div>
-                          )}
-                        </div>
+                  <div className='flex flex-col mb-6'>
+                    <h1 className='mb-2 text-lg font-semibold'>{t('Customize your product card')}</h1>
+                    <div className='grid grid-cols-1 sm:grid-cols-2 gap-4 w-full sm:w-[80%] p-4'>
+                      {/* Color de Fondo */}
+                      <div className='flex flex-col items-center'>
+                        <label className='my-2' htmlFor="background">{t('Background')}</label>
+                        <div
+                          className='w-10 h-10 border-2 border-gray-300 rounded cursor-pointer'
+                          onClick={() =>{if(globalTabValue!==1) setShowBackCategoryPicker(!showBackCategoryPicker)}}
+                          style={{
+                            backgroundColor: formData.category?.[activeCategory]?.products[0]?.backgroundProductCard || "#000",
+                            backgroundImage: formData.category?.[activeCategory]?.products[0]?.backgroundProductCard.includes("gradient") 
+                              ? formData.category?.[activeCategory]?.products[0]?.backgroundProductCard 
+                              : "none"
+                          }}
+                        ></div>
+                        {showBackCategoryPicker && (
+                          <div className='colorPicker z-50' ref={backgroundProductPickerRef}>
+                            <ColorPicker
+                              handlerFunction={(color) => {
+                                if (activeCategory !== null) {
+                                  handleBackgroundProduct(activeCategory, color);
+                                }
+                              }}
+                              pickerValue={formData.category?.[activeCategory]?.products[0]?.backgroundProductCard || '#FFFFFF'}
+                              pickerColor={formData.category?.[activeCategory]?.products[0]?.backgroundProductCard || '#FFFFFF'}
+                              gradient={true}
+                            />
+                          </div>
+                        )}
+                      </div>
 
-                        {/* Color del Nombre */}
-                        <div className='flex flex-col items-center'>
-                          <label className='my-2' htmlFor="nameColor">{t('Name Color')}</label>
-                          <div className='w-10 h-10 border border-gray-300 rounded cursor-pointer'  onClick={() => setShowNamePicker(!showNamePicker)}   style={{ backgroundColor: formData.category?.[activeCategory]?.products[0]?.colorName || '#000' }}
-                          ></div>
-                          {showNamePicker && (
-                            <div className='colorPicker' ref={namePickerRef}>
-                              <ColorPicker gradient={false} handlerFunction={(color) =>{handleColorNameProduct(activeCategory, color); }} pickerValue={formData.category?.[activeCategory]?.products?.[0].colorName || "#000"} pickerColor={formData.category?.[activeCategory]?.products?.[0].colorName || "#FFFFFF"} />
-                            </div>
-                          )}
-                        </div>
+                      {/* Color del Nombre */}
+                      <div className='flex flex-col items-center'>
+                        <label className='my-2' htmlFor="nameColor">{t('Name Color')}</label>
+                        <div
+                          className='w-10 h-10 border border-gray-300 rounded cursor-pointer'
+                          onClick={() =>{if(globalTabValue!==1) setShowNamePicker(!showNamePicker)}}
+                          style={{
+                            backgroundColor: formData.category?.[activeCategory]?.products[0]?.colorName || '#000'
+                          }}
+                        ></div>
+                        {showNamePicker && (
+                          <div className='colorPicker' ref={namePickerRef}>
+                            <ColorPicker
+                              gradient={false}
+                              handlerFunction={(color) => {
+                                handleColorNameProduct(activeCategory, color);
+                              }}
+                              pickerValue={formData.category?.[activeCategory]?.products?.[0].colorName || "#000"}
+                              pickerColor={formData.category?.[activeCategory]?.products?.[0].colorName || "#FFFFFF"}
+                            />
+                          </div>
+                        )}
+                      </div>
 
-                        {/* Color de la Descripción */}
-                        <div className='flex flex-col items-center'>
-                          <label className='my-2' htmlFor="descriptionColor">{t('Description Color')}</label>
-                          <div  className='w-10 h-10 border border-gray-300 rounded cursor-pointer'  onClick={() => setShowDescriptionPicker(!showDescriptionPicker)}  style={{ backgroundColor: formData.category?.[activeCategory]?.products[0]?.colorDescription || '#000' }}></div>
-                          {showDescriptionPicker && (
-                            <div className='colorPicker' ref={descriptionPickerRef}>
-                              <ColorPicker gradient={false}  handlerFunction={(color) => { handleColorDescriptionProduct(activeCategory, color); }} pickerValue={formData.category?.[activeCategory]?.products[0]?.colorDescription || "#FFFFFF"} pickerColor={formData.category?.[activeCategory]?.products?.[0].colorDescription || "#FFFFFF"} />
-                            </div>
-                          )}
-                        </div>
+                      {/* Color de la Descripción */}
+                      <div className='flex flex-col items-center'>
+                        <label className='my-2' htmlFor="descriptionColor">{t('Description Color')}</label>
+                        <div
+                          className='w-10 h-10 border border-gray-300 rounded cursor-pointer'
+                          onClick={() =>{if(globalTabValue!==1)setShowDescriptionPicker(!showDescriptionPicker)}}
+                          style={{
+                            backgroundColor: formData.category?.[activeCategory]?.products[0]?.colorDescription || '#000'
+                          }}
+                        ></div>
+                        {showDescriptionPicker && (
+                          <div className='colorPicker' ref={descriptionPickerRef}>
+                            <ColorPicker
+                              gradient={false}
+                              handlerFunction={(color) => {
+                                handleColorDescriptionProduct(activeCategory, color);
+                              }}
+                              pickerValue={formData.category?.[activeCategory]?.products[0]?.colorDescription || "#FFFFFF"}
+                              pickerColor={formData.category?.[activeCategory]?.products?.[0].colorDescription || "#FFFFFF"}
+                            />
+                          </div>
+                        )}
+                      </div>
 
-                        {/* Color del Precio */}
-                        <div className='flex flex-col items-center'>
-                          <label className='my-2' htmlFor="priceColor">{t('Price Color')}</label>
-                          <div  className='w-10 h-10 border border-gray-300 rounded cursor-pointer'  onClick={() => setShowPricePicker(!showPricePicker)}  style={{ backgroundColor: formData.category?.[activeCategory]?.products[0]?.colorPrice || '#000' }}
-                          ></div>
-                          {showPricePicker && (
-                            <div className='colorPicker' ref={pricePickerRef}>
-                              <ColorPicker gradient={false} handlerFunction={(color) => { handleColorPriceProduct(activeCategory, color); }} pickerValue={formData.category?.[activeCategory]?.products?.[0].colorPrice || "#FFFFFF"} pickerColor={formData.category?.[activeCategory]?.products?.[0].colorPrice || "#FFFFFF"} />
-                            </div>
-                          )}
-                        </div>
+                      {/* Color del Precio */}
+                      <div className='flex flex-col items-center'>
+                        <label className='my-2' htmlFor="priceColor">{t('Price Color')}</label>
+                        <div
+                          className='w-10 h-10 border border-gray-300 rounded cursor-pointer'
+                          onClick={() =>{if(globalTabValue!==1)setShowPricePicker(!showPricePicker)}}
+                          style={{
+                            backgroundColor: formData.category?.[activeCategory]?.products[0]?.colorPrice || '#000'
+                          }}
+                        ></div>
+                        {showPricePicker && (
+                          <div className='colorPicker' ref={pricePickerRef}>
+                            <ColorPicker
+                              gradient={false}
+                              handlerFunction={(color) => {
+                                handleColorPriceProduct(activeCategory, color);
+                              }}
+                              pickerValue={formData.category?.[activeCategory]?.products?.[0].colorPrice || "#FFFFFF"}
+                              pickerColor={formData.category?.[activeCategory]?.products?.[0].colorPrice || "#FFFFFF"}
+                            />
+                          </div>
+                        )}
                       </div>
                     </div>
+                  </div>
+
                     {/* Sección para Agregar Nueva Categoría y Productos */}
                     <div className='flex flex-col mt-6'>
                         {values?.category && values?.category.length <= 0 ? (
                             <div><h1>no hay categorias agregadas</h1></div>
                         ) : (
-<FieldArray name="category">
+<FieldArray disabled={globalTabValue==1}  name="category">
   {({ remove, push }) => (
     <div>
       <button
@@ -365,44 +420,49 @@ return (
 
       {/* Asegurarse de que hay categorías antes de mostrar el Accordion */}
       {values?.category.length > 0 && (
-        <Accordion variant="splitted">
-          {values?.category.map((category, index) => (
-            <AccordionItem
-              className={`bg-gray-300 my-2 p-3 pb-2 w-full rounded-2xl cursor-pointer ${
-                  activeCategory === index ? "border-2 border-zinc-800" : ""
-                }`}
-              key={index}
-              aria-label={`category ${index}`}
-              title={
-                <div onClick={()=>handleActiveCategory(index)} className="flex justify-between p-2">
-                  <label htmlFor={`category.${index}.categoryName`} className="">
-                    {!productsCategory?.[index].categoryName=="" ? productsCategory?.[index]?.categoryName:t('Category name')}
-                  </label>
-                    <button
-                      onClick={() => {
-                        if (values?.category.length>1 && formData.category.length>1) {
-                          remove(index);
-                          removeCategory(index);
-                        }
-                        if (activeCategory === index) {
-                          handleActiveCategory(index - 1);
-                        }
-                        const updatedCategories=[...formik.values.category];
-                        updatedCategories.splice(index,1)
-                        formik.setFieldValue(`category`,updatedCategories);
-                      }}
-                      type="button"
-                      className={`p-1 text-red-600 self-end font-semibold hover:underline ${values.category.length > 1 ? "" : "hidden"}`}
-                    >
-                      <DeleteIcon className='text-red-600 hover:underline hover:translate-y-[-2px] hover:duration-[.4s]' />
-                    </button>
-                </div>
-              }
-              keepContentMounted={true}
-            >
+        <Accordion variant='bordered'>
+        {values?.category.map((category, index) => (
+          <AccordionItem
+            className={`bg-gray-200 my-1 p-3 pb-2 w-full rounded-md cursor-pointer ${
+              activeCategory === index ? "border-2 border-zinc-800" : ""
+            }`}
+            key={index}
+            aria-label={`category ${index}`}
+            isOpen={activeCategory === index} // Asegura que el acordeón se abra correctamente
+            title={
+              <div onClick={() => handleActiveCategory(index)} className="flex justify-between p-2">
+                <label htmlFor={`category.${index}.categoryName`}>
+                  {productsCategory?.[index]?.categoryName || t("Category name")}
+                </label>
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    if (values?.category.length > 1 && index !== 0) {
+                      remove(index);
+                      removeCategory(index);
+                    }
+                    if (activeCategory === index) {
+                      handleActiveCategory(null);
+                    }
+                    const updatedCategories = [...formik.values.category];
+                    updatedCategories.splice(index, 1);
+                    formik.setFieldValue("category", updatedCategories);
+                  }}
+                  type="button"
+                  disabled={index === 0 || globalTabValue==1}
+                  className={`p-1 text-red-600 self-end font-semibold hover:underline ${
+                    values.category.length > 1 && index !== 0 ? "" : "hidden"
+                  }`}
+                >
+                  <DeleteIcon className="text-red-600 hover:underline hover:translate-y-[-2px] hover:duration-[.4s]" />
+                </button>
+              </div>
+            }
+            keepContentMounted={true}
+          >
               <div
                 onClick={() => setActiveCategory(index)}
-                className={`bg-gray-300 my-1 p-3 sm:p-1 md:p-1 w-full rounded-2xl cursor-pointer`}
+                className={`bg-transparent my-1 p-3 sm:p-1 md:p-1 w-full rounded-2xl cursor-pointer`}
               >
                 <div className='flex flex-col'>
                   {/* Input para el nombre de la categoría */}
@@ -411,6 +471,7 @@ return (
                     className="p-2 border rounded w-full"
                     type="text"
                     value={formData?.category[index]?.categoryName}
+                    disabled={globalTabValue==1} 
                     name={`category[${index}].categoryName`}
                     placeholder={t("Enter category name")}
                     onBlur={formik.handleBlur}
@@ -512,34 +573,43 @@ return (
                               </div>
                             }
                             keepContentMounted={true}
-                            className={`bg-white p-3 my-2 rounded-[10px]`}
+                            className={`bg-white p-3 my-2 rounded-md`}
                           >
                             {/* Contenedor de cada producto */}
                             <div>
                               {/* Contenedor de la imagen y detalles del producto */}
-                              <div className="flex flex-col lg:flex-row m-0">
-                                <div className={`lg:w-[30%] w-full rounded-[10px] bg-slate-600 sm:mb-4 lg:relative md:relative ${formData?.category[index]?.products[productIndex]?.productImg==null ? 'hidden':''}`}>
+                              <div className="flex flex-col lg:flex-row lg:gap-6 gap-4 m-0 w-full">
+                                {/* Contenedor de la Imagen */}
+                                <div
+                                  className={`lg:w-1/3 w-full sm:h-40 lg:h-auto ${formData?.category[index]?.products[productIndex]?.productImg == null ? 'hidden' : ''}`}
+                                >
                                   <img
                                     id={`imgProductPreview-${index}-${productIndex}`}
-                                    className={`w-full h-full rounded-[10px]`}
-                                    src={validateLink.test(formData?.category[index]?.products[productIndex]?.productImg)
-                                      ? (isEditRoute ? formData?.category[index]?.products[productIndex]?.productImg : '')
-                                      : (formData?.category[index]?.products[productIndex]?.productImg instanceof File
+                                    className="w-full h-full rounded-[10px]"
+                                    src={
+                                      validateLink.test(formData?.category[index]?.products[productIndex]?.productImg)
+                                        ? isEditRoute
+                                          ? formData?.category[index]?.products[productIndex]?.productImg
+                                          : ''
+                                        : formData?.category[index]?.products[productIndex]?.productImg instanceof File
                                         ? URL.createObjectURL(formData?.category[index]?.products[productIndex]?.productImg)
-                                        : '')}
+                                        : ''
+                                    }
                                     alt=""
                                   />
                                 </div>
 
-                                <div className="lg:w-[68%] w-full ml-4 lg:ml-6 flex flex-col">
-                                  <div className="flex flex-col sm:flex-row sm:items-center mb-4">
-                                    {/* Input para la imagen del producto */}
+                                {/* Contenedor de los Detalles */}
+                                <div className="lg:w-2/3 w-full flex flex-col gap-4">
+                                  {/* Input de Imagen */}
+                                  <div className="flex flex-col sm:flex-row sm:items-center gap-3">
                                     <input
                                       onChange={(e) => {
                                         handleImgProduct(index, productIndex, e);
                                         formik.setFieldValue(`category[${index}].products[${productIndex}].productImg`, e.target.files[0]);
                                       }}
                                       className="hidden"
+                                      disabled={globalTabValue==1} 
                                       type="file"
                                       accept="image/*"
                                       name={`category[${index}].products[${productIndex}].productImg`}
@@ -553,114 +623,122 @@ return (
                                         if (!touched.category[index]) touched.category[index] = { products: [] };
                                         if (!touched.category[index].products) touched.category[index].products = [];
                                         if (!touched.category[index].products[productIndex]) touched.category[index].products[productIndex] = {};
-
                                         touched.category[index].products[productIndex].productImg = true;
                                         formik.setTouched(touched);
                                       }}
                                       htmlFor={`category[${index}].products[${productIndex}].productImg`}
-                                      className="p-2 text-[17px] rounded-md my-3 w-[50%] sm:w-[25%] text-center bg-light-blue text-white hover:bg-dark-blue"
+                                      className="p-2 text-base rounded-md w-full sm:w-auto sm:max-w-xs text-center bg-light-blue text-white hover:bg-dark-blue"
                                     >
                                       {t('Add Image')}
                                     </label>
                                     {formik.touched?.category?.[index]?.products?.[productIndex]?.productImg &&
-                                      formik.errors?.category?.[index]?.products?.[productIndex]?.productImg ? (
-                                      <div className="text-[13px] text-red-600 mx-2 mt-6">
+                                    formik.errors?.category?.[index]?.products?.[productIndex]?.productImg ? (
+                                      <div className="text-sm text-red-600">
                                         {formik.errors.category[index].products[productIndex].productImg}
-                                      </div>
-                                    ) : (
-                                      <div className="mx-2 my-2 min-h-[20px]"></div>
-                                    )}
-                                  </div>
-
-                                  {/* Input para el nombre del producto */}
-                                  <input
-                                    className="mb-1 p-2 border rounded w-full mx-1"
-                                    type="text"
-                                    placeholder={t("Product Name")}
-                                    value={formData?.category[index]?.products[productIndex]?.productName}
-                                    name={`category[${index}].products[${productIndex}].productName`}
-                                    onBlur={formik.handleBlur}
-                                    onChange={(e) => {
-                                      handleProductName(index, productIndex, e);
-                                      formik.setFieldValue(`category[${index}].products[${productIndex}].productName`, e.target.value);
-                                    }}
-                                  />
-                                  {formik.touched?.category?.[index]?.products?.[productIndex]?.productName &&
-                                    formik.errors?.category?.[index]?.products?.[productIndex]?.productName ? (
-                                    <div className="text-[13px] text-red-600 mx-2 my-2">
-                                      {formik.errors.category[index].products[productIndex].productName}
-                                    </div>
-                                  ) : (
-                                    <div className="mx-2 my-2 min-h-[20px]"></div>
-                                  )}
-
-                                  {/* Input para la descripción del producto */}
-                                  <input
-                                    className="mb-1 p-2 border rounded w-full mx-1"
-                                    type="text"
-                                    value={formData?.category[index]?.products[productIndex]?.productDescription}
-                                    placeholder={t("Product Description")}
-                                    id={`category[${index}].products[${productIndex}].productDescription`}
-                                    name={`category[${index}].products[${productIndex}].productDescription`}
-                                    onBlur={formik.handleBlur}
-                                    onChange={(e) => {
-                                      handleProductDescription(index, productIndex, e);
-                                      formik.setFieldValue(`category[${index}].products[${productIndex}].productDescription`, e.target.value);
-                                    }}
-                                  />
-                                  {formik.touched?.category?.[index]?.products?.[productIndex]?.productDescription &&
-                                    formik.errors?.category?.[index]?.products?.[productIndex]?.productDescription ? (
-                                    <div className="text-[13px] text-red-600 mx-2 my-2">
-                                      {formik.errors.category[index].products[productIndex].productDescription}
-                                    </div>
-                                  ) : (
-                                    <div className="mx-2 my-2 min-h-[20px]"></div>
-                                  )}
-
-                                  {/* Checkbox y input para el precio */}
-                                  <div className="flex flex-wrap sm:flex-col md:flex-col lg:flex-row sm:items-center lg:items-start lg:justify-between w-full">
-                                  {/* Checkbox "Top" */}
-                                  <div className="flex items-center sm:mb-2 lg:mb-0 lg:mr-4">
-                                    <label>Top</label>
-                                    <input
-                                      className="mx-2"
-                                      type="checkbox"
-                                      defaultChecked={isEditRoute ? formData?.category[index]?.products[productIndex]?.top : false}
-                                      name={`category[${index}].products[${productIndex}].top`}
-                                      onBlur={formik.handleBlur}
-                                      onChange={(e) => {
-                                        handleProductTop(index, productIndex, e);
-                                        formik.setFieldValue(`category[${index}].products[${productIndex}].top`, e.target.checked);
-                                      }}
-                                    />
-                                  </div>
-
-                                  {/* Input "Price" */}
-                                  <div className="flex items-center sm:w-full lg:w-auto">
-                                    <label className="mx-2">{t('Price')} $</label>
-                                    <input
-                                      className="p-2 border rounded w-full sm:w-[50%] lg:w-24 h-10"
-                                      type="number"
-                                      value={formData.category[index]?.products[productIndex]?.price}
-                                      name={`category[${index}].products[${productIndex}].price`}
-                                      onBlur={formik.handleBlur}
-                                      min={0}
-                                      onChange={(e) => {
-                                        handleProductPrice(index, productIndex, e);
-                                        formik.setFieldValue(`category[${index}].products[${productIndex}].price`, e.target.value);
-                                      }}
-                                    />
-                                    {formik.touched?.category?.[index]?.products?.[productIndex]?.price &&
-                                      formik.errors?.category?.[index]?.products?.[productIndex]?.price ? (
-                                      <div className="text-[13px] text-red-600 mx-2">
-                                        {formik.errors.category[index].products[productIndex].price}
                                       </div>
                                     ) : null}
                                   </div>
-                                </div>
+
+                                  {/* Input para Nombre y Descripción */}
+                                  <div className="flex flex-col gap-2">
+                                    <input
+                                      className="p-2 border rounded w-full"
+                                      type="text"
+                                      placeholder={t('Product Name')}
+                                      disabled={globalTabValue==1}
+                                      value={formData?.category[index]?.products[productIndex]?.productName}
+                                      name={`category[${index}].products[${productIndex}].productName`}
+                                      onBlur={formik.handleBlur}
+                                      onChange={(e) => {
+                                        handleProductName(index, productIndex, e);
+                                        formik.setFieldValue(`category[${index}].products[${productIndex}].productName`, e.target.value);
+                                      }}
+                                    />
+                                    {formik.touched?.category?.[index]?.products?.[productIndex]?.productName &&
+                                    formik.errors?.category?.[index]?.products?.[productIndex]?.productName ? (
+                                      <div className="text-sm text-red-600">
+                                        {formik.errors.category[index].products[productIndex].productName}
+                                      </div>
+                                    ) : null}
+
+                                    <input
+                                      className="p-2 border rounded w-full"
+                                      type="text"
+                                      disabled={globalTabValue==1} 
+                                      placeholder={t('Product Description')}
+                                      value={formData?.category[index]?.products[productIndex]?.productDescription}
+                                      name={`category[${index}].products[${productIndex}].productDescription`}
+                                      onBlur={formik.handleBlur}
+                                      onChange={(e) => {
+                                        handleProductDescription(index, productIndex, e);
+                                        formik.setFieldValue(`category[${index}].products[${productIndex}].productDescription`, e.target.value);
+                                      }}
+                                    />
+                                    {formik.touched?.category?.[index]?.products?.[productIndex]?.productDescription &&
+                                    formik.errors?.category?.[index]?.products?.[productIndex]?.productDescription ? (
+                                      <div className="text-sm text-red-600">
+                                        {formik.errors.category[index].products[productIndex].productDescription}
+                                      </div>
+                                    ) : null}
+                                  </div>
+
+                                  {/* Checkbox y Precio */}
+                                  <div className="flex flex-col lg:flex-row gap-4">
+                                    {/* Checkbox "Top" */}
+                                    <div className="flex items-center gap-2">
+                                      <label>{t('Top')}</label>
+                                      <input
+                                        type="checkbox"
+                                        disabled={globalTabValue==1} 
+                                        checked={formData.category[index].products[productIndex]?.top || false}
+                                        name={`category[${index}].products[${productIndex}].top`}
+                                        onBlur={formik.handleBlur}
+                                        onChange={(e) => {
+                                          // Verifica si ya hay 3 productos con `top` activado
+                                          const topCount = formData.category[index].products.filter(product => product.top).length;
+
+                                          if (!e.target.checked || topCount < 3) {
+                                            // Permite cambiar el valor solo si se está desmarcando o si aún no hay 3 productos con `top`
+                                            handleProductTop(index, productIndex, e);
+                                            formik.setFieldValue(`category[${index}].products[${productIndex}].top`, e.target.checked);
+                                          }else{
+                                            toast.info("solo puede haber tres productos top por categoria",4000);
+                                          }
+                                        }}
+                                      />
+
+
+                                    </div>
+
+                                    {/* Input "Price" */}
+                                    <div className="flex items-center h-16 gap-2 p-2">
+                                      <label className="sm:mr-2">{t('Price')}</label>
+                                      <div className='flex flex-col'>
+                                        <input
+                                          className="p-2 border rounded w-full"
+                                          type="number"
+                                          disabled={globalTabValue==1} 
+                                          value={formData.category[index]?.products[productIndex]?.price}
+                                          name={`category[${index}].products[${productIndex}].price`}
+                                          onBlur={formik.handleBlur}
+                                          min={0}
+                                          onChange={(e) => {
+                                            const onlyNums = e.target.value.replace(/\D/g, ""); 
+                                            handleProductPrice(index, productIndex, e);
+                                            formik.setFieldValue(`category[${index}].products[${productIndex}].price`, onlyNums);
+                                          }}
+                                        />
+                                        {formik.touched?.category?.[index]?.products?.[productIndex]?.price &&
+                                        formik.errors?.category?.[index]?.products?.[productIndex]?.price ? (
+                                          <div className="text-sm text-red-600">
+                                            {formik.errors.category[index].products[productIndex].price}
+                                          </div>
+                                        ) : null}
+                                      </div>
+                                    </div>
+                                  </div>
                                 </div>
                               </div>
-
                             </div>
                           </AccordionItem>
                         ))}
@@ -676,7 +754,17 @@ return (
     </div>
   )}
 </FieldArray>
-                        )}
+)}
+        <div>
+            <button className="px-4 py-2 my-4 bg-light-blue text-white rounded "
+             onClick={()=>{if(Object.keys(formik.errors).length>1 || formik.errors.category.length>0){
+              toast.warning("please complete all fields",2000);
+             }else{
+              changeTabValue();
+             }}} type='button'>
+             submit </button>
+        </div>
+
                     </div>
                 </form>
             )}

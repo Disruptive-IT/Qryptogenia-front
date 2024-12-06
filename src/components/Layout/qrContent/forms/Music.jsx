@@ -51,6 +51,7 @@ export const MusicForm = ({ onFormChangeMusic, location, musicFormValues }) => {
     const {setValidateFormMusic,validateFormMusic}=useValidate();
     const [fontsMusicPreview, setFontsMusicPreview] = useState([]);
     const {getFontsPreview}=UseMenu();
+    const {globalTabValue,changeTabValue}=useValidate();
 
     useEffect(() => {
         const fetchFontsPreview = async () => {
@@ -294,15 +295,15 @@ export const MusicForm = ({ onFormChangeMusic, location, musicFormValues }) => {
     return (
         <Formik
             initialValues={initialValues}
-            onSubmit={(values, actions) => {
+            onSubmit={async(values, actions) => {
                 const errors = validateForm(values);
                 if (Object.keys(errors).length > 0) {
                     setFormErrors(errors);
                     actions.setSubmitting(false);
                 } else {
                     setFormErrors({});
-                    // Call the onSubmit function passed from the parent component
-                    onSubmit(values);
+                    changeTabValue()
+                    await onSubmit(values);
                     actions.setSubmitting(false);
                 }
             }}
@@ -325,6 +326,7 @@ export const MusicForm = ({ onFormChangeMusic, location, musicFormValues }) => {
         <Field
           type="text"
           id="title"
+          disabled={globalTabValue==1}
           placeholder={t("Title")}
           className="border w-full border-gray-300 rounded p-2 focus:ring-0 focus:outline-none"
           value={title}
@@ -351,7 +353,7 @@ export const MusicForm = ({ onFormChangeMusic, location, musicFormValues }) => {
                           <div
                               className="w-10 h-10 md:w-10 border border-gray-300 rounded cursor-pointer"
                               style={{ background: colorTitle }}
-                              onClick={() => setShowTitleColorPicker(!showTitleColorPicker)}
+                              onClick={() =>{if(globalTabValue!==1) setShowTitleColorPicker(!showTitleColorPicker)}}
                           ></div>
                           {showTitleColorPicker && (
                               <div className="absolute mt-2 left-0 top-full z-50" ref={titleColorPickerRef}>
@@ -368,13 +370,16 @@ export const MusicForm = ({ onFormChangeMusic, location, musicFormValues }) => {
                           <div className="flex items-center ">
                               <input
                               type="file"
+                              disabled={globalTabValue==1}
                               className="hidden "
                               ref={fileInputRef}
                               accept="image/*"
                               onChange={handleImageChange}
                               />
                               <button
+                              type='button'
                               onClick={handleClick}
+                              disabled={globalTabValue==1}
                               className="text-blue-500 hover:text-blue-600 focus:outline-none"
                               >
                               <MdOutlineCloudUpload size="40" /> 
@@ -414,6 +419,7 @@ export const MusicForm = ({ onFormChangeMusic, location, musicFormValues }) => {
           as="textarea"
           rows="5"
           type="text"
+          disabled={globalTabValue==1}
           placeholder={t("Description")}
           maxLength={maxLength}
           id="description"
@@ -431,7 +437,7 @@ export const MusicForm = ({ onFormChangeMusic, location, musicFormValues }) => {
           <div
             className="w-10 md:w-10 h-10 border border-gray-300 rounded cursor-pointer"
             style={{ background: descriptionColor }}
-            onClick={() => setShowDescriptionColorPicker(!showDescriptionColorPicker)}
+            onClick={() => {if(globalTabValue!==1)setShowDescriptionColorPicker(!showDescriptionColorPicker)}}
           ></div>
           {showDescriptionColorPicker && (
             <div className="absolute mt-2 left-0 top-full z-50" ref={descriptionColorPickerRef}>
@@ -453,7 +459,7 @@ export const MusicForm = ({ onFormChangeMusic, location, musicFormValues }) => {
         <div
           className="w-10 h-10 border border-gray-300 rounded cursor-pointer"
           style={{ background: backgroundColor }}
-          onClick={() => setShowBackgroundColorPicker(!showBackgroundColorPicker)}
+          onClick={() =>{if(globalTabValue!==1) setShowBackgroundColorPicker(!showBackgroundColorPicker)}}
         ></div>
         {showBackgroundColorPicker && (
           <div className="absolute mt-2 left-0 z-50" ref={backgroundColorPickerRef}>
@@ -477,7 +483,7 @@ export const MusicForm = ({ onFormChangeMusic, location, musicFormValues }) => {
         <div
           className="w-10 h-10 border border-gray-300 rounded cursor-pointer"
           style={{ background: boxColor }}
-          onClick={() => setShowBoxColorPicker(!showBoxColorPicker)}
+          onClick={() => {if(globalTabValue!==1)setShowBoxColorPicker(!showBoxColorPicker)}}
         ></div>
         {showBoxColorPicker && (
           <div className="absolute mt-2 left-0 z-50" ref={boxColorPickerRef}>
@@ -501,7 +507,7 @@ export const MusicForm = ({ onFormChangeMusic, location, musicFormValues }) => {
         <div
           className="w-10 h-10 border border-gray-300 rounded cursor-pointer"
           style={{ background: borderImg }}
-          onClick={() => setShowBorderColorPicker(!showBorderColorPicker)}
+          onClick={() => {if(globalTabValue!==1)setShowBorderColorPicker(!showBorderColorPicker)}}
         ></div>
         {showBorderColorPicker && (
           <div className="absolute mt-2 left-0 z-50" ref={borderColorPickerRef}>
@@ -520,7 +526,9 @@ export const MusicForm = ({ onFormChangeMusic, location, musicFormValues }) => {
                     {/* Select de fuentes */}
                     <div className='flex flex-col md:flex-row md:items-center mb-4 mt-10'>
           <h1 className='mt-3 text-lg font-semibold mr-6'>{t('Font style')}:</h1>
-                    <select 
+                    <select
+                    value={isEditRoute ? musicFormValues.idFontPreview : ''}
+                disabled={globalTabValue==1}
                 className='p-4 rounded-[10px] bg-gray-300' 
                 name="fontFamily" 
                 id="" 
@@ -543,6 +551,7 @@ export const MusicForm = ({ onFormChangeMusic, location, musicFormValues }) => {
                             <Select
                                 id="multiselect"
                                 options={musicOptions}
+                                isDisabled={globalTabValue==1}
                                 isMulti
                                 className="basic-multi-select w-full"
                                 classNamePrefix="select"
@@ -572,6 +581,7 @@ export const MusicForm = ({ onFormChangeMusic, location, musicFormValues }) => {
                                 <label htmlFor={`input_${option.value}`} className="mb-2">{option.icon}</label>
                                 <Field
                                     type="text"
+                                    disabled={globalTabValue==1}
                                     id={`url_${index}`}
                                     name={`url_${index}`}
                                     placeholder={`URL for ${option.value}`}
@@ -597,7 +607,7 @@ export const MusicForm = ({ onFormChangeMusic, location, musicFormValues }) => {
                         style={{ backgroundColor: '#284B63', color: '#fff' }}
                         onMouseEnter={(e) => e.target.style.backgroundColor = '#3C6E71'} // Cambia el color al hacer hover
                         onMouseLeave={(e) => e.target.style.backgroundColor = '#284B63'} // Vuelve al color original al salir del hover
-
+                        disabled={globalTabValue==1}
                         >{t('Submit')}</button>
                     </div>
                 </div>

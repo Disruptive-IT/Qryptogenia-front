@@ -87,3 +87,14 @@ export const extractColorFromGradient = (gradient, percentageFromBottom) => {
     };
     reader.readAsDataURL(file);
 };
+
+export const handleSetIsDark=(variable,setDarkHandler)=>{
+    if(variable){
+        if(variable.startsWith('linear-gradient')){
+          const colorAt30Percent=extractColorFromGradient(variable,30);
+          setDarkHandler(isDarkColor(colorAt30Percent) ? '#ffffff' : '#000000');
+        }else{
+          setDarkHandler(isDarkColor(variable) ? '#ffffff' : '#000000');
+        }
+    }
+}

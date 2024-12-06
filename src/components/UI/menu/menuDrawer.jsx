@@ -66,11 +66,10 @@ function MenuDrawer(props) {
                             <HomeIcon sx={{ mr: 1 }} />
                             {t("Home")}
                         </ListItem>
-                        
-                        <ListItem button component={Link} to="/aboutUs" className={isActive('/aboutUs') ? 'active' : ''}>
-                        <InfoIcon sx={{ mr: 1 }} />
-                        {t("About us")}
-                    </ListItem>
+                        <ListItem button component={Link} to="/about" className={isActive('/about') ? 'active' : ''}>
+                            <InfoIcon sx={{ mr: 1 }} />
+                            {t("About us")}
+                        </ListItem>
                         <ListItem button component={Link} to="/pricings" className={isActive('/pricings') ? 'active' : ''}>
                             <AttachMoneyIcon sx={{ mr: 1 }} />
                             {t("Plans")}

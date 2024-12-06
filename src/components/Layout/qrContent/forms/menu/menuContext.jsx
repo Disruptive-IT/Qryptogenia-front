@@ -27,7 +27,7 @@ export default function MenuProvider({children}) {
     const isEditRoute = location.pathname.startsWith('/edit');
     const initialFormDataRef=useRef();
     const validateLink=/.webp/
-    const productsCategory=formData.category;
+    const productsCategory=formData?.category;
     const [loading, setLoading] = useState(true); // Maneja el loading aquí
 
     const [currentTemplate, setCurrentTemplate] = useState(0);
@@ -44,6 +44,16 @@ export default function MenuProvider({children}) {
         category:isEditRoute && formData ? formData.category : [{categoryName:"",products:[{ backgroundProductCard:"#fff",colorName:"#000",colorDescription:"#000",colorPrice:"#000",productImg:null, productName:"", productDescription:"", top:false,price:null}]}]
     }
 
+    const currencyFormat=(price)=>{
+        const formatter=new Intl.NumberFormat('es-CO',{
+            style:'currency',
+            minimumFractionDigits:0,
+            currency:'COP'
+        })
+
+        return formatter.format(price);
+    }
+
     const getFonts = async () => {
         try {
             const getFontsArray = await instance.get('getFonts');
@@ -52,6 +62,17 @@ export default function MenuProvider({children}) {
            // console.error("Error fetching fonts: ", error.message);
         }
     };
+
+    const limitTops = (array) => {
+        array.forEach((category) => {
+            const topCount = category.products.filter(product => product.top).length;
+            if (topCount > 3) {
+              console.error(`La categoría "${category.name}" tiene más de 3 productos marcados como top.`);
+            } else {
+              console.log(`La categoría "${category.name}" está correcta.`);
+            }
+        });
+      };
 
     const getTemplates = async () => {
         try {
@@ -81,9 +102,10 @@ export default function MenuProvider({children}) {
         setCurrentTemplate((prevIndex) => (prevIndex < templates.length - 1 ? prevIndex + 1 : 0));
       };
 
-    const handleActiveCategory = (index) => {
-        setActiveCategory(index);
-    };
+      const handleActiveCategory = (index) => {
+        // Si el índice es el mismo que el estado activo, lo cerramos (lo ponemos en null)
+        setActiveCategory((prevIndex) => (prevIndex === index ? null : index));
+      };
     
     const handleActiveProduct = (index) => {
         setActiveProduct(index);
@@ -793,6 +815,7 @@ export default function MenuProvider({children}) {
             setShowDescriptionPicker,
             setShowPricePicker,
             setUserTemplate,
+            setActiveCategory,
             //funciones axios
             getFonts,
             getTemplates,
@@ -838,6 +861,8 @@ export default function MenuProvider({children}) {
             handleProductDescription,
             handleProductTop,
             handleProductPrice,
+            limitTops,
+            currencyFormat,
             //skeleton
             loading,
             setLoading,

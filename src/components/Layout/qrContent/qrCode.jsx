@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import QRCodeStyling from 'qr-code-styling';
+import QRCodeStyling, { gradientTypes } from 'qr-code-styling';
 import '../styles/qrCode.css';
 import { useQr } from '../../../context/QrContext';
 import axios from "../../../libs/axios";
@@ -7,6 +7,7 @@ import { toast } from 'sonner';
 import Swal from 'sweetalert2';
 import html2canvas from 'html2canvas';
 import { useValidate } from '../../../context/validateFormContext';
+import { ParseCSSGradient } from './customQr/design/gradientDots';
 /*
  * @UpdatedBy : Cristian Escobar,   @date 2024-09-03 15:05:11
  * @description : Se implemento la captura del qr con canvas y la transformacion a base64 para almacenarse en la base de datos.
@@ -191,48 +192,93 @@ const QR = ({ uniqueKey }) => {
         }
     };
 
+    console.log("qrprops", qrProps.dotsColor);
+    console.log("qr codeee", qrCode?.current?._options);
+  
     useEffect(() => {
         const createOrUpdateQRCode = () => {
             if (!qrCode.current) {
                 qrCode.current = new QRCodeStyling({
                     width: 1000,
                     height: 1000,
-                    data: `https://mesadoko.com/fractal.html`, //modificar aqui para crear url directa
-                    dotsOptions: {
-                        color: qrProps.dotsColor,
-                        type: qrProps.dotsType || 'rounded'
-                    },
+                    data: `https://apiqryptogenia.disruptiveinfotech.com/api/scan/${uniqueKey}`, // Modificar aquí para crear URL directa.
+                    dotsOptions: (() => {
+                      if (qrProps.dotsColor.includes("gradient")) {
+                        try {
+                          const parsedGradient = ParseCSSGradient(qrProps.dotsColor);
+                          return {
+                            gradient: {
+                              type: parsedGradient.type,
+                              rotation: parsedGradient.rotation || 0,
+                              colorStops: parsedGradient.colorStops,
+                            },
+                            type: qrProps.dotsType || "rounded",
+                          };
+                        } catch (error) {
+                          console.error("Error al parsear el gradiente:", error.message);
+                          return {
+                            color: "#000", // Color por defecto si hay error
+                            type: qrProps.dotsType || "rounded",
+                          };
+                        }
+                      }
+                      return {
+                        color: qrProps.dotsColor || "#000",
+                        type: qrProps.dotsType || "rounded",
+                      };
+                    })(),                                                                         
                     cornersSquareOptions: {
-                        color: qrProps.cornersSquareColor,
-                        type: qrProps.cornersSquareType || 'extra-rounded'
+                      color: qrProps.cornersSquareColor,
+                      type: qrProps.cornersSquareType || "extra-rounded",
                     },
                     cornersDotOptions: {
-                        color: qrProps.cornersDotColor,
-                        type: qrProps.cornersDotType || 'dot'
+                      color: qrProps.cornersDotColor,
+                      type: qrProps.cornersDotType || "dot",
                     },
                     backgroundOptions: {
-                        color: "transparent",
+                      color: "transparent", // Fondo transparente.
                     },
                     image: qrImageInfo.includeImage ? qrImageInfo.qrImage : null,
                     imageOptions: {
-                        crossOrigin: "anonymous",
-                        hideBackgroundDots: true,
-                        margin: 2,
-                        imageSize: '0.5'
+                      crossOrigin: "anonymous",
+                      hideBackgroundDots: true,
+                      margin: 2,
+                      imageSize: "0.5",
                     },
-                });
+                  });                  
                 qrCode.current.append(qrRef.current);
             } else {
                 qrCode.current.update({
-                    data: `https://mesadoko.com/fractal.html`, //modificar aqui para crear url directa
+                    data:`https://apiqryptogenia.disruptiveinfotech.com/api/scan/${uniqueKey}`, //modificar aqui para crear url directa
                     margin: 10,
                     backgroundOptions: {
                         color: "transparent",
                     },
-                    dotsOptions: {
-                        color: qrProps.dotsColor,
-                        type: qrProps.dotsType || 'rounded'
-                    },
+                    dotsOptions: (() => {
+                      if (qrProps.dotsColor.includes("gradient")) {
+                        try {
+                          const parsedGradient = ParseCSSGradient(qrProps.dotsColor);
+                          return {
+                            gradient: {
+                              type: parsedGradient.type,
+                              rotation: parsedGradient.rotation || 0,
+                              colorStops: parsedGradient.colorStops,
+                            },
+                            type: qrProps.dotsType || "rounded",
+                          };
+                        } catch (error) {
+                          console.error("Error al parsear el gradiente:", error.message);
+                          return {
+                            color: "#000", // Color por defecto si hay error
+                            type: qrProps.dotsType || "rounded",
+                          };
+                        }
+                      }
+                      return {
+                        color: qrProps.dotsColor || "#000",
+                        type: qrProps.dotsType || "rounded",
+                      };
+                    })(),                                                                                
                     cornersSquareOptions: {
                         color: qrProps.cornersSquareColor,
                         type: qrProps.cornersSquareType || 'extra-rounded'

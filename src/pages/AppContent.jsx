@@ -65,7 +65,9 @@ const AppContent = () => {
         qrTextProps,
         setQrFontStyle,
         setTextChipColor,
-        setQrImage
+        setQrImage,
+        setQrData,
+        setUrlValueWebsite
     } = useQr();
     const {formData,setFormData}=UseMenu();
     const [valuesLoaded, setValuesLoaded] = useState(false);
@@ -88,6 +90,8 @@ const AppContent = () => {
                     });
                 
                     const { typeQr } = response.data;
+
+                    let urlData
                 
                     // Declaramos las variables fuera del `if` para que estén disponibles después
                     let restaurantName, restaurantLogo, backgroundCard, colorMenu, idFontPreview, idImgTemplate,idUserTemplate,category, frameColor, dots, cornerSquare, cornerDot, text, colorText, position, qrTextBubble = {}, qrTextFont = {}, logo;
@@ -115,6 +119,21 @@ const AppContent = () => {
                             qrTextFont = {},
                             logo,
                         } = response.data);
+                    }else if(typeQr=='website-url'){
+                        ({
+                            urlData,
+                            frame,
+                            frameColor,
+                            dots,
+                            cornerSquare,
+                            cornerDot,
+                            text,
+                            colorText,
+                            position,
+                            qrTextBubble = {},
+                            qrTextFont = {},
+                            logo
+                        }=response.data)
                     } else {
                         ({
                             title,
@@ -173,6 +192,7 @@ const AppContent = () => {
                 
                     // Verificar y actualizar los valores relacionados con el QR
                     if (colorText) setTextColor(colorText);
+                    if(urlData && typeQr=='website-url') setQrData(urlData); 
                     if (text) setQrText(text);
                     if (position) setQrTextPosition(position);
                     if (qrTextBubble?.burbble) setTextChip(qrTextBubble.burbble);
@@ -196,7 +216,9 @@ const AppContent = () => {
                             idUserTemplate,
                             category,
                         }
-                        : {
+                        : (
+                            typeQr==="website-url" ? urlData :
+                         {
                             title,
                             colorTitle,
                             description,
@@ -207,7 +229,9 @@ const AppContent = () => {
                             backgroundColor,
                             selectedOptions,
                             idFontPreview
-                        };
+                        });
+
+                        console.log(appValues);
                 
                     // Verificar que los valores no sean undefined antes de actualizar los estados del formulario
                     if (Object.values(appValues).every(value => value !== undefined)) {
@@ -215,6 +239,7 @@ const AppContent = () => {
                         setSocialFormValues(appValues);
                         setMusicFormValues(appValues);
                         setFormData(appValues); //valores de qr para menu de comidas
+                        setUrlValueWebsite(appValues);    
                     }
                 
                     setValuesLoaded(true); // Indicar que los valores se han cargado
@@ -227,6 +252,7 @@ const AppContent = () => {
                 setSocialFormValues(initialSocialFormValues);
                 setMusicFormValues(initialMusicFormValues);
                 setFormData(initialMenuValues);
+                setUrlValueWebsite(null);
                 setValuesLoaded(true); // Indicar que los valores se han cargado
             }
             setActiveStep(1);
@@ -362,6 +388,7 @@ const AppContent = () => {
                         appFormValues={appFormValues}
                         socialFormValues={socialFormValues}
                         musicFormValues={musicFormValues}
+                        menuFormValues={formData}
                     />
                 </CellBox>
             </div>
