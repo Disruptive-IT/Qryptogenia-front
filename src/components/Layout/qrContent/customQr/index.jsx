@@ -338,20 +338,20 @@ const CustomQr = ({ qrId }) => {
     const OptionComponent = options[selectedOptionIndex].component;
 
     return (
-        <div className='w-full rounded-md flex flex-col justify-between pb-4 font-sans'>
+        <div className='min-w-[400px] rounded-md flex flex-col justify-between pb-4 gap-3 font-sans'>
             <div className={`flex relative mb-4 py-8 max-h-[400px] ${qrTextProps.qrText ? 'min-h-[380px]' : ''}`}>
                 <QR uniqueKey={uniqueKey}/>
             </div>
-            <div className='flex flex-col h-[400px] w-full px-8'>
-                <div className='space-x-3 mx-auto flex flex-row items-center overflow-x-auto z-0'>
+            <div className='flex flex-col h-[400px] w-full px-8 gap-3'>
+                <div className='flex justify-center overflow-x-auto z-0 w-full gap-1'>
                     {options.map((option, index) => (
                         <Button
                             variant="outlined"
-
                             onClick={() => handleOptionSelect(index)}
                             key={index}
                             sx={{
                                 fontFamily: 'Arial',
+                                minWidth:'100px',
                                 fontSize: '14px',
                                 zIndex:'10',
                                 fontWeight: selectedOptionIndex === index ? 'bold' : 'bold',
@@ -374,11 +374,13 @@ const CustomQr = ({ qrId }) => {
                     <OptionComponent onTabSelect={handleOptionSelect} />
                 </div>
             </div>
-            <button
-    onClick={CreateQr}
-    className="bottom-0 left-0 w-full p-3 mt-4 rounded-md text-white font-semibold bg-light-blue hover:bg-dark-blue transition duration-300 ease-in-out shadow-lg flex items-center justify-center">
-    <span>{!isEditRoute ? t("CREATE MY QR") : "SAVE CHANGES"}</span>
-</button>
+            <div className='flex w-full justify-center'>
+                <button
+                    onClick={CreateQr}
+                    className="w-[70%] p-3 mt-4 rounded-md text-white font-semibold bg-light-blue hover:bg-dark-blue transition duration-300 ease-in-out shadow-lg flex items-center justify-center">
+                    <span>{!isEditRoute ? t("CREATE MY QR") : "SAVE CHANGES"}</span>
+                </button>
+            </div>
 
            
         </div>
