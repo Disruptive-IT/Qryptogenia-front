@@ -91,7 +91,7 @@ const AppContent = () => {
                 
                     const { typeQr } = response.data;
 
-                    let urlData
+                    let url
                 
                     // Declaramos las variables fuera del `if` para que estén disponibles después
                     let restaurantName, restaurantLogo, backgroundCard, colorMenu, idFontPreview, idImgTemplate,idUserTemplate,category, frameColor, dots, cornerSquare, cornerDot, text, colorText, position, qrTextBubble = {}, qrTextFont = {}, logo;
