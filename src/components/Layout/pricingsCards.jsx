@@ -33,11 +33,18 @@ export const PricingsCards = ({ data, userId, isSelectionMode }) => {
         navigate('/')
         toast.success(response.data.msg)
       } catch (error) {
-      //  console.error('Error assigning membership:', error);
-        alert('Failed to assign membership');
+        if (error.response) {
+          console.error('Response error:', error.response.data); // Detalles de la respuesta del servidor
+          alert(`Failed to assign membership: ${error.response.data.error}`);
+        } else if (error.request) {
+          console.error('Request error:', error.request); // No hubo respuesta del servidor
+          alert('No response received from the server.');
+        } else {
+          console.error('Error:', error.message); // Otros errores (por ejemplo, de red)
+          alert(`Unexpected error: ${error.message}`);
+        }
       }
-    } else {
-      alert('Plan selection is only available in the selectPlan route.');
+
     }
   };
 
