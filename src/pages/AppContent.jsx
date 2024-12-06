@@ -121,7 +121,7 @@ const AppContent = () => {
                         } = response.data);
                     }else if(typeQr=='website-url'){
                         ({
-                            urlData,
+                            url,
                             frame,
                             frameColor,
                             dots,
@@ -192,7 +192,7 @@ const AppContent = () => {
                 
                     // Verificar y actualizar los valores relacionados con el QR
                     if (colorText) setTextColor(colorText);
-                    if(urlData && typeQr=='website-url') setQrData(urlData); 
+                    if(url && typeQr=='website-url') setQrData(url); 
                     if (text) setQrText(text);
                     if (position) setQrTextPosition(position);
                     if (qrTextBubble?.burbble) setTextChip(qrTextBubble.burbble);
