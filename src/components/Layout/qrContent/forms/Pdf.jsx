@@ -211,6 +211,7 @@ export const LinkInput = ({ onSubmit }) => {
   const [loading, setLoading] = useState(true);
   const isEditRoute=location.pathname.startsWith('/edit');  // Estado de carga para LinkInput
   const { t } = useTranslation();
+  const {qrState} = useQrState();
   const formik = useFormik({
     initialValues: { url: isEditRoute ? urlValueWebSite : '' },
     validate: (values) => {
@@ -245,7 +246,7 @@ export const LinkInput = ({ onSubmit }) => {
 
  // console.log(formik.values);
  console.log("url website: ",urlValueWebSite);
-
+ console.log ('data ', qrData)
   useEffect(() => {
     validateFormFields();
   }, [formik.errors]);
@@ -272,7 +273,7 @@ export const LinkInput = ({ onSubmit }) => {
         <input
           type="text"
           name="url"
-          value={valueUrl}
+          value={qrData}
           onChange={handleInputChange}
           onBlur={formik.handleBlur}
           className="w-full px-4 py-2 mb-4 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500"
