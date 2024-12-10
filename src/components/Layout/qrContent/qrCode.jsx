@@ -61,7 +61,7 @@ export const saveQrData = async (
             idImgTemplate:menuFormValues.idImgTemplate,
             category:menuFormValues.category
         } 
-        : 
+        : (currentContentType==='social-media' || currentContentType==='music' || currentContentType==='app-store' ? 
         {
             title: currentContentType === 'social-media' ? socialFormValues.title : currentContentType === 'music' ? musicFormValues.title : appFormValues.title,
             colorTitle: currentContentType === 'social-media' ? socialFormValues.colorTitle : currentContentType === 'music' ? musicFormValues.colorTitle : appFormValues.colorTitle,
@@ -73,7 +73,7 @@ export const saveQrData = async (
             backgroudColor: currentContentType === 'social-media' ? socialFormValues.backgroundColor : currentContentType === 'music' ? musicFormValues.backgroundColor : appFormValues.backgroundColor,
             SelectOptions: currentContentType === 'social-media' ? removeIconFromSelectOptions(socialFormValues.selectedOptions) : currentContentType === 'music' ? removeIconFromSelectOptions(musicFormValues.selectedOptions) : removeIconFromSelectOptions(appFormValues.selectedOptions),
             idFontPreview: currentContentType === 'social-media' ? socialFormValues.idFontPreview : currentContentType === 'music' ? musicFormValues.idFontPreview : appFormValues.idFontPreview
-        },
+        } : {}),
         qrText: {
             text: qrTextProps.qrText || '', 
             position: qrTextProps.qrTextPosition || {}, 
