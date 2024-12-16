@@ -12,6 +12,11 @@ import { ParseCSSGradient } from './customQr/design/gradientDots';
  * @UpdatedBy : Cristian Escobar,   @date 2024-09-03 15:05:11
  * @description : Se implemento la captura del qr con canvas y la transformacion a base64 para almacenarse en la base de datos.
  */
+
+/*
+ * @UpdatedBy : Nicolas Barrios,   @date 2024-12-16 10:47:28
+ * @description : se agrego validacion en qrpreview
+ */
 export const saveQrData = async (
     qrName, 
     data, 
