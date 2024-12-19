@@ -28,6 +28,7 @@ import { PlansPricings } from "../pages/Plans&pricings";
 import QRCodeList from "../components/UI/tables/memberTable";
 import AboutUs from "../pages/AboutUs";
 import Faq from "../pages/Faq";
+import Payments from "../pages/Payments";
 
 export const PageRouter = () => {
     const { isLoading } = useLoader();
@@ -46,6 +47,7 @@ export const PageRouter = () => {
                     <Route path="forgotPassword" element={user ? <Navigate to="/user/home" replace /> : <ForgotPassForm />} />
                     <Route path="aboutUs" element={<AboutUs />} />
                     <Route path="faq" element={<Faq />} />
+                    <Route path="payments" element={<Payments />} />
 
                     </Route>
 
@@ -86,7 +88,7 @@ export const PageRouter = () => {
                         <Route path="qr" element={<App />} />
                         <Route path="aboutUs" element={<AboutUs />} />
                         <Route path="faq" element={<Faq />} />
-
+                        <Route path="payments" element={<Payments />} />
                         </Route>
                 </Route>
 
