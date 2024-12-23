@@ -19,33 +19,37 @@ export const PricingsCards = ({ data, userId, isSelectionMode }) => {
   const { t } = useTranslation();
   const navigate = useNavigate();
 
-  const handlePlanSelection = async (membershipId) => {
-    if (isSelectionMode) { // Solo procede si está en la ruta '/selectPlan'
-      try {
-        const response = await instance.post('/user/assign-membership', {
-          userId: userId,
-          membershipId: membershipId,
-        }, {
-          withCredentials: true,
-        });
+  // const handlePlanSelection = async (membershipId) => {
+  //   if (isSelectionMode) { // Solo procede si está en la ruta '/selectPlan'
+  //     try {
+  //       const response = await instance.post('/user/assign-membership', {
+  //         userId: userId,
+  //         membershipId: membershipId,
+  //       }, {
+  //         withCredentials: true,
+  //       });
         
-      //  console.log('Membership assigned:', response.data);
-        navigate('/')
-        toast.success(response.data.msg)
-      } catch (error) {
-        if (error.response) {
-          console.error('Response error:', error.response.data); // Detalles de la respuesta del servidor
-          alert(`Failed to assign membership: ${error.response.data.error}`);
-        } else if (error.request) {
-          console.error('Request error:', error.request); // No hubo respuesta del servidor
-          alert('No response received from the server.');
-        } else {
-          console.error('Error:', error.message); // Otros errores (por ejemplo, de red)
-          alert(`Unexpected error: ${error.message}`);
-        }
-      }
+  //     //  console.log('Membership assigned:', response.data);
+  //       navigate('/')
+  //       toast.success(response.data.msg)
+  //     } catch (error) {
+  //       if (error.response) {
+  //         console.error('Response error:', error.response.data); // Detalles de la respuesta del servidor
+  //         alert(`Failed to assign membership: ${error.response.data.error}`);
+  //       } else if (error.request) {
+  //         console.error('Request error:', error.request); // No hubo respuesta del servidor
+  //         alert('No response received from the server.');
+  //       } else {
+  //         console.error('Error:', error.message); // Otros errores (por ejemplo, de red)
+  //         alert(`Unexpected error: ${error.message}`);
+  //       }
+  //     }
 
-    }
+  //   }
+  // };
+
+  const handlePlanSelection = async (membershipId) => {
+    navigate(`/payments?membershipId=${membershipId}`);
   };
 
   const sortedData = [...data].sort((a, b) => {

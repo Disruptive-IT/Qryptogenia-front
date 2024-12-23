@@ -15,7 +15,7 @@ import ChangeEmail from "./changeEmail";
 import { IoIosMail } from "react-icons/io";
 import { FaUser } from "react-icons/fa";
 import { useTranslation } from "react-i18next";
-const UserInfo = () => {
+const UserInfo = ({ hideEditButton }) => {
   const [modalisOpen, setmodalisOpen] = useState(false);
   const [emailModalisOpen, setEmailModalisOpen] = useState(false);
   const formRef = useRef(null);
@@ -116,9 +116,11 @@ const UserInfo = () => {
           {user.info.username}
         </p>
         <div className="inline-flex items-center px-2 text-lg text-gray-900 bg-gray-200 border rounded-s-0 border-gray-300 border-s-0 rounded-r-md dark:bg-my-gray dark:text-black dark:border-gray-600">
-        <Button onClick={handleModal}>
-          <EditIcon style={{ color: "black" }}/>
+      {!hideEditButton && (
+        <Button onClick={handleEmailModal}>
+          <EditIcon style={{ color: "black" }} />
         </Button>
+      )}
         </div>
         <MyModal
           actions={modalActions}
@@ -139,9 +141,11 @@ const UserInfo = () => {
           {user.info.email}
         </p>
         <div className="inline-flex items-center px-2 text-lg text-gray-900 bg-gray-200 border rounded-s-0 border-gray-300 border-s-0 rounded-r-md dark:bg-my-gray dark:text-black dark:border-gray-600">
+        {!hideEditButton && (
         <Button onClick={handleEmailModal}>
-          <EditIcon style={{ color: "black" }}/>
+          <EditIcon style={{ color: "black" }} />
         </Button>
+      )}
         </div>
         <MyModal
           actions={modalActionsEmail}
