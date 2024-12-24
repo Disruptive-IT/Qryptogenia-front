@@ -4,6 +4,9 @@ import { useEffect, useState } from 'react';
 import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import UserInfo from "../components/Admin/profile/userInfo";
 import instance from '../libs/axios';
+import { Wallet,initMercadoPago } from '@mercadopago/sdk-react';
+
+initMercadoPago(`${import.meta.env.VITE_MERCADO_PAGO_PUBLIC_KEY}`)
 
 
     const Payments = () => {
@@ -15,6 +18,7 @@ import instance from '../libs/axios';
         const [params] = useSearchParams();
         const [user, setUser] = useState({});
         const id = params.get('membershipId');
+        const [idPreference,setIdPreference]=useState(null);
         const current = new Date(); // Obtén el objeto Date directamente
         const limitDate = new Date(current); // Crea una copia de la fecha actual
         limitDate.setMonth(current.getMonth() + 1); // Incrementa el mes
@@ -23,6 +27,36 @@ import instance from '../libs/axios';
         const handleRedirect = () => {
             navigate('/pricings'); 
         };
+
+        const customization={
+          visual:{
+            buttonBackground:'#284B63'
+          }
+        }
+
+        const createPreference=async()=>{
+          try{
+            if(Object.keys(membership).length>0){
+              const responsePreference=await instance.post('/payment/preference',{
+                planId:membership,
+                startDate:current,
+                endDate:limitDate,
+                amount:1,
+                membresyName:membership?.type,
+                durationMembresy:1
+              })
+              const response=responsePreference.data
+              setIdPreference(response.idPreference);
+              console.log("prefrence id: ",response.idPreference);
+            }
+          }catch(error){
+            console.error("error getting preference: ",error.message);
+          }
+        }
+
+        useEffect(()=>{
+          console.log("prefrence id ",idPreference);
+        },[idPreference]);
         useEffect(() => {
             const fetchMembership = async () => {
                 try {
@@ -111,12 +145,16 @@ import instance from '../libs/axios';
                   <UserInfo setUser={setUser} user={user} hideEditButton={true} />
                   <div className="mt-6">
                     <button
-                      onClick={() => console.log("Continuar compra")}
+                      onClick={() => createPreference()}
+                      disabled={idPreference!==null}
                       className="bg-white text-my-black hover:bg-gray-200 font-bold py-2 px-4 rounded "
                     >
                       Continuar con MercadoPago
                     </button>
                   </div>
+                  {idPreference && (
+                    <Wallet initialization={{preferenceId:`${idPreference}`}} customization={customization} />
+                  )}
                 </div>
               </div>
               </div>
