@@ -29,6 +29,7 @@ import QRCodeList from "../components/UI/tables/memberTable";
 import AboutUs from "../pages/AboutUs";
 import Faq from "../pages/Faq";
 import Payments from "../pages/Payments";
+import UserMemberTable from "../components/tableMemberships/userMemberTable";
 
 export const PageRouter = () => {
     const { isLoading } = useLoader();
@@ -73,6 +74,7 @@ export const PageRouter = () => {
                         <Route path="users" element={<UserTable />} />
                         <Route path="discounts" element={<Discounts />} />
                         <Route path="membership" element={<QRCodeList />}/>
+                        <Route path="userMemberships" element={< UserMemberTable />} />
                     </Route>
                 </Route>
 

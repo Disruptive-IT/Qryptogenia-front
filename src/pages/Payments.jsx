@@ -38,9 +38,10 @@ initMercadoPago(`${import.meta.env.VITE_MERCADO_PAGO_PUBLIC_KEY}`)
           try{
             if(Object.keys(membership).length>0){
               const responsePreference=await instance.post('/payment/preference',{
-                planId:membership,
+                planId:membership?.planId,
                 startDate:current,
                 endDate:limitDate,
+                price:membership?.price,
                 amount:1,
                 membresyName:membership?.type,
                 durationMembresy:1
