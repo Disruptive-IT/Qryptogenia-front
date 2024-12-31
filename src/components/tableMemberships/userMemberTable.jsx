@@ -97,7 +97,7 @@ export default function UserMemberTable() {
               <td className="border border-gray-300 px-4 py-2">
                 {new Date(element.limit_date).toLocaleDateString()}
               </td>
-              <td className="border border-gray-300 px-4 py-2">
+              <td className={`border border-gray-300 px-4 py-2 ${element.state ? 'text-green-600' : 'text-red-600'}`}>
                 {element.state ? "Active" : "Inactive"}
               </td>
             </tr>
