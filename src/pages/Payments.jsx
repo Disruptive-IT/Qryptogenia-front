@@ -52,6 +52,7 @@ initMercadoPago(`${import.meta.env.VITE_MERCADOPAGO_PUBLIC}`)
                 planId:membership?.planId,
                 startDate:current,
                 endDate:limitDate,
+                price:membership?.price,
                 amount:1,
                 price:membership?.price,
                 membresyName:membership?.type,

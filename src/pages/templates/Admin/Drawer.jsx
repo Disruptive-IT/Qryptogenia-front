@@ -13,7 +13,7 @@ import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
-import { Mails, Menu as MenuIcon, Users, LayoutDashboard, ScanLine, Orbit,TicketPercent} from 'lucide-react';
+import { Mails, Menu as MenuIcon, Users, LayoutDashboard, ScanLine, Orbit,TicketPercent,Star} from 'lucide-react';
 import UserProfileMenu from '../../../components/Admin/Profile';
 import logo from "../../../assets/imgs/logoForms.png"
 import UseSwitchesCustom from '../../../components/UI/theme/SwitchesTheme';
@@ -138,6 +138,11 @@ export default function MiniDrawer() {
             title: t("Discounts"),
             icon: <TicketPercent />,
             path: "/admin/discounts"
+        },
+        {
+            title:"Plans",
+            icon: <Star />,
+            path:"/admin/userMemberships"
         }
     ];
     return (
