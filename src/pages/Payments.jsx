@@ -1,3 +1,12 @@
+/**
+ * @Author : Cristian rueda
+ * @date : 2025-01-03
+ * @description : Componente para gestionar el pago de una membresía utilizando MercadoPago. 
+ * Se obtiene información sobre el plan de membresía, se crea una preferencia de pago y 
+ * se integra con el sistema de MercadoPago para continuar con el proceso de pago.
+ * @Props : Ninguna
+ * @return : Renderiza una vista con detalles de la membresía y la opción de realizar el pago.
+ **/
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useEffect, useState } from 'react';
@@ -5,8 +14,9 @@ import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import UserInfo from "../components/Admin/profile/userInfo";
 import instance from '../libs/axios';
 import { Wallet,initMercadoPago } from '@mercadopago/sdk-react';
+import SkeletonPayment from '../components/Layout/qrContent/forms/Skeleton/SkeletonPayment';
 
-initMercadoPago(`${import.meta.env.VITE_MERCADO_PAGO_PUBLIC_KEY}`)
+initMercadoPago(`${import.meta.env.VITE_MERCADOPAGO_PUBLIC}`)
 
 
     const Payments = () => {
@@ -23,7 +33,8 @@ initMercadoPago(`${import.meta.env.VITE_MERCADO_PAGO_PUBLIC_KEY}`)
         const limitDate = new Date(current); // Crea una copia de la fecha actual
         limitDate.setMonth(current.getMonth() + 1); // Incrementa el mes
         const limitDateString = limitDate.toLocaleDateString(); // Convierte a string si lo necesitas
-        
+        const [loading, setLoading] = useState(true); // Estado para manejar el loading con setTimeout
+
         const handleRedirect = () => {
             navigate('/pricings'); 
         };
@@ -38,10 +49,11 @@ initMercadoPago(`${import.meta.env.VITE_MERCADO_PAGO_PUBLIC_KEY}`)
           try{
             if(Object.keys(membership).length>0){
               const responsePreference=await instance.post('/payment/preference',{
-                planId:membership,
+                planId:membership?.planId,
                 startDate:current,
                 endDate:limitDate,
                 amount:1,
+                price:membership?.price,
                 membresyName:membership?.type,
                 durationMembresy:1
               })
@@ -84,7 +96,9 @@ initMercadoPago(`${import.meta.env.VITE_MERCADO_PAGO_PUBLIC_KEY}`)
         if (!membership) {
             return <div>Cargando información de la membresía...</div>;
         }
-    
+        if (!membership || Object.keys(membership).length === 0) {
+          return <SkeletonPayment />;  
+        }
         // Si tenemos los datos, los mostramos
         return (
             <div className="flex items-center justify-center mt-10">
@@ -157,7 +171,7 @@ initMercadoPago(`${import.meta.env.VITE_MERCADO_PAGO_PUBLIC_KEY}`)
                   )}
                 </div>
               </div>
-              </div>
+            </div>
           
         );
         };
