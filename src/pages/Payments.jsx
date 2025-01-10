@@ -176,6 +176,6 @@ initMercadoPago(`${import.meta.env.VITE_MERCADOPAGO_PUBLIC}`)
         );
         };
         
-    
+    //Pagos
     export default Payments;
     
