@@ -1,6 +1,15 @@
 import instance from "../../libs/axios"
 import ModalComponent from "../discounts/form/modal";
 
+/*
+ * @Author : Nicolas Barrios,   @date 2025-01-07 09:10:17
+ * @description : componente que contiene las funciones de fetch a la api del back para traer info de los usuarios con membresia 
+ * y las propiedades de la tabla maestra de membershipUsers
+ * @Props : 
+ * @return : 
+ */
+
+//funcion fetch a la api del back
 export const fetchUserMemberships=async()=>{
     try{
     const response=await instance.get('/admin/getMemberships');
@@ -10,6 +19,7 @@ export const fetchUserMemberships=async()=>{
     }
 }
 
+//funcion fetch a la api que trae la info del pago a revisar
 export const fetchPayment=async(paymentId)=>{
     try {
         const payments=await instance.get(`/admin/infoPayment/${paymentId}`);
@@ -21,6 +31,7 @@ export const fetchPayment=async(paymentId)=>{
     }
 }
 
+//encabezados tabla userMembership
 export const userMembershipsHeaders=[
     {header:'username'},
     {header:'plan'},
@@ -31,6 +42,8 @@ export const userMembershipsHeaders=[
     {header:'payment'}
 ]
 
+
+//funcion que contiene  la modal que muestra info del pago
 export default function ModalPayment({data,isOpen,setClose}){
     return(
 <ModalComponent isOpen={isOpen} onClose={setClose}>

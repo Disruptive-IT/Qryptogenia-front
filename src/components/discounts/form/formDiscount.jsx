@@ -62,6 +62,14 @@ const CreateDiscount = ({event, efect}) => {
             errors.discount = "Required discount value";
         }
 
+        if(values.discount<1){
+            errors.discount="Discount cannot be lees than 1"
+        }
+
+        if(values.discount>100){
+            errors.discount="Discount cannot be greater than 100"
+        }
+
         if (!values.description) {
             errors.description = "Required";
         }
@@ -115,11 +123,13 @@ const CreateDiscount = ({event, efect}) => {
                     </label>
                     <input
                         className="w-full p-3 text-sm text-gray-800 border border-cyan-900 rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500"
-                        type="text"
+                        type="number"
                         name="discount"
                         id="discount"
                         onChange={formik.handleChange}
                         value={formik.values.discount}
+                        max={100}
+                        min={1}
                     />
                     {formik.errors.discount ? (
                         <div className="text-red-500 text-xs mt-1">{formik.errors.discount}</div>

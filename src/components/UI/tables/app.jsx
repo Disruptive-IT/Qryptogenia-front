@@ -59,6 +59,7 @@ const App = ({ id }) => {
   const [qrCodes, setQRCodes] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
+  const [limit,setLimit]=useState(10);
   const [error, setError] = useState(null);
   const [selectedQRCode, setSelectedQRCode] = useState(null);
   const [isDetailModalOpen, setIsDetailModalOpen] = useState(false);

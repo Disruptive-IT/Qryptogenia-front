@@ -3,6 +3,13 @@ import ModalPayment, { fetchPayment, fetchUserMemberships, userMembershipsHeader
 import SearchBar from "../searchbar/searchbar";
 import Paginator from "../UI/tables/paginator";
 
+/*
+ * @Author : Nicolas Barrios,   @date 2025-01-07 09:13:33
+ * @description : tabla maestra de userMembership
+ * @Props :
+ * @return : vista de tabla con los registros
+ */
+
 export default function UserMemberTable() {
   const [userMember, setUserMember] = useState([]);
   const [payment, setPayment] = useState(null);
