@@ -48,7 +48,6 @@ export const PageRouter = () => {
                     <Route path="forgotPassword" element={user ? <Navigate to="/user/home" replace /> : <ForgotPassForm />} />
                     <Route path="aboutUs" element={<AboutUs />} />
                     <Route path="faq" element={<Faq />} />
-                    <Route path="payments" element={<Payments />} />
 
                     </Route>
 

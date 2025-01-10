@@ -54,7 +54,6 @@ initMercadoPago(`${import.meta.env.VITE_MERCADOPAGO_PUBLIC}`)
                 endDate:limitDate,
                 price:membership?.price,
                 amount:1,
-                price:membership?.price,
                 membresyName:membership?.type,
                 durationMembresy:1
               })
