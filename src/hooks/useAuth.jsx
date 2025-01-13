@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { toast } from 'sonner';
 import { useLoader } from '../context/LoaderContext';
 import instance from "../libs/axios";
@@ -18,16 +18,16 @@ import instance from "../libs/axios";
 export const useAuth = (navigate) => {
     const [user, setUser] = useState(null);
 
-    async function checkToken() {
+    const checkToken = useCallback(async () => {
         try {
             const res = await instance.get('/auth/check-token');
             if (res.data.user) {
                 setUser(res.data.user);
             }
         } catch (error) {
-           // console.log("...")
+            console.error('Error checking token:', error);
         }
-    }
+    }, []);  // [] garantiza que la función no se vuelva a crear
 
     // Función para obtener los datos del usuario
     const fetchUserData = async () => {
@@ -43,7 +43,7 @@ export const useAuth = (navigate) => {
     // Usamos el hook useEffect para verificar el token cuando el componente se monta
     useEffect(() => {
         checkToken();
-    }, []);
+    }, [checkToken]);
     
 
 
