@@ -88,7 +88,7 @@ export const PricingsCards = ({ data, userId, isSelectionMode }) => {
               <p className="">{item.scansXqr}</p>
             </div>
             <div className='flex w-full gap-2 justify-between'>
-              <p className="font-bold">{t('Premium Support')}</p>
+              <p className="font-bold">{t('Premium support')}</p>
               <p className="">{item.sopport}</p>
             </div>
             <div className='flex w-full gap-2 justify-between'>
