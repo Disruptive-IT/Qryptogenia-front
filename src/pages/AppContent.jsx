@@ -54,6 +54,7 @@ const AppContent = () => {
         setCurrentContentType,
         resetQrData,
         setQrBgColor,
+        setIncludeImage,
         setMarcoType,
         setDotsType,
         setCornersSquareType,
@@ -63,6 +64,7 @@ const AppContent = () => {
         setQrTextPosition,
         setTextChip,
         qrTextProps,
+        setDotsColor,
         setQrFontStyle,
         setTextChipColor,
         setQrImage,
@@ -94,7 +96,7 @@ const AppContent = () => {
                     let url
                 
                     // Declaramos las variables fuera del `if` para que estén disponibles después
-                    let restaurantName, restaurantLogo, backgroundCard, colorMenu, idFontPreview, idImgTemplate,idUserTemplate,category, frameColor, dots, cornerSquare, cornerDot, text, colorText, position, qrTextBubble = {}, qrTextFont = {}, logo;
+                    let restaurantName, restaurantLogo, backgroundCard, colorMenu, idFontPreview, idImgTemplate,idUserTemplate,category, frameColor, dots,dotsColor, cornerSquare, cornerDot, text, colorText, position, qrTextBubble = {}, qrTextFont = {}, logo;
                 
                     let title, colorTitle, description, descriptionColor, boxColor, borderImg, image, backgroundColor, selectedOptions, frame;
                 
@@ -110,6 +112,7 @@ const AppContent = () => {
                             category,
                             frameColor,
                             dots,
+                            dotsColor,
                             cornerSquare,
                             cornerDot,
                             text,
@@ -127,6 +130,7 @@ const AppContent = () => {
                             dots,
                             cornerSquare,
                             cornerDot,
+                            dotsColor,
                             text,
                             colorText,
                             position,
@@ -149,6 +153,7 @@ const AppContent = () => {
                             frame,
                             frameColor,
                             dots,
+                            dotsColor,
                             cornerSquare,
                             cornerDot,
                             text,
@@ -200,9 +205,10 @@ const AppContent = () => {
                     if (cornerDot) setCornersDotType(cornerDot);
                     if (cornerSquare) setCornersSquareType(cornerSquare);
                     if (dots) setDotsType(dots);
+                    if(dotsColor) setDotsColor(dotsColor);
                     if (frameColor) setQrBgColor(frameColor);
                     if (qrTextFont?.fontFamily) setQrFontStyle(qrTextFont.fontFamily);
-                    if (logo) setQrImage(logo);
+                    if(logo) setQrImage(logo);
                 
                     // Actualización de valores del formulario dependiendo del tipo de QR
                     const appValues = typeQr === "food-menu"

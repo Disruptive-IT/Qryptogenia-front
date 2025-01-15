@@ -312,6 +312,7 @@ useEffect(() => {
     };
 
     // console.log(formErrors)
+    console.log(appFormValues);
 
     // Skeleton Loader
             useEffect(() => {
