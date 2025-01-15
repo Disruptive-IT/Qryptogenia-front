@@ -333,6 +333,7 @@ export const useAuth = (navigate) => {
 
     return {
         user,
+        setUser,
         loginUser,
         registerUser,
         completeRegister,

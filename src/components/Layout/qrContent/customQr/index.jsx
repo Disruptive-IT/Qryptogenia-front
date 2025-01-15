@@ -73,7 +73,7 @@ const CustomQr = ({ qrId }) => {
     const isEditRoute = pathname.startsWith("/edit");
     const [qrName, setQrName] = useState(''); // Estado para el nombre del QR
 
-    const { user, membership } = useAuthContext(); // Accede a `user` y `membership`
+    const { user,setUser ,fetchUserData } = useAuthContext(); // Accede a `user` y `membership`
     const handleCreateQr = async () => {
         if (!user) {
             await Swal.fire({
@@ -85,7 +85,7 @@ const CustomQr = ({ qrId }) => {
             return; // No permitir continuar si no está autenticado
         }
 
-        if (!membership) {
+        if (!user?.info?.hasMembership) {
             await Swal.fire({
                 title: t('Membership Required'),
                 text: t('You need an active membership to create a QR.'),
@@ -115,6 +115,16 @@ const CustomQr = ({ qrId }) => {
         console.log('Unique key updated:', uniqueKey);
     }, [uniqueKey]); // Este useEffect se ejecutará cada vez que uniqueKey cambie
 
+    useEffect(()=>{
+        const getInfoUser=async()=>{
+            const response=await fetchUserData();
+            setUser(response);
+        }
+
+        getInfoUser()
+    },[]);
+
+    console.log("user: ",user);
 
     useEffect(() => {
         // Si estás en modo edición, obtén el nombre del QR existente
