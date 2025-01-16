@@ -207,31 +207,10 @@ const QR = ({ uniqueKey }) => {
                     width: 1000,
                     height: 1000,
                     data: `https://apiqryptogenia.disruptiveinfotech.com/api/scan/${uniqueKey}`, // Modificar aquí para crear URL directa.
-                    dotsOptions: (() => {
-                      if (qrProps.dotsColor.includes("gradient")) {
-                        try {
-                          const parsedGradient = ParseCSSGradient(qrProps.dotsColor);
-                          return {
-                            gradient: {
-                              type: parsedGradient.type,
-                              rotation: parsedGradient.rotation || 0,
-                              colorStops: parsedGradient.colorStops,
-                            },
-                            type: qrProps.dotsType || "rounded",
-                          };
-                        } catch (error) {
-                          console.error("Error al parsear el gradiente:", error.message);
-                          return {
-                            color: "#000", // Color por defecto si hay error
-                            type: qrProps.dotsType || "rounded",
-                          };
-                        }
-                      }
-                      return {
+                    dotsOptions: {
                         color: qrProps.dotsColor || "#000",
                         type: qrProps.dotsType || "rounded",
-                      };
-                    })(),                                                                         
+                      },                                                                       
                     cornersSquareOptions: {
                       color: qrProps.cornersSquareColor,
                       type: qrProps.cornersSquareType || "extra-rounded",
@@ -259,31 +238,10 @@ const QR = ({ uniqueKey }) => {
                     backgroundOptions: {
                         color: "transparent",
                     },
-                    dotsOptions: (() => {
-                      if (qrProps.dotsColor.includes("gradient")) {
-                        try {
-                          const parsedGradient = ParseCSSGradient(qrProps.dotsColor);
-                          return {
-                            gradient: {
-                              type: parsedGradient.type,
-                              rotation: parsedGradient.rotation || 0,
-                              colorStops: parsedGradient.colorStops,
-                            },
-                            type: qrProps.dotsType || "rounded",
-                          };
-                        } catch (error) {
-                          console.error("Error al parsear el gradiente:", error.message);
-                          return {
-                            color: "#000", // Color por defecto si hay error
-                            type: qrProps.dotsType || "rounded",
-                          };
-                        }
-                      }
-                      return {
+                    dotsOptions:{
                         color: qrProps.dotsColor || "#000",
-                        type: qrProps.dotsType || "rounded",
-                      };
-                    })(),                                                                                
+                        type: qrProps.dotsType || "rounded",                                                    
+                    },
                     cornersSquareOptions: {
                         color: qrProps.cornersSquareColor,
                         type: qrProps.cornersSquareType || 'extra-rounded'
