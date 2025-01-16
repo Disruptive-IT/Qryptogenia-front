@@ -85,9 +85,9 @@ useEffect(() => {
         const errors = {};
 
         // Validar el título
-        if (!values.title) {
-            errors.title = t("Title is required");
-        }
+        if (!values.title || values.title.trim() === '') {
+          errors.title = t("Title is required");
+      }
 
         // if(!values.description) {
         //     errors.description=t("Description is required");

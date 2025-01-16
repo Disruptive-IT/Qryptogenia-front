@@ -73,9 +73,9 @@ export const SocialForm = ({ onFormChange, location, socialFormValues }) => {
     const errors = {};
 
     // Validar el título
-    if (!values.title) {
+    if (!values.title || values.title.trim() === '') {
       errors.title = t("Title is required");
-    }
+  }
 
     // Validar la selección de opciones
     if (selectedOptions.length === 0) {

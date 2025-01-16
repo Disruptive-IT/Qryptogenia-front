@@ -72,9 +72,9 @@ export const MusicForm = ({ onFormChangeMusic, location, musicFormValues }) => {
         const errors = {};
 
         // Validar el título
-        if (!values.title) {
-            errors.title = t("Title is required");
-        }
+        if (!values.title || values.title.trim() === '') {
+          errors.title = t("Title is required");
+      }
 
         // Validar la selección de opciones
         if (selectedOptions.length === 0) {
