@@ -33,7 +33,7 @@ export const PlansPricings = () => {
           return {
             id: item.id,
             name: item.type_membership,
-            pricings: !isNaN(discountedPrice) ? `$${discountedPrice}` : 'N/A',
+            pricings: !isNaN(discountedPrice) && discountedPrice !== price ? `$${discountedPrice}` : `$${price}`,
             pricingsMonthly: !isNaN(price) ? `$${price}` : 'N/A',
             ActivateQrs: item.active_qrs,
             scansXqr: item.scan_qrs || "Unlimited",
@@ -43,7 +43,7 @@ export const PlansPricings = () => {
             staticQrs: item.unlimited_static 
               ? <FaCheck className="text-green-500 text-2xl" /> 
               : <IoClose className="text-red-500 text-2xl" />,
-          };
+        };
         });
 
         setPricingData(transformedData);

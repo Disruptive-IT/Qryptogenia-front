@@ -69,30 +69,27 @@ export const SocialForm = ({ onFormChange, location, socialFormValues }) => {
         fetchFontsPreview();
     }, []);
 
-  const validateForm = (values) => {
-    const errors = {};
-
-    // Validar el título
-    if (!values.title || values.title.trim() === '') {
-      errors.title = t("Title is required");
-  }
-
-    // Validar la selección de opciones
-    if (selectedOptions.length === 0) {
-      errors.selectedOptions = t("At least one option must be selected");
-    }
-    //console.log(selectedOptions)
-    // Validar cada campo url en selectedOptions
-    selectedOptions.forEach((option, index) => {
-     // console.log(option.url)
-      if (!option.url) {
-        errors[`url_${index}`] = t("URL is required");
+    const validateForm = (values) => {
+      const errors = {};
+    
+      // Validar el título solo si no estás en modo de edición
+      if (!isEditRoute && (!values.title || values.title.trim() === '')) {
+          errors.title = t("Title is required");
       }
-    });
-    //console.log(errors)
-
-    return errors;
-  };
+    
+      // Validar la selección de opciones
+      if (selectedOptions.length === 0) {
+          errors.selectedOptions = t("At least one option must be selected");
+      }
+    
+      selectedOptions.forEach((option, index) => {
+          if (!option.url) {
+              errors[`url_${index}`] = t("URL is required");
+          }
+      });
+    
+      return errors;
+    };
 
   const validateFormFields=()=>{
     if (Object.keys(formErrors).length > 0) {

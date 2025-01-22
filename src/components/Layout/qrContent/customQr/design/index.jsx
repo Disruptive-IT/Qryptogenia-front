@@ -48,8 +48,12 @@ const Design = () => {
     };
 
     const handleTabChange = (event, newValue) => {
-        setTabValue(newValue);
-    };
+        if ([0, 1, 2, 3].includes(newValue)) {
+            setTabValue(newValue);
+        } else {
+            console.warn('Invalid tab value:', newValue);
+        }
+    };    
 
     const handleSubTabChange = (tabIndex, subTabIndex) => {
         setSubTabValues(prevState => ({
@@ -149,26 +153,10 @@ const Design = () => {
             },
         }}
     >
-        <Tab
-            icon={<SlFrame />}
-            label={t("Qr frame")}
-            value={0} // El valor de esta pestaña es 0
-        />
-        <Tab
-            icon={<MdOutlineQrCode2 />}
-            label={t("Dots")}
-            value={1} // El valor de esta pestaña es 1
-        />
-        <Tab
-            icon={<MdOutlineQrCode />}
-            label={t("Corners Square")}
-            value={2} // El valor de esta pestaña es 2
-        />
-        <Tab
-            icon={<IoQrCodeOutline />}
-            label={t("Corners Dot")}
-            value={3} // El valor de esta pestaña es 3
-        />
+            <Tab icon={<SlFrame />} label={t("Qr frame")} value={0} />
+            <Tab icon={<MdOutlineQrCode2 />} label={t("Dots")} value={1} />
+            <Tab icon={<MdOutlineQrCode />} label={t("Corners Square")} value={2} />
+            <Tab icon={<IoQrCodeOutline />} label={t("Corners Dot")} value={3} />
     </Tabs>
 </div>
 
