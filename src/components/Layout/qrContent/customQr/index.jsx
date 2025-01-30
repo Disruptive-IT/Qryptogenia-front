@@ -25,7 +25,7 @@ import { useLocation } from 'react-router-dom';
 import instance from '../../../../libs/axios';
 import axios from '../../../../libs/axios';
 import { useLoader } from "../../../../context/LoaderContext";
-
+import {useAuthContext} from "../../../../context/AuthContext"
 /*
  * @UpdatedBy : Cristian Escobar,   @date 2024-09-03 15:05:11
  * @description : Se implemento una funcion para generar una llave unica y pasarla como prop a los componente saveQrData y QR
@@ -73,6 +73,31 @@ const CustomQr = ({ qrId }) => {
     const isEditRoute = pathname.startsWith("/edit");
     const [qrName, setQrName] = useState(''); // Estado para el nombre del QR
 
+    const { user,setUser ,fetchUserData } = useAuthContext(); // Accede a `user` y `membership`
+    const handleCreateQr = async () => {
+        if (!user) {
+            await Swal.fire({
+                title: t('Registration Required'),
+                text: t('You need to register or log in to create a QR.'),
+                icon: 'warning',
+                confirmButtonText: t('OK')
+            });
+            return; // No permitir continuar si no está autenticado
+        }
+
+        if (!user?.info?.hasMembership) {
+            await Swal.fire({
+                title: t('Membership Required'),
+                text: t('You need an active membership to create a QR.'),
+                icon: 'warning',
+                confirmButtonText: t('OK')
+            });
+            return; // No permitir continuar si no hay membresía
+        }
+
+        // Lógica de creación del QR
+        CreateQr();  // Llama a tu función para crear el QR
+    };
     useEffect(() => {
         const fetchUniqueKey = async () => {
             try {
@@ -90,6 +115,16 @@ const CustomQr = ({ qrId }) => {
         console.log('Unique key updated:', uniqueKey);
     }, [uniqueKey]); // Este useEffect se ejecutará cada vez que uniqueKey cambie
 
+    useEffect(()=>{
+        const getInfoUser=async()=>{
+            const response=await fetchUserData();
+            setUser(response);
+        }
+
+        getInfoUser()
+    },[]);
+
+    console.log("user: ",user);
 
     useEffect(() => {
         // Si estás en modo edición, obtén el nombre del QR existente
@@ -375,11 +410,12 @@ const CustomQr = ({ qrId }) => {
                 </div>
             </div>
             <div className='flex w-full justify-center'>
-                <button
-                    onClick={CreateQr}
-                    className="w-[70%] p-3 mt-4 rounded-md text-white font-semibold bg-light-blue hover:bg-dark-blue transition duration-300 ease-in-out shadow-lg flex items-center justify-center">
-                    <span>{!isEditRoute ? t("CREATE MY QR") : "SAVE CHANGES"}</span>
-                </button>
+            <button
+            onClick={handleCreateQr}
+            className="w-[70%] p-3 mt-4 rounded-md text-white font-semibold bg-light-blue hover:bg-dark-blue transition duration-300 ease-in-out shadow-lg flex items-center justify-center"
+        >
+            <span>CREATE MY QR</span>
+        </button>
             </div>
 
            

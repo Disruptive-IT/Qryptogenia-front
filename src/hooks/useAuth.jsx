@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { toast } from 'sonner';
 import { useLoader } from '../context/LoaderContext';
 import instance from "../libs/axios";
@@ -18,26 +18,33 @@ import instance from "../libs/axios";
 export const useAuth = (navigate) => {
     const [user, setUser] = useState(null);
 
-    async function checkToken() {
+    const checkToken = useCallback(async () => {
         try {
             const res = await instance.get('/auth/check-token');
             if (res.data.user) {
                 setUser(res.data.user);
             }
         } catch (error) {
-           // console.log("...")
+            console.error('Error checking token:', error);
         }
-    }
+    }, []);  // [] garantiza que la función no se vuelva a crear
 
+    // Función para obtener los datos del usuario
     const fetchUserData = async () => {
         try {
-            const response = await instance.get('/user'); // Reemplaza '/api/user' con la ruta correcta en tu backend
-            return response.data; // Suponiendo que el backend devuelve los datos del usuario en la propiedad 'data'
+            const response = await instance.get('/user', { withCredentials: true });
+            return response.data;
         } catch (error) {
             console.error('Error fetching user data:', error);
-            throw error; // Maneja el error según sea necesario en tu aplicación
+            throw error;
         }
-    }
+    };
+
+    // Usamos el hook useEffect para verificar el token cuando el componente se monta
+    useEffect(() => {
+        checkToken();
+    }, [checkToken]);
+    
 
 
 
@@ -326,6 +333,7 @@ export const useAuth = (navigate) => {
 
     return {
         user,
+        setUser,
         loginUser,
         registerUser,
         completeRegister,

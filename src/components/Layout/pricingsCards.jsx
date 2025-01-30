@@ -1,15 +1,8 @@
-/**
- * @Author : Daniel Salazar,   @date 2024-07-30 10:38:09
- * @description :
- * @Props :
- * @return :
- */
-
-
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'sonner';
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../../hooks/useAuth'; // Usamos el hook para obtener el estado de autenticación
 import instance from '../../libs/axios';
 /*
  * @UpdatedBy : Cristian Escobar,   @date 2024-09-03 15:05:11
@@ -18,35 +11,50 @@ import instance from '../../libs/axios';
 export const PricingsCards = ({ data, userId, isSelectionMode }) => {
   const { t } = useTranslation();
   const navigate = useNavigate();
-
-  const handlePlanSelection = async (membershipId) => {
-    if (isSelectionMode) { // Solo procede si está en la ruta '/selectPlan'
-      try {
-        const response = await instance.post('/user/assign-membership', {
-          userId: userId,
-          membershipId: membershipId,
-        }, {
-          withCredentials: true,
-        });
+    // const handlePlanSelection = async (membershipId) => {
+  //   if (isSelectionMode) { // Solo procede si está en la ruta '/selectPlan'
+  //     try {
+  //       const response = await instance.post('/user/assign-membership', {
+  //         userId: userId,
+  //         membershipId: membershipId,
+  //       }, {
+  //         withCredentials: true,
+  //       });
         
-      //  console.log('Membership assigned:', response.data);
-        navigate('/')
-        toast.success(response.data.msg)
-      } catch (error) {
-        if (error.response) {
-          console.error('Response error:', error.response.data); // Detalles de la respuesta del servidor
-          alert(`Failed to assign membership: ${error.response.data.error}`);
-        } else if (error.request) {
-          console.error('Request error:', error.request); // No hubo respuesta del servidor
-          alert('No response received from the server.');
-        } else {
-          console.error('Error:', error.message); // Otros errores (por ejemplo, de red)
-          alert(`Unexpected error: ${error.message}`);
-        }
-      }
+  //     //  console.log('Membership assigned:', response.data);
+  //       navigate('/')
+  //       toast.success(response.data.msg)
+  //     } catch (error) {
+  //       if (error.response) {
+  //         console.error('Response error:', error.response.data); // Detalles de la respuesta del servidor
+  //         alert(`Failed to assign membership: ${error.response.data.error}`);
+  //       } else if (error.request) {
+  //         console.error('Request error:', error.request); // No hubo respuesta del servidor
+  //         alert('No response received from the server.');
+  //       } else {
+  //         console.error('Error:', error.message); // Otros errores (por ejemplo, de red)
+  //         alert(`Unexpected error: ${error.message}`);
+  //       }
+  //     }
 
+  //   }
+  // };
+  
+  const { user } = useAuth(); // Usamos el contexto para obtener el usuario
+  
+  const handlePlanSelection = (membershipId) => {
+    console.log('User:', user); // Verifica que el objeto user esté llegando correctamente
+  
+    if (user && user.rol === "CLIENT") {
+      // Si el usuario está autenticado y tiene el rol de CLIENT, redirigimos a la página de pagos
+      navigate(`/user/payments?membershipId=${membershipId}`);
+    } else {
+      // Si no está autenticado o no tiene el rol adecuado, redirigimos al login
+      toast.error(t('Please log in to continue'));
+      navigate('/login');
     }
   };
+  
 
   const sortedData = [...data].sort((a, b) => {
     const priceA = parseFloat(a.pricings.replace('$', ''));
@@ -74,7 +82,7 @@ export const PricingsCards = ({ data, userId, isSelectionMode }) => {
             <span className='text-sm text-slate-400'>{t('Billed Annually Included VAT')}</span>
             <span className='text-slate-300 text-sm'><strong className='line-through text-base'>{item.pricingsMonthly}</strong> {t('month to month')}</span>
             <button
-              onClick={() => handlePlanSelection(item.id)}
+              onClick={() => handlePlanSelection(item.id)}  // Aquí llamamos a la función para manejar la selección del plan
               className='bg-dark-blue text-white rounded-lg w-[90%] md:w-2/3 h-10 flex items-center justify-center transition-all duration-300 hover:scale-105 shadow-lg'>
               <span>{t('Check out now')}</span>
             </button>

@@ -11,7 +11,7 @@ function LayoutHome() {
             {location.pathname !== '/login' && location.pathname !== '/register'  && location.pathname !== '/forgotPassword' && location.pathname !== '/pricings' && location.pathname !== '/recoverPassword' && (
                 <Navbar />
             )}
-            {location.pathname !== '/login' && location.pathname !=='/edit' && location.pathname !== '/register' && location.pathname !== '/aboutUs' && location.pathname !== '/faq'  && location.pathname !== '/forgotPassword' && location.pathname !== '/pricings' && location.pathname !== '/recoverPassword' && (
+            {location.pathname !== '/login' && location.pathname !=='/edit' && location.pathname !== '/register' && location.pathname !== '/aboutUs' && location.pathname !== '/payments' && location.pathname !== '/faq'  && location.pathname !== '/forgotPassword' && location.pathname !== '/pricings' && location.pathname !== '/recoverPassword' && (
                 <div className='mt-10'>
                     <StepperQr />
                 </div>

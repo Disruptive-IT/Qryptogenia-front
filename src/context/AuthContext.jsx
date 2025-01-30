@@ -1,42 +1,41 @@
-import { createContext, useContext, useState, useEffect} from "react";
+import { createContext, useContext, useState, useEffect } from "react";
 import { useAuth } from '../hooks/useAuth';
 import { useNavigate } from 'react-router-dom';
 
 export const AuthContext = createContext();
 
-export const useAuthContext = ()=>{
-    const context = useContext(AuthContext)
-    return context
-}
+export const useAuthContext = () => {
+    const context = useContext(AuthContext);
+    if (!context) {
+        throw new Error('useAuthContext must be used within an AuthProvider');
+    }
+    return context;
+};
 
 export const AuthProvider = ({ children }) => {
     const navigate = useNavigate();
-    const auth = useAuth(navigate);
+    const auth = useAuth(navigate);  // Contiene funciones como checkToken y getProfileImageUrl
     const [profileImage, setProfileImage] = useState('');
-    const { getProfileImageUrl } = auth;
 
-    // Función para cargar la imagen de perfil
     const loadProfileImage = async () => {
-        const imageUrl = await getProfileImageUrl();
-        setProfileImage(imageUrl);
+        try {
+            const imageUrl = await auth.getProfileImageUrl();
+            setProfileImage(imageUrl);
+        } catch (error) {
+            console.error('Error loading profile image:', error);
+        }
     };
 
-    // Cargar la imagen de perfil cuando el componente se monte
     useEffect(() => {
         loadProfileImage();
     }, []);
 
-    // Función para actualizar la imagen de perfil
-    const updateProfileImage = async () => {
-        await loadProfileImage();
-    };
-
     useEffect(() => {
-        auth.checkToken();
-    }, []);
+        auth.checkToken();  // Supone que checkToken está memorizado usando useCallback en useAuth
+    }, [auth.checkToken]);
 
     return (
-        <AuthContext.Provider value={{...auth, profileImage, updateProfileImage}}>
+        <AuthContext.Provider value={{ ...auth, profileImage, updateProfileImage: loadProfileImage }}>
             {children}
         </AuthContext.Provider>
     );

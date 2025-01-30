@@ -109,9 +109,14 @@ const QRCodeList = () => {
     }
   };
 
+  console.log("form values: ",formValues);
+  console.log("discounts: ",discounts);
+  console.log("selected discounts: ",selectedDiscounts);
+
   const columns = [
     { header: t("Type Membership"), accessor: 'type_membership' },
     { header: t("Price"), accessor: 'price' },
+    {header: "Pay Price",accessor:'price_to_pay'},
     { header: t("Active QRs"), accessor: 'active_qrs' },
     { header: t("Scan QRs"), accessor: 'scan_qrs' },
     { header: t("Discount"), accessor: 'discount',
@@ -225,6 +230,8 @@ const QRCodeList = () => {
                 onChange={handleDiscountChange}
                 className="p-2 border border-gray-300 rounded-md"
               >
+                <option selected="true"  value="" disabled>selecciona</option>
+                <option value="0">sin descuento</option>
                 {discounts.map(discount => (
                   <option key={discount.id} value={discount.id}>
                     {discount.description}{'-'}{discount.discount}

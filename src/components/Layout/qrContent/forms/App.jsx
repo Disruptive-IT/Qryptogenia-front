@@ -81,34 +81,27 @@ useEffect(() => {
 
 //console.log("these are the selected options: ",appFormValues.selectedOptions);
 
-    const validateForm = (values) => {
-        const errors = {};
+const validateForm = (values) => {
+  const errors = {};
 
-        // Validar el título
-        if (!values.title) {
-            errors.title = t("Title is required");
-        }
+  // Validar el título solo si no estás en modo de edición
+  if (!isEditRoute && (!values.title || values.title.trim() === '')) {
+      errors.title = t("Title is required");
+  }
 
-        // if(!values.description) {
-        //     errors.description=t("Description is required");
-        // }
+  // Validar la selección de opciones
+  if (selectedOptions.length === 0) {
+      errors.selectedOptions = t("At least one option must be selected");
+  }
 
-        // Validar la selección de opciones
-        if (selectedOptions.length === 0) {
-            errors.selectedOptions = t("At least one option must be selected");
-        }
-       // console.log(selectedOptions)
-        // Validar cada campo url en selectedOptions
-        selectedOptions.forEach((option, index) => {
-            //console.log(option.url)
-            if (!option.url) {
-                errors[`url_${index}`] = t("URL is required");
-            }
-        });
-        //console.log(errors)
+  selectedOptions.forEach((option, index) => {
+      if (!option.url) {
+          errors[`url_${index}`] = t("URL is required");
+      }
+  });
 
-        return errors;
-    };
+  return errors;
+};
 
 
     const handleTitleChange = (e) => {
@@ -312,6 +305,7 @@ useEffect(() => {
     };
 
     // console.log(formErrors)
+    console.log(appFormValues);
 
     // Skeleton Loader
             useEffect(() => {

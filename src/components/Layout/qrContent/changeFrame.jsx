@@ -125,7 +125,15 @@ export default function ChangeFrame({ name, appFormValues, socialFormValues, mus
           setValue(newValue);
         }
       };
-
+      const ChangeFrame = ({ isSmallScreen, isSpecialContent, isTabClickable, name, appFormValues, socialFormValues, musicFormValues, menuFormValues, location, qrId }) => {
+        const theme = useTheme();
+        const [value, setValue] = useState(0); // Valor inicial de la pestaña
+    
+        const handleChange = (event, newValue) => {
+            setValue(newValue);
+        };
+    }
+    
     const content = contentTexts[contentName.toLowerCase().replace(/\s+/g, '-')];
     if (!content) {
         return <NotFoundPage />;
@@ -169,7 +177,7 @@ export default function ChangeFrame({ name, appFormValues, socialFormValues, mus
                         sx={{
                             '.MuiTabs-indicator': {
                                 display: 'block',
-                                backgroundColor : '#3C6E71' //Color linea scroll cambio PHONE - QR
+                                backgroundColor: '#3C6E71' // Color linea scroll cambio PHONE - QR
                             },
                             '.MuiTab-root.Mui-selected': {
                                 color: '#284B63',
@@ -177,11 +185,12 @@ export default function ChangeFrame({ name, appFormValues, socialFormValues, mus
                             },
                         }}
                     >
-                        {!(isSmallScreen || isSpecialContent) && <Tab label="Phone" />}  {/* Oculta el tab "Phone" en pantallas pequeñas o para contentName especial */}
-                            <Tab
-                            label="QR" 
-                            disabled={!isTabClickable || name=='music' || name=='social media' || name=='app store' || name=='food menu'} 
-                            />
+                        {!(isSmallScreen || isSpecialContent) && <Tab label="Phone" value={0} />}  {/* Oculta el tab "Phone" en pantallas pequeñas o para contentName especial */}
+                        <Tab
+                            label="QR"
+                            value={1} // Asegúrate de que el valor coincida con el valor inicial
+                            disabled={!isTabClickable || name === 'music' || name === 'social media' || name === 'app store' || name === 'food menu'}
+                        />
                     </Tabs>
                 </AppBar>
                 {!(isSmallScreen || isSpecialContent) && (
@@ -200,16 +209,17 @@ export default function ChangeFrame({ name, appFormValues, socialFormValues, mus
                         </div>
                     </TabPanel>
                 )}
-                <TabPanel value={value} index={1} dir={theme.direction}  className="w-full flex justify-center">
+                <TabPanel value={value} index={1} dir={theme.direction} className="w-full flex justify-center">
                     <div className="md:w-[100%] px-5">
                         <h2 className="text-center text-2xl font-bold mb-8">{t("Preview")} QRytogenia</h2>
-                        <CustomQr 
-                        location={location}
-                        qrId={qrId}
+                        <CustomQr
+                            location={location}
+                            qrId={qrId}
                         />
                     </div>
                 </TabPanel>
             </Box>
-        </section >
+        </section>
     );
-}
+};
+
